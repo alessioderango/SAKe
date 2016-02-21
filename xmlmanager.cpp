@@ -7,7 +7,8 @@ XMLManager::XMLManager()
     xmlFilePath("/home/You/QT/YourProject/myXML.xml");
 #else
 #ifdef __WIN32 //for those developing on windows
-    xmlFilePath = QString("C:\\Users\\Alessio\\Progetti\\SAke\\workspace\\main.xml");
+    xmlFilePath = QString(QDir::currentPath()+"/main.xml");
+    qDebug() << xmlFilePath << endl;
 #else //for those developing on linux
     xmlFilePath("/home/You/QT/YourProject/myXML.xml");
 #endif
@@ -16,10 +17,9 @@ XMLManager::XMLManager()
 }
 
 
-int findAllElementsByProject(){
-    QString filename = QString("C:\\Users\\Alessio\\Progetti\\SAke\\workspace\\main.xml");
+int findAllElementsByProject(QString xmlFilePath){
 
-    QFile inFile( filename );
+    QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
         qDebug( "Failed to open file for reading." );
@@ -66,9 +66,8 @@ void findElementsWithText(const QDomElement& elem, const QString& attr, QList<QD
 }
 
 int XMLManager::findProjectName(QString nameProject){
-    QString filename = QString("C:\\Users\\Alessio\\Progetti\\SAke\\workspace\\main.xml");
 
-    QFile inFile( filename );
+    QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
         qDebug( "Failed to open file for reading." );
@@ -88,7 +87,7 @@ int XMLManager::findProjectName(QString nameProject){
     QDomElement documentElement = document.documentElement();
     QList<QDomElement> foundElements;
     // Load document
-    findAllElementsByProject();
+    findAllElementsByProject(xmlFilePath);
 
     //findElementsWithText(documentElement,nameProject, foundElements);
     qDebug()<< "Receive " <<nameProject;
@@ -127,7 +126,7 @@ int XMLManager::SaveXMLFile(QString name,
 
     //Controllare se esiste un altro progetto con lo stesso nome
 
-    QString filename = QString("C:\\Users\\Alessio\\Progetti\\SAke\\workspace\\main.xml");
+    QString filename = QString(xmlFilePath);
 
     QFile inFile( filename );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
@@ -274,7 +273,7 @@ void parseProject(QXmlStreamReader& xml,QVariantList &a){
             //If the element is a text element, save it
             if(xml.name() == "Name"){
                 xml.readNext();
-                //                    qDebug() << "Name projects " << xml.text().toString()<< endl;
+                qDebug() << "Name projects " << xml.text().toString()<< endl;
                 a.append(QVariant(xml.text().toString()));
             }
 
@@ -296,6 +295,7 @@ void XMLManager::ReadMainXML(QVariantList &a)
     qDebug() << "ReadMainXML ";
     QFile* file = new QFile(xmlFilePath);
     if(!file->open(QIODevice::ReadOnly | QIODevice::Text)){
+        qDebug() << "File not prensent ";
         return;
     }
     QXmlStreamReader xml(file);

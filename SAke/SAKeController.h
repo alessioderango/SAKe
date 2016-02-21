@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <algorithm>
 using namespace std;
-#include "db/DBmanager.h"
+//#include "db/DBmanager.h"
 #include "eo"
 #include "utils/eoRealVectorBounds.h"
 #include "eoSAKe.h"
@@ -108,7 +108,7 @@ private:
     eoGenContinueMy<Indi> *stop;
     Rain * rain;
     int rain_size;
-    DBmanager db;
+    //DBmanager db;
     Activation * activations;
     int activations_size;
 

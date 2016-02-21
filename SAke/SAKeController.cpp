@@ -148,10 +148,10 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
    loadCSV(filenameRain,this->rain,this->rain_size);
    loadCSVActivation(filenameActivaion,activations,activations_size);
    try {
-         db.getConnection();
+        // db.getConnection();
          //db.executeQueryRain(this->rain,this->rain_size);
          //db.executeQueryActivation(activations,activations_size);
-         db.disconnect();
+        // db.disconnect();
 
      } catch (const std::exception &e) {
          cerr << e.what() << std::endl;

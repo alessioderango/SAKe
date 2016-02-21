@@ -39,7 +39,7 @@ HEADERS += \
     SAke/make_genotype_SAKe.h \
     SAke/make_op_SAKe.h \
     SAke/Ym.h \
-    SAke/db/DBmanager.h \
+   SAke/db/DBmanager.h \
     SAke/Rain.h \
     SAke/SAKeController.h \
     SAke/eoGraphFitenessStat.h \
@@ -159,18 +159,18 @@ else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/li
 
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
-else:unix: LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
+#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
+#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
+#else:unix: LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
 
-INCLUDEPATH += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/include
-DEPENDPATH += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/include
+#INCLUDEPATH += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/include
+#DEPENDPATH += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/include
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/pqxx.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/pqxxd.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
+#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
+#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
+#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/pqxx.lib
+#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/pqxxd.lib
+#else:unix: PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
 
 
 
