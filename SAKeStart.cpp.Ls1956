@@ -1,0 +1,346 @@
+#include "SAKeStart.h"
+
+SAKeStart::SAKeStart(QQmlApplicationEngine* _engine,QApplication * _a,QObject *parent) : QObject(parent)
+{
+    engine = _engine;
+    a=_a;
+    numberProject =1;
+}
+
+void SAKeStart::InitAlgo(const QVariant &selection,const QVariant &replacement,const QVariant &pop,const QVariant &maxGen,const QVariant &tbMax,
+                         const QVariant &tbMin,const QVariant &dHpMax,const QVariant &dHpMin,const QVariant &relRateCrossover,const QVariant &relRateMutation,
+                         const QVariant &propCrossover,const QVariant &propMutation,const QVariant &pme,const QVariant &pmb,const QVariant &pattern,const QVariant &filename,
+                         const QVariant &_filenameActivation,
+                         const QVariant &filenameSavePath){
+
+//   string  sselection           = selection.toString().toUtf8().constData();
+//   string  sreplacement         = replacement.toString().toUtf8().constData();
+//   string  spattern             = pattern.toString().toUtf8().constData();
+   QString  sselection          = selection.toString();
+   QString  sreplacement        = replacement.toString();
+   QString  spattern            = pattern.toString();
+   QString  sfilenameRain       = filename.toString();
+   QString  sfilenameActivation = _filenameActivation.toString();
+   QString  sfilenameSavePath   = filenameSavePath.toString();
+   int      ipop                = pop.toInt();
+   int      imaxGen             = maxGen.toInt();
+   int      itbMax              = tbMax.toInt();
+   int      itbMin              = tbMin.toInt();
+   int      idHpMax             = dHpMax.toInt();
+   int      idHpMin             = dHpMin.toInt();
+   float    frelRateCrossover   = relRateCrossover.toFloat();
+   float    frelRateMutation    = relRateMutation.toFloat();
+   float    fpropCrossover      = propCrossover.toFloat();
+   float    fpropMutation       = propMutation.toFloat();
+   float    fpme                = pme.toFloat();
+   float    fpmb                = pmb.toFloat();
+
+   qDebug() << "selection arrivato " << selection << "\n";
+   qDebug() << "replacement arrivato " << replacement << "\n";
+   qDebug() << "pattern arrivato " << pattern << "\n";
+   qDebug() << "ipop arrivato " <<   pop << "\n";
+   qDebug() << "imaxGen arrivato " << maxGen << "\n";
+   qDebug() << "itbMax arrivato " <<   tbMax << "\n";
+   qDebug() << "itbMin arrivato " <<   tbMin << "\n";
+   qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
+   qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
+   qDebug() << "frelRateCrossover arrivato " << relRateCrossover << "\n";
+   qDebug() << "frelRateMutation arrivato " << relRateMutation << "\n";
+   qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
+   qDebug() << "fpropMutation arrivato " << propMutation << "\n";
+   qDebug() << "fpme arrivato " << pme << "\n";
+   qDebug() << "fpmb arrivato " << pmb << "\n";
+   qDebug() << "filename arrivato " << sfilenameRain << "\n";
+
+
+
+//   QQmlApplicationEngine engine;
+//   engine.load(QUrl(QStringLiteral("qrc:/SakeView.qml")));
+//   QObject *rootObject = engine.rootObjects().first();
+//   CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>("customPlotFitness");
+//   CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>("customPlotMobilityFunction");
+//   CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>("customPlotKernel");
+//   SAKeController * controller = new SAKeController(qCustomPlotFitness,sselection,sreplacement,spattern,ipop,imaxGen,
+//                                                    itbMax,itbMin,idHpMax,idHpMin,frelRateCrossover,frelRateMutation,
+//                                                    fpropCrossover,fpropMutation,fpme,fpmb);
+//   controller->setPlotMobility(qCustomPlotMobilityFunction);
+//   controller->setPlotkernel(qCustomPlotKernel);
+//   controller->startThread();
+
+////    MyEventFilter filter;
+//    QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine.rootObjects().first());
+//   // engine.installEventFilter(&filter);
+
+//   QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
+//   //controller->moveToThread(QApplication::instance()->thread());
+//   QEventLoop l;
+//   //l.installEventFilter(&filter);
+//   l.exec();
+        QVariant returnedValue;
+        QVariant msg = "Hello from C";
+      QObject *rootObject = engine->rootObjects().first();
+      QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+      numberProject++;
+
+
+
+      QQmlComponent component(engine,QUrl(QStringLiteral("qrc:/Tab.qml")));
+      QObject *object = component.create();
+      QObject *customPlotFitness = rootObject->findChild<QObject*>("customPlotFitness");
+      customPlotFitness->setObjectName(QString("customPlotFitness%1").arg(numberProject));
+      QObject *customPlotMobilityFunction = rootObject->findChild<QObject*>("customPlotMobilityFunction");
+      customPlotMobilityFunction->setObjectName(QString("customPlotMobilityFunction%1").arg(numberProject));
+      QObject *customPlotKernel = rootObject->findChild<QObject*>("customPlotKernel");
+      customPlotKernel->setObjectName(QString("customPlotKernel%1").arg(numberProject));
+      QObject *gen = rootObject->findChild<QObject*>("gen");
+      gen->setObjectName(QString("gen%1").arg(numberProject));
+      QObject *currentMaximumFitness = rootObject->findChild<QObject*>("currentMaximumFitness");
+      currentMaximumFitness->setObjectName(QString("currentMaximumFitness%1").arg(numberProject));
+      QObject *absoluteMaximumFitness = rootObject->findChild<QObject*>("absoluteMaximumFitness");
+      absoluteMaximumFitness->setObjectName(QString("absoluteMaximumFitness%1").arg(numberProject));
+      QObject *currentAverageFitness = rootObject->findChild<QObject*>("currentAverageFitness");
+      currentAverageFitness->setObjectName(QString("currentAverageFitness%1").arg(numberProject));
+      QObject *absoluteAverageFitness = rootObject->findChild<QObject*>("absoluteAverageFitness");
+      absoluteAverageFitness->setObjectName(QString("absoluteAverageFitness%1").arg(numberProject));
+      QObject *progressBar = rootObject->findChild<QObject*>("progressBar");
+      progressBar->setObjectName(QString("progressBar%1").arg(numberProject));
+
+      QTabWidget * tabwidget= rootObject->findChild<QTabWidget*>("tabmain");
+
+
+      QMetaObject::invokeMethod(rectMain, "addTab", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, numberProject));
+      qDebug() << "filename arrivato " << QString("customPlotFitness%1").arg(numberProject) << "\n";
+
+
+      CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(numberProject));
+      CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(numberProject) );
+      CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(numberProject) );
+      QObject *gen = rootObject->findChild<QObject*>(QString("gen%1").arg(numberProject));
+      QObject *currentMaximumFitness = rootObject->findChild<QObject*>(QString("currentMaximumFitness%1").arg(numberProject));
+      QObject *absoluteMaximumFitness = rootObject->findChild<QObject*>(QString("absoluteMaximumFitness%1").arg(numberProject));
+      QObject *currentAverageFitness = rootObject->findChild<QObject*>(QString("currentAverageFitness%1").arg(numberProject));
+      QObject *absoluteAverageFitness = rootObject->findChild<QObject*>(QString("absoluteAverageFitness%1").arg(numberProject));
+      QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(numberProject));
+
+      _currentMaximumFitness = currentMaximumFitness;
+      _absoluteMaximumFitness = absoluteMaximumFitness;
+      _currentAverageFitness = currentAverageFitness;
+      _absoluteAverageFitness = absoluteAverageFitness;
+      _gen =gen;
+
+      Update * update= new Update();
+      SAKeController * controller = new SAKeController(qCustomPlotFitness,sselection,sreplacement,spattern,sfilenameRain,sfilenameActivation,sfilenameSavePath,ipop,imaxGen,
+                                                       itbMax,itbMin,idHpMax,idHpMin,frelRateCrossover,frelRateMutation,
+                                                       fpropCrossover,fpropMutation,fpme,fpmb,
+                                                       currentMaximumFitness,
+                                                       absoluteMaximumFitness,
+                                                       currentAverageFitness,
+                                                       absoluteAverageFitness,
+                                                       update);
+      controller->setPlotMobility(qCustomPlotMobilityFunction);
+      controller->setPlotkernel(qCustomPlotKernel);
+      controller->setApplication(a);
+      progressBar->setProperty("maximumValue",100);
+      progressBar->setProperty("minimumValue",0);
+//    progressBar->setMaximum(100);
+//    progressBar-> setMinimum(0);
+      controller->setProgressBar(progressBar);
+      controller->startThread();
+
+   //    MyEventFilter filter;
+       QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine->rootObjects().first());
+      // engine.installEventFilter(&filter);
+
+      QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
+
+      QObject::connect(update, SIGNAL(valueCurrentMaximumFitness(QString)),this, SLOT( updateCurrentMaximumFitness(QString)));
+      QObject::connect(update, SIGNAL(valueAbsoluteMaximumFitness(QString)),this, SLOT( updateAbosulteMaximumFitness(QString)));
+      QObject::connect(update, SIGNAL(valueCurrentAvarageFitness(QString)),this, SLOT( updateCurrentAvarageFitness(QString)));
+      QObject::connect(update, SIGNAL(valueAbsoluteAvarageFitness(QString)),this, SLOT( updateAbsoluteAvarageFitness(QString)));
+      QObject::connect(update, SIGNAL(valueGen(QString)),this, SLOT( updateGen(QString)));
+      //controller->moveToThread(QApplication::instance()->thread());
+ //     QEventLoop l;
+      //l.installEventFilter(&filter);
+ //     l.exec();
+
+}
+
+string SAKeStart::getPattern() const
+{
+    return pattern;
+}
+
+void SAKeStart::setPattern(const string &value)
+{
+    pattern = value;
+}
+
+float SAKeStart::getPmb() const
+{
+    return Pmb;
+}
+
+void SAKeStart::setPmb(float value)
+{
+    Pmb = value;
+}
+
+float SAKeStart::getPme() const
+{
+    return Pme;
+}
+
+void SAKeStart::setPme(float value)
+{
+    Pme = value;
+}
+
+float SAKeStart::getDHpMax() const
+{
+    return dHpMax;
+}
+
+void SAKeStart::setDHpMax(float value)
+{
+    dHpMax = value;
+}
+
+float SAKeStart::getDHpMin() const
+{
+    return dHpMin;
+}
+
+void SAKeStart::setDHpMin(float value)
+{
+    dHpMin = value;
+}
+
+float SAKeStart::getTbMax() const
+{
+    return tbMax;
+}
+
+void SAKeStart::setTbMax(float value)
+{
+    tbMax = value;
+}
+
+float SAKeStart::getTbMin() const
+{
+    return tbMin;
+}
+
+void SAKeStart::setTbMin(float value)
+{
+    tbMin = value;
+}
+
+float SAKeStart::getPropCrossover() const
+{
+    return propCrossover;
+}
+
+void SAKeStart::setPropCrossover(float value)
+{
+    propCrossover = value;
+}
+
+float SAKeStart::getPropMutation() const
+{
+    return propMutation;
+}
+
+void SAKeStart::setPropMutation(float value)
+{
+    propMutation = value;
+}
+
+float SAKeStart::getRelRateMutation() const
+{
+    return relRateMutation;
+}
+
+void SAKeStart::setRelRateMutation(float value)
+{
+    relRateMutation = value;
+}
+
+float SAKeStart::getRelRateCrossover() const
+{
+    return relRateCrossover;
+}
+
+void SAKeStart::setRelRateCrossover(float value)
+{
+    relRateCrossover = value;
+}
+
+int SAKeStart::getMaxGen() const
+{
+    return maxGen;
+}
+
+void SAKeStart::setMaxGen(int value)
+{
+    maxGen = value;
+}
+
+int SAKeStart::getPopSize() const
+{
+    return popSize;
+}
+
+void SAKeStart::setPopSize(int value)
+{
+    popSize = value;
+}
+
+string SAKeStart::getReplecament() const
+{
+    return replecament;
+}
+
+void SAKeStart::setReplecament(const string &value)
+{
+    replecament = value;
+}
+
+string SAKeStart::getSelection() const
+{
+    return selection;
+}
+
+void SAKeStart::setSelection(const string &value)
+{
+    selection = value;
+}
+
+void SAKeStart::update(){
+
+    qApp->processEvents();
+}
+void SAKeStart::updateCurrentMaximumFitness(QString s){
+
+    _currentMaximumFitness->setProperty("text",s);
+}
+
+void SAKeStart::updateAbosulteMaximumFitness(QString s){
+
+    _absoluteMaximumFitness->setProperty("text",s);
+}
+
+void SAKeStart::updateCurrentAvarageFitness(QString s){
+
+    _currentAverageFitness->setProperty("text",s);
+}
+
+void SAKeStart::updateAbsoluteAvarageFitness(QString s){
+
+    _absoluteAverageFitness->setProperty("text",s);
+}
+void SAKeStart::updateGen(QString s){
+
+    _gen->setProperty("text",s);
+}
+
+

@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>SakeView.qml</file>
+        <file>newProjectCalibration.qml</file>
+        <file>MainWindow.qml</file>
+        <file>img/noun_210738_cc.svg</file>
+        <file>img/download.png</file>
+        <file>parameters.qml</file>
+        <file>FileBrowser.qml</file>
+        <file>ContactModel.qml</file>
+        <file>img/project.png</file>
+        <file>Tab.qml</file>
+        <file>ProjectCalibration.qml</file>
+    </qresource>
+</RCC>
