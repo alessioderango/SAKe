@@ -26,14 +26,12 @@ int main(int argc, char *argv[])
  QObject *listProjects = rootObject->findChild<QObject*>("ListProjects");
 
  // load main xml with number of Projects and names
- QVariant returnedValue;
- QVariantList projects;
-
- XMLManager * xmlmanager = new XMLManager();
- xmlmanager->ReadMainXML(projects);
 
 
- QMetaObject::invokeMethod(listProjects, "addElementList", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, QVariant::fromValue(projects)));
+ XMLManager * xmlmanager = new XMLManager(listProjects);
+ xmlmanager->ReadMainXML();
+
+
 
 
 

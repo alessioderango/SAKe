@@ -106,9 +106,10 @@ ApplicationWindow {
                 objectName: "ListProjects"
                 id: model
                  function addElementList(projectName){
+
                       console.log("Entrato!!!!!!!!!!!!!!!!  "+ projectName);
 
-                   // model.clear()
+                     model.clear()
                      for (var i=0; i<projectName.length; i++){
                          console.log("Entrato!!!!!!!!!!!!!!!!  "+ projectName[i]);
                          model.append({"name": projectName[i]})
@@ -142,9 +143,15 @@ ApplicationWindow {
                               onDoubleClicked: {
 
                                   var component = Qt.createComponent("ProjectCalibration.qml")
+                                  console.log(listview1.model.get(listview1.currentIndex).name)
+                                  var list = sakeStart.getAllElementsFromProjectName(listview1.model.get(listview1.currentIndex).name)
+                                   console.log("ciao"+list.length )
+                                  for(var i = 0; i < list.length ; i++){
+                                      console.log(list[i])
+                                  }
 
                                   var window    = component.createObject(applicationWindow1)
-                                    console.log(window.f())
+                                    console.log(window.f(list))
                               }
 
                        }

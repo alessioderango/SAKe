@@ -30,140 +30,169 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &filenameSavePath,
                          const QVariant &_projectName,
                          const QVariant &_numberProcessor,
-                         const QVariant &_elitists
+                         const QVariant &_elitists,
+                         const QVariant &tipo
                          ){
 
-   // **** converto e verifico che siano arrrivati dal QML tutti i parametri
+    // **** converto e verifico che siano arrrivati dal QML tutti i parametri
+      qDebug() << "Tipo arrivato " << tipo.toInt() << "\n";
+    if(tipo.toInt()==1 )
+    {
+        xmlManager->SaveXMLFileAlreadyExist(_projectName.toString(),
+                                selection.toString(),
+                                _elitists.toString(),
+                                _elitists.toString(),
+                                _numberProcessor.toString(),
+                                pop.toString(),
+                                maxGen.toString(),
+                                tbMax.toString(),
+                                tbMin.toString(),
+                                dHpMax.toString(),
+                                dHpMin.toString(),
+                                propCrossover.toString(),
+                                propMutation.toString(),
+                                pme.toString(),
+                                pmb.toString(),
+                                pattern.toString(),
+                                filename.toString(),
+                                _filenameActivation.toString());
+    }else{
+        xmlManager->SaveXMLFile(_projectName.toString(),
+                                selection.toString(),
+                                _elitists.toString(),
+                                _elitists.toString(),
+                                _numberProcessor.toString(),
+                                pop.toString(),
+                                maxGen.toString(),
+                                tbMax.toString(),
+                                tbMin.toString(),
+                                dHpMax.toString(),
+                                dHpMin.toString(),
+                                propCrossover.toString(),
+                                propMutation.toString(),
+                                pme.toString(),
+                                pmb.toString(),
+                                pattern.toString(),
+                                filename.toString(),
+                                _filenameActivation.toString());
+    }
+    // INIZIO
+    QString  sselection          = selection.toString();
+    QString  spattern            = pattern.toString();
+    QString  sfilenameRain       = filename.toString();
+    QString  sfilenameActivation = _filenameActivation.toString();
+    QString  sfilenameSavePath   = filenameSavePath.toString();
+    QString  sprojectname          = _projectName.toString();
+    int      ipop                = pop.toInt();
+    int      imaxGen             = maxGen.toInt();
+    int      itbMax              = tbMax.toInt();
+    int      itbMin              = tbMin.toInt();
+    int      idHpMax             = dHpMax.toInt();
+    int      idHpMin             = dHpMin.toInt();
+    int      inumberProcessor    = _numberProcessor.toInt();
+    int      ielitists           = _elitists.toInt();
+    float    fpropCrossover      = propCrossover.toFloat();
+    float    fpropMutation       = propMutation.toFloat();
+    float    fpme                = pme.toFloat();
+    float    fpmb                = pmb.toFloat();
 
-   xmlManager->SaveXMLFile(_projectName.toString(),
-                           selection.toString(),
-                           _elitists.toString(),
-                           _elitists.toString(),
-                           _numberProcessor.toString(),
-                            pop.toString(),
-                            maxGen.toString(),
-                            tbMax.toString(),
-                            tbMin.toString(),
-                            dHpMax.toString(),
-                            dHpMin.toString(),
-                            propCrossover.toString(),
-                            propMutation.toString(),
-                            pme.toString(),
-                            pmb.toString(),
-                            pattern.toString(),
-                            filename.toString(),
-                            _filenameActivation.toString());
-   // INIZIO
-   QString  sselection          = selection.toString();
-   QString  spattern            = pattern.toString();
-   QString  sfilenameRain       = filename.toString();
-   QString  sfilenameActivation = _filenameActivation.toString();
-   QString  sfilenameSavePath   = filenameSavePath.toString();
-   QString  sprojectname          = _projectName.toString();
-   int      ipop                = pop.toInt();
-   int      imaxGen             = maxGen.toInt();
-   int      itbMax              = tbMax.toInt();
-   int      itbMin              = tbMin.toInt();
-   int      idHpMax             = dHpMax.toInt();
-   int      idHpMin             = dHpMin.toInt();
-   int      inumberProcessor    = _numberProcessor.toInt();
-   int      ielitists           = _elitists.toInt();
-   float    fpropCrossover      = propCrossover.toFloat();
-   float    fpropMutation       = propMutation.toFloat();
-   float    fpme                = pme.toFloat();
-   float    fpmb                = pmb.toFloat();
-
-//   qDebug() << "selection arrivato " << selection << "\n";
-//   qDebug() << "pattern arrivato " << pattern << "\n";
-//   qDebug() << "ipop arrivato " <<   pop << "\n";
-//   qDebug() << "imaxGen arrivato " << maxGen << "\n";
-//   qDebug() << "itbMax arrivato " <<   tbMax << "\n";
-//   qDebug() << "itbMin arrivato " <<   tbMin << "\n";
-//   qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
-//   qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
-//   qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
-//   qDebug() << "fpropMutation arrivato " << propMutation << "\n";
-//   qDebug() << "fpme arrivato " << pme << "\n";
-//   qDebug() << "fpmb arrivato " << pmb << "\n";
-//   qDebug() << "filename arrivato " << sfilenameRain << "\n";
-//   qDebug() << "_projectName  arrivato " << sprojectname << "\n";
-//   qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
-//   qDebug() << "ielitists arrivato " << ielitists << "\n";
+//       qDebug() << "selection arrivato " << selection << "\n";
+//       qDebug() << "pattern arrivato " << pattern << "\n";
+//       qDebug() << "ipop arrivato " <<   pop << "\n";
+//       qDebug() << "imaxGen arrivato " << maxGen << "\n";
+//       qDebug() << "itbMax arrivato " <<   tbMax << "\n";
+//       qDebug() << "itbMin arrivato " <<   tbMin << "\n";
+//       qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
+//       qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
+//       qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
+//       qDebug() << "fpropMutation arrivato " << propMutation << "\n";
+//       qDebug() << "fpme arrivato " << pme << "\n";
+//       qDebug() << "fpmb arrivato " << pmb << "\n";
+//       qDebug() << "filename arrivato " << sfilenameRain << "\n";
+//       qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
+//       qDebug() << "sfilenameSavePath arrivato " << sfilenameSavePath << "\n";
+//       qDebug() << "_projectName  arrivato " << sprojectname << "\n";
+//       qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
+//       qDebug() << "ielitists arrivato " << ielitists << "\n";
     // FINE
 
-   //Aggiungere nell'XML il nuovo Progetto
+    //Aggiungere nell'XML il nuovo Progetto
 
-   //aggiungo una nuova Tab nell'interfaccia
-   //INIZIO
-      QVariant returnedValue;
-      QVariant msg = "Hello from C";
-      QObject *rootObject = engine->rootObjects().first();
-      QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
-      numberProject++;
-
-
-      QMetaObject::invokeMethod(rectMain, "addTab", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, numberProject));
-//      qDebug() << "filename arrivato " << QString("customPlotFitness%1").arg(numberProject) << "\n";
-   //FINE
-
-   //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
-   //INIZIO
-      CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(numberProject));
-      CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(numberProject) );
-      CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(numberProject) );
-      QObject *gen = rootObject->findChild<QObject*>(QString("gen%1").arg(numberProject));
-      QObject *currentMaximumFitness = rootObject->findChild<QObject*>(QString("currentMaximumFitness%1").arg(numberProject));
-      QObject *absoluteMaximumFitness = rootObject->findChild<QObject*>(QString("absoluteMaximumFitness%1").arg(numberProject));
-      QObject *currentAverageFitness = rootObject->findChild<QObject*>(QString("currentAverageFitness%1").arg(numberProject));
-      QObject *absoluteAverageFitness = rootObject->findChild<QObject*>(QString("absoluteAverageFitness%1").arg(numberProject));
-      QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(numberProject));
-
-      Update * update = new Update();
-      UpdateProjects * updateprojects = new UpdateProjects(currentMaximumFitness,
-                                                           absoluteMaximumFitness,
-                                                           currentAverageFitness,
-                                                           absoluteAverageFitness,
-                                                           gen,
-                                                           update);
+    //aggiungo una nuova Tab nell'interfaccia
+    //INIZIO
+    QVariant returnedValue;
+    QVariant msg = sprojectname;
+    QObject *rootObject = engine->rootObjects().first();
+    QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+    numberProject++;
 
 
-      SAKeController * controller = new SAKeController(qCustomPlotFitness,
-                                                       sselection,
-                                                       spattern,
-                                                       sfilenameRain,
-                                                       sfilenameActivation,
-                                                       sfilenameSavePath,
-                                                       ipop,
-                                                       imaxGen,
-                                                       itbMax,
-                                                       itbMin,
-                                                       idHpMax,
-                                                       idHpMin,
-                                                       fpropCrossover,
-                                                       fpropMutation,
-                                                       fpme,
-                                                       fpmb,
-                                                       currentMaximumFitness,
-                                                       absoluteMaximumFitness,
-                                                       currentAverageFitness,
-                                                       absoluteAverageFitness,
-                                                       inumberProcessor,
-                                                       ielitists,
-                                                       update);
-      controller->setPlotMobility(qCustomPlotMobilityFunction);
-      controller->setPlotkernel(qCustomPlotKernel);
-      controller->setApplication(a);
-      progressBar->setProperty("maximumValue",100);
-      progressBar->setProperty("minimumValue",0);
+    QMetaObject::invokeMethod(rectMain, "addTab", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, numberProject));
+    //      qDebug() << "filename arrivato " << QString("customPlotFitness%1").arg(numberProject) << "\n";
+    //FINE
 
-      controller->setProgressBar(progressBar);
-      //FINE
+    //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
+    //INIZIO
+    CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(numberProject));
+    CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(numberProject) );
+    CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(numberProject) );
+    QObject *gen = rootObject->findChild<QObject*>(QString("gen%1").arg(numberProject));
+    QObject *currentMaximumFitness = rootObject->findChild<QObject*>(QString("currentMaximumFitness%1").arg(numberProject));
+    QObject *absoluteMaximumFitness = rootObject->findChild<QObject*>(QString("absoluteMaximumFitness%1").arg(numberProject));
+    QObject *currentAverageFitness = rootObject->findChild<QObject*>(QString("currentAverageFitness%1").arg(numberProject));
+    QObject *absoluteAverageFitness = rootObject->findChild<QObject*>(QString("absoluteAverageFitness%1").arg(numberProject));
+    QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(numberProject));
 
-      //eseguo l'algoritmo genetico e setto il segnale di stop
-      controller->startThread();
-      QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine->rootObjects().first());
-      QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
+    Update * update = new Update();
+    UpdateProjects * updateprojects = new UpdateProjects(currentMaximumFitness,
+                                                         absoluteMaximumFitness,
+                                                         currentAverageFitness,
+                                                         absoluteAverageFitness,
+                                                         gen,
+                                                         update);
 
+
+    SAKeController * controller = new SAKeController(qCustomPlotFitness,
+                                                     sselection,
+                                                     spattern,
+                                                     sfilenameRain,
+                                                     sfilenameActivation,
+                                                     sfilenameSavePath,
+                                                     ipop,
+                                                     imaxGen,
+                                                     itbMax,
+                                                     itbMin,
+                                                     idHpMax,
+                                                     idHpMin,
+                                                     fpropCrossover,
+                                                     fpropMutation,
+                                                     fpme,
+                                                     fpmb,
+                                                     currentMaximumFitness,
+                                                     absoluteMaximumFitness,
+                                                     currentAverageFitness,
+                                                     absoluteAverageFitness,
+                                                     inumberProcessor,
+                                                     ielitists,
+                                                     update);
+    controller->setPlotMobility(qCustomPlotMobilityFunction);
+    controller->setPlotkernel(qCustomPlotKernel);
+    controller->setApplication(a);
+    progressBar->setProperty("maximumValue",100);
+    progressBar->setProperty("minimumValue",0);
+
+    controller->setProgressBar(progressBar);
+    //FINE
+
+    //eseguo l'algoritmo genetico e setto il segnale di stop
+    controller->startThread();
+    QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine->rootObjects().first());
+    QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
+
+}
+
+QVariantList SAKeStart::getAllElementsFromProjectName(const QVariant &_projectName){
+    return xmlManager->getAllElementsFromProjectName(_projectName.toString());
 }
 
 string SAKeStart::getPattern() const

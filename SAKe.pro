@@ -63,9 +63,9 @@ HEADERS += \
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686
 QMAKE_LFLAGS+= --enable-auto-import
-QMAKE_CXXFLAGS+= -fopenmp
-QMAKE_LFLAGS +=  -fopenmp
-LIBS += -fopenmp
+#QMAKE_CXXFLAGS+= -fopenmp
+#QMAKE_LFLAGS +=  -fopenmp
+#LIBS += -fopenmp
 
 #win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Sake/libpqxx-4.0/src/.libs/release/ -lpqxx
 #else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Sake/libpqxx-4.0/src/.libs/debug/ -lpqxx

@@ -7,6 +7,7 @@ Dialog {
     title: "Sake Parameters"
     width: 695
     height: 750
+    modality: Qt.ApplicationModal
     contentItem:
 
         Rectangle{
@@ -63,7 +64,6 @@ Dialog {
                         ListElement { text: "Roulette"; }
                         ListElement { text: "Sequential(ordered/unordered)";  }
                         ListElement { text: "TournamentWithoutReplacement"; }
-                        ListElement { text: "NoSelect"; }
                     }
                    onCurrentIndexChanged: show(currentIndex)
                 }
@@ -133,7 +133,14 @@ Dialog {
                             console.log("You chose: " + textProjectName.text);
                             console.log("You chose: " + sakeStart.existProjectName(textProjectName.text));
 
+                        if(textProjectName.length ===0){
+                             messageDialogProjectNameEmpty.open()
+                        }else
 
+                        if( sakeStart.existProjectName(textProjectName.text) === 1 ){
+                            messageDialogProjectName.open()
+                        }
+                           else
                              if(textfileRain.text == "Empty"){
                                   messageDialogRain.open()
                              }else
@@ -160,7 +167,8 @@ Dialog {
                                                             fileDialogPathSave.folder,
                                                             textProjectName.text,
                                                             textNumberProcessor.text,
-                                                            selectionParameterTournamentWithoutReplacement.text
+                                                            selectionParameterTournamentWithoutReplacement.text,
+                                                            0
                                                             )
                                          close()
                                      }
@@ -756,7 +764,22 @@ Dialog {
                     Component.onCompleted: visible = false
                     modality: "ApplicationModal"
                 }
-
+                MessageDialog {
+                    id: messageDialogProjectName
+                    title: "Input error"
+                    text: "The project name already exists."
+                    onAccepted: close()
+                    Component.onCompleted: visible = false
+                    modality: "ApplicationModal"
+                }
+                MessageDialog {
+                    id: messageDialogProjectNameEmpty
+                    title: "Input error"
+                    text: "The project name is empty."
+                    onAccepted: close()
+                    Component.onCompleted: visible = false
+                    modality: "ApplicationModal"
+                }
 
         }
 }

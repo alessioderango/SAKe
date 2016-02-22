@@ -1,6 +1,6 @@
 #include "xmlmanager.h"
 
-XMLManager::XMLManager()
+XMLManager::XMLManager(QObject *_listProjects)
 {
 
 #ifdef __arm__ //on the target
@@ -14,10 +14,12 @@ XMLManager::XMLManager()
 #endif
 #endif
 
+    listProjects=_listProjects;
+
 }
 
 
-int findAllElementsByProject(QString xmlFilePath){
+int findAllElementsByProject(QString xmlFilePath,QString nameProject){
 
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
@@ -40,32 +42,88 @@ int findAllElementsByProject(QString xmlFilePath){
     QDomNodeList a = documentElement.elementsByTagName("Project");
     qDebug() << a.length();
     for (int i = 0; i < a.length(); i++) {
-        qDebug() << a.at(i).nodeValue();
+        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+        if(QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0)
+            return 1;
     }
-
     // Load document
     return 0;
 }
 
-void findElementsWithText(const QDomElement& elem, const QString& attr, QList<QDomElement> &foundElements)
-{
-   qDebug() <<  elem.text() << " vs " << attr;
-   qDebug() <<  elem.nodeName() << " vs " << attr;
-   qDebug() <<  elem.nodeType() << " vs " << attr;
-   qDebug() <<  QString::compare(elem.text(), attr, Qt::CaseInsensitive);
+QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
+    QVariantList list;
+    QFile inFile( xmlFilePath );
+    if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        qDebug( "Failed to open file for reading." );
+        return list;
+    }
+
+    QDomDocument document;
+    if( !document.setContent( &inFile ) )
+    {
+        qDebug( "Failed to parse the file into a DOM tree." );
+        inFile.close();
+        return list;
+    }
+
+    inFile.close();
+
+    QDomElement documentElement = document.documentElement();
+    QDomNodeList a = documentElement.elementsByTagName("Project");
+    qDebug() << a.length();
+    for (int i = 0; i < a.length(); i++) {
+        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+        if(QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0)
+            for (int j = 0; j < a.at(i).childNodes().length(); j++) {
+                if(j==1)
+                {
+                    list.append(a.at(i).childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
+                    list.append(a.at(i).childNodes().at(j).childNodes().at(1).firstChild().nodeValue());
+                    list.append(a.at(i).childNodes().at(j).childNodes().at(2).firstChild().nodeValue());
+                    qDebug() << a.at(i).childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
+                    qDebug() << a.at(i).childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
+                    qDebug() << a.at(i).childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
+                }else{
+                    list.append(a.at(i).childNodes().at(j).firstChild().nodeValue());
+                    qDebug() << a.at(i).childNodes().at(j).firstChild().nodeValue();
+                }
+
+            }
 
 
-  if( QString::compare(elem.text(), attr, Qt::CaseInsensitive) == 0 )
-    foundElements.append(elem);
-
-  QDomElement child = elem.firstChildElement();
-  while( !child.isNull() ) {
-    findElementsWithText(child, attr, foundElements);
-    child = child.nextSiblingElement();
-  }
+    }
+    return list;
 }
 
+
+
 int XMLManager::findProjectName(QString nameProject){
+    int result = findAllElementsByProject(xmlFilePath,nameProject);
+    qDebug() << result << endl;
+    return result;
+}
+
+int XMLManager::SaveXMLFileAlreadyExist(QString name,
+                            QString selection,
+                            QString value1,
+                            QString value2,
+                            QString numberProcessor,
+                            QString populationSize,
+                            QString maximumNumberOfGenerations,
+                            QString tbMax,
+                            QString tbMin,
+                            QString dHpMax,
+                            QString dHpMin,
+                            QString probabilityOfCrossover,
+                            QString probabilityOfMutation,
+                            QString pme,
+                            QString pmb,
+                            QString pattern,
+                            QString pathRains,
+                            QString pathActivations
+                            )
+{
 
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
@@ -85,23 +143,47 @@ int XMLManager::findProjectName(QString nameProject){
     inFile.close();
 
     QDomElement documentElement = document.documentElement();
-    QList<QDomElement> foundElements;
-    // Load document
-    findAllElementsByProject(xmlFilePath);
+    QDomNodeList a = documentElement.elementsByTagName("Project");
+    qDebug() << a.length();
+    for (int i = 0; i < a.length(); i++) {
+        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+        if(QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive)==0)
 
-    //findElementsWithText(documentElement,nameProject, foundElements);
-    qDebug()<< "Receive " <<nameProject;
-    qDebug()<< "Receive " <<foundElements.length();
-    if(foundElements.length() ==0){
-        return 0;
-    }else
-    {
-        if(foundElements.length() ==1){
-            return 1;
-        }
+
+                    a.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
+                    a.at(i).childNodes().at(1).childNodes().at(1).firstChild().setNodeValue(value1);
+                    a.at(i).childNodes().at(1).childNodes().at(2).firstChild().setNodeValue(value2);
+
+                    a.at(i).childNodes().at(2).firstChild().setNodeValue(numberProcessor);
+                    a.at(i).childNodes().at(3).firstChild().setNodeValue(populationSize);
+                    a.at(i).childNodes().at(4).firstChild().setNodeValue(maximumNumberOfGenerations);
+                    a.at(i).childNodes().at(5).firstChild().setNodeValue(tbMax);
+                    a.at(i).childNodes().at(6).firstChild().setNodeValue(tbMin);
+                    a.at(i).childNodes().at(7).firstChild().setNodeValue(dHpMax);
+                    a.at(i).childNodes().at(8).firstChild().setNodeValue(dHpMin);
+                    a.at(i).childNodes().at(9).firstChild().setNodeValue(probabilityOfCrossover);
+                    a.at(i).childNodes().at(10).firstChild().setNodeValue(probabilityOfMutation);
+                    a.at(i).childNodes().at(11).firstChild().setNodeValue(pme);
+                    a.at(i).childNodes().at(12).firstChild().setNodeValue(pmb);
+                    a.at(i).childNodes().at(13).firstChild().setNodeValue(pattern);
+                    a.at(i).childNodes().at(14).firstChild().setNodeValue(pathRains);
+                    a.at(i).childNodes().at(15).firstChild().setNodeValue(pathActivations);
+
+
     }
-}
 
+    // Save content back to the file
+    if (!inFile.open(QIODevice::Truncate | QIODevice::WriteOnly)) {
+        qDebug("Basically, now we lost content of a file");
+        return 0;
+    }
+    QByteArray xml = document.toByteArray();
+    inFile.write(xml);
+    inFile.close();
+
+
+    return 1;
+}
 
 int XMLManager::SaveXMLFile(QString name,
                             QString selection,
@@ -254,6 +336,8 @@ int XMLManager::SaveXMLFile(QString name,
     inFile.write(xml);
     inFile.close();
 
+    ReadMainXML();
+
 }
 
 void parseProject(QXmlStreamReader& xml,QVariantList &a){
@@ -290,8 +374,10 @@ void parseProject(QXmlStreamReader& xml,QVariantList &a){
 
 
 
-void XMLManager::ReadMainXML(QVariantList &a)
+void XMLManager::ReadMainXML()
 {
+    QVariant returnedValue;
+    QVariantList a;
     qDebug() << "ReadMainXML ";
     QFile* file = new QFile(xmlFilePath);
     if(!file->open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -314,5 +400,8 @@ void XMLManager::ReadMainXML(QVariantList &a)
             }
         }//startElement
     }//while
+
+
+    QMetaObject::invokeMethod(listProjects, "addElementList", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, QVariant::fromValue(a)));
 
 }

@@ -87,9 +87,11 @@ public slots:
                   const QVariant &filenameSavePath,
                   const QVariant &_projectName,
                   const QVariant &_numberProcessor,
-                  const QVariant &_elitists
+                  const QVariant &_elitists,
+                  const QVariant &tipo
                   );
       int existProjectName(const QVariant &_projectName);
+      QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
 //    void updateCurrentMaximumFitness(QString);
 //    void updateAbosulteMaximumFitness(QString s);
 //    void updateCurrentAvarageFitness(QString s);

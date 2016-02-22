@@ -276,7 +276,7 @@ char **x= (char**)malloc(sizeof(char*) * 1);
           ///// End of construction of the algorithm
           //make_parallel_my(parser);
 
-          parallel.setNumberProcessor(numberofProcessor);
+          //parallel.setNumberProcessor(numberofProcessor);
 
           /////////////////////////////////////////
           // to be called AFTER all parameters have been read!!!
