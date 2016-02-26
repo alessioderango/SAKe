@@ -88,6 +88,7 @@ public slots:
                   const QVariant &_projectName,
                   const QVariant &_numberProcessor,
                   const QVariant &_elitists,
+                  const QVariant &thresholdKernel,
                   const QVariant &tipo
                   );
       int existProjectName(const QVariant &_projectName);
@@ -117,6 +118,7 @@ private:
     string projectName;
     int numberProcessor;
     string pattern;
+    double thresholdKernel;
     QQmlApplicationEngine* engine;
     QApplication * a;
 //    QObject *_currentMaximumFitness;

@@ -2,6 +2,7 @@
 #include "qcustomplot.h"
 #include "SAke/Rain.h"
 #include "SAke/Activation.h"
+#include "SAke/Ym.h"
 #include <QtQuick>
 #include <time.h>
 #include <iostream>
@@ -25,7 +26,7 @@ public:
     void updateGraph1(QVector<double> x,QVector<double> y);
     void paint( QPainter* painter );
 
-    void updateGraph(double *Y,double YsMin,double YsMin2);
+    void updateGraph(double *Y,Ym YsMin,Ym YsMin2);
     Q_INVOKABLE void initCustomPlotMobilityFunction();
 
     Rain *getRain() const;

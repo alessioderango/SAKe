@@ -109,7 +109,7 @@ public:
 		for (int i = tb1 ; i < tb; i++)
 			FiTemp[i] = 0;
 
-//		_genotype.deleteFi();
+//      _genotype.deleteFi();
 //		realloc(_genotype.getFi(),  tb * sizeof(double));
 //		memcpy( _genotype.getFi(), FiTemp, tb * sizeof(double) );
 

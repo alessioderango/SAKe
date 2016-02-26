@@ -92,9 +92,6 @@ private :
 
 
        const EOT now= _pop.best_element();
-       //const double *Fi=now.getFi();
-       //   const int tb=now.getSize();
-       //  typename eoPop<EOT>::iterator it = std::max_element(_pop.begin(), _pop.end());
        double * Y = new double[rain_size];
        for (int t = 0; t < rain_size; t++) {
            double ym = 0;
@@ -105,18 +102,13 @@ private :
                }
            Y[t] = ym;
        }
-       plotMobility->updateGraph(Y,now.getYsMinConst(),now.getYsMin2Const());
+       plotMobility->updateGraph(Y,now.getYmMinConst(),now.getYmMin2Const());
        delete []Y;
       // currentMaximumFitness->children();
 
        plotKernel->updateGraph(now.getFiConst(),now.getSizeConst());
        qCustomPlot->updateGraph0(x,yBest);
        qCustomPlot->updateGraph1(x,yAverage);
-
-//       QString tmp= QString("Current Maximum Fitness:    %1").arg(fitness );
-//       currentMaximumFitness->setProperty("text",tmp);
-//       QString tmpAvarage= QString("Current Maximum Fitness:    %1").arg( v / _pop.size() );
-//       currentAverageFitness->setProperty("text",tmpAvarage);
 
        QString genString= QString("Gen:    %1").arg(steps);
        Q_EMIT update->valueGen(genString);
@@ -135,16 +127,18 @@ private :
            Q_EMIT update->valueAbsoluteMaximumFitness(tmpAvarage);
            AbsoluteMaximumFitness=fitness;
        }
-       //QQmlProperty(currentMaximumFitness, "text").write(tmp);
-       //cout << "aaaaaaaaaaaaaa " <<currentMaximumFitness->setProperty("text",tmp)<< endl;
-   //    QWidget* tmp2 = qobject_cast<QWidget*>(currentMaximumFitness );
+       QString tbString= QString("tb:    %1").arg(_pop.best_element().getSizeConst() );
+       //qDebug() << tbString << endl;
+       Q_EMIT update->valueTb(tbString);
 
-       //appli->processEvents();
-//       ((QLabel*)currentMaximumFitness)->repaint();
-//       if(currentMaximumFitness->property("text").toDouble() > absoluteMaximumFitness->property("text").toDouble()){
-//                QString tmp2= QString("Absolute Maximum Fitness:    %1").arg( _pop.best_element().fitness());
-//                absoluteMaximumFitness->setProperty("text",QVariant(tmp2));
-//       }
+       QString deltaCriticoString= QString("Δcritico:    %1").arg((now.getYmMinConst().getValue()-now.getYmMin2Const().getValue())/now.getYmMinConst().getValue());
+       //qDebug() << deltaCriticoString << endl;
+       Q_EMIT update->valueDeltaCritico(deltaCriticoString);
+
+       QString momentoDelPrimoOrdineString= QString("Momento del primo ordine:    %1").arg(now.getMomentoDelPrimoOrdineConst());
+       //qDebug() << momentoDelPrimoOrdineString << endl;
+       Q_EMIT update->valueMomentoDelPrimoOrdine(momentoDelPrimoOrdineString);
+
        steps++;
 //       cout << (steps*100)/maxGen << endl;
        progressBar->setProperty("value",((steps*100)/maxGen));

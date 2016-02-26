@@ -5,6 +5,9 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
                                QObject *__currentAverageFitness,
                                QObject *__absoluteAverageFitness,
                                QObject *__gen,
+                               QObject *__tb,
+                               QObject *__deltaCritico,
+                               QObject *__momentoDelPrimoOrdine,
                                Update * _update)
 {
 
@@ -13,6 +16,9 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
     _currentAverageFitness = __currentAverageFitness;
     _absoluteAverageFitness = __absoluteAverageFitness;
     _gen =__gen;
+    _tb=__tb;
+    _deltaCritico=__deltaCritico;
+    _momentoDelPrimoOrdine=__momentoDelPrimoOrdine;
 
     update=_update;
     QObject::connect(update, SIGNAL(valueCurrentMaximumFitness(QString)),this, SLOT( updateCurrentMaximumFitness(QString)));
@@ -20,7 +26,9 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
     QObject::connect(update, SIGNAL(valueCurrentAvarageFitness(QString)),this, SLOT( updateCurrentAvarageFitness(QString)));
     QObject::connect(update, SIGNAL(valueAbsoluteAvarageFitness(QString)),this, SLOT( updateAbsoluteAvarageFitness(QString)));
     QObject::connect(update, SIGNAL(valueGen(QString)),this, SLOT( updateGen(QString)));
-
+    QObject::connect(update, SIGNAL(valueTb(QString)),this, SLOT( updateTb(QString)));
+    QObject::connect(update, SIGNAL(valueDeltaCritico(QString)),this, SLOT( updateDeltaCritico(QString)));
+    QObject::connect(update, SIGNAL(valueMomentoDelPrimoOrdine(QString)),this, SLOT( updateMomentoDelPrimoOrdine(QString)));
 }
 
 void UpdateProjects::updateCurrentMaximumFitness(QString s){
@@ -45,4 +53,16 @@ void UpdateProjects::updateAbsoluteAvarageFitness(QString s){
 void UpdateProjects::updateGen(QString s){
 
     _gen->setProperty("text",s);
+}
+void UpdateProjects::updateTb(QString s){
+
+    _tb->setProperty("text",s);
+}
+void UpdateProjects::updateDeltaCritico(QString s){
+
+    _deltaCritico->setProperty("text",s);
+}
+void UpdateProjects::updateMomentoDelPrimoOrdine(QString s){
+
+    _momentoDelPrimoOrdine->setProperty("text",s);
 }

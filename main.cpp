@@ -11,6 +11,7 @@
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
 
     qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");

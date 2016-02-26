@@ -13,7 +13,9 @@ signals:
     void valueCurrentAvarageFitness(QString);
     void valueAbsoluteAvarageFitness(QString);
     void valueGen(QString);
-
+    void valueTb(QString);
+    void valueDeltaCritico(QString);
+    void valueMomentoDelPrimoOrdine(QString);
 public slots:
 
 private:

@@ -23,7 +23,7 @@ public:
     using eoCountContinue<EOT>::thisGenerationPlaceholder;
 
   /// Ctor for setting a
-  eoGenContinueMy( QString _savePath)
+  eoGenContinueMy( QString _savePath,double _thresholdKernel)
           : eoCountContinue<EOT>( ),
             eoValueParam<unsigned>(0, "Generations", "Generations"),
             stop( false )
@@ -32,6 +32,11 @@ public:
       _savePath.remove(0,8);
       savePath=_savePath;
       savePath+="/kernels.csv";
+      thresholdKernel =_thresholdKernel;
+      ofstream myfile;
+      myfile.open (savePath.toStdString(),ios::app);
+       myfile << "gen ; fitness ; DeltaCritico ; tb ; momento del primo ordine;"<< endl;
+        myfile.close();
 
     }
 
@@ -45,11 +50,17 @@ public:
       for (int t = 0; t < _vEO.size(); t++) {
           double tmp = _vEO[t].fitness();
 
-         if(tmp >= (double)0.3){
+         if(tmp >= thresholdKernel){
 
           int stop =  _vEO[t].getSizeConst();
           myfile << thisGeneration << " ;";
-            myfile << "fitness ; "<<tmp <<" ; ";
+          myfile << tmp << " ;";
+          double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
+          myfile << delta << " ;";
+          myfile << stop << " ;";
+          myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+          myfile << " ;";
+          //  myfile << "fitness ; "<<tmp <<" ; ";
           for (int i = 0; i < stop; i++) {
              myfile << _vEO[t].getFiConst()[i] << "; ";
           }
@@ -88,6 +99,7 @@ public:
 
 private:
   bool stop;
+  double thresholdKernel;
   QString savePath;
   QObject *gen;
 

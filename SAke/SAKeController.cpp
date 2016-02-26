@@ -137,6 +137,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                QObject *_absoluteAverageFitness,
                                int _numberofProcessor,
                                int _maxNumberToConsider,
+                               double _thresholdKernel,
                                Update* _update)
 
 {
@@ -184,6 +185,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
    savePath = filenameSavePath;
    maxNumberToConsider=_maxNumberToConsider;
    numberofProcessor=_numberofProcessor;
+   thresholdKernel = _thresholdKernel;
 
 
 }
@@ -262,7 +264,7 @@ char **x= (char**)malloc(sizeof(char*) * 1);
           // yes, this is representation indepedent once you have an eoInit
           eoPop<Indi>& pop   = do_make_pop(parser, state, init);
 
-          this->stop = new eoGenContinueMy<Indi>(savePath);
+          this->stop = new eoGenContinueMy<Indi>(savePath,thresholdKernel);
           // stopping criteria
           eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
           // output
@@ -274,9 +276,11 @@ char **x= (char**)malloc(sizeof(char*) * 1);
           eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider);
 
           ///// End of construction of the algorithm
+          //parallel.setNumberProcessor(numberofProcessor);
           //make_parallel_my(parser);
 
           //parallel.setNumberProcessor(numberofProcessor);
+          //parallel.setNumberProcessor(8);
 
           /////////////////////////////////////////
           // to be called AFTER all parameters have been read!!!
@@ -345,16 +349,18 @@ void SAKeController::setApplication(QApplication * _a){
     a=_a;
 }
 
-void SAKeController::stopThread(QQuickCloseEvent * selection){
-//    qDebug() << "close " << "\n";
+void SAKeController::stopThread(){
+    qDebug() << "close " << "\n";
     //this->moveToThread(QApplication::instance()->thread());
     //  this->exit(0);
 //    this->requestInterruption();
 //    if(this->isInterruptionRequested())
 //        this->stop();
-
-    if(!this->stop)
-    this->stop->setStop(true);
+//    this->sleep(10000);
+    if(this->stop){
+        qDebug() << "close2 " << "\n";
+        this->stop->setStop(true);
+    }
 
 }
 

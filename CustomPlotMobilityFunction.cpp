@@ -166,7 +166,7 @@ void CustomPlotMobilityFunction::setupQuadraticDemo( QCustomPlot* customPlot )
       customPlot->yAxis->setRange( 0,20 );
 
       customPlot->addGraph();
-      customPlot->graph( 1 )->setPen( QPen( Qt::gray ) );
+      customPlot->graph(1)->setPen( QPen( Qt::gray ) );
 
       QVector<double> timetmp(rain_size),ytime(rain_size);
       for (int i=0; i<rain_size; i++){
@@ -178,7 +178,16 @@ void CustomPlotMobilityFunction::setupQuadraticDemo( QCustomPlot* customPlot )
 
       customPlot->addGraph();
 
+      customPlot->graph(2)->setPen( QPen( Qt::blue ) );
+
       customPlot->graph(2)->setData(timetmp, ytime);
+
+      customPlot->addGraph();
+      customPlot->graph(3)->setPen( QPen( Qt::blue ) );
+      customPlot->graph(3)->setLineStyle(QCPGraph::lsNone);
+      customPlot->graph(3)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 7));
+
+
 
     //}
     // configure bottom axis to show date and time instead of number:
@@ -190,23 +199,9 @@ void CustomPlotMobilityFunction::setupQuadraticDemo( QCustomPlot* customPlot )
     // set a fixed tick-step to one tick per month:
     customPlot->xAxis->setAutoTickStep(true);
     customPlot->xAxis->setTickStep(2628000); // one month in seconds
-   // customPlot->xAxis->setSubTickCount(3);
-    // apply manual tick and tick label for left axis:
-  //  customPlot->yAxis->setAutoTicks(false);
-  //  customPlot->yAxis->setAutoTickLabels(false);
-//    customPlot->yAxis->setTickVector(QVector<double>() << 5 << 55);
-//    customPlot->yAxis->setTickVectorLabels(QVector<QString>() << "Not so\nhigh" << "Very\nhigh");
-    // set axis labels:
+
     customPlot->xAxis->setLabel("Date");
     customPlot->yAxis->setLabel("y");
-    // make top and right axes visible but without ticks and labels:
-//    customPlot->xAxis2->setVisible(true);
-//    customPlot->yAxis2->setVisible(true);
-//    customPlot->xAxis2->setTicks(false);
-//    customPlot->yAxis2->setTicks(false);
-//    customPlot->xAxis2->setTickLabels(false);
-//    customPlot->yAxis2->setTickLabels(false);
-    // set axis ranges to show all data:
 
 
      ptime rain0 = ptime_from_tm(rain[0].getTime());
@@ -224,7 +219,7 @@ void CustomPlotMobilityFunction::setupQuadraticDemo( QCustomPlot* customPlot )
     connect(customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
     connect(customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
     first = true;
-    int graphnum=3;
+    int graphnum=4;
     if(first){
       QVector<double> x(100), y(100);
       for (int j=0; j<activation_size; j++)
@@ -298,7 +293,7 @@ void CustomPlotMobilityFunction::setRain(Rain *value,int _rain_size)
     rain_size =_rain_size;
 }
 
-void CustomPlotMobilityFunction::updateGraph(double *Y,double YsMin,double YsMin2){
+void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2){
 
 
 
@@ -326,13 +321,21 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,double YsMin,double YsMin
 
     QVector<double> timetmp(rain_size),ytime(rain_size),ytime2(rain_size);
     for (int i=0; i<rain_size; i++){
-        timetmp[i]=(ptime_from_tm(rain[i].getTime())-ptime(date(1970, Jan, 1))).total_seconds();
-        ytime[i]=YsMin;
-        ytime2[i]=YsMin2;
+        //timetmp[i]=(ptime_from_tm(rain[i].getTime())-ptime(date(1970, Jan, 1))).total_seconds();
+        ytime[i]=YmMin.getValue();
+        ytime2[i]=YmMin2.getValue();
     }
 //    m_CustomPlot->graph(1)->setLineStyle((QCPGraph::LineStyle)0);
-    m_CustomPlot->graph(1)->setData(timetmp, ytime);
-    m_CustomPlot->graph(2)->setData(timetmp, ytime2);
+    m_CustomPlot->graph(1)->setData(time, ytime);
+    m_CustomPlot->graph(2)->setData(time, ytime2);
+
+    QVector<double> yPoint(2),xPoint(2);
+
+    yPoint[0]=YmMin.getValue();
+    yPoint[1]=YmMin2.getValue();
+    xPoint[0]=(ptime_from_tm(YmMin.getTime())-ptime(date(1970, Jan, 1))).total_seconds();
+    xPoint[1]=(ptime_from_tm(YmMin2.getTime())-ptime(date(1970, Jan, 1))).total_seconds();
+    m_CustomPlot->graph(3)->setData(xPoint, yPoint);
 
 //     m_CustomPlot->addGraph();
 //       pen.setColor(QColor(qSin(1+1.2)*80+80, qSin(0.3+0)*80+80, qSin(0.3+1.5)*80+80));

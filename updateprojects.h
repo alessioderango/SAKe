@@ -13,6 +13,9 @@ public:
     QObject *_currentAverageFitness,
     QObject *_absoluteAverageFitness,
     QObject *_gen,
+    QObject *__tb,
+    QObject *__deltaCritico,
+    QObject *__momentoDelPrimoOrdine,
     Update * _update);
 
 
@@ -22,6 +25,9 @@ public slots:
     void updateCurrentAvarageFitness(QString s);
     void updateAbsoluteAvarageFitness(QString s);
     void updateGen(QString s);
+    void updateTb(QString s);
+    void updateDeltaCritico(QString s);
+    void updateMomentoDelPrimoOrdine(QString s);
 
 private:
      QObject *_currentMaximumFitness;
@@ -29,6 +35,9 @@ private:
      QObject *_currentAverageFitness;
      QObject *_absoluteAverageFitness;
      QObject *_gen;
+     QObject *_tb;
+     QObject *_deltaCritico;
+     QObject *_momentoDelPrimoOrdine;
      Update * update;
 
 };

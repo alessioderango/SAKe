@@ -168,6 +168,7 @@ Dialog {
                                                             textProjectName.text,
                                                             textNumberProcessor.text,
                                                             selectionParameterTournamentWithoutReplacement.text,
+                                                            textFieldSoglia.text,
                                                             0
                                                             )
                                          close()
@@ -438,6 +439,28 @@ Dialog {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 378
+                }
+
+                Label {
+                    id: labeSoglia
+                    x: 446
+                    text: qsTr("minimum kernel saving threshold")
+                    anchors.horizontalCenterOffset: 109
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 348
+                }
+
+                TextField {
+                    id: textFieldSoglia
+                    x: 581
+                    width: 63
+                    text: "0.5"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 348
+                    anchors.horizontalCenterOffset: 255
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    placeholderText: qsTr("")
                 }
 
                 TextField {

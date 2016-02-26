@@ -121,7 +121,7 @@ public:
 		double f=0;
 		Ym * ym= new Ym[rain_size];
 		int countYm=0;
-		//TODO perche chiedere oreste da 1 a Y.Count-2
+
 		for (int t = 1; t < rain_size-1; t++) {
             bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
 			if(cross){
@@ -142,7 +142,7 @@ public:
 
 
         double YsMin = 999999999;
-		double iMin =-1;
+        int iMin =-1;
 
         for (int s = 0; s < activations_size; s++) {
             for (int i = 0; i < countYm; i++) {
@@ -173,10 +173,18 @@ public:
 		if(iMin > countYm-1)  iMin = countYm-1;
         int index=(iMin+1);
         double dYcr = (YsMin-ym[index].getValue())/YsMin;
-        printf("dYcr %f \n",dYcr);
+//        printf("dYcr %f \n",dYcr);
+//        printf("YsMin %f \n",YsMin);
+//        printf("YsMin2 %f \n",ym[index].getValue());
         _eo.setdYcr(dYcr);
-        _eo.setYsMin(YsMin);
-        _eo.setYsMin2(ym[index].getValue());
+        //_eo.setYsMin(YsMin);
+        //_eo.setYsMin2(ym[index].getValue());
+        //_eo.setiMin(iMin);
+        Ym ymMin= ym[iMin];
+        Ym ymMin2 = ym[index];
+        _eo.setYmMin(ymMin);
+        _eo.setYmMin2(ymMin2);
+
 
 		double fMax=0;
        // printf("activations_size %d \n",activations_size);
@@ -212,6 +220,11 @@ public:
 //			tm temp = rain[0].getTime();
             double f = getFitness(Y,_eo);
 
+            double momentoDelPrimoOrdine = 0;
+            for (int i = 0; i < tb; i++) {
+                momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
+            }
+            _eo.setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
 
 			delete []Y;
 			_eo.fitness(f);

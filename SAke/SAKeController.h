@@ -72,6 +72,7 @@ public:
                    QObject *_absoluteAverageFitness,
                    int numberofProcessor,
                    int maxNumberToConsider,
+                   double _thresholdKernel,
                    Update* update);
 
 
@@ -87,7 +88,7 @@ protected:
 
 public slots:
     void startThread();
-    void stopThread(QQuickCloseEvent * selection);
+    void stopThread();
 private:
     void run();
     void startAlgorithm();
@@ -130,6 +131,7 @@ private:
     float    pmb;
     int maxNumberToConsider;
     int numberofProcessor;
+    double thresholdKernel;
     QString  savePath;
     QApplication * a;
     Update* update;

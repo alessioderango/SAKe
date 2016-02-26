@@ -13,6 +13,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include "Ym.h"
 
 using namespace std;
 /**
@@ -47,8 +48,12 @@ public:
 		Fi = NULL;
 		number =0;
         dYcr=0;
-        YsMin=0;
-        YsMin2=0;
+//        YsMin=0;
+//        YsMin2=0;
+//        iMin=0;
+        min();
+        min2();
+        momentoDelPrimoOrdine=0;
 		// END   Code of default Ctor of an eoSAKe object
 	}
 
@@ -112,24 +117,66 @@ public:
     double getdYcrConst() const  {
         return dYcr;
     }
-    void setYsMin(double _YsMin)  {
-        YsMin =  _YsMin;
+
+
+    void setMomentoDelPrimoOrdine(double _momentoDelPrimoOrdine)  {
+        momentoDelPrimoOrdine =  _momentoDelPrimoOrdine;
     }
-    double getYsMin()  {
-        return YsMin;
+    double getMomentoDelPrimoOrdine()  {
+        return momentoDelPrimoOrdine;
     }
-    double getYsMinConst() const  {
-        return YsMin;
+    double getMomentoDelPrimoOrdineConst() const  {
+        return momentoDelPrimoOrdine;
     }
-    void setYsMin2(double _YsMin2)  {
-        YsMin2 =  _YsMin2;
-    }
-    double getYsMin2()  {
-        return YsMin2;
-    }
-    double getYsMin2Const() const  {
-        return YsMin2;
-    }
+//    void setYsMin(double _YsMin)  {
+//        YsMin =  _YsMin;
+//    }
+//    double getYsMin()  {
+//        return YsMin;
+//    }
+//    double getYsMinConst() const  {
+//        return YsMin;
+//    }
+
+//    int getiMin()  {
+//        return iMin;
+//    }
+//    int getiMinConst() const  {
+//        return iMin;
+//    }
+
+//    void setiMin(int _iMin)  {
+//        iMin =  _iMin;
+//    }
+//    void setYsMin2(double _YsMin2)  {
+//        YsMin2 =  _YsMin2;
+//    }
+//    double getYsMin2()  {
+//        return YsMin2;
+//    }
+//    double getYsMin2Const() const  {
+//        return YsMin2;
+//    }
+
+        void setYmMin(Ym _YmMin)  {
+            min =  _YmMin;
+        }
+        Ym getYmMin()  {
+            return min;
+        }
+        Ym getYmMinConst() const  {
+            return min;
+        }
+
+        void setYmMin2(Ym _YmMin2)  {
+            min2 =  _YmMin2;
+        }
+        Ym getYmMin2()  {
+            return min2;
+        }
+        Ym getYmMin2Const() const  {
+            return min2;
+        }
 
 	void setFiIndex(int _i, double value) {
 		Fi[_i] = value;
@@ -162,8 +209,12 @@ private:
 
     double dYcr;
 
-    double YsMin;
-    double YsMin2;
+//    double YsMin;
+//    double YsMin2;
+//    int iMin;
+    Ym min;
+    Ym min2;
+    double momentoDelPrimoOrdine;
 	 	// size of the array Fi
 
 	// END   Private data of an eoSAKe object

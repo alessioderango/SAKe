@@ -31,6 +31,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &_projectName,
                          const QVariant &_numberProcessor,
                          const QVariant &_elitists,
+                         const QVariant &_thresholdKernel,
                          const QVariant &tipo
                          ){
 
@@ -95,6 +96,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     float    fpropMutation       = propMutation.toFloat();
     float    fpme                = pme.toFloat();
     float    fpmb                = pmb.toFloat();
+    double   dthresholdKernel     = _thresholdKernel.toDouble();
 
 //       qDebug() << "selection arrivato " << selection << "\n";
 //       qDebug() << "pattern arrivato " << pattern << "\n";
@@ -110,7 +112,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 //       qDebug() << "fpmb arrivato " << pmb << "\n";
 //       qDebug() << "filename arrivato " << sfilenameRain << "\n";
 //       qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
-//       qDebug() << "sfilenameSavePath arrivato " << sfilenameSavePath << "\n";
+       qDebug() << "sfilenameSavePath arrivato " << sfilenameSavePath << "\n";
 //       qDebug() << "_projectName  arrivato " << sprojectname << "\n";
 //       qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
 //       qDebug() << "ielitists arrivato " << ielitists << "\n";
@@ -124,6 +126,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     QVariant msg = sprojectname;
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+    //QObject *tabmain = rootObject->findChild<QObject*>("Tabmain");
     numberProject++;
 
 
@@ -142,6 +145,14 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     QObject *currentAverageFitness = rootObject->findChild<QObject*>(QString("currentAverageFitness%1").arg(numberProject));
     QObject *absoluteAverageFitness = rootObject->findChild<QObject*>(QString("absoluteAverageFitness%1").arg(numberProject));
     QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(numberProject));
+    QObject *tb = rootObject->findChild<QObject*>(QString("tb%1").arg(numberProject));
+    QObject *deltaCritico = rootObject->findChild<QObject*>(QString("deltaCritico%1").arg(numberProject));
+    QObject *momentoDelPrimoOrdine = rootObject->findChild<QObject*>(QString("momentoDelPrimoOrdine%1").arg(numberProject));
+
+
+    QObject *buttonStop = rootObject->findChild<QObject*>(QString("stop%1").arg(numberProject));
+
+
 
     Update * update = new Update();
     UpdateProjects * updateprojects = new UpdateProjects(currentMaximumFitness,
@@ -149,6 +160,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                          currentAverageFitness,
                                                          absoluteAverageFitness,
                                                          gen,
+                                                         tb,
+                                                         deltaCritico,
+                                                         momentoDelPrimoOrdine,
                                                          update);
 
 
@@ -174,6 +188,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                      absoluteAverageFitness,
                                                      inumberProcessor,
                                                      ielitists,
+                                                     dthresholdKernel,
                                                      update);
     controller->setPlotMobility(qCustomPlotMobilityFunction);
     controller->setPlotkernel(qCustomPlotKernel);
@@ -183,11 +198,12 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 
     controller->setProgressBar(progressBar);
     //FINE
-
+QObject::connect(buttonStop, SIGNAL(clicked()),controller, SLOT( stopThread()));
+//QObject::connect(tabmain, SIGNAL(stopExecution()),controller, SLOT( stopThread()));
     //eseguo l'algoritmo genetico e setto il segnale di stop
     controller->startThread();
-    QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine->rootObjects().first());
-    QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
+//    QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine->rootObjects().first());
+//    QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
 
 }
 
