@@ -191,6 +191,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
 }
 void SAKeController::startAlgorithm()
 {
+    parallel.setNumberProcessor(numberofProcessor);
     srand(time(0));
 //    qDebug() << "Start Algorithm %d /n"<< "/n";
     time_t start_time, end_time;
@@ -276,9 +277,12 @@ char **x= (char**)malloc(sizeof(char*) * 1);
           eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider);
 
           ///// End of construction of the algorithm
-          //parallel.setNumberProcessor(numberofProcessor);
-          //make_parallel_my(parser);
 
+          //parallel.make_parallel_my(numberofProcessor);
+
+           #ifdef _OPENMP
+                 omp_set_num_threads( numberofProcessor );
+            #endif // !_OPENMP
           //parallel.setNumberProcessor(numberofProcessor);
           //parallel.setNumberProcessor(8);
 

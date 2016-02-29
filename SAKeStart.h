@@ -13,6 +13,9 @@
 #include <qapplication.h>
 #include "xmlmanager.h"
 #include "update.h"
+
+
+
 class SAKeStart : public QObject
 {
     Q_OBJECT

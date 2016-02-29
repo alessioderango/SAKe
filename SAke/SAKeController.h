@@ -1,5 +1,7 @@
 #ifndef SAKECONTROLLER_H
 #define SAKECONTROLLER_H
+
+#include <utils/eoParallel.h>
 #include "SAke/eoSAKeEvalFunc.h"
 #include <iostream>
 #include <time.h>
@@ -12,6 +14,7 @@ using namespace std;
 #include "eoSAKe.h"
 #include "eoSAKeInit.h"
 #include "updateprojects.h"
+//#include "SAke/eoParallelMy.h"
 
 // GENOTYPE   eoSAKe ***MUST*** be templatized over the fitness
 
@@ -33,7 +36,7 @@ typedef eoSAKe<MyFitT> Indi;      // ***MUST*** derive from EO
 void make_help(eoParser & _parser);
 
 
-//#include <utils/eoParallel.h>
+
 #include <QObject>
 #include <QtQuick>
 #include "CustomPlotItem.h"

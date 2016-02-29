@@ -70,7 +70,7 @@ public:
             }
         } else if (Inputpattern.compare( "Triangolare Asc") == 0) {
             for (i = 0; i < tb; i++) {
-                double hMax = (double)(2 /tb);
+                double hMax = (double)(2 /(double)tb);
                 fi[i] = ((double)(i / (double)(tb * hMax)));
             }
         }
@@ -82,7 +82,7 @@ public:
 //        for (i = 0; i < tb; i++) {
 //            printf(" %f ",fi[i]);
 //        }
-        printf("\n");
+//        printf("\n");
 		return fi;
 	}
 

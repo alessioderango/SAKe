@@ -4,7 +4,7 @@ QT += qml xml quick widgets
 greaterThan(QT_MAJOR_VERSION, 4) :QT+= widgets printsupport declarative
 
 
-#CONFIG += console
+CONFIG += console
 
 SOURCES += main.cpp \
     CustomPlotItem.cpp \
@@ -15,7 +15,6 @@ SOURCES += main.cpp \
     SAKeStart.cpp \
     CustomPlotMobilityFunction.cpp \
     CustomPlotKernel.cpp \
-    timesupport.cpp \
     updateprojects.cpp \
     xmlmanager.cpp
 
@@ -54,7 +53,6 @@ HEADERS += \
     SAke/eoElitistReplacement.h \
     SAke/eoMySelection.h \
     SAke/eoMySGA.h \
-    timesupport.h \
     SAke/eoSGAReplacement.h \
     update.h \
     updateprojects.h \
@@ -63,68 +61,13 @@ HEADERS += \
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686
 QMAKE_LFLAGS+= --enable-auto-import
-#QMAKE_CXXFLAGS+= -fopenmp
-#QMAKE_LFLAGS +=  -fopenmp
-#LIBS += -fopenmp
+QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_CXXFLAGS+= -static-libgcc
+QMAKE_CXXFLAGS+= -static-libstdc++
+QMAKE_LFLAGS +=  -fopenmp
+#LIBS += -fopenm
 
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../Sake/libpqxx-4.0/src/.libs/release/ -lpqxx
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../Sake/libpqxx-4.0/src/.libs/debug/ -lpqxx
-#else:unix: LIBS += -L$$PWD/../Sake/libpqxx-4.0/src/.libs/ -lpqxx
-
-#INCLUDEPATH += $$PWD/../Sake/libpqxx-4.0/include
-#DEPENDPATH += $$PWD/../Sake/libpqxx-4.0/include
-
-#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../Sake/libpqxx-4.0/src/.libs/release/libpqxx.a
-#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../Sake/libpqxx-4.0/src/.libs/debug/libpqxx.a
-#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../Sake/libpqxx-4.0/src/.libs/release/pqxx.lib
-#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../Sake/libpqxx-4.0/src/.libs/debug/pqxx.lib
-#else:unix: PRE_TARGETDEPS += $$PWD/../Sake/libpqxx-4.0/src/.libs/libpqxx.a
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../opt/PostgreSQL/9.4/lib/release/ -lpq
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../opt/PostgreSQL/9.4/lib/debug/ -lpq
-#else:unix: LIBS += -L$$PWD/../../../opt/PostgreSQL/9.4/lib/ -lpq
-
-#INCLUDEPATH += $$PWD/../../../opt/PostgreSQL/9.4/include
-#DEPENDPATH += $$PWD/../../../opt/PostgreSQL/9.4/include
-
-#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../opt/PostgreSQL/9.4/lib/release/libpq.a
-#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../opt/PostgreSQL/9.4/lib/debug/libpq.a
-#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../../../opt/PostgreSQL/9.4/lib/release/pq.lib
-#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../../../opt/PostgreSQL/9.4/lib/debug/pq.lib
-#else:unix: PRE_TARGETDEPS += $$PWD/../../../opt/PostgreSQL/9.4/lib/libpq.a
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../git/paradiseo/build/lib/release/ -leo
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../git/paradiseo/build/lib/debug/ -leo
-#else:unix: LIBS += -L$$PWD/../git/paradiseo/build/lib/ -leo
-
-#INCLUDEPATH += $$PWD/../git/paradiseo/eo/src
-#DEPENDPATH += $$PWD/../git/paradiseo/eo/src
-
-#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/release/libeo.a
-#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/debug/libeo.a
-#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/release/eo.lib
-#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/debug/eo.lib
-#else:unix: PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/libeo.a
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../git/paradiseo/build/lib/release/ -leoutils
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../git/paradiseo/build/lib/debug/ -leoutils
-#else:unix: LIBS += -L$$PWD/../git/paradiseo/build/lib/ -leoutils
-
-#INCLUDEPATH += $$PWD/../git/paradiseo/eo/src
-#DEPENDPATH += $$PWD/../git/paradiseo/eo/src
-
-#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/release/libutils.a
-#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/debug/libutils.a
-#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/release/eoutils.lib
-#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/debug/eoutils.lib
-#else:unix: PRE_TARGETDEPS += $$PWD/../git/paradiseo/build/lib/libeoutils.a
-
-
-
-
-
-
-
+#QMAKE_CXXFLAGS+= -D__NO_INLINE__
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leo
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leo
@@ -140,9 +83,6 @@ else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../p
 else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeo.a
 
 
-
-
-
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leoutils
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leoutils
 else:unix: LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leoutils
@@ -155,23 +95,6 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradise
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/eoutils.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/eoutilsd.lib
 else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeoutils.a
-
-
-
-
-#win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
-#else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
-#else:unix: LIBS += -L$$PWD/../pqxx-4.0.1/pqxx-4.0.1/ -lpqxx
-
-#INCLUDEPATH += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/include
-#DEPENDPATH += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/include
-
-#win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
-#else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
-#else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/pqxx.lib
-#else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/pqxxd.lib
-#else:unix: PRE_TARGETDEPS += $$PWD/../pqxx-4.0.1/pqxx-4.0.1/libpqxx.a
-
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../boost_1_60_0/boost_1_60_0/stage/lib/ -lboost_date_time-mgw48-mt-1_60

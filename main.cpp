@@ -4,7 +4,7 @@
 #include <QDeclarativeView>
 #include "xmlmanager.h"
 
-#include <utils/eoParallel.h>
+
 #include "SAKeStart.h"
 #include "Qt"
 #include "CustomPlotMobilityFunction.h"
