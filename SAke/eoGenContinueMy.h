@@ -29,15 +29,10 @@ public:
             stop( false )
 
     {
-      _savePath.remove(0,8);
+      //_savePath.remove(0,8);
       savePath=_savePath;
-      savePath+="/kernels.csv";
-      thresholdKernel =_thresholdKernel;
-      ofstream myfile;
-      myfile.open (savePath.toStdString(),ios::app);
-       myfile << "gen ; fitness ; DeltaCritico ; tb ; momento del primo ordine;"<< endl;
-        myfile.close();
-
+      savePath+="/currentGeneration.csv";
+      thresholdKernel =0;
     }
 
   /** Returns false when a certain number of generations is
@@ -46,7 +41,7 @@ public:
 
 
       ofstream myfile;
-      myfile.open (savePath.toStdString(),ios::app);
+      myfile.open (savePath.toStdString(),ios::out);
       for (int t = 0; t < _vEO.size(); t++) {
           double tmp = _vEO[t].fitness();
 
@@ -57,12 +52,13 @@ public:
           myfile << tmp << " ;";
           double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
           myfile << delta << " ;";
+          myfile << _vEO[t].getYmMinConst().getValue() << " ;";
           myfile << stop << " ;";
           myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
-          myfile << " ;";
+          //myfile << " ;";
           //  myfile << "fitness ; "<<tmp <<" ; ";
           for (int i = 0; i < stop; i++) {
-             myfile << _vEO[t].getFiConst()[i] << "; ";
+             myfile << _vEO[t].getFiConst()[i] << ";";
           }
                myfile << "\n";
           }

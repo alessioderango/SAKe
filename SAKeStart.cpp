@@ -27,7 +27,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &pattern,
                          const QVariant &filename,
                          const QVariant &_filenameActivation,
-                         const QVariant &filenameSavePath,
                          const QVariant &_projectName,
                          const QVariant &_numberProcessor,
                          const QVariant &_elitists,
@@ -82,7 +81,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     QString  spattern            = pattern.toString();
     QString  sfilenameRain       = filename.toString();
     QString  sfilenameActivation = _filenameActivation.toString();
-    QString  sfilenameSavePath   = filenameSavePath.toString();
     QString  sprojectname          = _projectName.toString();
     int      ipop                = pop.toInt();
     int      imaxGen             = maxGen.toInt();
@@ -112,7 +110,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 //       qDebug() << "fpmb arrivato " << pmb << "\n";
 //       qDebug() << "filename arrivato " << sfilenameRain << "\n";
 //       qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
-       qDebug() << "sfilenameSavePath arrivato " << sfilenameSavePath << "\n";
 //       qDebug() << "_projectName  arrivato " << sprojectname << "\n";
 //       qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
 //       qDebug() << "ielitists arrivato " << ielitists << "\n";
@@ -126,12 +123,10 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     QVariant msg = sprojectname;
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
-    //QObject *tabmain = rootObject->findChild<QObject*>("Tabmain");
     numberProject++;
 
 
     QMetaObject::invokeMethod(rectMain, "addTab", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, numberProject));
-    //      qDebug() << "filename arrivato " << QString("customPlotFitness%1").arg(numberProject) << "\n";
     //FINE
 
     //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
@@ -171,7 +166,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                      spattern,
                                                      sfilenameRain,
                                                      sfilenameActivation,
-                                                     sfilenameSavePath,
                                                      ipop,
                                                      imaxGen,
                                                      itbMax,
@@ -189,7 +183,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                      inumberProcessor,
                                                      ielitists,
                                                      dthresholdKernel,
-                                                     update);
+                                                     update,
+                                                     sprojectname);
     controller->setPlotMobility(qCustomPlotMobilityFunction);
     controller->setPlotkernel(qCustomPlotKernel);
     controller->setApplication(a);
@@ -199,13 +194,47 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     controller->setProgressBar(progressBar);
     //FINE
 QObject::connect(buttonStop, SIGNAL(clicked()),controller, SLOT( stopThread()));
-//QObject::connect(tabmain, SIGNAL(stopExecution()),controller, SLOT( stopThread()));
     //eseguo l'algoritmo genetico e setto il segnale di stop
     controller->startThread();
-//    QQuickWindow * mainWindow =qobject_cast<QQuickWindow *>(engine->rootObjects().first());
-//    QObject::connect(mainWindow, SIGNAL(closing(QQuickCloseEvent*)),controller, SLOT( stopThread(QQuickCloseEvent*)));
 
 }
+
+
+void SAKeStart::startValidation(
+              const QVariant &_projectName,
+              const QVariant &filenameRainPath,
+              const QVariant &filenameActivaionPath,
+              const QVariant &filenameKernelPath,
+              const QVariant &folderSave
+              )
+{
+
+
+    ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
+
+
+    QVariant returnedValue;
+    QVariant msg = _projectName.toString();
+    QObject *rootObject = engine->rootObjects().first();
+    QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+    numberProject++;
+
+
+    QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, numberProject));
+    //FINE
+
+    //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
+    //INIZIO
+    CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(numberProject) );
+    validationController->setPlotMobility(qCustomPlotMobilityFunction);
+    validationController->updatePlot();
+
+    CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(numberProject) );
+    validationController->setKernelPlot(qCustomPlotKernel);
+    validationController->updateKernelPlot();
+
+}
+
 
 QVariantList SAKeStart::getAllElementsFromProjectName(const QVariant &_projectName){
     return xmlManager->getAllElementsFromProjectName(_projectName.toString());

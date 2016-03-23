@@ -146,7 +146,10 @@ Dialog {
                              }else
                                  if(textfileActivation.text == "Empty"){
                                       messageDialogActivation.open()
-                                 }else{
+                                 }else
+                                     if(textfileSave.text == "Empty"){
+                                          messageDialogFilePath.open()
+                                     }else{
                                          sakeStart.InitAlgo(comboSelection.currentText,
                                                             textFieldPopulation.text,
                                                             textFieldMaxGen.text,
@@ -161,6 +164,7 @@ Dialog {
                                                             comboPattern.currentText,
                                                             fileDialogRain.fileUrl,
                                                             fileDialogActivation.fileUrl,
+                                                            fileDialogPathSave.folder,
                                                             textProjectName.text,
                                                             textNumberProcessor.text,
                                                             selectionParameterTournamentWithoutReplacement.text,
@@ -654,7 +658,30 @@ Dialog {
                     modality: "ApplicationModal"
                 }
 
-                Button {
+                FileDialog {
+                    id: fileDialogPathSave
+                    title: "Please choose a file"
+                    selectFolder: true
+                    property string  tmp
+                    property variant split
+                    onAccepted: {
+                        tmp = fileDialogPathSave.fileUrl
+                        split = tmp.split("/")
+                        textfileSave.text = "../"+split[split.length-1]
+                        //Qt.quit()
+                    }
+                    onRejected: {
+                        console.log("Canceled")
+                        //Qt.quit()
+                    }
+                    nameFilters: [ "All files (*)" ]
+
+                    Component.onCompleted: visible = false
+                    modality: "ApplicationModal"
+                }
+
+
+               Button {
                     id: button1
                     x: 49
                     y: 533
@@ -697,7 +724,28 @@ Dialog {
                     font.pixelSize: 12
                 }
 
-               TextField {
+                Button {
+                    id: button3
+                    x: 49
+                    y: 610
+                    text: qsTr("Choose where save kernels")
+                    onClicked: {
+                                fileDialogPathSave.open()
+                            }
+                }
+
+                Text {
+                    id: textfileSave
+                    x: 260
+                    y: 610
+                    width: 79
+                    height: 31
+                    text: qsTr("Empty")
+                    verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: 12
+                }
+
+                TextField {
                     id: textProjectName
                     x: 145
                     y: 74
@@ -731,6 +779,14 @@ Dialog {
                     modality: "ApplicationModal"
                 }
 
+                MessageDialog {
+                    id: messageDialogFilePath
+                    title: "Input error"
+                    text: "Please enter kernels save path."
+                    onAccepted: close()
+                    Component.onCompleted: visible = false
+                    modality: "ApplicationModal"
+                }
                 MessageDialog {
                     id: messageDialogProjectName
                     title: "Input error"

@@ -13,7 +13,6 @@
 
 using namespace std;
 using namespace boost::posix_time;
-using namespace std;
 class QCustomPlot;
 
 class CustomPlotMobilityFunction : public QQuickPaintedItem
@@ -27,6 +26,7 @@ public:
     void paint( QPainter* painter );
 
     void updateGraph(double *Y,Ym YsMin,Ym YsMin2);
+    void updateGraph(double *Y,double YsMin);
     Q_INVOKABLE void initCustomPlotMobilityFunction();
 
     Rain *getRain() const;

@@ -1,126 +1,12 @@
 #include "SAKeController.h"
 
-std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    } 
-    return elems;
-}
 
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, elems);
-    return elems;
-}
-
-void ReplaceStringInPlace(std::string& subject, const std::string& search,
-                          const std::string& replace) {
-    size_t pos = 0;
-    while ((pos = subject.find(search, pos)) != std::string::npos) {
-         subject.replace(pos, search.length(), replace);
-         pos += replace.length();
-    }
-}
-
-int loadCSV(QString fileurl,Rain * &rain,int &size)
-{
-
-//    qDebug() << "Entrato in loadCSV";
-        fileurl.remove(0,8);
-//       qDebug() << fileurl;
-       size=0;
-//       qDebug() << fileurl;
-
-       std::ifstream in(fileurl.toStdString());
-
-           std::string line;
-            std::vector< std::vector<std::string>> rows;
-
-           clock_t start=clock();
-           while (std::getline(in, line)){
-               size++;
-               std::vector<std::string> x;
-               x = split(line, ';');
-               rows.push_back(x);
-             // cout << line << endl;
-           }
-           clock_t stop=clock();
-//           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
-//           qDebug() << size;
-           rain = new Rain[size];
-           size=0;
-
-           for(int i =0; i < rows.size();i++){
-               double mm = atof(rows[i].at(3).c_str());
-               string date =  rows[i].at(2);
-               string a =" 00:00:00.000";
-               date+=a;
-
-               //cout << "mm " << mm << " date " << date << endl;
-
-               ptime rain0 = time_from_string(date);
-               rain[size]= Rain(to_tm(rain0),mm);
-               size++;
-           }
-
-       return 0;
-
-}
-
-
-int loadCSVActivation(QString fileurl,Activation *&activation,int &activation_size)
-{
-
-//    qDebug() << "Entrato in loadCSV";
-        fileurl.remove(0,8);
-//       qDebug() << fileurl;
-       activation_size=0;
-//       qDebug() << fileurl;
-
-       std::ifstream in(fileurl.toStdString());
-
-           std::string line;
-            std::vector< std::vector<std::string>> rows;
-
-           clock_t start=clock();
-           while (std::getline(in, line)){
-               activation_size++;
-               std::vector<std::string> x;
-               x = split(line, ';');
-               rows.push_back(x);
-              cout << line << endl;
-           }
-           clock_t stop=clock();
-//           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
-//           qDebug() << activation_size;
-           activation = new Activation[activation_size];
-           activation_size=0;
-
-           for(int i =0; i < rows.size();i++){
-               string dateStart =  rows[i].at(1);
-               string dateEnd =  rows[i].at(2);
-
-
-               cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
-
-               ptime activationStart = time_from_string(dateStart);
-               ptime activationEnd = time_from_string(dateEnd);
-               activation[activation_size]= Activation(to_tm(activationStart),to_tm(activationEnd));
-               activation_size++;
-           }
-
-       return 0;
-
-}
 
 SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                QString  sselection,
                                QString  spattern,
                                QString  filenameRain,
-							   QString  filenameActivaion,
-							   QString  filenameSavePath,
+                               QString  filenameActivaion,
                                int      ipop,
                                int      imaxGen,
                                int      itbMax,
@@ -138,16 +24,16 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                int _numberofProcessor,
                                int _maxNumberToConsider,
                                double _thresholdKernel,
-                               Update* _update)
+                               Update* _update,
+                               const QString& projectName)
 
 {
     this->start=false;
     this->finish=true;
     qCustomPlot = _qCustomPlot;
-//    qDebug() << "filenameSavePath = " <<"    "<<"  "<< filenameSavePath<< endl;
    qCustomPlot->initCustomPlotFitness();
-   loadCSV(filenameRain,this->rain,this->rain_size);
-   loadCSVActivation(filenameActivaion,activations,activations_size);
+   HandlerCSV::loadCSVRain(filenameRain,this->rain,this->rain_size);
+   HandlerCSV::loadCSVActivation(filenameActivaion,activations,activations_size);
    try {
         // db.getConnection();
          //db.executeQueryRain(this->rain,this->rain_size);
@@ -182,7 +68,18 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
    currentAverageFitness= _currentAverageFitness;
    absoluteAverageFitness=_absoluteAverageFitness;
    update = _update;
-   savePath = filenameSavePath;
+
+   QDir dir(QDir::currentPath()+"/workspace");
+   if (!dir.exists()){
+     dir.mkdir(".");
+   }
+   QString tmp = QDir::currentPath()+"/workspace/"+projectName;
+   QDir dir2(tmp);
+   if (!dir2.exists()){
+     dir2.mkdir(".");
+   }
+   savePath = tmp;
+
    maxNumberToConsider=_maxNumberToConsider;
    numberofProcessor=_numberofProcessor;
    thresholdKernel = _thresholdKernel;
@@ -211,6 +108,11 @@ char **x= (char**)malloc(sizeof(char*) * 1);
               replacement.toStdString()
 
           */
+
+          vector<vector<double>> popFromFile;
+          int numGen;
+          HandlerCSV::loadCSVPopFromFile(savePath+"/currentGeneration.csv",popFromFile,numGen);
+
           //parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
           parser.setORcreateParam(eoParamParamType("MySelection"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
 //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
@@ -245,7 +147,7 @@ char **x= (char**)malloc(sizeof(char*) * 1);
 
 
           // the genotype - through a genotype initializerdo_make_genotype(_parser, _state, _eo);
-          eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString());
+          eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile);
 
           // Build the variation operator (any seq/prop construct)
           eoGenOp<Indi>& op = do_make_op(parser, state, init,tbMin,tbMax,pme,pmb,dHpMin,dHpMax);

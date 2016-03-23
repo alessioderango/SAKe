@@ -294,10 +294,6 @@ void CustomPlotMobilityFunction::setRain(Rain *value,int _rain_size)
 }
 
 void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2){
-
-
-
-
     m_CustomPlot->graph( 0 )->setPen( QPen( Qt::red ) );
 //    qDebug() << "aggiorno" << endl;
     double max =-1;
@@ -357,6 +353,56 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2){
      /* m_CustomPlot->graph(1)->setData(x, y);
       m_CustomPlot->graph(1)->rescaleAxes(true);
    m_CustomPlot->replot();*/
+
+    m_CustomPlot->replot();
+
+
+}
+
+void CustomPlotMobilityFunction::updateGraph(double *Y,double YmMin){
+
+
+
+
+    m_CustomPlot->graph( 0 )->setPen( QPen( Qt::red ) );
+//    qDebug() << "aggiorno" << endl;
+    double max =-1;
+    QVector<double> time(rain_size), value(rain_size);
+    for (int i=0; i<rain_size; i++)
+    {
+     // qDebug() << mktime(&(rain[i].getTime()));
+     // boost::posix_time::time_duration diff1 =(rain0-ptime(date(1970, Jan, 1)));
+      ptime raintime = ptime_from_tm(rain[i].getTime());
+      boost::posix_time::time_duration diff =(raintime-ptime(date(1970, Jan, 1)));
+      time[i] = diff.total_seconds();
+      value[i]=Y[i];
+        if(value[i] > max)
+            max=value[i];
+    }
+
+    m_CustomPlot->graph(0)->setData(time, value);
+    //m_CustomPlot->yAxis->setRange( 0,max );
+
+
+
+    QVector<double> timetmp(rain_size),ytime(rain_size),ytime2(rain_size);
+    for (int i=0; i<rain_size; i++){
+        //timetmp[i]=(ptime_from_tm(rain[i].getTime())-ptime(date(1970, Jan, 1))).total_seconds();
+        ytime[i]=YmMin;
+        ytime2[i]=0;
+    }
+//    m_CustomPlot->graph(1)->setLineStyle((QCPGraph::LineStyle)0);
+    m_CustomPlot->graph(1)->setData(time, ytime);
+    m_CustomPlot->graph(2)->setData(time, ytime2);
+
+    QVector<double> yPoint(2),xPoint(2);
+
+    yPoint[0]=YmMin;
+    yPoint[1]=0;
+    xPoint[0]=0;
+    xPoint[1]=0;
+    m_CustomPlot->graph(3)->setData(xPoint, yPoint);
+
 
     m_CustomPlot->replot();
 

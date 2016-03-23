@@ -15,6 +15,7 @@ using namespace std;
 #include "eoSAKeInit.h"
 #include "updateprojects.h"
 //#include "SAke/eoParallelMy.h"
+#include "handlercsv.h"
 
 // GENOTYPE   eoSAKe ***MUST*** be templatized over the fitness
 
@@ -57,8 +58,7 @@ public:
                    QString  sselection,
                    QString  spattern,
                    QString  filename,
-				   QString  filenameActivaion,
-				   QString  filenameSavePath,
+                   QString  filenameActivaion,
                    int      ipop,
                    int      imaxGen,
                    int      itbMax,
@@ -76,7 +76,8 @@ public:
                    int numberofProcessor,
                    int maxNumberToConsider,
                    double _thresholdKernel,
-                   Update* update);
+                   Update* update,
+                   const QString& projectName);
 
 
 

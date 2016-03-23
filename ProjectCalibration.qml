@@ -190,10 +190,7 @@ Dialog {
                         }else
                             if(textfileActivation.text == "Empty"){
                                 messageDialogActivation.open()
-                            }else
-                                if(textfileSave.text == "Empty"){
-                                    messageDialogFilePath.open()
-                                }else{
+                            }else{
                                     sakeStart.InitAlgo(comboSelection.currentText,
                                                        textFieldPopulation.text,
                                                        textFieldMaxGen.text,
@@ -208,7 +205,6 @@ Dialog {
                                                        comboPattern.currentText,
                                                        pathrain,
                                                        pathactivation,
-                                                       fileDialogPathSave.folder,
                                                        labelProjectNameFromFile.text,
                                                        textNumberProcessor.text,
                                                        selectionParameterTournamentWithoutReplacement.text,
@@ -708,29 +704,6 @@ Dialog {
             modality: "ApplicationModal"
         }
 
-        FileDialog {
-            id: fileDialogPathSave
-            title: "Please choose a file"
-            selectFolder: true
-            property string  tmp
-            property variant split
-            onAccepted: {
-                tmp = fileDialogPathSave.fileUrl
-                split = tmp.split("/")
-                textfileSave.text = "../"+split[split.length-1]
-                //Qt.quit()
-            }
-            onRejected: {
-                console.log("Canceled")
-                //Qt.quit()
-            }
-            nameFilters: [ "All files (*)" ]
-
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
-
-
         Button {
             id: button1
             x: 49
@@ -774,28 +747,7 @@ Dialog {
             font.pixelSize: 12
         }
 
-        Button {
-            id: button3
-            x: 49
-            y: 610
-            text: qsTr("Choose where save kernels")
-            onClicked: {
-                fileDialogPathSave.open()
-            }
-        }
-
-        Text {
-            id: textfileSave
-            x: 260
-            y: 610
-            width: 79
-            height: 31
-            text: qsTr("Empty")
-            verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 12
-        }
-
-        Label {
+       Label {
             id: labelProjectNameFromFile
             x: 145
             y: 74
@@ -824,15 +776,6 @@ Dialog {
             id: messageDialogActivation
             title: "Input error"
             text: "Please enter Activation csv path."
-            onAccepted: close()
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
-
-        MessageDialog {
-            id: messageDialogFilePath
-            title: "Input error"
-            text: "Please enter kernels save path."
             onAccepted: close()
             Component.onCompleted: visible = false
             modality: "ApplicationModal"

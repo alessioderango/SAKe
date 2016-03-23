@@ -24,39 +24,17 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     QObject *rootObject = engine.rootObjects().first();
- QObject *listProjects = rootObject->findChild<QObject*>("ListProjects");
+    QObject *listProjects = rootObject->findChild<QObject*>("ListProjects");
 
- // load main xml with number of Projects and names
-
-
- XMLManager * xmlmanager = new XMLManager(listProjects);
- xmlmanager->ReadMainXML();
+    // load main xml with number of Projects and names
 
 
+    XMLManager * xmlmanager = new XMLManager(listProjects);
+    xmlmanager->ReadMainXML();
 
+    SAKeStart * sakeStart = new SAKeStart(&engine,&a,xmlmanager);
+    engine.rootContext()->setContextProperty("sakeStart", sakeStart);
 
-
-//   engine.load(QUrl(QStringLiteral("qrc:/parameters.qml")));
-// QObject *rootObject = engine.rootObjects().first();
- 
-// QQmlApplicationEngine newProject;
-// newProject.load(QUrl(QStringLiteral("qrc:/main.qml")));
-//  QObject *newProjectObecjt = engine.rootObjects().first();
-//   QObject *m_button = newProjectObecjt->findChild<QObject*>("namestart");
-   
-
-
-//    QObject *listProjects = rootObject->findChild<QObject*>("listProjects");
-
-
-     SAKeStart * sakeStart = new SAKeStart(&engine,&a,xmlmanager);
-     engine.rootContext()->setContextProperty("sakeStart", sakeStart);
-
-//  QObject::connect(m_button, SIGNAL(qmlSignal(QVariant,QVariant,QVariant,QVariant,QVariant,QVariant,
-//                                              QVariant,QVariant,QVariant,QVariant,QVariant,QVariant,
-//                                              QVariant,QVariant,QVariant)),sakeStart, SLOT( InitAlgo(QVariant,QVariant,QVariant,QVariant,QVariant,QVariant,
-//                                                                                                     QVariant,QVariant,QVariant,QVariant,QVariant,QVariant,
-//                                                                                                     QVariant,QVariant,QVariant)));
-  return a.exec();
+    return a.exec();
 }
 

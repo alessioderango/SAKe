@@ -13,6 +13,7 @@
 #include <qapplication.h>
 #include "xmlmanager.h"
 #include "update.h"
+#include "validationcontroller.h"
 
 
 
@@ -86,13 +87,19 @@ public slots:
                   const QVariant &pmb,
                   const QVariant &pattern,
                   const QVariant &filename,
-				  const QVariant &filenameActivaion,
-                  const QVariant &filenameSavePath,
+                  const QVariant &filenameActivaion,
                   const QVariant &_projectName,
                   const QVariant &_numberProcessor,
                   const QVariant &_elitists,
                   const QVariant &thresholdKernel,
                   const QVariant &tipo
+                  );
+    void startValidation(
+                  const QVariant &_projectName,
+                  const QVariant &filenameRainPath,
+                  const QVariant &filenameActivaionPath,
+                  const QVariant &filenameKernelPath,
+                  const QVariant &filenameKenrelPath
                   );
       int existProjectName(const QVariant &_projectName);
       QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
@@ -130,6 +137,7 @@ private:
 //    QObject *_absoluteAverageFitness;
 //    QObject *_gen;
     XMLManager * xmlManager;
+
 
 
 

@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     CustomPlotMobilityFunction.cpp \
     CustomPlotKernel.cpp \
     updateprojects.cpp \
-    xmlmanager.cpp
+    xmlmanager.cpp \
+    ValidationController.cpp \
+    HandlerCSV.cpp
 
 RESOURCES += qml.qrc
 
@@ -56,7 +58,9 @@ HEADERS += \
     SAke/eoSGAReplacement.h \
     update.h \
     updateprojects.h \
-    xmlmanager.h
+    xmlmanager.h \
+    ValidationController.h \
+    HandlerCSV.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686

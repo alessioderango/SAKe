@@ -8,7 +8,7 @@ ApplicationWindow {
     visible: true
     width: 700
     height: 800
-    title: qsTr("Sakè software")
+    title: qsTr("Sake software")
 Rectangle{
     id: parameter
     x: 0
@@ -31,12 +31,30 @@ Rectangle{
             id: label1
             y: 26
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("SAKè parameters")
+            text: qsTr("SAKe parameters")
             font.bold: true
             font.pointSize: 22
 
         }
+        RowLayout {
+            id: rowLayout
+            spacing: 2
 
+             Label {
+                id: projectName
+                y: 26
+                text: qsTr("Project Name")
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+             TextField {
+                 id: textProjectName
+                 width: 63
+                 text: "20"
+
+                 placeholderText: ""
+             }
+        }
         RowLayout {
             id: rowLayout1
             y: 100
@@ -176,18 +194,28 @@ Rectangle{
 
             }
 
+            ColumnLayout{
+                y: 100
+                TextField {
+                    id: selectionParameterTournamentWithoutReplacement
+                    visible: true
+                    text: "0"
+                }
+            }
+
+
             GridLayout {
                 id: gridLayout2
                 x: 297
                 y: 0
-                width: 324
-                height: 298
+                width: 309
+                height: 426
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 columns: 2
-                rows: 3
+                rows: 4
 
-                Layout.preferredWidth: 325
-                Layout.preferredHeight: 298
+                Layout.preferredWidth: 309
+                Layout.preferredHeight: 426
 
 
                 Label {
@@ -262,6 +290,19 @@ Rectangle{
                     }
                 }
 
+                Label {
+                    id: labelNumberProcessor
+                    width: 120
+                    text: qsTr("Number Processor")
+                }
+
+                TextField {
+                    id: textNumberProcessor
+                    width: 63
+                    visible: true
+                    text: "1"
+                    placeholderText: "Number of Processor"
+                }
 
 
             }
@@ -415,18 +456,32 @@ Rectangle{
                 y: 597
                 text: qsTr("Start")
                 checkable: false
-                //            onClicked: {
-                //                       // if(textfileRain.text != "empty")
-                //                        sakeStart.InitAlgo(comboSelection.currentText,comboReplacement.currentText, textFieldPopulation.text,
-                //                                 textFieldMaxGen.text,textFieldtbMax.text,textFieldtbMin.text,textFielddHpMax.text,
-                //                                 textFielddHpMin.text,textFieldRelRateCrossover.text,textFieldRelRateMutation.text,
-                //                                 textFieldPropCrossover.text,textFieldPropMutation.text,textFieldPme.text,
-                //                                 textFieldPmb.text,comboPattern.currentText,fileDialogRain.fileUrl,fileDialogActivation.fileUrl,
-                //                                 fileDialogPathSave.folder)
-                //                       close()
+//                            onClicked: {
+//                                       // if(textfileRain.text != "empty")
+//                                        sakeStart.InitAlgo(comboSelection.currentText,
+//                                                           textFieldPopulation.text,
+//                                                           textFieldMaxGen.text,
+//                                                           textFieldtbMax.text,
+//                                                           textFieldtbMin.text,
+//                                                           textFielddHpMax.text,
+//                                                           textFielddHpMin.text,
+//                                                           textFieldPropCrossover.text,
+//                                                           textFieldPropMutation.text,
+//                                                           textFieldPme.text,
+//                                                           textFieldPmb.text,
+//                                                           comboPattern.currentText,
+//                                                           fileDialogRain.fileUrl,
+//                                                           fileDialogActivation.fileUrl,
+//                                                           fileDialogPathSave.folder,
+//                                                           textProjectName.text,
+//                                                           textNumberProcessor.text,
+//                                                           selectionParameterTournamentWithoutReplacement.text,
+//                                                           textFieldSoglia.text,
+//                                                           0)
+//                                       close()
 
 
-                //            }
+//                            }
 
             }
 
@@ -439,6 +494,8 @@ Rectangle{
 
             }
         }
+
+
 
     }
 

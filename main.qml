@@ -13,7 +13,7 @@ ApplicationWindow {
     visible: true
     width: 700
     height: 800
-    title: qsTr("Sakè software")
+    title: qsTr("Sake software")
 
 
     function createSpriteObjects() {
@@ -67,17 +67,56 @@ ApplicationWindow {
 
 
     toolBar:ToolBar {
-        RowLayout {
-            anchors.fill: parent
-            height: 80
+        Layout.fillHeight: true
+        height: 50
 
+        RowLayout {
+            anchors.rightMargin: 6
+            anchors.fill: parent
             ToolButton{
+
                 iconSource: "qrc:/img/download.png"
-                id:openFile
-                width: parent.height
+                id:calibration
+                text: qsTr("Calibration")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                 onClicked: {
                     console.log("Action Calibration Project");
                     var component = Qt.createComponent("newProjectCalibration.qml")
+
+                    var window    = component.createObject(applicationWindow1)
+
+                }
+//                Text {
+//                    text: parent.text
+//                    anchors.bottom: parent.bottom
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    Layout.fillWidth: true
+
+//                }
+                Layout.fillHeight: true
+
+            }
+
+            ToolButton{
+                iconSource: "qrc:/img/check.png"
+                id:validation
+                width: parent.height
+                onClicked: {
+                    console.log("Action Validation Project");
+                    var component = Qt.createComponent("parameters.qml")
+
+                    var window    = component.createObject(applicationWindow1)
+
+                }
+
+            }
+
+            ToolButton{
+                iconSource: "qrc:/img/check.png"
+                width: parent.height
+                onClicked: {
+                    console.log("Action Validation Project2");
+                    var component = Qt.createComponent("parametersValidationLayout.qml")
 
                     var window    = component.createObject(applicationWindow1)
 
@@ -410,6 +449,88 @@ import QtQuick.Controls.Styles 1.4
 
                         }
                     }
+                    }";
+
+
+
+                //                            var c_tab=tabmain.currentIndex
+                //                                var t=tabmain.addTab("x",viewComp)
+                //                                tabmain.currentIndex=count-1
+                //                                tabmain.currentIndex=c_tab
+                // var component=Qt.createComponent("Tab.qml");
+                // var window    = component.createObject(applicationWindow1);
+                var component=  Qt.createQmlObject(qml,tabmain);
+                tabmain.activeFocusOnTab=count-1;
+                //   tabmain.addTab(component);
+
+                return "0"
+
+            }
+
+            function addTabValidation(msg,count){
+                console.log("Entrato in Add Tab");
+                console.log("Entrato in Add Tab"+ count);
+                var tmp = "customPlotFitness"+count;
+                console.log(tmp);
+                var qml = "
+import QtQuick 2.0
+import QtQuick.Window 2.0
+import CustomPlot 1.0
+import CustomPlotMobilityFunction 1.0
+import CustomPlotKernel 1.0
+import QtQuick.Layouts 1.2
+import QtQuick.Controls 1.4
+import QtMultimedia 5.5
+import QtQuick.Controls.Styles 1.4
+                        Tab {
+                           title:   '"+msg+"'
+                        active: true
+
+
+                        GridLayout {
+                        Layout.fillWidth: true
+                        rowSpacing: 0
+                        columnSpacing: 0
+                        columns: 1
+                        rows:1
+                        anchors.fill: parent
+                        Layout.preferredWidth: 700
+                        Layout.preferredHeight: 200
+                        Layout.maximumWidth:  1500
+                        Layout.maximumHeight:  1500
+
+                        CustomPlotMobilityFunction {
+
+
+                            Layout.fillWidth: true
+                             Layout.fillHeight: true
+                            Layout.preferredWidth: 700
+                            Layout.preferredHeight: 200
+                            clip: false
+                            Layout.maximumWidth:  1000000
+                            Layout.maximumHeight: 1000000
+
+                            objectName:  'customPlotMobilityFunction"+count+"'
+                            //anchors.top: customPlot1.bottom
+                            // Component.onCompleted: initCustomPlotMobilityFunction()
+
+                        }
+
+                        CustomPlotKernel {
+
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+
+                            Layout.preferredWidth: 700
+                            Layout.preferredHeight: 200
+                            Layout.maximumWidth:  1000000
+                            Layout.maximumHeight: 1000000
+                            objectName:  'customPlotKernel"+count+"'
+                            //anchors.top: customPlot1.bottom
+                            // Component.onCompleted: initCustomPlotMobilityFunction()
+
+                        }
+                      }
                     }";
 
 
