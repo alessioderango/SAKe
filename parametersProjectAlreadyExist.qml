@@ -9,6 +9,79 @@ ApplicationWindow {
     width: 700
     height: 800
     title: qsTr("Sake software")
+
+
+    property  string pathrain;
+    property  string pathactivation;
+
+    function f(list){
+        console.log("Ok funzia")
+        labelProjectNameFromFile.text=list[0]
+        if(list[1]=="TournamentWithoutReplacement"){
+            comboSelection.currentIndex=5
+            selectionParameterTournamentWithoutReplacement.text=list[2]
+        }else
+            if(list[1]=="StochTour(t)"){
+                comboSelection.currentIndex=0
+                selectionParameter.text=list[2]
+            }else
+                if(list[1]=="DetTour(T)"){
+                    comboSelection.currentIndex=1
+                    selectionParameter.text=list[2]
+                }else
+                    if(list[1]=="Ranking(p,e)"){
+                        comboSelection.currentIndex=2
+                        selectParameterRanking1.text=list[2]
+                        selectParameterRanking2.text=list[3]
+                    }else
+                        if(list[1]=="Sequential(ordered/unordered)"){
+                            comboSelection.currentIndex=4
+                            if(list[2]=="ordered")
+                            {
+                                comboSelectinParameterSequential.currentIndex=0;
+                            }else
+                                comboSelectinParameterSequential.currentIndex=1;
+
+                            //comboSelectinParameterSequentialList.text=list[2]
+                        }else
+                            if(list[1]=="Roulette"){
+                                comboSelection.currentIndex=3
+                            }
+
+
+        textNumberProcessor.text=list[4]
+        textFieldPopulation.text=list[5]
+        textFieldMaxGen.text=list[6]
+        textFieldtbMax.text=list[7]
+        textFieldtbMin.text=list[8]
+        textFielddHpMax.text=list[9]
+        textFielddHpMin.text=list[10]
+        textFieldPropCrossover.text=list[11]
+        textFieldPropMutation.text=list[12]
+        textFieldPme.text=list[13]
+        textFieldPmb.text=list[14]
+        if(list[15]=="Rettangolare")
+            comboPattern.currentIndex=2
+        else
+            if(list[15]=="Triangolare Disc")
+                comboPattern.currentIndex=0
+            else
+                if(list[15]=="Triangolare Asc")
+                    comboPattern.currentIndex=1
+
+        var split = list[16].split("/")
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAA ../"+split[split.length-1]);
+        textfileRain.text = "../"+split[split.length-1]
+        pathrain=list[16]
+
+        var split2 = list[17].split("/")
+         console.log("AAAAAAAAAAAAAAAAAAAAAAAA ../"+split2[split2.length-1]);
+        textfileActivation.text = "../"+split2[split2.length-1]
+        pathactivation=list[17]
+
+    }
+
+
     Rectangle{
         id: parameter
         x: 0
@@ -49,12 +122,10 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter
                     }
 
-                    TextField {
-                        id: textProjectName
+                    Label {
+                        id: labelProjectNameFromFile
                         width: 63
                         text: ""
-
-                        placeholderText: "Project Name"
                     }
                 }
 
@@ -274,7 +345,7 @@ ApplicationWindow {
                             placeholderText: qsTr("")
                         }
 
-                        //CheckBox {id:lastGeneration; text: qsTr("Start From Last Generation")   }
+                        CheckBox {id:lastGeneration; text: qsTr("Start From Last Generation")   }
                     }
                     GridLayout {
                         id: gridLayout2
@@ -415,9 +486,15 @@ ApplicationWindow {
                     id: fileDialogRain
                     title: "Please choose a file"
                     folder: shortcuts.home
+                    property string  tmp
+                    property variant split
                     onAccepted: {
-                        console.log("You chose: " + fileDialogRain.fileUrls)
-                        textfileRain.text = fileDialogRain.fileUrl
+                        pathrain=fileDialogRain.fileUrl
+                        tmp = fileDialogRain.fileUrl
+                        split = tmp.split("/")
+                        console.log("You chose: " + split[0])
+                        console.log("You chose: " + split.length)
+                        textfileRain.text = "../"+split[split.length-1]
                         //handlerCSV.loadCSV(fileDialogRain.fileUrl)
                         //Qt.quit()
                     }
@@ -434,9 +511,15 @@ ApplicationWindow {
                     id: fileDialogActivation
                     title: "Please choose a file"
                     folder: shortcuts.home
+                    property string  tmp
+                    property variant split
                     onAccepted: {
-                        console.log("You chose: " + fileDialogActivation.fileUrls)
-                        textfileActivation.text = fileDialogActivation.fileUrl
+                        pathactivation=fileDialogActivation.fileUrl
+                        tmp = fileDialogActivation.fileUrl
+                        split = tmp.split("/")
+                        console.log("You chose: " + split[0])
+                        console.log("You chose: " + split.length)
+                        textfileActivation.text = "../"+split[split.length-1]
                         //handlerCSV.loadCSV(fileDialogActivation.fileUrl)
                         //Qt.quit()
                     }
@@ -447,7 +530,6 @@ ApplicationWindow {
                     nameFilters: [ "files (*.csv)" ]
                     Component.onCompleted: visible = false
                 }
-
 
                 Button {
                     id: button1
@@ -483,7 +565,6 @@ ApplicationWindow {
                     text: qsTr("Empty")
                     font.pixelSize: 12
                 }
-
             }
 
 
@@ -513,28 +594,29 @@ ApplicationWindow {
                     property  string para1;
                     property  string para2;
                                                 onClicked: {
-                                                    if(comboSelection.currentText == "StochTour(t)"
-                                                       || comboSelection.currentText == "DetTour(T)"){
-                                                        para1=selectionParameter.text;
-                                                        para2=-1;
-                                                    }else
-                                                        if(comboSelection.currentText == "Ranking(p,e)"){
-                                                            para1=selectParameterRanking1.text;
-                                                            para2=selectParameterRanking2.text;
-                                                        }else
-                                                             if(comboSelection.currentText == "Roulette"){
-                                                                 para1=-1;
-                                                                 para2=-1;
-                                                             }else
-                                                                 if(comboSelection.currentText == "Sequential(ordered/unordered)")
-                                                                 {
-                                                                     para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
-                                                                     para2=-1;
-                                                                 }else
-                                                                     if(comboSelection.currentText == "TournamentWithoutReplacement"){
-                                                                         para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                         para2=-1;
-                                                                     }
+                                                           if(comboSelection.currentText == "StochTour(t)"
+                                                              || comboSelection.currentText == "DetTour(T)"){
+                                                               para1=selectionParameter.text;
+                                                               para2=-1;
+                                                           }else
+                                                               if(comboSelection.currentText == "Ranking(p,e)"){
+                                                                   para1=selectParameterRanking1.text;
+                                                                   para2=selectParameterRanking2.text;
+                                                               }else
+                                                                    if(comboSelection.currentText == "Roulette"){
+                                                                        para1=-1;
+                                                                        para2=-1;
+                                                                    }else
+                                                                        if(comboSelection.currentText == "Sequential(ordered/unordered)")
+                                                                        {
+                                                                            para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
+                                                                            para2=-1;
+                                                                        }else
+                                                                            if(comboSelection.currentText == "TournamentWithoutReplacement"){
+                                                                                para1=selectionParameterTournamentWithoutReplacement.text;
+                                                                                para2=-1;
+                                                                            }
+
 
                                                            // if(textfileRain.text != "empty")
                                                             sakeStart.InitAlgo(comboSelection.currentText,
@@ -549,14 +631,14 @@ ApplicationWindow {
                                                                                textFieldPme.text,
                                                                                textFieldPmb.text,
                                                                                comboPattern.currentText,
-                                                                               fileDialogRain.fileUrl,
-                                                                               fileDialogActivation.fileUrl,
-                                                                               textProjectName.text,
+                                                                               pathrain,
+                                                                               pathactivation,
+                                                                               labelProjectNameFromFile.text,
                                                                                textNumberProcessor.text,
                                                                                para1,
                                                                                para2,
-                                                                               false,
-                                                                               0)
+                                                                               lastGeneration.checked,
+                                                                               1)
                                                            close()
 
 

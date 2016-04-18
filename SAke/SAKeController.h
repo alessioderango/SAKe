@@ -74,12 +74,14 @@ public:
                    QObject *_currentAverageFitness,
                    QObject *_absoluteAverageFitness,
                    int numberofProcessor,
-                   int maxNumberToConsider,
-                   double _thresholdKernel,
+                   int para1,
+                   int para2,
+                   QString spara1,
+                   bool _lastGeneration,
                    Update* update,
                    const QString& projectName);
 
-
+    SAKeController();
 
 
     void setPlotMobility(CustomPlotMobilityFunction *value);
@@ -135,10 +137,14 @@ private:
     float    pmb;
     int maxNumberToConsider;
     int numberofProcessor;
-    double thresholdKernel;
+    bool lastGeneration;
     QString  savePath;
     QApplication * a;
     Update* update;
+
+    unsigned int typeAlgorithm;
+    double parameter1;
+    double parameter2;
 
 };
 

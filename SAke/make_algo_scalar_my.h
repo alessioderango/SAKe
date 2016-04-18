@@ -66,6 +66,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      eoMonOp<EOT>& _mutate,
                                      float _mrate,
                                      int maxNumberToConsider,
+                                     unsigned int typeAlgorithm,
                                      eoDistance<EOT> * _dist = NULL
                                      )
 {
@@ -316,7 +317,14 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
 
   // now the eoEasyEA
 //  eoAlgo<EOT> *algo = new eoEasyEA<EOT>(_continue, _eval, *breed, *replace);
-  eoAlgo<EOT> *algo = new eoSGAReplacement<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+  eoAlgo<EOT> *algo;
+  if(typeAlgorithm==0)
+  {
+    algo = new eoSGAReplacement<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+  }
+  else{
+    algo = new eoMySGA<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
+  }
   _state.storeFunctor(algo);
   // that's it!
   return *algo;

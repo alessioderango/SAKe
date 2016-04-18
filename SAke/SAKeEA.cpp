@@ -63,12 +63,16 @@ typedef eoSAKe<MyFitT> Indi;      // ***MUST*** derive from EO
 
 // create an initializer
 #include "make_genotype_SAKe.h"
-eoInit<Indi> & make_genotype(eoParser& _parser, eoState&_state, Indi _eo,int tbMin,
+eoInit<Indi> & make_genotype(eoParser& _parser,
+                             eoState&_state,
+                             Indi _eo,
+                             int tbMin,
                              int tbMax,
                              string pattern,
-                             vector<vector<double>> populationfromFile)
+                             vector<vector<double>> populationfromFile,
+                             bool lastGeneration)
 {
-  return do_make_genotype(_parser, _state, _eo,tbMin,tbMax,pattern,populationfromFile);
+  return do_make_genotype(_parser, _state, _eo,tbMin,tbMax,pattern,populationfromFile,lastGeneration);
 }
 
 // and the variation operaotrs

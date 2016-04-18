@@ -109,7 +109,7 @@ Dialog {
                         ListElement { text: "Triangolare Asc";  }
                         ListElement { text: "Rettangolare";  }
                     }
-                    //  onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
+                    //  onCurrentIndexChanged: console.debug(   cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
                 }
 
                 Button {

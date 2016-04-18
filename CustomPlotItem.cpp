@@ -3,7 +3,7 @@
 #include <QDebug>
 
 CustomPlotItem::CustomPlotItem( QQuickItem* parent ) : QQuickPaintedItem( parent )
-    , m_CustomPlot( nullptr )
+  , m_CustomPlot( nullptr )
 {
     setFlag( QQuickItem::ItemHasContents, true );
     // setRenderTarget(QQuickPaintedItem::FramebufferObject);
@@ -88,7 +88,7 @@ void CustomPlotItem::routeMouseEvents( QMouseEvent* event )
         QMouseEvent* newEvent = new QMouseEvent( event->type(), event->localPos(), event->button(), event->buttons(), event->modifiers() );
         //QCoreApplication::sendEvent( m_CustomPlot, newEvent );
         QCoreApplication::postEvent( m_CustomPlot, newEvent );
-         m_CustomPlot->replot();
+        m_CustomPlot->replot();
     }
 }
 
@@ -97,10 +97,10 @@ void CustomPlotItem::wheelEvent(QWheelEvent *event){
     double wheelSteps = event->delta()/120.0; // a single step delta is +/-120 usually
     factor = qPow(m_CustomPlot->axisRect()->rangeZoomFactor(Qt::Horizontal), wheelSteps);
     if (m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Horizontal))
-      m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->scaleRange(factor,  m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->pixelToCoord(event->pos().x()));
+        m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->scaleRange(factor,  m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->pixelToCoord(event->pos().x()));
     factor = qPow(m_CustomPlot->axisRect()->rangeZoomFactor(Qt::Vertical), wheelSteps);
     if (m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Vertical))
-     m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->scaleRange(factor, m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->pixelToCoord(event->pos().y()));
+        m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->scaleRange(factor, m_CustomPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->pixelToCoord(event->pos().y()));
     m_CustomPlot->replot();
     //cout <<"wheeeel" << endl;
 }
@@ -110,7 +110,7 @@ void CustomPlotItem::updateCustomPlotSize()
 
     if (m_CustomPlot)
     {
-       // std::cout << " width() "<< width() << "  height() " << height() << std::endl;
+        // std::cout << " width() "<< width() << "  height() " << height() << std::endl;
         m_CustomPlot->setGeometry( 0, 0, width(), height() );
         m_CustomPlot->setViewport(QRect(0, 0, (int)width(), (int)height()));
     }
@@ -128,24 +128,24 @@ void CustomPlotItem::setupQuadraticDemo( QCustomPlot* customPlot )
     QCPAxisRect* axisRect = customPlot->axisRect();
 
     // generate some data:
-      QVector<double> x1( 0 ), y1( 0 );   // initialize with entries 0..100
-//   QVector<double> lx( 101 ), ly( 101 ); // initialize with entries 0..100
-//    for (int i = 0; i < 101; ++i)
-//    {
-//        x[i] = i / 50.0 - 1;              // x goes from -1 to 1
-//        y[i] = x[i] * x[i];               // let's plot a quadratic function
+    QVector<double> x1( 0 ), y1( 0 );   // initialize with entries 0..100
+    //   QVector<double> lx( 101 ), ly( 101 ); // initialize with entries 0..100
+    //    for (int i = 0; i < 101; ++i)
+    //    {
+    //        x[i] = i / 50.0 - 1;              // x goes from -1 to 1
+    //        y[i] = x[i] * x[i];               // let's plot a quadratic function
 
-//        lx[i] = i / 50.0 - 1;             //
-//        ly[i] = lx[i];                    // linear
-//    }
-//    for (int i = 0; i < 101; ++i)
-//    {
-//        this->x[i] = i;              // x goes from -1 to 1
-//        this->y[i] = i;               // let's plot a quadratic function
+    //        lx[i] = i / 50.0 - 1;             //
+    //        ly[i] = lx[i];                    // linear
+    //    }
+    //    for (int i = 0; i < 101; ++i)
+    //    {
+    //        this->x[i] = i;              // x goes from -1 to 1
+    //        this->y[i] = i;               // let's plot a quadratic function
 
-//   //     lx[i] = i / 50.0 - 1;             //
-//   //     ly[i] = lx[i];                    // linear
-//    }
+    //   //     lx[i] = i / 50.0 - 1;             //
+    //   //     ly[i] = lx[i];                    // linear
+    //    }
     // create graph and assign data to it:
     customPlot->addGraph();
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
@@ -168,32 +168,34 @@ void CustomPlotItem::setupQuadraticDemo( QCustomPlot* customPlot )
     connect( customPlot, SIGNAL( plottableClick( QCPAbstractPlottable*, QMouseEvent* ) ), this, SLOT( graphClicked( QCPAbstractPlottable* ) ) );
 }
 
- void CustomPlotItem::updateGraph0(QVector<double> x,QVector<double> y){
+void CustomPlotItem::updateGraph0(QVector<double> x,QVector<double> y){
 
-//     qDebug() << "aggiorno" << endl;
+    //     qDebug() << "aggiorno" << endl;
+    if (m_CustomPlot)
+    {
+        if(x.size() > 20)
+            m_CustomPlot->xAxis->setRange( 0, x.size() );
+        m_CustomPlot->graph( 0 )->setData( x, y);
+        m_CustomPlot->replot();
 
-     if(x.size() > 20)
-           m_CustomPlot->xAxis->setRange( 0, x.size() );
-     m_CustomPlot->graph( 0 )->setData( x, y);
-     m_CustomPlot->replot();
-
-
+    }
 }
 
 void CustomPlotItem::updateGraph1(QVector<double> x,QVector<double> y){
 
-
-    if(x.size() > 20)
-          m_CustomPlot->xAxis->setRange( 0, x.size() );
-     m_CustomPlot->graph( 1 )->setData( x, y);
-     m_CustomPlot->replot();
-
+    if (m_CustomPlot)
+    {
+        if(x.size() > 20)
+            m_CustomPlot->xAxis->setRange( 0, x.size() );
+        m_CustomPlot->graph( 1 )->setData( x, y);
+        m_CustomPlot->replot();
+    }
 
 }
 
 
 void CustomPlotItem::resizeEvent(QResizeEvent *event)
 {
-//    qDebug() << "CustomPlotItem " << endl;
+    //    qDebug() << "CustomPlotItem " << endl;
     m_CustomPlot->resize(event->size());
 }

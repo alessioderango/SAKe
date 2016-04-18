@@ -29,8 +29,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &_filenameActivation,
                          const QVariant &_projectName,
                          const QVariant &_numberProcessor,
-                         const QVariant &_elitists,
-                         const QVariant &_thresholdKernel,
+                         const QVariant &_para1,
+                         const QVariant &_para2,
+                         const QVariant &_lastGeneration,
                          const QVariant &tipo
                          ){
 
@@ -40,8 +41,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     {
         xmlManager->SaveXMLFileAlreadyExist(_projectName.toString(),
                                 selection.toString(),
-                                _elitists.toString(),
-                                _elitists.toString(),
+                                _para1.toString(),
+                                _para2.toString(),
                                 _numberProcessor.toString(),
                                 pop.toString(),
                                 maxGen.toString(),
@@ -59,8 +60,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     }else{
         xmlManager->SaveXMLFile(_projectName.toString(),
                                 selection.toString(),
-                                _elitists.toString(),
-                                _elitists.toString(),
+                                _para1.toString(),
+                                _para2.toString(),
                                 _numberProcessor.toString(),
                                 pop.toString(),
                                 maxGen.toString(),
@@ -89,12 +90,21 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     int      idHpMax             = dHpMax.toInt();
     int      idHpMin             = dHpMin.toInt();
     int      inumberProcessor    = _numberProcessor.toInt();
-    int      ielitists           = _elitists.toInt();
+    int      ipara1=-1;
+    QString  spara1="";
+    if(QString::compare(_para1.toString(), "ordered", Qt::CaseInsensitive)==0||
+         QString::compare(_para1.toString(), "unordered", Qt::CaseInsensitive)==0   )
+    {
+          spara1 = _para1.toString();
+    }else{
+         ipara1              = _para1.toInt();
+    }
+    int      ipara2              = _para2.toInt();
     float    fpropCrossover      = propCrossover.toFloat();
     float    fpropMutation       = propMutation.toFloat();
     float    fpme                = pme.toFloat();
     float    fpmb                = pmb.toFloat();
-    double   dthresholdKernel     = _thresholdKernel.toDouble();
+    bool     bLastGeneration     = _lastGeneration.toBool();
 
 //       qDebug() << "selection arrivato " << selection << "\n";
 //       qDebug() << "pattern arrivato " << pattern << "\n";
@@ -112,7 +122,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 //       qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
 //       qDebug() << "_projectName  arrivato " << sprojectname << "\n";
 //       qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
-//       qDebug() << "ielitists arrivato " << ielitists << "\n";
+         qDebug() << "ipara1 arrivato " << ipara1 << "\n";
+         qDebug() << "ipara2 arrivato " << ipara2 << "\n";
     // FINE
 
     //Aggiungere nell'XML il nuovo Progetto
@@ -120,7 +131,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     //aggiungo una nuova Tab nell'interfaccia
     //INIZIO
     QVariant returnedValue;
-    QVariant msg = sprojectname;
+    QVariant msg = "Calibration - "+sprojectname;
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
     numberProject++;
@@ -181,8 +192,10 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                      currentAverageFitness,
                                                      absoluteAverageFitness,
                                                      inumberProcessor,
-                                                     ielitists,
-                                                     dthresholdKernel,
+                                                     ipara1,
+                                                     ipara2,
+                                                     spara1,
+                                                     bLastGeneration,
                                                      update,
                                                      sprojectname);
     controller->setPlotMobility(qCustomPlotMobilityFunction);
@@ -193,10 +206,10 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 
     controller->setProgressBar(progressBar);
     //FINE
-QObject::connect(buttonStop, SIGNAL(clicked()),controller, SLOT( stopThread()));
+    QObject::connect(buttonStop, SIGNAL(clicked()),controller, SLOT( stopThread()));
     //eseguo l'algoritmo genetico e setto il segnale di stop
     controller->startThread();
-
+    threadsSakeController.push_back(controller);
 }
 
 
@@ -214,7 +227,7 @@ void SAKeStart::startValidation(
 
 
     QVariant returnedValue;
-    QVariant msg = _projectName.toString();
+    QVariant msg = "Validation - "+_projectName.toString();
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
     numberProject++;
@@ -232,7 +245,9 @@ void SAKeStart::startValidation(
     CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(numberProject) );
     validationController->setKernelPlot(qCustomPlotKernel);
     validationController->updateKernelPlot();
-
+    SAKeController* tmp =new SAKeController();
+    threadsSakeController.push_back(tmp);
+    
 }
 
 
@@ -394,6 +409,18 @@ void SAKeStart::update(){
 
     qApp->processEvents();
 }
+
+void SAKeStart::stopController(int count){
+   cout << "count " << count << endl;
+   cout << "threadsSakeController.size() " << threadsSakeController.size() << endl;
+   if(threadsSakeController[count-1]->isRunning ()){
+        threadsSakeController[count-1]->stopThread();
+        while(threadsSakeController[count-1]->isRunning ()){
+
+        }
+   }
+}
+
 //void SAKeStart::updateCurrentMaximumFitness(QString s){
 
 //    _currentMaximumFitness->setProperty("text",s);

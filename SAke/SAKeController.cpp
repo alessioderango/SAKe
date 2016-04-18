@@ -1,6 +1,17 @@
 #include "SAKeController.h"
 
+bool fileExists(QString path) {
+    QFileInfo checkFile(path);
+    // check if file exists and if yes: Is it really a file and no directory?
+    if (checkFile.exists() && checkFile.isFile()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+SAKeController::SAKeController(){
 
+}
 
 SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                QString  sselection,
@@ -22,8 +33,10 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                QObject *_currentAverageFitness,
                                QObject *_absoluteAverageFitness,
                                int _numberofProcessor,
-                               int _maxNumberToConsider,
-                               double _thresholdKernel,
+                               int para1,
+                               int para2,
+                               QString spara1,
+                               bool _lastGeneration,
                                Update* _update,
                                const QString& projectName)
 
@@ -31,58 +44,106 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     this->start=false;
     this->finish=true;
     qCustomPlot = _qCustomPlot;
-   qCustomPlot->initCustomPlotFitness();
-   HandlerCSV::loadCSVRain(filenameRain,this->rain,this->rain_size);
-   HandlerCSV::loadCSVActivation(filenameActivaion,activations,activations_size);
-   try {
+    qCustomPlot->initCustomPlotFitness();
+    HandlerCSV::loadCSVRain(filenameRain,this->rain,this->rain_size);
+    HandlerCSV::loadCSVActivation(filenameActivaion,activations,activations_size);
+    try {
         // db.getConnection();
-         //db.executeQueryRain(this->rain,this->rain_size);
-         //db.executeQueryActivation(activations,activations_size);
+        //db.executeQueryRain(this->rain,this->rain_size);
+        //db.executeQueryActivation(activations,activations_size);
         // db.disconnect();
 
-     } catch (const std::exception &e) {
-         cerr << e.what() << std::endl;
-  //       return 1;
-     }
-//     for (int i = 0; i < activations_size; ++i) {
-//         cout << "Activation Start = " <<"    "<<"  "<< activations[i].getStart().tm_hour<< ":" << activations[i].getStart().tm_min << ":"<< activations[i].getStart().tm_sec << "   " <<activations[i].getStart().tm_mday << "-"<< activations[i].getStart().tm_mon << "-"<< 1900+activations[i].getStart().tm_year << endl;
-//         cout << "Activation End = " <<"    "<<"  "<< activations[i].getEnd().tm_hour<< ":" << activations[i].getEnd().tm_min << ":"<< activations[i].getEnd().tm_sec << "   " <<activations[i].getEnd().tm_mday << "-"<< activations[i].getEnd().tm_mon << "-"<< 1900+activations[i].getEnd().tm_year << endl;
-//     }
-//     qDebug() << "Activation End = " <<"    "<<"  "<< this->rain[0].getRainMm()<< endl;
+    } catch (const std::exception &e) {
+        cerr << e.what() << std::endl;
+        //       return 1;
+    }
+    //     for (int i = 0; i < activations_size; ++i) {
+    //         cout << "Activation Start = " <<"    "<<"  "<< activations[i].getStart().tm_hour<< ":" << activations[i].getStart().tm_min << ":"<< activations[i].getStart().tm_sec << "   " <<activations[i].getStart().tm_mday << "-"<< activations[i].getStart().tm_mon << "-"<< 1900+activations[i].getStart().tm_year << endl;
+    //         cout << "Activation End = " <<"    "<<"  "<< activations[i].getEnd().tm_hour<< ":" << activations[i].getEnd().tm_min << ":"<< activations[i].getEnd().tm_sec << "   " <<activations[i].getEnd().tm_mday << "-"<< activations[i].getEnd().tm_mon << "-"<< 1900+activations[i].getEnd().tm_year << endl;
+    //     }
+    //     qDebug() << "Activation End = " <<"    "<<"  "<< this->rain[0].getRainMm()<< endl;
 
 
-   selection        = sselection;
-   pattern          = spattern;
-   pop              = ipop;
-   maxGen           = imaxGen;
-   tbMax            = itbMax;
-   tbMin            = itbMin;
-   dHpMax           = idHpMax;
-   dHpMin           = idHpMin;
-   propCrossover    = fpropCrossover;
-   propMutation     = fpropMutation;
-   pme              = fpme;
-   pmb              = fpmb;
-   currentMaximumFitness=_currentMaximumFitness;
-   absoluteMaximumFitness=_absoluteMaximumFitness;
-   currentAverageFitness= _currentAverageFitness;
-   absoluteAverageFitness=_absoluteAverageFitness;
-   update = _update;
+    selection        = sselection;
+    pattern          = spattern;
+    pop              = ipop;
+    maxGen           = imaxGen;
+    tbMax            = itbMax;
+    tbMin            = itbMin;
+    dHpMax           = idHpMax;
+    dHpMin           = idHpMin;
+    propCrossover    = fpropCrossover;
+    propMutation     = fpropMutation;
+    pme              = fpme;
+    pmb              = fpmb;
+    currentMaximumFitness=_currentMaximumFitness;
+    absoluteMaximumFitness=_absoluteMaximumFitness;
+    currentAverageFitness= _currentAverageFitness;
+    absoluteAverageFitness=_absoluteAverageFitness;
+    update = _update;
 
-   QDir dir(QDir::currentPath()+"/workspace");
-   if (!dir.exists()){
-     dir.mkdir(".");
-   }
-   QString tmp = QDir::currentPath()+"/workspace/"+projectName;
-   QDir dir2(tmp);
-   if (!dir2.exists()){
-     dir2.mkdir(".");
-   }
-   savePath = tmp;
+    QDir dir(QDir::currentPath()+"/workspace");
+    if (!dir.exists()){
+        dir.mkdir(".");
+    }
+    QString tmp1 = QDir::currentPath()+"/workspace/"+projectName;
+    QDir dir2(tmp1);
+    if (!dir2.exists()){
+        dir2.mkdir(".");
+    }
+    QString tmp2 = QDir::currentPath()+"/workspace/"+projectName+"/calibration";
+    QDir dir3(tmp2);
+    if (!dir3.exists()){
+        dir3.mkdir(".");
+    }
 
-   maxNumberToConsider=_maxNumberToConsider;
-   numberofProcessor=_numberofProcessor;
-   thresholdKernel = _thresholdKernel;
+    savePath = tmp2;
+
+    if(QString::compare(selection, "StochTour(t)", Qt::CaseInsensitive)==0)
+    {
+        parameter1=para1;
+        parameter2=para2;
+        selection = QString("StochTour(%1)").arg(parameter1);
+    }else
+        if( QString::compare(selection, "DetTour(T)", Qt::CaseInsensitive)==0){
+            parameter1=para1;
+            parameter2=para2;
+            selection = QString("DetTour(%1)").arg(parameter1);
+        }else
+        if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
+            parameter1=para1;
+            parameter2=para2;
+            selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+        }else
+        if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
+            parameter1=para1;
+            parameter2=para2;
+            //selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+        }else
+        if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
+
+            parameter2=para2;
+            selection = QString("Sequential("+ spara1 +")").arg(parameter1,parameter2);
+        }
+
+
+    maxNumberToConsider=para1;
+    numberofProcessor=_numberofProcessor;
+
+    if(fileExists(tmp2+"/currentGeneration.csv")){
+        lastGeneration = _lastGeneration;
+    }else
+        lastGeneration = false;
+
+    if(QString::compare(selection, "TournamentWithoutReplacement", Qt::CaseInsensitive)==0)
+    {
+        typeAlgorithm=0;// eoSGARepplacement
+    }
+    else
+    {
+        typeAlgorithm=1;
+    }
+
 
 
 }
@@ -90,134 +151,138 @@ void SAKeController::startAlgorithm()
 {
     parallel.setNumberProcessor(numberofProcessor);
     srand(time(0));
-//    qDebug() << "Start Algorithm %d /n"<< "/n";
+    //    qDebug() << "Start Algorithm %d /n"<< "/n";
     time_t start_time, end_time;
     this->start=true;
-int argc=1;
-char **x= (char**)malloc(sizeof(char*) * 1);
- x[0]= (char*)malloc(sizeof(char)*1);
- x[0]=(char*) 'a';
-          try
-          {
+    int argc=1;
+    char **x= (char**)malloc(sizeof(char*) * 1);
+    x[0]= (char*)malloc(sizeof(char)*1);
+    x[0]=(char*) 'a';
+    try
+    {
 
-              eoParser parser(argc,x);  // for user-parameter readi ng
-//              qDebug() << "Start Algorithm %d /n"<< "/n";
+        eoParser parser(argc,x);  // for user-parameter readi ng
+        //              qDebug() << "Start Algorithm %d /n"<< "/n";
 
-          /* TODO
+        /* TODO
                 GESTIRE ElitistReplacement(10) GUI
               replacement.toStdString()
 
           */
+        vector<vector<double>> popFromFile;
+        if(lastGeneration){
+            int numGen;
+            HandlerCSV::loadCSVPopFromFile(savePath+"/currentGeneration.csv",popFromFile,numGen);
+        }
 
-          vector<vector<double>> popFromFile;
-          int numGen;
-          HandlerCSV::loadCSVPopFromFile(savePath+"/currentGeneration.csv",popFromFile,numGen);
+        if(typeAlgorithm==1)
+            parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
+        //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
 
-          //parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
-          parser.setORcreateParam(eoParamParamType("MySelection"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
-//        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
-          parser.setORcreateParam(unsigned(this->pop), "popSize", "Population Size", 'P', "Evolution Engine");
-          parser.setORcreateParam(unsigned(this->maxGen), "maxGen", "Maximum number of generations () = none)",'G',"Stopping criterion");
-//          parser.setORcreateParam(relRateCrossover, "cross1Rate", "Relative rate for crossover 1", '1', "Variation Operators").value();
-//          parser.setORcreateParam(relRateMutation, "mut1Rate", "Relative rate for mutation 1", '1', "Variation Operators").value();
-          parser.setORcreateParam(propCrossover, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
-          parser.setORcreateParam(propMutation, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
+        //parser.setORcreateParam(eoParamParamType("MySelection"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
 
+        parser.setORcreateParam(unsigned(this->pop), "popSize", "Population Size", 'P', "Evolution Engine");
+        parser.setORcreateParam(unsigned(this->maxGen), "maxGen", "Maximum number of generations () = none)",'G',"Stopping criterion");
+        //          parser.setORcreateParam(relRateCrossover, "cross1Rate", "Relative rate for crossover 1", '1', "Variation Operators").value();
+        //          parser.setORcreateParam(relRateMutation, "mut1Rate", "Relative rate for mutation 1", '1', "Variation Operators").value();
+        //parser.setORcreateParam(propCrossover, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
+        //parser.setORcreateParam(propMutation, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
+        //parser.setORcreateParam(uint32_t(0), "seed", "Random number seed", 'S');
 
-//          int tbMin=30;
-//          int tbMax=180;
-//          double Pme=25;
-//          double Pmb=0.3;
-//          double dHpMin=0;
-//          double dHpMax=10;
-//          string pattern = "Triangolare Disc";
-
-
-
-          eoState state;    // keeps all things allocated
-
-            //plotMobility->initCustomPlotMobilityFunction();
-
-            // The fitness
-            //////////////
-           eoSAKeEvalFunc<Indi> plainEval(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
-
-           // turn that object into an evaluation counter
-           eoEvalFuncCounter<Indi> eval(plainEval);
-
-
-          // the genotype - through a genotype initializerdo_make_genotype(_parser, _state, _eo);
-          eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile);
-
-          // Build the variation operator (any seq/prop construct)
-          eoGenOp<Indi>& op = do_make_op(parser, state, init,tbMin,tbMax,pme,pmb,dHpMin,dHpMax);
-
-          eoQuadOp<Indi> *cross = new eoSAKeQuadCrossover<Indi> /* (varType  _anyVariable) */;
-          eoMonOp<Indi> *mut = new eoSAKeMutation<Indi>(tbMin,tbMax, pme, pmb,dHpMin,dHpMax)/* (varType  _anyVariable) */;
+        //          int tbMin=30;
+        //          int tbMax=180;
+        //          double Pme=25;
+        //          double Pmb=0.3;
+        //          double dHpMin=0;
+        //          double dHpMax=10;
+        //          string pattern = "Triangolare Disc";
 
 
 
-          //// Now the representation-independent things
-          //
-          // YOU SHOULD NOT NEED TO MODIFY ANYTHING BEYOND THIS POINT
-          // unless you want to add specific statistics to the checkpoint
-          //////////////////////////////////////////////
+        eoState state;    // keeps all things allocated
 
-          // initialize the population
-          // yes, this is representation indepedent once you have an eoInit
-          eoPop<Indi>& pop   = do_make_pop(parser, state, init);
+        //plotMobility->initCustomPlotMobilityFunction();
 
-          this->stop = new eoGenContinueMy<Indi>(savePath,thresholdKernel);
-          // stopping criteria
-          eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
-          // output
-          eoCheckPoint<Indi> & checkpoint = do_make_checkpoint_my(parser, state, eval, term,qCustomPlot,plotMobility,rain,rain_size,plotkernel,progressBar,this->maxGen,   currentMaximumFitness,
-                  absoluteMaximumFitness,
-                  currentAverageFitness,
-                  absoluteAverageFitness, a,update);
-          // algorithm (need the operator!)
-          eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider);
+        // The fitness
+        //////////////
+        eoSAKeEvalFunc<Indi> plainEval(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
 
-          ///// End of construction of the algorithm
+        // turn that object into an evaluation counter
+        eoEvalFuncCounter<Indi> eval(plainEval);
 
-          //parallel.make_parallel_my(numberofProcessor);
 
-           #ifdef _OPENMP
-                 omp_set_num_threads( numberofProcessor );
-            #endif // !_OPENMP
-          //parallel.setNumberProcessor(numberofProcessor);
-          //parallel.setNumberProcessor(8);
+        // the genotype - through a genotype initializerdo_make_genotype(_parser, _state, _eo);
+        eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile,lastGeneration);
 
-          /////////////////////////////////////////
-          // to be called AFTER all parameters have been read!!!
-          //make_help(parser);
+        // Build the variation operator (any seq/prop construct)
+        eoGenOp<Indi>& op = do_make_op(parser, state, init,tbMin,tbMax,pme,pmb,dHpMin,dHpMax);
 
-          //// GO
-          ///////
-          // evaluate intial population AFTER help and status in case it takes time
+        eoQuadOp<Indi> *cross = new eoSAKeQuadCrossover<Indi> /* (varType  _anyVariable) */;
+        eoMonOp<Indi> *mut = new eoSAKeMutation<Indi>(tbMin,tbMax, pme, pmb,dHpMin,dHpMax)/* (varType  _anyVariable) */;
 
-          apply<Indi>(eval, pop);
-          // if you want to print it out
-//           cout << "Initial Population\n";
-//           pop.sortedPrintOn(cout);
-//           qDebug() << "initialized population %d /n"<< "/n";
-//           cout << endl;
-//            qDebug() << "start %d /n"<< "/n";
-            start_time = time(NULL);
-           do_run(ga, pop); // run the ga
-            end_time = time(NULL);
-//            cout << "tempo esecuzione " << end_time -start_time<< "\n";
-//          cout << "Final Population\n";
+
+
+        //// Now the representation-independent things
+        //
+        // YOU SHOULD NOT NEED TO MODIFY ANYTHING BEYOND THIS POINT
+        // unless you want to add specific statistics to the checkpoint
+        //////////////////////////////////////////////
+
+        // initialize the population
+        // yes, this is representation indepedent once you have an eoInit
+        eoPop<Indi>& pop   = do_make_pop(parser, state, init);
+
+        this->stop = new eoGenContinueMy<Indi>(savePath);
+        // stopping criteria
+        eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
+        // output
+        eoCheckPoint<Indi> & checkpoint = do_make_checkpoint_my(parser, state, eval, term,qCustomPlot,plotMobility,rain,rain_size,plotkernel,progressBar,this->maxGen,   currentMaximumFitness,
+                                                                absoluteMaximumFitness,
+                                                                currentAverageFitness,
+                                                                absoluteAverageFitness, a,update);
+        // algorithm (need the operator!)
+        eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider,typeAlgorithm);
+
+        ///// End of construction of the algorithm
+
+        //parallel.make_parallel_my(numberofProcessor);
+
+#ifdef _OPENMP
+        omp_set_num_threads( numberofProcessor );
+#endif // !_OPENMP
+        //parallel.setNumberProcessor(numberofProcessor);
+        //parallel.setNumberProcessor(8);
+
+        /////////////////////////////////////////
+        // to be called AFTER all parameters have been read!!!
+        //make_help(parser);
+
+        //// GO
+        ///////
+        // evaluate intial population AFTER help and status in case it takes time
+
+        apply<Indi>(eval, pop);
+        // if you want to print it out
+        //           cout << "Initial Population\n";
+        //           pop.sortedPrintOn(cout);
+        //           qDebug() << "initialized population %d /n"<< "/n";
+        //           cout << endl;
+        //            qDebug() << "start %d /n"<< "/n";
+        start_time = time(NULL);
+        do_run(ga, pop); // run the ga
+        end_time = time(NULL);
+        //            cout << "tempo esecuzione " << end_time -start_time<< "\n";
+        //          cout << "Final Population\n";
         //  cout << pop.it_best_element().base()->fitness() << endl;
         //  cout << *(pop.it_best_element())<< endl;
-//          pop.sortedPrintOn(cout);
-//          cout << endl;
+        //          pop.sortedPrintOn(cout);
+        //          cout << endl;
 
-          }
-          catch(exception& e)
-          {
-//            cout << e.what() << endl;
-          }
+    }
+    catch(exception& e)
+    {
+        //            cout << e.what() << endl;
+    }
 }
 
 CustomPlotKernel *SAKeController::getPlotkernel() const
@@ -259,13 +324,13 @@ void SAKeController::stopThread(){
     qDebug() << "close " << "\n";
     //this->moveToThread(QApplication::instance()->thread());
     //  this->exit(0);
-//    this->requestInterruption();
-//    if(this->isInterruptionRequested())
-//        this->stop();
-//    this->sleep(10000);
-    if(this->stop){
+    //    this->requestInterruption();
+    //    if(this->isInterruptionRequested())
+    //        this->stop();
+    //    this->sleep(10000);
+    if(stop){
         qDebug() << "close2 " << "\n";
-        this->stop->setStop(true);
+        stop->setStop(true);
     }
 
 }

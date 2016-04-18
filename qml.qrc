@@ -12,5 +12,8 @@
         <file>img/project.png</file>
         <file>Tab.qml</file>
         <file>ProjectCalibration.qml</file>
+        <file>parametersValidationLayout.qml</file>
+        <file>img/check.png</file>
+        <file>parametersProjectAlreadyExist.qml</file>
     </qresource>
 </RCC>

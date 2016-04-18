@@ -15,7 +15,6 @@ ApplicationWindow {
     height: 800
     title: qsTr("Sake software")
 
-
     function createSpriteObjects() {
         component = Qt.createComponent("Sprite.qml");
         sprite = component.createObject(appWindow, {"x": 100, "y": 100});
@@ -181,7 +180,7 @@ ApplicationWindow {
                         }
                         onDoubleClicked: {
 
-                            var component = Qt.createComponent("ProjectCalibration.qml")
+                            var component = Qt.createComponent("parametersProjectAlreadyExist.qml")
                             console.log(listview1.model.get(listview1.currentIndex).name)
                             var list = sakeStart.getAllElementsFromProjectName(listview1.model.get(listview1.currentIndex).name)
                             console.log("ciao"+list.length )
@@ -244,7 +243,10 @@ import QtQuick.Controls.Styles 1.4
                         Tab {
                            title:   '"+msg+"'
                         active: true
-
+                        property int threadId: "+count+"
+                        function stopExecution(){
+                                  sakeStart.stopController(threadId);
+                        }
 
                         GridLayout {
                         Layout.fillWidth: true
@@ -425,7 +427,7 @@ import QtQuick.Controls.Styles 1.4
                                     Layout.fillWidth: true
                                 }
 
-                               // RowLayout {
+//                               RowLayout {
                                         Button {
                                             id: stop
                                             objectName: 'stop"+count+"'
@@ -436,11 +438,11 @@ import QtQuick.Controls.Styles 1.4
 //                                            id: closeWindows
 //                                            objectName: 'closeWindows"+count+"'
 //                                            text: qsTr('close Tab')
-//                                            onClicked:
-//                                                    tabmain.removeTab("+count+")
+//                                            //onClicked:
+//                                                    //tabmain.removeTab("+count+")
 
-//                                        }
-//                                }
+//                                       }
+//                               }
 
                             }
 
@@ -542,7 +544,7 @@ import QtQuick.Controls.Styles 1.4
                 // var component=Qt.createComponent("Tab.qml");
                 // var window    = component.createObject(applicationWindow1);
                 var component=  Qt.createQmlObject(qml,tabmain);
-                tabmain.activeFocusOnTab=count-1;
+                tabmain.activeFocusOnTab=count;
                 //   tabmain.addTab(component);
 
                 return "0"
@@ -560,7 +562,7 @@ import QtQuick.Controls.Styles 1.4
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
-                //signal stopExecution()
+                signal stopExecution()
 
                 style: TabViewStyle {
                     property color frameColor: "#999"
@@ -572,7 +574,7 @@ import QtQuick.Controls.Styles 1.4
                     }
                     tab: Rectangle {
                         color: styleData.selected ? fillColor : frameColor
-                        implicitWidth: Math.max(text.width + 24, 80)
+                        implicitWidth: Math.max(text.width + 40, 80)
                         implicitHeight: 20
                         Rectangle { height: 1 ; width: parent.width ; color: frameColor}
                         Rectangle { height: parent.height ; width: 1; color: frameColor}
@@ -586,6 +588,7 @@ import QtQuick.Controls.Styles 1.4
                             color: styleData.selected ? "black" : "white"
                         }
                         Button {
+
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.rightMargin: 4
@@ -601,8 +604,14 @@ import QtQuick.Controls.Styles 1.4
                                 }}
                             onClicked: {
                                 //tabmain.stopExecution();
-
-                                //tabmain.removeTab(styleData.index)
+                                var patt = new RegExp("Calibration ");
+                                console.log(patt.test(tabmain.getTab(styleData.index).title));
+                                console.log(tabmain.getTab(styleData.index).title);
+                                if(patt.test(tabmain.getTab(styleData.index).title)){
+                                    console.log("STOPPO ALGO")
+                                     tabmain.getTab(styleData.index).stopExecution();
+                                }
+                                tabmain.removeTab(styleData.index)
                             }
                         }
                     }

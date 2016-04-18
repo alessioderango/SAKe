@@ -59,7 +59,8 @@ eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser, eoState& _state, EOT,
                                int tbMin,
                                int tbMax,
                                string pattern,
-                               std::vector<std::vector<double>> populationfromFile)
+                               std::vector<std::vector<double>> populationfromFile,
+                               bool lastGeneration)
 {
   // read any useful parameter here from the parser
   // the param itself will belong to the parser (as far as memory is concerned)
@@ -71,7 +72,7 @@ eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser, eoState& _state, EOT,
 
 
   // Then built the initializer - a pointer, stored in the eoState
-  eoInit<EOT>* init = new eoSAKeInit<EOT>(tbMin,tbMax,pattern,populationfromFile);
+  eoInit<EOT>* init = new eoSAKeInit<EOT>(tbMin,tbMax,pattern,populationfromFile,lastGeneration);
   // store in state
   _state.storeFunctor(init);
   // and return a reference

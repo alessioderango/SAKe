@@ -147,9 +147,10 @@ int XMLManager::SaveXMLFileAlreadyExist(QString name,
     qDebug() << a.length();
     for (int i = 0; i < a.length(); i++) {
         qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
-        if(QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive)==0)
-
-
+        qDebug() << name;
+        qDebug() << QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+        int result = QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+        if(result==0){
                     a.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
                     a.at(i).childNodes().at(1).childNodes().at(1).firstChild().setNodeValue(value1);
                     a.at(i).childNodes().at(1).childNodes().at(2).firstChild().setNodeValue(value2);
@@ -168,7 +169,7 @@ int XMLManager::SaveXMLFileAlreadyExist(QString name,
                     a.at(i).childNodes().at(13).firstChild().setNodeValue(pattern);
                     a.at(i).childNodes().at(14).firstChild().setNodeValue(pathRains);
                     a.at(i).childNodes().at(15).firstChild().setNodeValue(pathActivations);
-
+        }
 
     }
 

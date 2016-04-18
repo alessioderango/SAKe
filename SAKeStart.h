@@ -74,6 +74,7 @@ public:
 signals:
 
 public slots:
+    void stopController(int count);
     void InitAlgo(const QVariant &selection,
                   const QVariant &pop,
                   const QVariant &maxGen,
@@ -90,7 +91,8 @@ public slots:
                   const QVariant &filenameActivaion,
                   const QVariant &_projectName,
                   const QVariant &_numberProcessor,
-                  const QVariant &_elitists,
+                  const QVariant &_para1,
+                  const QVariant &_para2,
                   const QVariant &thresholdKernel,
                   const QVariant &tipo
                   );
@@ -137,6 +139,8 @@ private:
 //    QObject *_absoluteAverageFitness;
 //    QObject *_gen;
     XMLManager * xmlManager;
+
+    std::vector<SAKeController*> threadsSakeController;
 
 
 

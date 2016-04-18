@@ -27,24 +27,29 @@
 template<class GenotypeT>
 class eoSAKeInit: public eoInit<GenotypeT> {
 public:
-	/// Ctor - no requirement
-// START eventually add or modify the anyVariable argument
-//  eoSAKeInit()
-    eoSAKeInit(int _tbMin,int _tbMax, string _pattern, std::vector<std::vector<double>> populationfromFile)
-// END eventually add or modify the anyVariable argument
-			{
-		// START Code of Ctor of an eoSAKeInit object
-		tbMin = _tbMin;
-		tbMax = _tbMax;
-		pattern = _pattern;
-		count=0;
+    /// Ctor - no requirement
+    // START eventually add or modify the anyVariable argument
+    //  eoSAKeInit()
+    eoSAKeInit(int _tbMin,
+               int _tbMax,
+               string _pattern,
+               std::vector<std::vector<double>> populationfromFile,
+               bool _lastGeneration)
+    // END eventually add or modify the anyVariable argument
+    {
+        // START Code of Ctor of an eoSAKeInit object
+        tbMin = _tbMin;
+        tbMax = _tbMax;
+        pattern = _pattern;
+        count=0;
         popFromFile=populationfromFile;
-		// END   Code of Ctor of an eoSAKeInit object
-	}
+        lastGeneration=_lastGeneration;
+        // END   Code of Ctor of an eoSAKeInit object
+    }
 
     double * GetFunzioneFiltro(int tb,string Inputpattern) {
-      double* fi = (double*) malloc(sizeof(double)*tb);
-      int i;
+        double* fi = (double*) malloc(sizeof(double)*tb);
+        int i;
         if (Inputpattern.compare("Rettangolare") == 0) {
             for (i = 0; i < tb; i++) {
                 double e = (1 /(double)tb);
@@ -52,58 +57,65 @@ public:
             }
         } else
             if (Inputpattern.compare("Triangolare Disc") == 0) {
-            for (i = 0; i < tb; i++) {
-                double hMax = (double)(2 /(double) tb);
-                fi[i] = ((double)(tb - i) /(double)( tb * hMax));
+                for (i = 0; i < tb; i++) {
+                    double hMax = (double)(2 /(double) tb);
+                    fi[i] = ((double)(tb - i) /(double)( tb * hMax));
+                }
+            } else if (Inputpattern.compare( "Triangolare Asc") == 0) {
+                for (i = 0; i < tb; i++) {
+                    double hMax = (double)(2 /(double)tb);
+                    fi[i] = ((double)(i / (double)(tb * hMax)));
+                }
             }
-        } else if (Inputpattern.compare( "Triangolare Asc") == 0) {
-            for (i = 0; i < tb; i++) {
-                double hMax = (double)(2 /(double)tb);
-                fi[i] = ((double)(i / (double)(tb * hMax)));
+        return fi;
+    }
+
+    /** initialize a genotype
+     *
+     * @param _genotype  generally a genotype that has been default-constructed
+     *                   whatever it contains will be lost
+     */
+    void operator()(GenotypeT & _genotype) {
+        // START Code of random initialization of an eoSAKe object
+
+        if(lastGeneration){
+
+            int tb = popFromFile[count].size();
+            _genotype.setSize(tb);
+            //double* fi = GetFunzioneFiltro(tb, pattern);
+            double* fi= (double*) malloc(sizeof(double)*tb);
+            for (int i = 0; i < tb; i++) {
+                fi[i] =  popFromFile[count][i];
             }
+            _genotype.setFi(fi);
+            _genotype.number=count;
+            count++;
+            _genotype.invalidate();
+
+        }else
+        {
+            int tb =( rand()%(tbMax-tbMin))+tbMin;
+            _genotype.setSize(tb);
+            double* fi = GetFunzioneFiltro(tb, pattern);
+            _genotype.setFi(fi);
+            _genotype.number=count;
+            count++;
+            _genotype.invalidate();
         }
-		return fi;
-	}
 
-	/** initialize a genotype
-	 *
-	 * @param _genotype  generally a genotype that has been default-constructed
-	 *                   whatever it contains will be lost
-	 */
-	void operator()(GenotypeT & _genotype) {
-		// START Code of random initialization of an eoSAKe object
-//        int tb =( rand()%(tbMax-tbMin))+tbMin;
-//        _genotype.setSize(tb);
-//        double* fi = GetFunzioneFiltro(tb, pattern);
-//        _genotype.setFi(fi);
-//        _genotype.number=count;
-//        count++;
-//        _genotype.invalidate();
+    }
 
-        int tb = popFromFile[count].size();
-        _genotype.setSize(tb);
-        //double* fi = GetFunzioneFiltro(tb, pattern);
-        double* fi= (double*) malloc(sizeof(double)*tb);
-        for (int i = 0; i < tb; i++) {
-            fi[i] =  popFromFile[count][i];
-        }
-        _genotype.setFi(fi);
-        _genotype.number=count;
-        count++;
-        _genotype.invalidate();
-
-	}
-
-	int count;
+    int count;
 private:
-// START Private data of an eoSAKeInit object
-	int tbMin;
-	int tbMax;
+    // START Private data of an eoSAKeInit object
+    int tbMin;
+    int tbMax;
     string pattern;
     vector<vector<double>> popFromFile;
+    bool lastGeneration;
 
-//  varType anyVariable;		   // for example ...
-// END   Private data of an eoSAKeInit object
+    //  varType anyVariable;		   // for example ...
+    // END   Private data of an eoSAKeInit object
 };
 
 #endif
