@@ -15,5 +15,6 @@
         <file>parametersValidationLayout.qml</file>
         <file>img/check.png</file>
         <file>parametersProjectAlreadyExist.qml</file>
+        <file>parameterMultiObjects.qml</file>
     </qresource>
 </RCC>

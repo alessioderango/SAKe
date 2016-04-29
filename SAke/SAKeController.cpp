@@ -16,8 +16,10 @@ SAKeController::SAKeController(){
 SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                QString  sselection,
                                QString  spattern,
-                               QString  filenameRain,
-                               QString  filenameActivaion,
+                               Rain *rain,
+                               int rain_size,
+                               Activation * activation,
+                               int activation_size,
                                int      ipop,
                                int      imaxGen,
                                int      itbMax,
@@ -38,15 +40,21 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                QString spara1,
                                bool _lastGeneration,
                                Update* _update,
-                               const QString& projectName)
+                               const QString& projectName,
+                               vector<QString> orders,
+                               int itypeAlgorithm)
 
 {
+
+    this->rain=rain;
+    this->rain_size = rain_size;
+    this->activations=activation;
+    this->activations_size = activation_size;
+    typeAlgorithm =itypeAlgorithm;
     this->start=false;
     this->finish=true;
     qCustomPlot = _qCustomPlot;
     qCustomPlot->initCustomPlotFitness();
-    HandlerCSV::loadCSVRain(filenameRain,this->rain,this->rain_size);
-    HandlerCSV::loadCSVActivation(filenameActivaion,activations,activations_size);
     try {
         // db.getConnection();
         //db.executeQueryRain(this->rain,this->rain_size);
@@ -57,11 +65,35 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
         cerr << e.what() << std::endl;
         //       return 1;
     }
-    //     for (int i = 0; i < activations_size; ++i) {
-    //         cout << "Activation Start = " <<"    "<<"  "<< activations[i].getStart().tm_hour<< ":" << activations[i].getStart().tm_min << ":"<< activations[i].getStart().tm_sec << "   " <<activations[i].getStart().tm_mday << "-"<< activations[i].getStart().tm_mon << "-"<< 1900+activations[i].getStart().tm_year << endl;
-    //         cout << "Activation End = " <<"    "<<"  "<< activations[i].getEnd().tm_hour<< ":" << activations[i].getEnd().tm_min << ":"<< activations[i].getEnd().tm_sec << "   " <<activations[i].getEnd().tm_mday << "-"<< activations[i].getEnd().tm_mon << "-"<< 1900+activations[i].getEnd().tm_year << endl;
-    //     }
-    //     qDebug() << "Activation End = " <<"    "<<"  "<< this->rain[0].getRainMm()<< endl;
+
+    if(orders.size() != 0){
+        selectionStrategy = new SelectionStrategy<Indi>*[4];
+        for(int i = 0; i < orders.size(); i++){
+
+            if(QString::compare(orders[i], "Fitness", Qt::CaseInsensitive)==0)
+            {
+                selectionStrategy[i] = new SelectionFitness<Indi>();
+            }else
+                if(QString::compare(orders[i], "Delta critico", Qt::CaseInsensitive)==0)
+                {
+                    selectionStrategy[i] = new SelectionDeltaCr<Indi>();
+                }else
+                    if(QString::compare(orders[i], "Momento del primo ordine", Qt::CaseInsensitive)==0)
+                    {
+                        selectionStrategy[i] = new SelectionMomentoDelPrimoOrdine<Indi>();
+                    }else
+                        if(QString::compare(orders[i], "tempo base", Qt::CaseInsensitive)==0)
+                        {
+                            selectionStrategy[i] = new SelectionSize<Indi>();
+                        }
+        }
+    }
+
+         for (int i = 0; i < activations_size; ++i) {
+             cout << "Activation Start = " <<"    "<<"  "<< activations[i].getStart().tm_hour<< ":" << activations[i].getStart().tm_min << ":"<< activations[i].getStart().tm_sec << "   " <<activations[i].getStart().tm_mday << "-"<< activations[i].getStart().tm_mon << "-"<< 1900+activations[i].getStart().tm_year << endl;
+             cout << "Activation End = " <<"    "<<"  "<< activations[i].getEnd().tm_hour<< ":" << activations[i].getEnd().tm_min << ":"<< activations[i].getEnd().tm_sec << "   " <<activations[i].getEnd().tm_mday << "-"<< activations[i].getEnd().tm_mon << "-"<< 1900+activations[i].getEnd().tm_year << endl;
+         }
+         qDebug() << "Activation End = " <<"    "<<"  "<< this->rain[0].getRainMm()<< endl;
 
 
     selection        = sselection;
@@ -110,21 +142,21 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
             parameter2=para2;
             selection = QString("DetTour(%1)").arg(parameter1);
         }else
-        if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
-            parameter1=para1;
-            parameter2=para2;
-            selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
-        }else
-        if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
-            parameter1=para1;
-            parameter2=para2;
-            //selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
-        }else
-        if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
+            if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
+                parameter1=para1;
+                parameter2=para2;
+                selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+            }else
+                if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
+                    parameter1=para1;
+                    parameter2=para2;
+                    //selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+                }else
+                    if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
 
-            parameter2=para2;
-            selection = QString("Sequential("+ spara1 +")").arg(parameter1,parameter2);
-        }
+                        parameter2=para2;
+                        selection = QString("Sequential("+ spara1 +")").arg(parameter1,parameter2);
+                    }
 
 
     maxNumberToConsider=para1;
@@ -134,16 +166,6 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
         lastGeneration = _lastGeneration;
     }else
         lastGeneration = false;
-
-    if(QString::compare(selection, "TournamentWithoutReplacement", Qt::CaseInsensitive)==0)
-    {
-        typeAlgorithm=0;// eoSGARepplacement
-    }
-    else
-    {
-        typeAlgorithm=1;
-    }
-
 
 
 }
@@ -175,7 +197,7 @@ void SAKeController::startAlgorithm()
             HandlerCSV::loadCSVPopFromFile(savePath+"/currentGeneration.csv",popFromFile,numGen);
         }
 
-        if(typeAlgorithm==1)
+        if(typeAlgorithm==4)
             parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
         //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
 
@@ -241,7 +263,7 @@ void SAKeController::startAlgorithm()
                                                                 currentAverageFitness,
                                                                 absoluteAverageFitness, a,update);
         // algorithm (need the operator!)
-        eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider,typeAlgorithm);
+        eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider,typeAlgorithm,selectionStrategy);
 
         ///// End of construction of the algorithm
 
@@ -283,6 +305,16 @@ void SAKeController::startAlgorithm()
     {
         //            cout << e.what() << endl;
     }
+}
+
+int SAKeController::getCsvHandlerstatusRain() const
+{
+    return csvHandlerstatusRain;
+}
+
+void SAKeController::setCsvHandlerstatusRain(int value)
+{
+    csvHandlerstatusRain = value;
 }
 
 CustomPlotKernel *SAKeController::getPlotkernel() const

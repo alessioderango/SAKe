@@ -16,10 +16,12 @@ signals:
     void valueTb(QString);
     void valueDeltaCritico(QString);
     void valueMomentoDelPrimoOrdine(QString);
-public slots:
 
-private:
-
+    void valueCurrentMaximumFitnessRegression(QString);
+    void valueAbsoluteMaximumFitnessRegression(QString);
+    void valueCurrentAvarageFitnessRegression(QString);
+    void valueAbsoluteAvarageFitnessRegression(QString);
+    void valueGenRegression(QString);
 
 };
 

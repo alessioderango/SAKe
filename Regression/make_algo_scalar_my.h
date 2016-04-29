@@ -17,14 +17,14 @@
 #include <eoStochTournamentSelect.h>
 #include <eoSharingSelect.h>
 #include <utils/eoDistance.h>
-#include "eoMySelection.h"
+//#include "eoMySelection.h"
 
 // Breeders
 #include <eoGeneralBreeder.h>
 
 // Replacement
 // #include <eoReplacement.h>
-#include "eoElitistReplacement.h"
+//#include "eoElitistReplacement.h"
 #include <eoMergeReduce.h>
 #include <eoReduceMerge.h>
 #include <eoSurviveAndDie.h>
@@ -33,11 +33,8 @@
 #include <utils/eoDistance.h>
 
 // Algorithm (only this one needed)
-#include "eoMySGA.h"
-#include "eoSGASteadyState.h"
-#include "eoSGASteadyStateMultiObjects.h"
-#include "eoSGAGenerational.h"
-#include "eoSGAGenerationalMultiObjects.h"
+//#include "eoMySGA.h"
+#include "eoSGAReplacement.h"
 
   // also need the parser and param includes
 #include <utils/eoParser.h>
@@ -69,8 +66,6 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      eoMonOp<EOT>& _mutate,
                                      float _mrate,
                                      int maxNumberToConsider,
-                                     unsigned int typeAlgorithm,
-                                     SelectionStrategy<EOT> ** selectionStrategy,
                                      eoDistance<EOT> * _dist = NULL
                                      )
 {
@@ -198,10 +193,6 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
     {
       select = new eoRandomSelect<EOT>;
     }
-  else if (ppSelect.first == std::string("MySelection")) // no argument
-    {
-      select = new eoMySelect<EOT>;
-    }
   else if (ppSelect.first == std::string("NoSelect")) // no argument
     {
       select = new eoNoSelect<EOT>;
@@ -282,21 +273,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
 
       replace = new eoSSGAStochTournamentReplacement<EOT>(p);
     }
- else if (ppReplace.first == std::string("ElitistReplacement"))
-    {
-
-       unsigned elitistNumber;
-       if (!ppReplace.second.size())   // no parameter added
-        {
-          std::cerr << "WARNING, no parameter passed to SSGADet, using 2" << std::endl;
-          elitistNumber = 2;
-          // put back in parameter for consistency (and status file)
-          ppReplace.second.push_back(std::string("2"));
-        }else
-        elitistNumber = atoi(ppReplace.second[0].c_str());
-      replace = new eoElitistReplacement<EOT>(*replace,elitistNumber);
-    }
-  else
+ else
     {
       std::string stmp = std::string("Invalid replacement: ") + ppReplace.first;
       throw std::runtime_error(stmp.c_str());
@@ -321,28 +298,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
 
   // now the eoEasyEA
 //  eoAlgo<EOT> *algo = new eoEasyEA<EOT>(_continue, _eval, *breed, *replace);
-  eoAlgo<EOT> *algo;
-  if(typeAlgorithm==0)
-  {
-      algo = new eoSGASteadyState<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
-  }else
-      if(typeAlgorithm==1)
-      {
-          algo = new eoSGASteadyStateMultiObjects<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
-      }
-      else
-          if(typeAlgorithm==2)
-          {
-              algo = new eoSGAGenerational<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
-          }else
-              if(typeAlgorithm==3)
-              {
-                  algo = new eoSGAGenerationalMultiObjects<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
-              }else
-                  if(typeAlgorithm==4)
-                  {
-                      algo = new eoMySGA<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
-                  }
+  eoAlgo<EOT> *algo = new eoSGAReplacement<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
   _state.storeFunctor(algo);
   // that's it!
   return *algo;

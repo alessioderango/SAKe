@@ -4,7 +4,9 @@
 #include <QObject>
 #include <QQmlComponent>
 #include "CustomPlotItem.h"
+#include "CustomPlotRegression.h"
 #include "SAke/SAKeController.h"
+#include "Regression/regressioncontroller.h"
 #include "MyEventFilter.h"
 #include <QMetaObject>
 #include <QFile>
@@ -14,7 +16,6 @@
 #include "xmlmanager.h"
 #include "update.h"
 #include "validationcontroller.h"
-
 
 
 class SAKeStart : public QObject
@@ -74,7 +75,9 @@ public:
 signals:
 
 public slots:
-    void stopController(int count);
+    void stopSAKeController(int count);
+    void stopValidationController(int count);
+    void stopRegressionController(int count);
     void InitAlgo(const QVariant &selection,
                   const QVariant &pop,
                   const QVariant &maxGen,
@@ -94,7 +97,12 @@ public slots:
                   const QVariant &_para1,
                   const QVariant &_para2,
                   const QVariant &thresholdKernel,
-                  const QVariant &tipo
+                  const QVariant &tipo,
+                  const QVariant &typeAlgorithm,
+                  const QVariant &selectionOrder1,
+                  const QVariant &selectionOrder2,
+                  const QVariant &selectionOrder3,
+                  const QVariant &selectionOrder4
                   );
     void startValidation(
                   const QVariant &_projectName,
@@ -103,6 +111,7 @@ public slots:
                   const QVariant &filenameKernelPath,
                   const QVariant &filenameKenrelPath
                   );
+    void startRegression();
       int existProjectName(const QVariant &_projectName);
       QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
 //    void updateCurrentMaximumFitness(QString);
@@ -117,6 +126,7 @@ private:
     int popSize;
     int maxGen;
     int numberProject;
+    int numberProjectRegression;
     float relRateCrossover;
     float relRateMutation;
     float propMutation;
@@ -140,7 +150,7 @@ private:
 //    QObject *_gen;
     XMLManager * xmlManager;
 
-    std::vector<SAKeController*> threadsSakeController;
+    std::vector<QThread*> threadsController;
 
 
 

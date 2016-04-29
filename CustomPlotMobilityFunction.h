@@ -25,7 +25,7 @@ public:
     void updateGraph1(QVector<double> x,QVector<double> y);
     void paint( QPainter* painter );
 
-    void updateGraph(double *Y,Ym YsMin,Ym YsMin2);
+    void updateGraph(double *Y,Ym YsMin,Ym YsMin2,std::vector<Ym> bests);
     void updateGraph(double *Y,double YsMin);
     Q_INVOKABLE void initCustomPlotMobilityFunction();
 
@@ -52,6 +52,8 @@ private:
   Activation * activation;
   int activation_size;
   bool first;
+  vector<QCPItemText*> widgetArray;
+  vector<QCPItemLine*> arrowArray;
 
 private slots:
     void graphClicked( QCPAbstractPlottable* plottable );

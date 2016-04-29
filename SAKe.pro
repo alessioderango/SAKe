@@ -18,7 +18,10 @@ SOURCES += main.cpp \
     updateprojects.cpp \
     xmlmanager.cpp \
     ValidationController.cpp \
-    HandlerCSV.cpp
+    HandlerCSV.cpp \
+    Regression/parameters.cpp \
+    Regression/regressioncontroller.cpp \
+    CustomPlotRegression.cpp
 
 RESOURCES += qml.qrc
 
@@ -40,7 +43,7 @@ HEADERS += \
     SAke/make_genotype_SAKe.h \
     SAke/make_op_SAKe.h \
     SAke/Ym.h \
-   SAke/db/DBmanager.h \
+    SAke/db/DBmanager.h \
     SAke/Rain.h \
     SAke/SAKeController.h \
     SAke/eoGraphFitenessStat.h \
@@ -55,20 +58,46 @@ HEADERS += \
     SAke/eoElitistReplacement.h \
     SAke/eoMySelection.h \
     SAke/eoMySGA.h \
-    SAke/eoSGAReplacement.h \
     update.h \
     updateprojects.h \
     xmlmanager.h \
     ValidationController.h \
-    HandlerCSV.h
+    HandlerCSV.h \
+    SAke/selectionfitness.h \
+    SAke/selectiondeltacr.h \
+    SAke/selectionmomentoprimoordine.h \
+    SAke/selectionsize.h \
+    SAke/selectionstrategy.h \
+    SAke/eoSGAReplacementMultiObjects - Copia.h \
+    SAke/eoSGAGenerational.h \
+    SAke/eoSGAGenerationalMultiObjects.h \
+    SAke/eoSGASteadyState.h \
+    SAke/eoSGASteadyStateMultiObjects.h \
+    Regression/eoOneMax.h \
+    Regression/eoOneMaxEvalFunc.h \
+    Regression/eoOneMaxInit.h \
+    Regression/eoOneMaxMutation.h \
+    Regression/eoOneMaxQuadCrossover.h \
+    Regression/eoSGAReplacement.h \
+    Regression/make_algo_scalar_my.h \
+    Regression/make_genotype_OneMax.h \
+    Regression/make_op_OneMax.h \
+    Regression/parameters.h \
+    Regression/regressioncontroller.h \
+    strptime.h \
+    Regression/eoGraphFitenessStat.h \
+    CustomPlotRegression.h \
+    Regression/make_checkpoint_my.h \
+    Regression/eoGenContinueMy.h \
+    Regression/make_continue_my.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686
 QMAKE_LFLAGS+= --enable-auto-import
-QMAKE_CXXFLAGS+= -fopenmp
+#QMAKE_CXXFLAGS+= -fopenmp
 QMAKE_CXXFLAGS+= -static-libgcc
 QMAKE_CXXFLAGS+= -static-libstdc++
-QMAKE_LFLAGS +=  -fopenmp
+#QMAKE_LFLAGS +=  -fopenmp
 #LIBS += -fopenm
 
 #QMAKE_CXXFLAGS+= -D__NO_INLINE__

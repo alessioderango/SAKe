@@ -13,7 +13,7 @@
 #include "CustomPlotItem.h"
 #include "CustomPlotMobilityFunction.h"
 #include "CustomPlotKernel.h"
-#include "Rain.h"
+#include "CustomPlotRegression.h"
 #include "update.h"
 
 
@@ -28,21 +28,23 @@ public:
 
     typedef typename EOT::Fitness Fitness;
 
-    eoGraphFitnessStat(int _maxGen,QObject *_progressBar,CustomPlotItem *& _qCustomPlot,CustomPlotMobilityFunction*& plot,Rain*& rain,int& size,CustomPlotKernel * a,    QObject *_currentMaximumFitness,
-    QObject *_absoluteMaximumFitness,
-    QObject *_currentAverageFitness,
-    QObject *_absoluteAverageFitness,
-    QApplication*_appli,
-    Update* _update,
-    std::string _description = "Best ")
-        : eoStat<EOT, Fitness>(Fitness(), _description)
+    eoGraphFitnessStat(int _maxGen,
+                       QObject *_progressBar,
+                       CustomPlotItem *& _qCustomPlot,
+                       CustomPlotRegression *& _qCustomPlotRegression,
+                       QObject *_currentMaximumFitness,
+                       QObject *_absoluteMaximumFitness,
+                       QObject *_currentAverageFitness,
+                       QObject *_absoluteAverageFitness,
+                       Update* _update,
+                       std::vector< double> _xRegression,
+                       std::string _description = "Best ")
+                       : eoStat<EOT, Fitness>(Fitness(), _description)
     {
         qCustomPlot=_qCustomPlot;
-        plotMobility=plot;
-        plotKernel = a;
+        qCustomPlotRegression=_qCustomPlotRegression;
+        xRegression = _xRegression;
         progressBar = _progressBar;
-        P=rain;
-        rain_size=size;
         count=0;
         steps= 1;
         maxGen = _maxGen;
@@ -50,7 +52,6 @@ public:
         absoluteMaximumFitness=_absoluteMaximumFitness;
         currentAverageFitness= _currentAverageFitness;
         absoluteAverageFitness=_absoluteAverageFitness;
-        appli=_appli;
         AbsoluteMaximumFitness=0;
         AbsoluteAvarageFitness=0;
         update=_update;
@@ -80,64 +81,34 @@ private :
        count++;
        double fitness =_pop.best_element().fitness();
 
-
-
        yBest.push_back( _pop.best_element().fitness());
        x.push_back(count);
 
        Fitness v = std::accumulate(_pop.begin(), _pop.end(), Fitness(0.0), eoGraphFitnessStat::sumFitness);
 
        yAverage.push_back( v / _pop.size());
-
-
-
-       const EOT now= _pop.best_element();
-       double * Y = new double[rain_size];
-       for (int t = 0; t < rain_size; t++) {
-           double ym = 0;
-           Y[t] = 0;
-           for (int r = 0; r < t; r++)
-               if ((t - r) < now.getSizeConst()){
-                   ym += now.getFiConst()[t - r] * P[r].getRainMm();
-               }
-           Y[t] = ym;
-       }
-       plotMobility->updateGraph(Y,now.getYmMinConst(),now.getYmMin2Const(),now.getBestsConst());
-       delete []Y;
-      // currentMaximumFitness->children();
-
-       plotKernel->updateGraph(now.getFiConst(),now.getSizeConst());
        qCustomPlot->updateGraph0(x,yBest);
        qCustomPlot->updateGraph1(x,yAverage);
 
+       qCustomPlotRegression->updateGraph1(QVector<double>::fromStdVector(xRegression),QVector<double>::fromStdVector(_pop.best_element().getYCombinataConst()));
+
        QString genString= QString("Gen:    %1").arg(steps);
-       Q_EMIT update->valueGen(genString);
+       Q_EMIT update->valueGenRegression(genString);
        QString currentMaxiumFitness= QString("Current Maximum Fitness:    %1").arg(fitness );
-       Q_EMIT update->valueCurrentMaximumFitness(currentMaxiumFitness);
+       Q_EMIT update->valueCurrentMaximumFitnessRegression(currentMaxiumFitness);
        QString currentAvarageFitness= QString("Current Average Fitness:    %1").arg( v / _pop.size() );
-       Q_EMIT update->valueCurrentAvarageFitness(currentAvarageFitness);
+       Q_EMIT update->valueCurrentAvarageFitnessRegression(currentAvarageFitness);
        if(AbsoluteAvarageFitness < ( v / _pop.size())){
            QString tmpAvarage= QString("Absolute Average Fitness:       %1").arg( v / _pop.size() );
-           Q_EMIT update->valueAbsoluteAvarageFitness(tmpAvarage);
+           Q_EMIT update->valueAbsoluteAvarageFitnessRegression(tmpAvarage);
            AbsoluteAvarageFitness=( v / _pop.size());
        }
 
        if(AbsoluteMaximumFitness < fitness){
            QString tmpAvarage= QString("Absolute Maximum Fitness:    %1").arg(fitness );
-           Q_EMIT update->valueAbsoluteMaximumFitness(tmpAvarage);
+           Q_EMIT update->valueAbsoluteMaximumFitnessRegression(tmpAvarage);
            AbsoluteMaximumFitness=fitness;
        }
-       QString tbString= QString("tb:    %1").arg(_pop.best_element().getSizeConst() );
-       //qDebug() << tbString << endl;
-       Q_EMIT update->valueTb(tbString);
-
-       QString deltaCriticoString= QString("Δcritico:    %1").arg((now.getYmMinConst().getValue()-now.getYmMin2Const().getValue())/now.getYmMinConst().getValue());
-       //qDebug() << deltaCriticoString << endl;
-       Q_EMIT update->valueDeltaCritico(deltaCriticoString);
-
-       QString momentoDelPrimoOrdineString= QString("Momento del primo ordine:    %1").arg(now.getMomentoDelPrimoOrdineConst());
-       //qDebug() << momentoDelPrimoOrdineString << endl;
-       Q_EMIT update->valueMomentoDelPrimoOrdine(momentoDelPrimoOrdineString);
 
        steps++;
 //       cout << (steps*100)/maxGen << endl;
@@ -149,23 +120,20 @@ private :
     QVector<double> yBest;
     QVector<double> yAverage;
     CustomPlotItem * qCustomPlot;
-    CustomPlotMobilityFunction *plotMobility;
-    CustomPlotKernel *plotKernel;
+    CustomPlotRegression * qCustomPlotRegression;
+
     QObject *progressBar;
     QObject *currentMaximumFitness;
     QObject *absoluteMaximumFitness;
     QObject *currentAverageFitness;
     QObject *absoluteAverageFitness;
-  //  SAKeController * sakecontroller;
-    QApplication*appli;
 
-    Rain * P;
-    int rain_size;
     int steps ;
     int maxGen;
 
     Update* update;
     double AbsoluteMaximumFitness;
     double AbsoluteAvarageFitness;
+    std::vector< double> xRegression;
 };
 #endif // EOGRAPHFITENESSSTAT_H

@@ -8,6 +8,7 @@
 #include "SAKeStart.h"
 #include "Qt"
 #include "CustomPlotMobilityFunction.h"
+#include "CustomPlotRegression.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     qmlRegisterType<CustomPlotMobilityFunction>("CustomPlotMobilityFunction", 1, 0, "CustomPlotMobilityFunction");
     qmlRegisterType<CustomPlotKernel>("CustomPlotKernel", 1, 0, "CustomPlotKernel");
+    qmlRegisterType<CustomPlotRegression>("CustomPlotRegression", 1, 0, "CustomPlotRegression");
 
     QQmlApplicationEngine engine;
 

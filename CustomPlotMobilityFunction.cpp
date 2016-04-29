@@ -32,6 +32,32 @@ void CustomPlotMobilityFunction::initCustomPlotMobilityFunction()
 
     setupQuadraticDemo( m_CustomPlot );
 
+    // add the text label at the top: activation_size
+
+    for(int i = 0; i < activation_size;i++){
+        QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
+        m_CustomPlot->addItem(textLabel);
+        textLabel->setPositionAlignment(Qt::AlignTop);
+        //textLabel->position->setType(QCPItemPosition::ptPlotCoords);
+        //textLabel->position->setCoords(15, 18); // place position at center/top of axis rect
+        textLabel->setText("Text Item Demo");
+        //textLabel->setFont(QFont(font().family(), 16)); // make font a bit larger
+        textLabel->setPen(QPen(Qt::black)); // show black border around text
+        widgetArray.push_back(textLabel);
+
+        QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
+        m_CustomPlot->addItem(arrow);
+        arrow->start->setParentAnchor(textLabel->bottom);
+        arrow->end->setType(QCPItemPosition::ptPlotCoords);
+        //arrow->end->setCoords(0.23, 1.6); // point to (4, 1.6) in x-y-plot coordinates
+        arrow->setHead(QCPLineEnding::esSpikeArrow);
+        arrowArray.push_back(arrow);
+    }
+
+
+    // add the arrow:
+
+
     connect( m_CustomPlot, &QCustomPlot::afterReplot, this, &CustomPlotMobilityFunction::onCustomReplot );
 
     m_CustomPlot->replot();
@@ -57,13 +83,13 @@ void CustomPlotMobilityFunction::paint( QPainter* painter )
 
 void CustomPlotMobilityFunction::mousePressEvent( QMouseEvent* event )
 {
-    //qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO;
     routeMouseEvents( event );
 }
 
 void CustomPlotMobilityFunction::mouseReleaseEvent( QMouseEvent* event )
 {
-    //qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO;
     routeMouseEvents( event );
 }
 
@@ -82,15 +108,16 @@ void CustomPlotMobilityFunction::mouseWheel()
 
 void CustomPlotMobilityFunction::mousePress()
 {
-    // if an axis is selected, only allow the direction of that axis to be dragged
-    // if no axis is selected, both directions may be dragged
+    qDebug() << Q_FUNC_INFO;
+//     if an axis is selected, only allow the direction of that axis to be dragged
+//     if no axis is selected, both directions may be dragged
 
-    if (m_CustomPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        m_CustomPlot->axisRect()->setRangeDrag(m_CustomPlot->xAxis->orientation());
-    else if (m_CustomPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
-        m_CustomPlot->axisRect()->setRangeDrag(m_CustomPlot->yAxis->orientation());
-    else
-        m_CustomPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
+//    if (m_CustomPlot->xAxis->selectedParts().testFlag(QCPAxis::spAxis))
+//        m_CustomPlot->axisRect()->setRangeDrag(m_CustomPlot->xAxis->orientation());
+//    else if (m_CustomPlot->yAxis->selectedParts().testFlag(QCPAxis::spAxis))
+//        m_CustomPlot->axisRect()->setRangeDrag(m_CustomPlot->yAxis->orientation());
+//    else
+//        m_CustomPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
 }
 
 
@@ -293,9 +320,54 @@ void CustomPlotMobilityFunction::setRain(Rain *value,int _rain_size)
     rain_size =_rain_size;
 }
 
-void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2){
+void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::vector<Ym> bests){
     if (m_CustomPlot)
     {
+        m_CustomPlot->axisRect()->setRangeDrag(0);
+        m_CustomPlot->axisRect()->setRangeZoom(0);
+//        for(int i = 0; i < activation_size;i++){
+//            QCPItemText textLabel = new QCPItemText(m_CustomPlot);
+//            m_CustomPlot->addItem(textLabel);
+//            textLabel->setPositionAlignment(Qt::AlignTop);
+//            textLabel->position->setType(QCPItemPosition::ptPlotCoords);
+//            //textLabel->position->setCoords(0.2, 0); // place position at center/top of axis rect
+//            //textLabel->setText("Text Item Demo");
+//            //textLabel->setFont(QFont(font().family(), 16)); // make font a bit larger
+//            //textLabel->setPen(QPen(Qt::black)); // show black border around text
+//            widgetArray.push_back(textLabel);
+
+//            QCPItemLine arrow = new QCPItemLine(m_CustomPlot);
+//            m_CustomPlot->addItem(arrow);
+//            //arrow->start->setParentAnchor(textLabel->bottom);
+//            arrow->end->setType(QCPItemPosition::ptPlotCoords);
+//            //arrow->end->setCoords(0.23, 1.6); // point to (4, 1.6) in x-y-plot coordinates
+//            arrow->setHead(QCPLineEnding::esSpikeArrow);
+//            arrowArray.push_back(arrow);
+//        }
+
+
+
+        for(int i = 0; i < bests.size();i++){
+
+            ptime bestTmp = ptime_from_tm(bests[i].getTime());
+            boost::posix_time::time_duration diff =(bestTmp-ptime(date(1970, Jan, 1)));
+            widgetArray[i]->position->setCoords(diff.total_seconds(), bests[i].getValue()+8);
+
+            //DateTime time = DateTime(t.tm_year+1900, t.tm_mon+1, t.tm_day, t.tm_hour, t.tm_min, t.tm_sec);
+            int year = bests[i].getTime().tm_year +1900;
+            int mon = bests[i].getTime().tm_mon +1;
+            int day = bests[i].getTime().tm_mday ;
+            //std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
+////            string year = std::to_string(1900);
+////            string mon = bests[i].getTime().tm_mon+std::to_string(1);
+////            string day = bests[i].getTime().day;
+
+            QString a = QString("%1 %2 %3 - %4").arg(year).arg(mon).arg(day).arg(i+1);
+            widgetArray[i]->setText(a);
+            arrowArray[i]->end->setCoords(diff.total_seconds(), bests[i].getValue());
+        }
+
+
         m_CustomPlot->graph( 0 )->setPen( QPen( Qt::red ) );
         //    qDebug() << "aggiorno" << endl;
         double max =-1;
@@ -355,6 +427,8 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2){
         /* m_CustomPlot->graph(1)->setData(x, y);
       m_CustomPlot->graph(1)->rescaleAxes(true);
    m_CustomPlot->replot();*/
+        m_CustomPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
+        m_CustomPlot->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
 
         m_CustomPlot->replot();
     }

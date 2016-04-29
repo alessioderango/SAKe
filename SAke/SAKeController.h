@@ -57,8 +57,10 @@ public:
     SAKeController(CustomPlotItem *& qCustomPlot,
                    QString  sselection,
                    QString  spattern,
-                   QString  filename,
-                   QString  filenameActivaion,
+                   Rain *rain,
+                   int rain_size,
+                   Activation * activation,
+                   int activation_size,
                    int      ipop,
                    int      imaxGen,
                    int      itbMax,
@@ -79,7 +81,9 @@ public:
                    QString spara1,
                    bool _lastGeneration,
                    Update* update,
-                   const QString& projectName);
+                   const QString& projectName,
+                   vector<QString> orders,
+                   int itypeAlgorithm);
 
     SAKeController();
 
@@ -90,6 +94,9 @@ public:
     CustomPlotKernel *getPlotkernel() const;
     void setPlotkernel(CustomPlotKernel *value);
     void setProgressBar(QObject* progressBar);
+    int getCsvHandlerstatusRain() const;
+    void setCsvHandlerstatusRain(int value);
+
 protected:
 
 public slots:
@@ -145,7 +152,8 @@ private:
     unsigned int typeAlgorithm;
     double parameter1;
     double parameter2;
-
+    SelectionStrategy<Indi> ** selectionStrategy;
+    int csvHandlerstatusRain;
 };
 
 #endif // SAKCONTROLLER_H

@@ -42,7 +42,7 @@ public:
 	eoSAKe() {
 	}
 
-	eoSAKe(int _size) {
+    eoSAKe(int _size) {
 		// START Code of default Ctor of an eoSAKe object
 		size = _size;
 		Fi = NULL;
@@ -182,6 +182,18 @@ public:
 		Fi[_i] = value;
 	}
 
+    void setBests(std::vector<Ym> a) {
+        bests = a;
+    }
+
+    std::vector<Ym> getBests() {
+        return bests;
+    }
+
+    std::vector<Ym> getBestsConst() const {
+        return bests;
+    }
+
 	double getFiIndex(int _i) {
 		return Fi[_i];
 	}
@@ -215,6 +227,7 @@ private:
     Ym min;
     Ym min2;
     double momentoDelPrimoOrdine;
+    std::vector<Ym> bests;
 	 	// size of the array Fi
 
 	// END   Private data of an eoSAKe object

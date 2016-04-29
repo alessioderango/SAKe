@@ -4,13 +4,15 @@ XMLManager::XMLManager(QObject *_listProjects)
 {
 
 #ifdef __arm__ //on the target
-    xmlFilePath("/home/You/QT/YourProject/myXML.xml");
+    xmlFilePath = QString(QDir::currentPath()+"/main.xml");
+    qDebug() << xmlFilePath << endl;
 #else
 #ifdef __WIN32 //for those developing on windows
     xmlFilePath = QString(QDir::currentPath()+"/main.xml");
     qDebug() << xmlFilePath << endl;
 #else //for those developing on linux
-    xmlFilePath("/home/You/QT/YourProject/myXML.xml");
+    xmlFilePath = QString(QDir::currentPath()+"/main.xml");
+    qDebug() << xmlFilePath << endl;
 #endif
 #endif
 

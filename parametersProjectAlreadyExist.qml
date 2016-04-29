@@ -9,7 +9,10 @@ ApplicationWindow {
     width: 700
     height: 800
     title: qsTr("Sake software")
-
+    minimumHeight: 800
+    minimumWidth: 700
+    maximumHeight: minimumHeight
+    maximumWidth: minimumWidth
 
     property  string pathrain;
     property  string pathactivation;
@@ -169,10 +172,16 @@ ApplicationWindow {
                             }else{
                                 comboSelectinParameterSequential.visible=false;
                             }
-                            if(currentIndex ===5){
+
+                            if(currentIndex ===5 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
                                 selectionParameterTournamentWithoutReplacement.visible=true;
                             }else{
                                 selectionParameterTournamentWithoutReplacement.visible=false;
+                            }
+                            if(currentIndex ===6 || currentIndex ===8){
+                                gridLayout5.visible=true;
+                            }else{
+                                gridLayout5.visible=false;
                             }
                         }
 
@@ -183,7 +192,10 @@ ApplicationWindow {
                             ListElement { text: "Ranking(p,e)";  }
                             ListElement { text: "Roulette"; }
                             ListElement { text: "Sequential(ordered/unordered)";  }
-                            ListElement { text: "TournamentWithoutReplacement"; }
+                            ListElement { text: "Generational"; }
+                            ListElement { text: "MultiObjects Generational"; }
+                            ListElement { text: "Steady-State"; }
+                            ListElement { text: "MultiObjects Steady-State"; }
                         }
                          onCurrentIndexChanged: show(currentIndex)
                     }
@@ -227,6 +239,183 @@ ApplicationWindow {
                         }
 
                     }
+
+                }
+
+                GridLayout {
+                    id: gridLayout5
+                    width: 100
+                    height: 100
+                    visible: false
+                    rows: 1
+                    columns: 2
+
+                    Label {
+                        id: label2
+                        text: qsTr("Selection Order")
+                    }
+
+                    Label {
+                        id: label12
+                        text: qsTr(":")
+                        visible: true
+                    }
+
+                    Label {
+                        id: label13
+                        text: qsTr("1")
+                    }
+
+                    ListModel {
+                        id: selectionsOrder1
+                        ListElement {
+                            text: "Delta critico"
+                        }
+                    }
+                    ListModel {
+                        id: selectionsOrder2
+                        ListElement {
+                            text: "Momento del primo ordine"
+                        }
+                    }
+
+                    ListModel {
+                        id: selectionsOrder3
+                        ListElement {
+                            text: "tempo base"
+                        }
+                    }
+
+
+                    ComboBox {
+                        id: comboBox1
+                        currentIndex: 0
+                        visible: true
+                        function configComboBox1(currentIndex){
+                            selectionsOrder1.clear();
+                            var i=0;
+                            if(currentIndex === 0)
+                            {
+                                for( i=1;i<4;i++ ){
+                                    console.log("0 index i = "+i+"\n");
+                                    selectionsOrder1.append(selectionsOrder.get(i))
+                                }
+                            }else
+                                if(currentIndex === 1)
+                                {
+                                    for( i=2;i<5;i++ ){
+                                        console.log("1 index i = "+i%4+"\n");
+                                        selectionsOrder1.append(selectionsOrder.get(i%4))
+                                    }
+                                }else
+                                    if(currentIndex === 2)
+                                    {
+                                        for( i=3;i<6;i++ ){
+                                            console.log("2 index i = "+i%4+"\n");
+                                            selectionsOrder1.append(selectionsOrder.get(i%4))
+                                        }
+                                    }else
+                                        if(currentIndex === 3)
+                                        {
+                                            for( i=4;i<7;i++ ){
+                                                console.log("3 index i = "+i%4+"\n");
+                                                selectionsOrder1.append(selectionsOrder.get(i%4))
+                                            }
+                                        }
+                            comboBox2.currentIndex=i%3;
+                            comboBox2.configComboBox2((i%3));
+                            //comboBox3.configComboBox3(0);
+                        }
+
+                        model: ListModel {
+                            id: selectionsOrder
+                            ListElement { text: "Fitness";  }
+                            ListElement { text: "Delta critico";  }
+                            ListElement { text: "Momento del primo ordine";  }
+                            ListElement { text: "tempo base"; }
+                        }
+                        onCurrentIndexChanged: configComboBox1(currentIndex)
+                    }
+
+                    Label {
+                        id: label14
+                        text: qsTr("2")
+                    }
+
+
+                    ComboBox {
+
+                        id: comboBox2
+                        function configComboBox2(currentIndex){
+                            selectionsOrder2.clear();
+                            var i=0;
+                            if(currentIndex === 0)
+                            {
+                                for( i=1;i<3;i++ ){
+                                    console.log(" comboBox2 0 index i = "+i%3+"\n");
+                                    selectionsOrder2.append(selectionsOrder1.get(i%3))
+                                }
+                            }else
+                                if(currentIndex === 1)
+                                {
+                                    for( i=2;i<4;i++ ){
+                                        console.log(" comboBox2 1 index i = "+i%3+"\n");
+                                        selectionsOrder2.append(selectionsOrder1.get(i%3))
+                                    }
+                                }else
+                                    if(currentIndex === 2)
+                                    {
+                                        for( i=3;i<5;i++ ){
+                                            console.log(" comboBox2 2 index i = "+i%3+"\n");
+                                            selectionsOrder2.append(selectionsOrder1.get(i%3))
+                                        }
+                                    }
+                            comboBox3.currentIndex=i%2;
+                            comboBox3.configComboBox3((i%2));
+                        }
+                        currentIndex: 0
+                        model: selectionsOrder1
+                        visible: true
+                        onCurrentIndexChanged: configComboBox2(currentIndex)
+                    }
+
+                    Label {
+                        id: label15
+                        text: qsTr("3")
+                    }
+
+                    ComboBox {
+                        id: comboBox3
+                        function configComboBox3(currentIndex){
+                            selectionsOrder3.clear();
+                            console.log("comboBox3 currentIndex = " +currentIndex+"\n")
+                            if(currentIndex === 0)
+                            {
+                                selectionsOrder3.append(selectionsOrder2.get(1))
+                            }else
+                                if(currentIndex === 1)
+                                {
+                                    selectionsOrder3.append(selectionsOrder2.get(0))
+                                }
+                        }
+                        currentIndex: 0
+                        model:selectionsOrder2
+                        visible: true
+                        onCurrentIndexChanged: configComboBox3(currentIndex)
+                    }
+
+                    Label {
+                        id: label16
+                        text: qsTr("4")
+                    }
+
+                    ComboBox {
+                        id: comboBox4
+                        currentIndex: 0
+                        model:selectionsOrder3
+                        visible: true
+                    }
+
 
                 }
 
@@ -274,9 +463,10 @@ ApplicationWindow {
                         TextField {
                             id: textFieldPopulation
                             width: 63
-                            text: "20"
-
-                            placeholderText: ""
+                            //text: "30"
+                            //inputMethodHints: Qt.ImhDigitsOnly
+                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
+                            placeholderText: "population Size"
                         }
 
 
@@ -290,6 +480,7 @@ ApplicationWindow {
                             id: textFieldMaxGen
                             width: 63
                             text: "5000"
+                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -304,6 +495,7 @@ ApplicationWindow {
                             id: textFieldtbMax
                             width: 63
                             text: "180"
+                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -316,6 +508,7 @@ ApplicationWindow {
                             id: textFieldtbMin
                             width: 63
                             text: "30"
+                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -328,6 +521,8 @@ ApplicationWindow {
                             id: textFielddHpMax
                             width: 63
                             text: "50"
+
+                            validator: RegExpValidator { regExp: /^-?[0-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -342,6 +537,7 @@ ApplicationWindow {
                             id: textFielddHpMin
                             width: 63
                             text: "-50"
+                             validator: RegExpValidator { regExp: /^-?[0-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -367,6 +563,7 @@ ApplicationWindow {
                         }
                         TextField {
                             id: textFieldPropCrossover
+                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
                             width: 63
                             text: "0.75"
                             placeholderText: qsTr("")
@@ -385,6 +582,7 @@ ApplicationWindow {
                             id: textFieldPropMutation
                             width: 63
                             text: "0.25"
+                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
                             placeholderText: qsTr("")
                         }
 
@@ -400,6 +598,7 @@ ApplicationWindow {
                             id: textFieldPme
                             width: 63
                             text: "25"
+                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -413,6 +612,7 @@ ApplicationWindow {
                             id: textFieldPmb
                             width: 63
                             text: "0.5"
+                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -444,6 +644,7 @@ ApplicationWindow {
                             width: 63
                             visible: true
                             text: "1"
+                            validator:  RegExpValidator { regExp: /[1-9][0-9]+/ }
                             placeholderText: "Number of Processor"
                         }
 
@@ -458,6 +659,7 @@ ApplicationWindow {
                             width: 63
                             visible: true
                             text: ""
+                            validator:  RegExpValidator { regExp: /\d+/ }
                             placeholderText: "Seed"
                         }
 
@@ -593,7 +795,18 @@ ApplicationWindow {
                     checkable: false
                     property  string para1;
                     property  string para2;
+                    property  string order1;
+                    property  string order2;
+                    property  string order3;
+                    property  string order4;
+                    property  int typeAlgorithm;
+
                                                 onClicked: {
+                                                    order1="";
+                                                    order2="";
+                                                    order3="";
+                                                    order4="";
+                                                    typeAlgorithm=4;
                                                            if(comboSelection.currentText == "StochTour(t)"
                                                               || comboSelection.currentText == "DetTour(T)"){
                                                                para1=selectionParameter.text;
@@ -612,13 +825,42 @@ ApplicationWindow {
                                                                             para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
                                                                             para2=-1;
                                                                         }else
-                                                                            if(comboSelection.currentText == "TournamentWithoutReplacement"){
+                                                                            if(comboSelection.currentText == "Generational"){
                                                                                 para1=selectionParameterTournamentWithoutReplacement.text;
                                                                                 para2=-1;
-                                                                            }
-
-
+                                                                                typeAlgorithm=2;
+                                                                            }else
+                                                                                if(comboSelection.currentText == "MultiObjects Generational"){
+                                                                                    para1=selectionParameterTournamentWithoutReplacement.text;
+                                                                                    para2=-1;
+                                                                                    typeAlgorithm=3;
+                                                                                    order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                                                                                    order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                                                                                    order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                                                                                    order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
+                                                                                }else
+                                                                                    if(comboSelection.currentText == "Steady-State"){
+                                                                                        para1=selectionParameterTournamentWithoutReplacement.text;
+                                                                                        para2=-1;
+                                                                                        typeAlgorithm=0;
+                                                                                    }else
+                                                                                        if(comboSelection.currentText == "MultiObjects Steady-State"){
+                                                                                            para1=selectionParameterTournamentWithoutReplacement.text;
+                                                                                            para2=-1;
+                                                                                            typeAlgorithm=1;
+                                                                                            order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                                                                                            order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                                                                                            order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                                                                                            order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
+                                                                                        }
                                                            // if(textfileRain.text != "empty")
+
+                                                                   if(textfileRain.text == "Empty"){
+                                                                       messageDialogRain.open()
+                                                                   }else
+                                                                       if(textfileActivation.text == "Empty"){
+                                                                           messageDialogActivation.open()
+                                                                       }else{
                                                             sakeStart.InitAlgo(comboSelection.currentText,
                                                                                textFieldPopulation.text,
                                                                                textFieldMaxGen.text,
@@ -638,9 +880,15 @@ ApplicationWindow {
                                                                                para1,
                                                                                para2,
                                                                                lastGeneration.checked,
-                                                                               1)
+                                                                               1,
+                                                                               typeAlgorithm,
+                                                                               order1,
+                                                                               order2,
+                                                                               order3,
+                                                                               order4
+                                                                               )
                                                            close()
-
+                                                         }
 
                                                 }
 
@@ -660,6 +908,40 @@ ApplicationWindow {
 
         }
 
+    }
+    MessageDialog {
+        id: messageDialogRain
+        title: "Input error"
+        text: "Please enter rain csv path."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+
+    MessageDialog {
+        id: messageDialogActivation
+        title: "Input error"
+        text: "Please enter Activation csv path."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+
+    MessageDialog {
+        id: messageDialogProjectName
+        title: "Input error"
+        text: "The project name already exists."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+    MessageDialog {
+        id: messageDialogProjectNameEmpty
+        title: "Input error"
+        text: "The project name is empty."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
     }
 
 }

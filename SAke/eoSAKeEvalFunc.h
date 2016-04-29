@@ -143,7 +143,7 @@ public:
 
         double YsMin = 999999999;
         int iMin =-1;
-
+        std::vector<Ym> bests;
         for (int s = 0; s < activations_size; s++) {
             for (int i = 0; i < countYm; i++) {
                 //TODO inserire variabili intervallo giorni
@@ -155,6 +155,12 @@ public:
                     // printf("i %d \n",i);
                     // printf("f %f \n",f);
                         f += 1 / (double)(i + 1);
+                        bests.push_back(ym[i]);
+//                        int year = ym[i].getTime().tm_year +1900;
+//                        int mon = ym[i].getTime().tm_mon +1;
+//                        int day = ym[i].getTime().tm_mday ;
+//                        std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
+//                        std::cout << "ym[i] value " << ym[i].getValue() << std::endl;
                         //printf("+  %f \n",(1 / (double)(i + 1)));
                         if(ym[i].getValue() < YsMin){
                             YsMin =ym[i].getValue();
@@ -167,8 +173,8 @@ public:
                 }//if
             }//for
         }//for
-
-
+        //std::cout << std::endl;
+        _eo.setBests(bests);
 		if(iMin < 0)  iMin = 0;
 		if(iMin > countYm-1)  iMin = countYm-1;
         int index=(iMin+1);
@@ -195,6 +201,7 @@ public:
        //printf("f %f fMax %f fitness = %f \n",f,fMax,(double) (f/fMax));
 
 		delete []ym;
+
         return (double) (f/fMax);
 	}
 

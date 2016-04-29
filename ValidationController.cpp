@@ -8,9 +8,9 @@ ValidationController::ValidationController(
                                            )
 {
        //CARICO I CSV
-       HandlerCSV::loadCSVRain(filenameRainPath,rain,rain_size);
-       HandlerCSV::loadCSVActivation(filenameActivationPath,activations,activations_size);
-       HandlerCSV::loadCSVKernel(filenameKernelPath,Fi,size,zCr);
+//       HandlerCSV::loadCSVRain(filenameRainPath,rain,rain_size);
+//       HandlerCSV::loadCSVActivation(filenameActivationPath,activations,activations_size);
+//       HandlerCSV::loadCSVKernel(filenameKernelPath,Fi,size,zCr);
 }
 
 void ValidationController::setPlotMobility(CustomPlotMobilityFunction *value)

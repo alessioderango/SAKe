@@ -1,5 +1,5 @@
-#ifndef EOSGAREPLACEMENT
-#define EOSGAREPLACEMENT
+#ifndef EOSGASTEADYSTATE
+#define EOSGASTEADYSTATE
 
 #include <eoInvalidateOps.h>
 #include <eoContinue.h>
@@ -9,6 +9,7 @@
 #include <eoEvalFunc.h>
 #include <eoAlgo.h>
 #include <apply.h>
+
 
 /** The Simple Genetic Algorithm, following Holland and Goldberg
  *
@@ -21,13 +22,13 @@
  * @ingroup Algorithms
  */
 template <class EOT>
-class eoSGAReplacement : public eoAlgo<EOT>
+class eoSGASteadyState : public eoAlgo<EOT>
 {
 public :
 
   // added this second ctor as I didn't like the ordering of the parameters
   // in the one above. Any objection :-) MS
-  eoSGAReplacement(
+  eoSGASteadyState(
         eoSelectOne<EOT>& _select,
         float _selectRate,
         eoQuadOp<EOT>& _cross, float _crate,
@@ -43,6 +44,29 @@ public :
           select(_select,_selectRate),
           eval(_eval) {
       maxNumberToConsider =_maxNumberToConsider;
+  }
+
+  double roundMy(double x, int prec)
+  {
+      double power = 1.0;
+      int i;
+
+      if (prec > 0)
+          for (i = 0; i < prec; i++)
+              power *= 10.0;
+      else if (prec < 0)
+          for (i = 0; i < prec; i++)
+              power /= 10.0;
+
+      if (x > 0)
+          x = floor(x * power + 0.5) / power;
+      else if (x < 0)
+          x = ceil(x * power - 0.5) / power;
+
+      if (x == -0)
+          x = 0;
+
+      return x;
   }
 
 
@@ -68,24 +92,18 @@ public :
 
     do
       {
+
         int counter=-1;
-        EOT* popTmp= (EOT*) malloc(sizeof(EOT)*_pop.size());
-//         std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-      //   popTmp.resize(_pop.size());
+        EOT* popTmp= new EOT[_pop.size()];
+
         for (int i=0; i<_pop.size(); i++){
             popTmp[i] = _pop[i];
-
-//            std::cout << &popTmp[i] << " -> " << &_pop[i] << endl;
-
         }
         qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
-        // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-        //_pop.sort(result);
         //SELECTION
         offspring.clear();
         offspring.resize(_pop.size());
 
-        // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
         for (int i=0; i<_pop.size(); i++){
 
             if(counter < maxNumberToConsider){
@@ -107,13 +125,9 @@ public :
             int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
             int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
 
-//            std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-//            std::cout << popTmp[gen1].fitness() << " ";
-
-//            std::cout << popTmp[gen2].fitness() << " ";
-//            std::cout << " FINE TORNEO!!!!!!! " << " " << std::endl;
-
-            if(popTmp[gen1].fitness() > popTmp[gen2].fitness() ){
+            double tmpFitnessGen1 = popTmp[gen1].fitness();
+            double tmpFitnessGen2 = popTmp[gen2].fitness();
+            if(roundMy(tmpFitnessGen1,3) > roundMy(tmpFitnessGen2,3) ){
                 EOT a;
                 double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
                 a.setFi(r);
@@ -124,36 +138,22 @@ public :
                 offspring[counter]=a;
             }
             else{
-                EOT a;
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[gen2]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                    a. setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
+                    EOT a;
+                    double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
+                    a.setFi(r);
+                    a.setSize(popTmp[gen2]. getSize());
+                    for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
+                        a. setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
+                    }
+                    offspring[counter]=a;
                 }
-                offspring[counter]=a;
-            }
-
 
         }
         // END SELECTION
 
-        //delete []popTmp;
 
         unsigned i;
 
-// std::cout << "BEFORE CROSSOVER AND MUTATION  " << std::endl;
-
-// for (int tmp = 0; tmp < offspring.size(); tmp++) {
-//      if(!offspring[tmp].invalid())
-//     std::cout << offspring[tmp].fitness() << " -> " ;
-//  for (int j = 0; j < offspring[tmp].getSizeConst() ;j++){
-//      std::cout << offspring[tmp].getFiConst()[j] << " ";
-//      std::cout.flush();
-//    }
-//   std::cout <<  std::endl;
-
-// }
 
         //for (i=0; i<_pop.size()/2; i++)
         for (i=0; i<_pop.size()/2; i++)
@@ -168,17 +168,6 @@ public :
                        }
             }
           }
-// std::cout << "DOPO CROSSOVER  " << std::endl;
-
-//        for (int tmp = 0; tmp < offspring.size(); tmp++) {
-//            if(!offspring[tmp].invalid())
-//              std::cout << offspring[tmp].fitness() << " -> ";
-//         for (int j = 0; j < offspring[tmp].getSizeConst() ;j++){
-//             std::cout << offspring[tmp].getFiConst()[j] << " ";
-//             std::cout.flush();
-//           }
-//  std::cout <<  std::endl;
-//        }
 
 
         for (i=0; i < offspring.size(); i++)
@@ -191,27 +180,12 @@ public :
 
           }
 
-//        std::cout << "DOPO MUTATION  " << std::endl;
-
-
-//        for (int tmp = 0; tmp < offspring.size(); tmp++) {
-//            if(!offspring[tmp].invalid())
-//              std::cout << offspring[tmp].fitness() << " -> ";
-//         for (int j = 0; j < offspring[tmp].getSizeConst() ;j++){
-//             std::cout << offspring[tmp].getFiConst()[j] << " ";
-//             std::cout.flush();
-//           }
-//  std::cout <<  std::endl;
-//        }
 
 
         offspring.invalidate();
         _pop.clear();
         _pop.swap(offspring);
-//        for (i=0; i < offspring.size(); i++)
-//        {
-//            _pop[i]=offspring[i];
-//        }
+        delete[] popTmp;
         apply<EOT>(eval, _pop);
 
       } while (cont(_pop));
@@ -229,6 +203,7 @@ private :
       eoSelectPerc<EOT> select;
       eoEvalFunc<EOT>& eval;
       int maxNumberToConsider;
+
 };
 
 
