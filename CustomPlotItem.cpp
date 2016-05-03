@@ -155,8 +155,8 @@ void CustomPlotItem::updateGraph0(QVector<double> x,QVector<double> y){
     //     qDebug() << "aggiorno" << endl;
     if (m_CustomPlot)
     {
-//        if(x.size() > 20)
-//            m_CustomPlot->xAxis->setRange( 0, x.size() );
+        if(x.size() > 20)
+            m_CustomPlot->xAxis->setRange( 0, x.size() );
         m_CustomPlot->graph( 0 )->setData( x, y);
         m_CustomPlot->replot();
 
@@ -167,8 +167,8 @@ void CustomPlotItem::updateGraph1(QVector<double> x,QVector<double> y){
 
     if (m_CustomPlot)
     {
-//        if(x.size() > 20)
-//            m_CustomPlot->xAxis->setRange( 0, x.size() );
+        if(x.size() > 20)
+            m_CustomPlot->xAxis->setRange( 0, x.size() );
         m_CustomPlot->graph( 1 )->setData( x, y);
         m_CustomPlot->replot();
     }

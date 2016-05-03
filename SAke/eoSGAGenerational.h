@@ -95,7 +95,7 @@ public :
         int counter=-1;
         EOT* popTmp= new EOT[_pop.size()];//(EOT*) malloc(sizeof(EOT)*_pop.size());
 
-        for (int i=0; i<_pop.size(); i++){
+        for (unsigned i=0; i<_pop.size(); i++){
             //std::cout << "Arrivo " << std::endl;
             popTmp[i] = _pop[i];
         }
@@ -104,7 +104,7 @@ public :
         //SELECTION
         offspring.clear();
         offspring.resize(_pop.size());
-        for (int i=0; i<_pop.size(); i++){
+        for (unsigned int i=0; i<_pop.size(); i++){
             counter++;
 //            std::cout << "Arrivo " << std::endl;
             if(counter < maxNumberToConsider){

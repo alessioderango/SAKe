@@ -68,7 +68,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
 
     if(orders.size() != 0){
         selectionStrategy = new SelectionStrategy<Indi>*[4];
-        for(int i = 0; i < orders.size(); i++){
+        for(unsigned i = 0; i < orders.size(); i++){
 
             if(QString::compare(orders[i], "Fitness", Qt::CaseInsensitive)==0)
             {
@@ -174,8 +174,7 @@ void SAKeController::startAlgorithm()
     parallel.setNumberProcessor(numberofProcessor);
     srand(time(0));
     //    qDebug() << "Start Algorithm %d /n"<< "/n";
-    time_t start_time, end_time;
-    this->start=true;
+
     int argc=1;
     char **x= (char**)malloc(sizeof(char*) * 1);
     x[0]= (char*)malloc(sizeof(char)*1);
@@ -290,9 +289,7 @@ void SAKeController::startAlgorithm()
         //           qDebug() << "initialized population %d /n"<< "/n";
         //           cout << endl;
         //            qDebug() << "start %d /n"<< "/n";
-        start_time = time(NULL);
         do_run(ga, pop); // run the ga
-        end_time = time(NULL);
         //            cout << "tempo esecuzione " << end_time -start_time<< "\n";
         //          cout << "Final Population\n";
         //  cout << pop.it_best_element().base()->fitness() << endl;

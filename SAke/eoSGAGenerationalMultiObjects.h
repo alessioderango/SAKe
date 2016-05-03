@@ -83,10 +83,10 @@ public :
       // - perche decrescente
     if( (double)(((EOT*)a)->fitness()) > (double)(((EOT*)b)->fitness()) ){
         return -  1;
-    }
+    }else
     if( (double)(((EOT*)a)->fitness()) < (double)(((EOT*)b)->fitness()) ){
         return 1;
-    }
+    }else
     if( (double)(((EOT*)a)->fitness()) == (double)(((EOT*)b)->fitness()) ){
         return 0;
     }
@@ -103,7 +103,7 @@ public :
         EOT* popTmp= new EOT[_pop.size()];
 //         std::cout << "TORNEO!!!!!!! " << " " << std::endl;
       //   popTmp.resize(_pop.size());
-        for (int i=0; i<_pop.size(); i++){
+        for (unsigned int i=0; i<_pop.size(); i++){
             popTmp[i] = _pop[i];
 
 //            std::cout << &popTmp[i] << " -> " << &_pop[i] << endl;
@@ -117,7 +117,7 @@ public :
         offspring.resize(_pop.size());
 
         // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-        for (int i=0; i<_pop.size(); i++){
+        for (unsigned int i=0; i<_pop.size(); i++){
 
             if(counter < maxNumberToConsider){
                //  std::cout << "TORNEO!!!!!!! " << " " << std::endl;

@@ -55,7 +55,8 @@
 */
 
 template <class EOT>
-eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser, eoState& _state, EOT,
+eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser,
+                               eoState& _state, EOT,
                                int tbMin,
                                int tbMax,
                                string pattern,

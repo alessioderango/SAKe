@@ -226,7 +226,7 @@ public :
 //            _pop[i]=offspring[i];
 //        }
         apply<EOT>(eval, _pop);
-         // std::cout << "FINE!!!!!!! " << " " << std::endl;
+          std::cout << "FINE!!!!!!! " << " " << std::endl;
       } while (cont(_pop));
   }
 

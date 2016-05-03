@@ -7,7 +7,7 @@ template <class EOT>
 class SelectionSize: public SelectionStrategy<EOT>
 {
 public:
-    SelectionFitness(){
+    SelectionSize(){
         roundedDigits=3;
     }
 private:
@@ -17,7 +17,7 @@ private:
         int sizeGen1 = popTmp[gen1].getSizeConst();
         int sizeGen2 = popTmp[gen2].getSizeConst();
         if(this->roundMy(sizeGen1,4) < this->roundMy(sizeGen2,4)){
-            printf("size Gen 1 %f < size Gen 2 %f\n ",sizeGen1,sizeGen2 );
+//            printf("size Gen 1 %f < size Gen 2 %f\n ",sizeGen1,sizeGen2 );
 
             EOT a;
             double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
@@ -27,9 +27,10 @@ private:
                 a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
             }
             offspring[counter]=a;
+            return true;
         }else
             if(this->roundMy(sizeGen1,4) > this->roundMy(sizeGen2,4)){
-                printf("size Gen 1 %f > size Gen 2 %f\n ",sizeGen1,sizeGen2 );
+//                printf("size Gen 1 %f > size Gen 2 %f\n ",sizeGen1,sizeGen2 );
                 EOT a;
                 double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
                 a.setFi(r);
@@ -38,6 +39,7 @@ private:
                     a.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
                 }
                 offspring[counter]=a;
+                 return true;
             }else
             {
                 return false;

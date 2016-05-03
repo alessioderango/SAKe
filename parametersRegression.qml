@@ -13,78 +13,6 @@ ApplicationWindow {
     minimumWidth: 700
     maximumHeight: minimumHeight
     maximumWidth: minimumWidth
-
-    property  string pathrain;
-    property  string pathactivation;
-
-    function f(list){
-        console.log("Ok funzia")
-        labelProjectNameFromFile.text=list[0]
-        if(list[1]=="TournamentWithoutReplacement"){
-            comboSelection.currentIndex=5
-            selectionParameterTournamentWithoutReplacement.text=list[2]
-        }else
-            if(list[1]=="StochTour(t)"){
-                comboSelection.currentIndex=0
-                selectionParameter.text=list[2]
-            }else
-                if(list[1]=="DetTour(T)"){
-                    comboSelection.currentIndex=1
-                    selectionParameter.text=list[2]
-                }else
-                    if(list[1]=="Ranking(p,e)"){
-                        comboSelection.currentIndex=2
-                        selectParameterRanking1.text=list[2]
-                        selectParameterRanking2.text=list[3]
-                    }else
-                        if(list[1]=="Sequential(ordered/unordered)"){
-                            comboSelection.currentIndex=4
-                            if(list[2]=="ordered")
-                            {
-                                comboSelectinParameterSequential.currentIndex=0;
-                            }else
-                                comboSelectinParameterSequential.currentIndex=1;
-
-                            //comboSelectinParameterSequentialList.text=list[2]
-                        }else
-                            if(list[1]=="Roulette"){
-                                comboSelection.currentIndex=3
-                            }
-
-
-        textNumberProcessor.text=list[4]
-        textFieldPopulation.text=list[5]
-        textFieldMaxGen.text=list[6]
-        textFieldtbMax.text=list[7]
-        textFieldtbMin.text=list[8]
-        textFielddHpMax.text=list[9]
-        textFielddHpMin.text=list[10]
-        textFieldPropCrossover.text=list[11]
-        textFieldPropMutation.text=list[12]
-        textFieldPme.text=list[13]
-        textFieldPmb.text=list[14]
-        if(list[15]=="Rettangolare")
-            comboPattern.currentIndex=2
-        else
-            if(list[15]=="Triangolare Disc")
-                comboPattern.currentIndex=0
-            else
-                if(list[15]=="Triangolare Asc")
-                    comboPattern.currentIndex=1
-
-        var split = list[16].split("/")
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAA ../"+split[split.length-1]);
-        textfileRain.text = "../"+split[split.length-1]
-        pathrain=list[16]
-
-        var split2 = list[17].split("/")
-         console.log("AAAAAAAAAAAAAAAAAAAAAAAA ../"+split2[split2.length-1]);
-        textfileActivation.text = "../"+split2[split2.length-1]
-        pathactivation=list[17]
-
-    }
-
-
     Rectangle{
         id: parameter
         x: 0
@@ -125,10 +53,11 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter
                     }
 
-                    Label {
-                        id: labelProjectNameFromFile
+                    TextField {
+                        id: textProjectName
                         width: 63
                         text: ""
+                        placeholderText: "Project Name"
                     }
                 }
 
@@ -153,7 +82,7 @@ ApplicationWindow {
                         function show( currentIndex){
 
                             if(currentIndex === 0 ||
-                               currentIndex === 1  ){
+                                    currentIndex === 1  ){
                                 selectionParameter.visible=true;
                             }else
                                 selectionParameter.visible=false;
@@ -173,15 +102,17 @@ ApplicationWindow {
                                 comboSelectinParameterSequential.visible=false;
                             }
 
-                            if(currentIndex ===5 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
+                            if(currentIndex ===5 || currentIndex ===7 ){
                                 selectionParameterTournamentWithoutReplacement.visible=true;
+                                gridLayout5.visible=true;
                             }else{
                                 selectionParameterTournamentWithoutReplacement.visible=false;
                             }
                             if(currentIndex ===6 || currentIndex ===8){
-                                gridLayout5.visible=true;
-                            }else{
+                                selectionParameterTournamentWithoutReplacement.visible=true;
                                 gridLayout5.visible=false;
+                            }else{
+                                selectionParameterTournamentWithoutReplacement.visible=fals;
                             }
                         }
 
@@ -197,7 +128,7 @@ ApplicationWindow {
                             ListElement { text: "Steady-State"; }
                             ListElement { text: "MultiObjects Steady-State"; }
                         }
-                         onCurrentIndexChanged: show(currentIndex)
+                        onCurrentIndexChanged: show(currentIndex)
                     }
 
                     TextField {
@@ -463,10 +394,9 @@ ApplicationWindow {
                         TextField {
                             id: textFieldPopulation
                             width: 63
-                            //text: "30"
-                            //inputMethodHints: Qt.ImhDigitsOnly
-                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
-                            placeholderText: "population Size"
+                            text: "20"
+
+                            placeholderText: ""
                         }
 
 
@@ -480,7 +410,6 @@ ApplicationWindow {
                             id: textFieldMaxGen
                             width: 63
                             text: "5000"
-                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -495,7 +424,6 @@ ApplicationWindow {
                             id: textFieldtbMax
                             width: 63
                             text: "180"
-                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -508,7 +436,6 @@ ApplicationWindow {
                             id: textFieldtbMin
                             width: 63
                             text: "30"
-                            validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -521,8 +448,6 @@ ApplicationWindow {
                             id: textFielddHpMax
                             width: 63
                             text: "50"
-
-                            validator: RegExpValidator { regExp: /^-?[0-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -537,11 +462,10 @@ ApplicationWindow {
                             id: textFielddHpMin
                             width: 63
                             text: "-50"
-                             validator: RegExpValidator { regExp: /^-?[0-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
-                        CheckBox {id:lastGeneration; text: qsTr("Start From Last Generation")   }
+                        //CheckBox {id:lastGeneration; text: qsTr("Start From Last Generation")   }
                     }
                     GridLayout {
                         id: gridLayout2
@@ -563,7 +487,6 @@ ApplicationWindow {
                         }
                         TextField {
                             id: textFieldPropCrossover
-                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
                             width: 63
                             text: "0.75"
                             placeholderText: qsTr("")
@@ -582,7 +505,6 @@ ApplicationWindow {
                             id: textFieldPropMutation
                             width: 63
                             text: "0.25"
-                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
                             placeholderText: qsTr("")
                         }
 
@@ -598,7 +520,6 @@ ApplicationWindow {
                             id: textFieldPme
                             width: 63
                             text: "25"
-                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -612,7 +533,6 @@ ApplicationWindow {
                             id: textFieldPmb
                             width: 63
                             text: "0.5"
-                            validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -644,7 +564,6 @@ ApplicationWindow {
                             width: 63
                             visible: true
                             text: "1"
-                            validator:  RegExpValidator { regExp: /[1-9][0-9]+/ }
                             placeholderText: "Number of Processor"
                         }
 
@@ -659,7 +578,6 @@ ApplicationWindow {
                             width: 63
                             visible: true
                             text: ""
-                            validator:  RegExpValidator { regExp: /\d+/ }
                             placeholderText: "Seed"
                         }
 
@@ -671,6 +589,7 @@ ApplicationWindow {
 
 
             }
+
             GridLayout {
                 id: gridLayout3
                 y: 548
@@ -688,15 +607,9 @@ ApplicationWindow {
                     id: fileDialogRain
                     title: "Please choose a file"
                     folder: shortcuts.home
-                    property string  tmp
-                    property variant split
                     onAccepted: {
-                        pathrain=fileDialogRain.fileUrl
-                        tmp = fileDialogRain.fileUrl
-                        split = tmp.split("/")
-                        console.log("You chose: " + split[0])
-                        console.log("You chose: " + split.length)
-                        textfileRain.text = "../"+split[split.length-1]
+                        console.log("You chose: " + fileDialogRain.fileUrls)
+                        textfileRain.text = fileDialogRain.fileUrl
                         //handlerCSV.loadCSV(fileDialogRain.fileUrl)
                         //Qt.quit()
                     }
@@ -713,15 +626,9 @@ ApplicationWindow {
                     id: fileDialogActivation
                     title: "Please choose a file"
                     folder: shortcuts.home
-                    property string  tmp
-                    property variant split
                     onAccepted: {
-                        pathactivation=fileDialogActivation.fileUrl
-                        tmp = fileDialogActivation.fileUrl
-                        split = tmp.split("/")
-                        console.log("You chose: " + split[0])
-                        console.log("You chose: " + split.length)
-                        textfileActivation.text = "../"+split[split.length-1]
+                        console.log("You chose: " + fileDialogActivation.fileUrls)
+                        textfileActivation.text = fileDialogActivation.fileUrl
                         //handlerCSV.loadCSV(fileDialogActivation.fileUrl)
                         //Qt.quit()
                     }
@@ -732,6 +639,7 @@ ApplicationWindow {
                     nameFilters: [ "files (*.csv)" ]
                     Component.onCompleted: visible = false
                 }
+
 
                 Button {
                     id: button1
@@ -767,6 +675,7 @@ ApplicationWindow {
                     text: qsTr("Empty")
                     font.pixelSize: 12
                 }
+
             }
 
 
@@ -801,96 +710,103 @@ ApplicationWindow {
                     property  string order4;
                     property  int typeAlgorithm;
 
-                                                onClicked: {
-                                                    order1="";
-                                                    order2="";
-                                                    order3="";
-                                                    order4="";
-                                                    typeAlgorithm=4;
-                                                           if(comboSelection.currentText == "StochTour(t)"
-                                                              || comboSelection.currentText == "DetTour(T)"){
-                                                               para1=selectionParameter.text;
-                                                               para2=-1;
-                                                           }else
-                                                               if(comboSelection.currentText == "Ranking(p,e)"){
-                                                                   para1=selectParameterRanking1.text;
-                                                                   para2=selectParameterRanking2.text;
-                                                               }else
-                                                                    if(comboSelection.currentText == "Roulette"){
-                                                                        para1=-1;
-                                                                        para2=-1;
-                                                                    }else
-                                                                        if(comboSelection.currentText == "Sequential(ordered/unordered)")
-                                                                        {
-                                                                            para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
-                                                                            para2=-1;
-                                                                        }else
-                                                                            if(comboSelection.currentText == "Generational"){
-                                                                                para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                para2=-1;
-                                                                                typeAlgorithm=2;
-                                                                            }else
-                                                                                if(comboSelection.currentText == "MultiObjects Generational"){
-                                                                                    para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                    para2=-1;
-                                                                                    typeAlgorithm=3;
-                                                                                    order1=selectionsOrder.get(selectionsOrder.currentIndex).text
-                                                                                    order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
-                                                                                    order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
-                                                                                    order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
-                                                                                }else
-                                                                                    if(comboSelection.currentText == "Steady-State"){
-                                                                                        para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                        para2=-1;
-                                                                                        typeAlgorithm=0;
-                                                                                    }else
-                                                                                        if(comboSelection.currentText == "MultiObjects Steady-State"){
-                                                                                            para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                            para2=-1;
-                                                                                            typeAlgorithm=1;
-                                                                                            order1=selectionsOrder.get(selectionsOrder.currentIndex).text
-                                                                                            order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
-                                                                                            order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
-                                                                                            order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
-                                                                                        }
-                                                           // if(textfileRain.text != "empty")
+                    onClicked: {
+                        order1="";
+                        order2="";
+                        order3="";
+                        order4="";
+                        typeAlgorithm=4;
+                        if(comboSelection.currentText == "StochTour(t)"
+                                || comboSelection.currentText == "DetTour(T)"){
+                            para1=selectionParameter.text;
+                            para2=-1;
+                        }else
+                            if(comboSelection.currentText == "Ranking(p,e)"){
+                                para1=selectParameterRanking1.text;
+                                para2=selectParameterRanking2.text;
+                            }else
+                                if(comboSelection.currentText == "Roulette"){
+                                    para1=-1;
+                                    para2=-1;
+                                }else
+                                    if(comboSelection.currentText == "Sequential(ordered/unordered)")
+                                    {
+                                        para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
+                                        para2=-1;
+                                    }else
+                                        if(comboSelection.currentText == "Generational"){
+                                            para1=selectionParameterTournamentWithoutReplacement.text;
+                                            para2=-1;
+                                            typeAlgorithm=2;
+                                        }else
+                                            if(comboSelection.currentText == "MultiObjects Generational"){
+                                                para1=selectionParameterTournamentWithoutReplacement.text;
+                                                para2=-1;
+                                                typeAlgorithm=3;
+                                                order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                                                order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                                                order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                                                order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
+                                            }else
+                                                if(comboSelection.currentText == "Steady-State"){
+                                                    para1=selectionParameterTournamentWithoutReplacement.text;
+                                                    para2=-1;
+                                                    typeAlgorithm=0;
+                                                }else
+                                                    if(comboSelection.currentText == "MultiObjects Steady-State"){
+                                                        para1=selectionParameterTournamentWithoutReplacement.text;
+                                                        para2=-1;
+                                                        typeAlgorithm=1;
+                                                        order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                                                        order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                                                        order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                                                        order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
+                                                    }
+                        if(textProjectName.length ===0){
+                            messageDialogProjectNameEmpty.open()
+                        }else
 
-                                                                   if(textfileRain.text == "Empty"){
-                                                                       messageDialogRain.open()
-                                                                   }else
-                                                                       if(textfileActivation.text == "Empty"){
-                                                                           messageDialogActivation.open()
-                                                                       }else{
-                                                            sakeStart.InitAlgo(comboSelection.currentText,
-                                                                               textFieldPopulation.text,
-                                                                               textFieldMaxGen.text,
-                                                                               textFieldtbMax.text,
-                                                                               textFieldtbMin.text,
-                                                                               textFielddHpMax.text,
-                                                                               textFielddHpMin.text,
-                                                                               textFieldPropCrossover.text,
-                                                                               textFieldPropMutation.text,
-                                                                               textFieldPme.text,
-                                                                               textFieldPmb.text,
-                                                                               comboPattern.currentText,
-                                                                               pathrain,
-                                                                               pathactivation,
-                                                                               labelProjectNameFromFile.text,
-                                                                               textNumberProcessor.text,
-                                                                               para1,
-                                                                               para2,
-                                                                               lastGeneration.checked,
-                                                                               1,
-                                                                               typeAlgorithm,
-                                                                               order1,
-                                                                               order2,
-                                                                               order3,
-                                                                               order4
-                                                                               )
-                                                           close()
-                                                         }
+                            if( sakeStart.existProjectName(textProjectName.text) === 1 ){
+                                messageDialogProjectName.open()
+                            }
+                            else
+                                if(textfileRain.text == "Empty"){
+                                    messageDialogRain.open()
+                                }else
+                                    if(textfileActivation.text == "Empty"){
+                                        messageDialogActivation.open()
+                                    }else{
+//                                        sakeStart.InitAlgo(comboSelection.currentText,
+//                                                           textFieldPopulation.text,
+//                                                           textFieldMaxGen.text,
+//                                                           textFieldtbMax.text,
+//                                                           textFieldtbMin.text,
+//                                                           textFielddHpMax.text,
+//                                                           textFielddHpMin.text,
+//                                                           textFieldPropCrossover.text,
+//                                                           textFieldPropMutation.text,
+//                                                           textFieldPme.text,
+//                                                           textFieldPmb.text,
+//                                                           comboPattern.currentText,
+//                                                           fileDialogRain.fileUrl,
+//                                                           fileDialogActivation.fileUrl,
+//                                                           textProjectName.text,
+//                                                           textNumberProcessor.text,
+//                                                           para1,
+//                                                           para2,
+//                                                           false,
+//                                                           0,
+//                                                           typeAlgorithm,
+//                                                           order1,
+//                                                           order2,
+//                                                           order3,
+//                                                           order4
+//                                                           )
 
-                                                }
+                                        close()
+                                    }
+
+                    }
 
                 }
 
@@ -906,42 +822,47 @@ ApplicationWindow {
 
 
 
+
         }
 
     }
-//    MessageDialog {
-//        id: messageDialogRain
-//        title: "Input error"
-//        text: "Please enter rain csv path."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
 
-//    MessageDialog {
-//        id: messageDialogActivation
-//        title: "Input error"
-//        text: "Please enter Activation csv path."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
 
-//    MessageDialog {
-//        id: messageDialogProjectName
-//        title: "Input error"
-//        text: "The project name already exists."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
-//    MessageDialog {
-//        id: messageDialogProjectNameEmpty
-//        title: "Input error"
-//        text: "The project name is empty."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
+    MessageDialog {
+        id: messageDialogRain
+        title: "Input error"
+        text: "Please enter rain csv path."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+
+    MessageDialog {
+        id: messageDialogActivation
+        title: "Input error"
+        text: "Please enter Activation csv path."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+
+    MessageDialog {
+        id: messageDialogProjectName
+        title: "Input error"
+        text: "The project name already exists."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+    MessageDialog {
+        id: messageDialogProjectNameEmpty
+        title: "Input error"
+        text: "The project name is empty."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+
+
 
 }

@@ -11,6 +11,8 @@
 #include <utils/eoLogger.h>
 #include <utils/eoStat.h>
 #include "CustomPlotItem.h"
+#include "CustomPlotMobilityFunction.h"
+#include "CustomPlotKernel.h"
 #include "CustomPlotRegression.h"
 #include "update.h"
 
@@ -39,7 +41,7 @@ public:
                        std::string _description = "Best ")
                        : eoStat<EOT, Fitness>(Fitness(), _description)
     {
-//        qCustomPlot=_qCustomPlot;
+        qCustomPlot=_qCustomPlot;
         qCustomPlotRegression=_qCustomPlotRegression;
         xRegression = _xRegression;
         progressBar = _progressBar;
@@ -87,12 +89,12 @@ private :
          yAverage.push_back( v / _pop.size());
 //       qCustomPlot->updateGraph0(x,yBest);
 //       qCustomPlot->updateGraph1(x,yAverage);
-       QVector<double> xRegretmp(xRegression.size());
-       QVector<double> yRegretmp(xRegression.size());
-
+       QVector<double> xRegretmp;
+       QVector<double> yRegretmp;
+       std::vector<double> tmpi= _pop.best_element().getYCombinataConst();
        for (int i = 0; i < xRegression.size(); i++) {
-           xRegretmp[i]=xRegression[i];
-           yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
+           xRegretmp.push_back(xRegression[i]);
+           yRegretmp.push_back(tmpi[i]);
        }
 
        qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);

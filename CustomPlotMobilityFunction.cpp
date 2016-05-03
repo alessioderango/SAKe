@@ -347,7 +347,7 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::v
 
 
 
-        for(int i = 0; i < bests.size();i++){
+        for(unsigned int i = 0; i < bests.size();i++){
 
             ptime bestTmp = ptime_from_tm(bests[i].getTime());
             boost::posix_time::time_duration diff =(bestTmp-ptime(date(1970, Jan, 1)));

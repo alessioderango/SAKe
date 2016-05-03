@@ -40,32 +40,176 @@ RegressionController::RegressionController(double percentualePeso,
 
     this->sizeKernel=_sizeKernel;
     this->kernel = _kernel;
-    this->numberProcessor=inumberProcessor;
+    this->numberProcessor=4;
 
 
-    this->selectionElitist = iselectionElitist;
-    this->populationSize = ipopulationSize;
-    this->maxGeneration = imaxGeneration;
-    this->percentageCrossover = dpercentageCrossover;
-    this->percentageMutation = dpercentageMutation;
+    selectionElitist = iselectionElitist;
+    populationSize = ipopulationSize;
+    maxGeneration = imaxGeneration;
+    percentageCrossover = dpercentageCrossover;
+    percentageMutation = dpercentageMutation;
+
+}
+
+double getHMed(double kernel[], int sizeKernel){
+    double sum=0;
+    for (int i = 0; i < sizeKernel; i++) {
+        sum+=kernel[i];
+    }
+    return sum/sizeKernel;
+
+}
+
+double getHMax(double kernel[], int sizeKernel){
+    double max=-1;
+    for (int i = 0; i < sizeKernel; i++) {
+        if(max< kernel[i])
+            max = kernel[i];
+    }
+    return max;
+
+}
+
+void initAlreadyConsidered(double *&alreadyConsidered, int sizeKernel){
+    for (int i = 0; i < sizeKernel; i++) {
+        alreadyConsidered[i]=-1;
+    }
+}
+
+void stampa(double array[], int sizeKernel){
+    for (int i = 0; i < sizeKernel; i++) {
+        cout << array[i] << " ";
+    }
+    cout << endl;
+}
+int getInterset(double kernel[],double *&alreadyConsidered,double *&alreadyConsideredTemp,double boundary, int sizeKernel){
+    int count=0;
+    for (int i = 0; i < sizeKernel; i++) {
+        if(alreadyConsidered[i]==-1  && kernel[i] >= boundary){
+            alreadyConsideredTemp[i]=kernel[i];
+            alreadyConsidered[i]=kernel[i];
+            count++;
+        }
+    }
+    return count;
+}
+
+void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec, int sizeKernel){
+
+
+    double sum=0;
+    double x=0;
+    int count=0;
+    for (int i = 0; i < sizeKernel-1; i++) {
+        if(a[i]!=-1){
+            if(a[i+1]==-1 && a[i-1] ==-1){
+                //write << i+1 << "; " << a[i] << "; " << endl;
+                xVec.push_back(i+1);
+                yVec.push_back(a[i]);
+                cout << " x = " << i+1 << " y = " << a[i] << endl;
+            }else{
+                sum+=a[i];
+                x+=i;
+                count++;
+                if(a[i+1]==-1){
+                    //write << (x/count)+1 << "; " << sum/count << "; " << endl;
+                    xVec.push_back((x/count)+1);
+                    yVec.push_back(sum/count);
+                    cout << " x = " << (x/count)+1 << " y = " << sum/count << endl;
+                    sum=0;
+                    count=0;
+                    x=0;
+                }
+            }
+        }
+    }
+
 
 }
 
 
-
 void RegressionController::startAlgorithm(){
 
+    std::vector< double> x;
+    std::vector< double> y;
 
-//    qCustomPlotRegression->setKernely(&y[0]);
-//    qCustomPlotRegression->setSize_kernely(y.size());
-//    qCustomPlotRegression->setKernelx(&x[0]);
-//    qCustomPlotRegression->setSize_kernelx(x.size());
-//    void setupQuadraticDemo(  double * kernely,
-//                              int size_kernely,
-//                              double * kernelx,
-//                              int size_kernelx
-//                              );
+    double hmed= getHMed(kernel,sizeKernel);
+    double hmax = getHMax(kernel,sizeKernel);
+    double hmed2= hmed/2;
+    double hmedmax= (hmed+hmax)/2;
 
+    cout << "hmax = " << hmax << endl;
+    cout << "hmedmax = " << hmedmax << endl;
+    cout << "hmed = "<< hmed << endl;
+    cout << "hmed2 = " << hmed2 <<endl;
+
+    //    double alreadyConsideredHMax[SIZE];
+    //    double alreadyConsideredHMedMax[SIZE];
+    //    double alreadyConsideredHMed[SIZE];
+    //    double alreadyConsideredHMed2[SIZE];
+    //    double alreadyConsidered[SIZE];
+    double *alreadyConsideredHMax = new double[sizeKernel];
+    double *alreadyConsideredHMedMax= new double[sizeKernel];
+    double *alreadyConsideredHMed= new double[sizeKernel];
+    double *alreadyConsideredHMed2= new double[sizeKernel];
+    double *alreadyConsidered= new double[sizeKernel];
+    initAlreadyConsidered(alreadyConsidered,sizeKernel);
+    initAlreadyConsidered(alreadyConsideredHMax,sizeKernel);
+    initAlreadyConsidered(alreadyConsideredHMedMax,sizeKernel);
+    initAlreadyConsidered(alreadyConsideredHMed,sizeKernel);
+    initAlreadyConsidered(alreadyConsideredHMed2,sizeKernel);
+    int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,sizeKernel);
+    cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
+    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,sizeKernel);
+    cout << "ho trovato " << count << " barre superiori a " << hmedmax << endl;
+    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed,hmed,sizeKernel);
+    cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
+    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,sizeKernel);
+    cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
+    //stampa(alreadyConsideredHMax);
+    //stampa(alreadyConsideredHMedMax);
+    //stampa(alreadyConsideredHMed);
+    //stampa(alreadyConsideredHMed2);
+    cout << " points from hmax" << endl;
+    getPoints(alreadyConsideredHMax,x,y,sizeKernel);
+    cout << " points from hmedhmax" << endl;
+    getPoints(alreadyConsideredHMedMax,x,y,sizeKernel);
+    cout << " points from hmed" << endl;
+    getPoints(alreadyConsideredHMed,x,y,sizeKernel);
+    cout << " points from hmed2" << endl;
+    getPoints(alreadyConsideredHMed2,x,y,sizeKernel);
+    for (int i = 0; i < x.size(); i++) {
+        cout << x[i] <<" " << y[i] << endl;
+    }
+
+
+    int alto;
+    for (alto = x.size() - 1; alto > 0; alto-- )
+    {
+        for (int i=0; i<alto; i++)
+        {
+            if (x[i]>x[i+1]) /* sostituire ">" con "<" per avere un ordinamento decrescente */
+            {
+                double tmp = x[i];
+                x[i] = x[i+1];
+                x[i+1] = tmp;
+                double tmp2 = y[i];
+                y[i] = y[i+1];
+                y[i+1] = tmp2;
+
+            }
+        }
+    }
+
+    for (int i = 0; i < x.size(); i++) {
+        cout << x[i] <<" " << y[i] << endl;
+    }
+
+    qCustomPlotRegression->setKernely(&y[0]);
+    qCustomPlotRegression->setSize_kernely(y.size());
+    qCustomPlotRegression->setKernelx(&x[0]);
+    qCustomPlotRegression->setSize_kernelx(x.size());
+    qCustomPlotRegression->setupQuadraticDemo();
     time_t start_time, end_time;
     this->start=true;
     int argc=1;
@@ -78,9 +222,10 @@ void RegressionController::startAlgorithm(){
         omp_set_num_threads( numberProcessor );
 #endif // !_OPENMP
         eoParser parser(argc,input);  // for user-parameter readi ng
+        int maxGen = 15000;
         // parser.setORcreateParam(eoParamParamType("Sequential(ordered)"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
         //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
-        parser.setORcreateParam(unsigned(5), "popSize", "Population Size", 'P', "Evolution Engine");
+        parser.setORcreateParam(unsigned(populationSize), "popSize", "Population Size", 'P', "Evolution Engine");
         parser.setORcreateParam(unsigned(maxGeneration), "maxGen", "Maximum number of generations () = none)",'G',"Stopping criterion");
         //          parser.setORcreateParam(relRateCrossover, "cross1Rate", "Relative rate for crossover 1", '1', "Variation Operators").value();
         //          parser.setORcreateParam(relRateMutation, "mut1Rate", "Relative rate for mutation 1", '1', "Variation Operators").value();
@@ -128,7 +273,7 @@ void RegressionController::startAlgorithm(){
                                                                       qCustomPlotFitness,
                                                                       qCustomPlotRegression,
                                                                       progressBar,
-                                                                      maxGeneration,
+                                                                      maxGen,
                                                                       currentMaximumFitness,
                                                                       absoluteMaximumFitness,
                                                                       currentAverageFitness,
@@ -137,7 +282,7 @@ void RegressionController::startAlgorithm(){
                                                                       x);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);
-        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,8);
+        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,selectionElitist);
 
         ///// End of construction of the algorithm
 
@@ -180,27 +325,7 @@ void RegressionController::run(){
     startAlgorithm();
 }
 
-std::vector<double> RegressionController::getY()
-{
-    return y;
-}
-
-void RegressionController::setY(std::vector<double> &value)
-{
-    y = value;
-}
-
-std::vector<double> RegressionController::getX()
-{
-    return x;
-}
-
-void RegressionController::setX(std::vector<double> &value)
-{
-    x = value;
-}
-
-CustomPlotRegression *RegressionController::getQCustomPlotRegression()
+CustomPlotRegression *RegressionController::getQCustomPlotRegression() const
 {
     return qCustomPlotRegression;
 }
@@ -208,7 +333,7 @@ CustomPlotRegression *RegressionController::getQCustomPlotRegression()
 void RegressionController::setQCustomPlotRegression(CustomPlotRegression *value)
 {
     qCustomPlotRegression = value;
-    qCustomPlotRegression->initCustomPlotRegression();
+    qCustomPlotRegression->initCustomPlotFitness();
 
 }
 

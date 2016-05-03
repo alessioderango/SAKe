@@ -341,6 +341,8 @@ int XMLManager::SaveXMLFile(QString name,
 
     ReadMainXML();
 
+    return 1;
+
 }
 
 void parseProject(QXmlStreamReader& xml,QVariantList &a){

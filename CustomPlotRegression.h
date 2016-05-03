@@ -15,27 +15,20 @@ public:
     CustomPlotRegression(double * kernel, int size_kernel, QQuickItem* parent = 0 );
     CustomPlotRegression(QQuickItem* parent = 0 );
     virtual ~CustomPlotRegression();
+    void updateGraph0(QVector<double> x,QVector<double> y);
     void updateGraph1(QVector<double> x,QVector<double> y);
     void paint( QPainter* painter );
 
-    void updateGraph0(QVector<double> x,QVector<double> y);
-    Q_INVOKABLE void initCustomPlotFitness();
+    Q_INVOKABLE void initCustomPlotRegression();
 
 
 
-    void setupQuadraticDemo();
+    void setupQuadraticDemo(  double * kernely,
+                              int size_kernely,
+                              double * kernelx,
+                              int size_kernelx
+                              );
 
-    double *getKernely() const;
-    void setKernely(double *value);
-
-    int getSize_kernely() const;
-    void setSize_kernely(int value);
-
-    double *getKernelx() const;
-    void setKernelx(double *value);
-
-    int getSize_kernelx() const;
-    void setSize_kernelx(int value);
 
 protected:
     void routeMouseEvents( QMouseEvent* event );
@@ -50,10 +43,6 @@ protected:
 
 private:
   QCustomPlot*  m_CustomPlot;
-  double * kernely;
-  int size_kernely;
-  double * kernelx;
-  int size_kernelx;
 
 private slots:
     void graphClicked( QCPAbstractPlottable* plottable );

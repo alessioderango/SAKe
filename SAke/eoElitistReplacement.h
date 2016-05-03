@@ -21,17 +21,17 @@ public :
    _pop.sort();
   _offspring.sort();
   std::cerr << "STAMPO ARRAY pop " << std::endl;
-  for (int i = 0; i < _pop.size(); i++) {
+  for (unsigned int  i = 0; i < _pop.size(); i++) {
     std::cerr << _pop[i].fitness() << " ";
   }
   std::cerr << std::endl;
   std::cerr << "STAMPO ARRAY offspring " << std::endl;
-  for (int i = 0; i < _offspring.size(); i++) {
+  for (unsigned int  i = 0; i < _offspring.size(); i++) {
     std::cerr << _offspring[i].fitness() << " ";
   }
   std::cerr << std::endl;
   std::cerr << "numberElementReplacement " << numberElementReplacement <<"   _pop.size() " << _pop.size()<<std::endl;
-    for(int i = 0 ; i < numberElementReplacement; i++)
+    for(int  i = 0 ; i < numberElementReplacement; i++)
     {
         if(_pop[_pop.size()-i-1].fitness() < _offspring[i].fitness()){
             typename eoPop<EOT>::iterator itGuy = _offspring.begin()+(_offspring.size()-i-1);
@@ -41,7 +41,7 @@ public :
     }
 
   std::cerr << "STAMPO ARRAY offspring FITNESS DOPO REPLACE " << std::endl;
-    for (int i = 0; i < _offspring.size(); i++) {
+    for (unsigned int  i = 0; i < _offspring.size(); i++) {
         std::cerr << _offspring[i].fitness() << " ";
     }
 
@@ -51,7 +51,7 @@ public :
   _pop.sort();
 
     std::cerr << "STAMPO ARRAY offspring FITNESS DOPO CAMBIO " << std::endl;
-    for (int i = 0; i < _pop.size(); i++) {
+    for (unsigned int  i = 0; i < _pop.size(); i++) {
         std::cerr << _pop[i].fitness() << " ";
     }
     std::cerr << std::endl;

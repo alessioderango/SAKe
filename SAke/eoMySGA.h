@@ -101,7 +101,7 @@ public :
             eoPop<EOT> popTmp;
             popTmp.resize(_pop.size());
             int counter=0;
-            for (int i=0; i<_pop.size(); i++){
+            for (unsigned int i=0; i<_pop.size(); i++){
                 EOT a;
                 double * r = (double*) malloc(sizeof(double)*offspring[counter].getSize());
                 a.setFi(r);

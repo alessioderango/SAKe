@@ -7,7 +7,7 @@ template <class EOT>
 class SelectionMomentoDelPrimoOrdine: public SelectionStrategy<EOT>
 {
 public:
-    SelectionFitness(){
+    SelectionMomentoDelPrimoOrdine(){
         roundedDigits=2;
     }
 private:

@@ -82,7 +82,7 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                 onClicked: {
                     console.log("Action Calibration Project");
-                    var component = Qt.createComponent("newProjectCalibration.qml")
+                    var component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
 
                     var window    = component.createObject(applicationWindow1)
 
@@ -510,6 +510,7 @@ import QtQuick.Controls.Styles 1.4
                         active: true
                         property int threadId: "+count+"
                         function stopExecution(){
+                                  console.log('clicco STOPPPPP threadId');
                                   sakeStart.stopRegressionController(threadId);
                         }
 
@@ -549,7 +550,7 @@ import QtQuick.Controls.Styles 1.4
                              Layout.fillHeight: true
                             Layout.preferredWidth: 700
                             Layout.preferredHeight: 200
-                            clip: false
+
                             Layout.maximumWidth:  1000000
                             Layout.maximumHeight: 1000000
 
@@ -832,8 +833,9 @@ import QtQuick.Controls.Styles 1.4
                                 console.log(tabmain.getTab(styleData.index).title);
                                 if(patt.test(tabmain.getTab(styleData.index).title)){
                                     console.log("STOPPO ALGO")
-                                    tabmain.getTab(styleData.index).stopExecution();
+
                                 }
+                                tabmain.getTab(styleData.index).stopExecution();
                                 tabmain.removeTab(styleData.index)
                             }
                         }

@@ -35,7 +35,7 @@ public:
                        QObject *_currentAverageFitness,
                        QObject *_absoluteAverageFitness,
                        Update* _update,
-                       std::vector< double> _xRegression,
+                       QVector< double> _xRegression,
                        std::string _description = "Best ")
                        : eoStat<EOT, Fitness>(Fitness(), _description)
     {
@@ -79,23 +79,21 @@ private :
        count++;
        double fitness =_pop.best_element().fitness();
 
-       yBest.push_back( _pop.best_element().fitness());
-       x.push_back(count);
+//       yBest.push_back( _pop.best_element().fitness());
+//       x.push_back(count);
 
          Fitness v = std::accumulate(_pop.begin(), _pop.end(), Fitness(0.0), eoGraphFitnessStat::sumFitness);
 
-         yAverage.push_back( v / _pop.size());
+//         yAverage.push_back( v / _pop.size());
 //       qCustomPlot->updateGraph0(x,yBest);
 //       qCustomPlot->updateGraph1(x,yAverage);
-       QVector<double> xRegretmp(xRegression.size());
-       QVector<double> yRegretmp(xRegression.size());
+//       QVector<double> yRegretmp(xRegression.size());
 
-       for (int i = 0; i < xRegression.size(); i++) {
-           xRegretmp[i]=xRegression[i];
-           yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
-       }
+//       for (int i = 0; i < xRegression.size(); i++) {
+//           yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
+//       }
 
-       qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+       qCustomPlotRegression->updateGraph1(xRegression,_pop.best_element().getYCombinataConst());
 
        QString genString= QString("Gen:    %1").arg(steps);
        Q_EMIT update->valueGenRegression(genString);
@@ -139,6 +137,6 @@ private :
     Update* update;
     double AbsoluteMaximumFitness;
     double AbsoluteAvarageFitness;
-    std::vector< double> xRegression;
+    QVector< double> xRegression;
 };
 #endif // EOGRAPHFITENESSSTAT_H

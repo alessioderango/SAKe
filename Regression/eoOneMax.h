@@ -12,6 +12,7 @@ Template for creating a new representation in EO
 #define _eoOneMax_h
 
 #include "parameters.h"
+#include <QVector>
 /**
  *  Always write a comment in this format before class definition
  *  if you want the class to be documented by Doxygen
@@ -137,10 +138,10 @@ public:
       functionType.push_back(value);
   }
 
-   std::vector<double>  getYCombinata(){
+   QVector<double>  getYCombinata(){
       return yCombinata;
   }
-   std::vector<double>  getYCombinataConst() const{
+   QVector<double>  getYCombinataConst() const{
        return yCombinata;
    }
 
@@ -173,7 +174,7 @@ public:
   void setFunctionTypeFromNew(std::vector<int> _w){
       functionType=_w;
   }
-  void setYcombinataFromNew(std::vector<double> _w){
+  void setYcombinataFromNew(QVector<double> _w){
       yCombinata=_w;
   }
 
@@ -222,7 +223,7 @@ private:			   // put all data here
     std::vector<double> w;
     std::vector<Parameters> par;
     std::vector<int> functionType;
-    std::vector<double> yCombinata;
+    QVector<double> yCombinata;
     // END   Private data of an eoOneMax object
 };
 

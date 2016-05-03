@@ -80,7 +80,7 @@ public:
 	{
 		// - perche decrescente
       if( (double)(((Ym*)a)->getValue()) > (double)(((Ym*)b)->getValue()) ){
-          return -  1;
+          return -1;
       }
       if( (double)(((Ym*)a)->getValue()) < (double)(((Ym*)b)->getValue()) ){
           return 1;

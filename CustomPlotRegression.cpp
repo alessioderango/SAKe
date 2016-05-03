@@ -20,7 +20,7 @@ CustomPlotRegression::~CustomPlotRegression()
     m_CustomPlot = nullptr;
 }
 
-void CustomPlotRegression::initCustomPlotFitness()
+void CustomPlotRegression::initCustomPlotRegression()
 {
     m_CustomPlot = new QCustomPlot();
     //m_CustomPlot->setMinimumHeight(200);
@@ -117,32 +117,16 @@ void CustomPlotRegression::onCustomReplot()
     update();
 }
 
-void CustomPlotRegression::setupQuadraticDemo(  )
+void CustomPlotRegression::setupQuadraticDemo(double * kernely,
+                                              int size_kernely,
+                                              double * kernelx,
+                                              int size_kernelx  )
 {
     QCustomPlot* customPlot=m_CustomPlot;
     // make top right axes clones of bottom left axes:
-    QCPAxisRect* axisRect = customPlot->axisRect();
 
     // generate some data:
     QVector<double> x1( 0 ), y1( 0 );   // initialize with entries 0..100
-    //   QVector<double> lx( 101 ), ly( 101 ); // initialize with entries 0..100
-    //    for (int i = 0; i < 101; ++i)
-    //    {
-    //        x[i] = i / 50.0 - 1;              // x goes from -1 to 1
-    //        y[i] = x[i] * x[i];               // let's plot a quadratic function
-
-    //        lx[i] = i / 50.0 - 1;             //
-    //        ly[i] = lx[i];                    // linear
-    //    }
-    //    for (int i = 0; i < 101; ++i)
-    //    {
-    //        this->x[i] = i;              // x goes from -1 to 1
-    //        this->y[i] = i;               // let's plot a quadratic function
-
-    //   //     lx[i] = i / 50.0 - 1;             //
-    //   //     ly[i] = lx[i];                    // linear
-    //    }
-    // create graph and assign data to it:
     customPlot->addGraph();
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
     customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
@@ -170,7 +154,7 @@ void CustomPlotRegression::setupQuadraticDemo(  )
     customPlot->addGraph();
     customPlot->graph( 1 )->setPen( QPen( Qt::green ) );
     customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
-    customPlot->graph( 1 )->setData( x1, y1 );
+//    customPlot->graph( 1 )->setData( x1, y1 );
     customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
 
     // give the axes some labels:
@@ -219,42 +203,4 @@ void CustomPlotRegression::resizeEvent(QResizeEvent *event)
     m_CustomPlot->resize(event->size());
 }
 
-int CustomPlotRegression::getSize_kernelx() const
-{
-    return size_kernelx;
-}
 
-void CustomPlotRegression::setSize_kernelx(int value)
-{
-    size_kernelx = value;
-}
-
-double *CustomPlotRegression::getKernelx() const
-{
-    return kernelx;
-}
-
-void CustomPlotRegression::setKernelx(double *value)
-{
-    kernelx = value;
-}
-
-int CustomPlotRegression::getSize_kernely() const
-{
-    return size_kernely;
-}
-
-void CustomPlotRegression::setSize_kernely(int value)
-{
-    size_kernely = value;
-}
-
-double *CustomPlotRegression::getKernely() const
-{
-    return kernely;
-}
-
-void CustomPlotRegression::setKernely(double *value)
-{
-    kernely = value;
-}

@@ -7,7 +7,7 @@ template <class EOT>
 class SelectionDeltaCr: public SelectionStrategy<EOT>
 {
 public:
-    SelectionFitness(){
+    SelectionDeltaCr(){
         roundedDigits=3;
     }
 private:

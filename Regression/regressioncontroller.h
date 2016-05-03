@@ -94,7 +94,13 @@ public:
                              Parameters *parameters,
                              int parametersSize,
                              int sizeKernel,
-                             double *kernel);
+                             double *kernel,
+                             int iselectionElitist,
+                             int ipopulationSize,
+                             int imaxGeneration,
+                             double dpercentageCrossover,
+                             double dpercentageMutation,
+                             int inumberProcessor );
     RegressionController();
     CustomPlotItem *getQCustomPlotFitness() const;
     void setQCustomPlotFitness(CustomPlotItem *value);
@@ -121,8 +127,14 @@ public:
     Update *getUpdate() const;
     void setUpdate(Update *value);
 
-    CustomPlotRegression *getQCustomPlotRegression() const;
+    CustomPlotRegression *getQCustomPlotRegression();
     void setQCustomPlotRegression(CustomPlotRegression *value);
+
+    std::vector<double> getX();
+    void setX(std::vector<double> &value);
+
+    std::vector<double> getY();
+    void setY(std::vector<double> &value);
 
 public slots:
     void startThread();
@@ -157,6 +169,16 @@ private:
     QObject *absoluteMaximumFitness;
     QObject *currentAverageFitness;
     QObject *absoluteAverageFitness;
+
+    int selectionElitist;
+    int populationSize;
+    int maxGeneration;
+    double percentageCrossover;
+    double percentageMutation;
+
+    std::vector< double> x;
+    std::vector< double> y;
+
 };
 
 #endif // REGRESSIONCONTROLLER_H

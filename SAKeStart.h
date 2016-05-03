@@ -111,7 +111,21 @@ public slots:
                   const QVariant &filenameKernelPath,
                   const QVariant &filenameKenrelPath
                   );
-    void startRegression();
+    void startRegression(   const QVariant &selection,
+                            const QVariant &selectionElitist,
+                            const QVariant &populationSize,
+                            const QVariant &percentageCrossover,
+                            const QVariant &percentageMutation,
+                            const  QVariant &percentageWeight,
+                            const  QVariant &numberProcessor,
+                            const  QVariant &numberGamma,
+                            const  QVariant& percentageGammaA,
+                            const  QVariant &percentageGammaB,
+                            const  QVariant &numberLinear,
+                            const  QVariant& percentageLinearA,
+                            const  QVariant &percentageLinearB,
+                            const  QVariant &maxGeneration,
+                            const  QVariant &fileurl);
       int existProjectName(const QVariant &_projectName);
       QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
 //    void updateCurrentMaximumFitness(QString);

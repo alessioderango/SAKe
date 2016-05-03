@@ -76,7 +76,7 @@ eoContinue<Individual> & do_make_continue_my(eoParser& _parser, eoState& _state,
 
   _state.storeFunctor(stop);
   // and "add" to combined
-//  continuator = make_combinedContinue<Individual>(continuator, stop);
+  continuator = make_combinedContinue<Individual>(continuator, stop);
   // for each possible criterion, check if wanted, otherwise do nothing
 
   // First the eoGenContinue - need a default value so you can run blind

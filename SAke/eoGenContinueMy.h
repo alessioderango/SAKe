@@ -108,7 +108,7 @@ public:
 
         bool numElementsEqualFitness=allElementsEqualFitness(kernels);
 
-        for (int t = 0; t < _vEO.size(); t++) {
+        for (unsigned int  t = 0; t < _vEO.size(); t++) {
             double tmp = _vEO[t].fitness();
 
             int stop =  _vEO[t].getSizeConst();
@@ -155,7 +155,7 @@ public:
                             return a[0] > b[0];
                         });
 
-                        for (int g = 0; g < kernels.size(); g++) {
+                        for (unsigned int g = 0; g < kernels.size(); g++) {
                             if(kernels[g][0] < tmp){
                                 std::vector<double> tmpKernel;
                                 tmpKernel.push_back(tmp);
@@ -182,7 +182,7 @@ public:
                             return a[1] > b[1];
                         });
 
-                        for (int g = 0; g < kernels.size(); g++) {
+                        for (unsigned int g = 0; g < kernels.size(); g++) {
                             if(kernels[g][1] < delta){
                                 std::vector<double> tmpKernel;
                                 tmpKernel.push_back(tmp);
@@ -208,7 +208,7 @@ public:
         }
         myfile.close();
 
-        for (int i = 0; i < kernels.size(); i++) {
+        for (unsigned int i = 0; i < kernels.size(); i++) {
             for (int j = 0; j < kernels[i][3]; j++) {
                 kernelStream <<kernels[i][j] << ";";
 
