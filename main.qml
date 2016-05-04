@@ -519,7 +519,7 @@ import QtQuick.Controls.Styles 1.4
                         rowSpacing: 0
                         columnSpacing: 0
                         columns: 1
-                        rows:7
+                        rows:6
                         anchors.fill: parent
                         Layout.preferredWidth: 700
                         Layout.preferredHeight: 200
@@ -527,21 +527,21 @@ import QtQuick.Controls.Styles 1.4
                         Layout.maximumHeight:  1500
 
 
-                        CustomPlotItem {
+//                        CustomPlotItem {
 
 
-                            Layout.fillWidth: true
-                             Layout.fillHeight: true
-                            Layout.preferredWidth: 700
-                            Layout.preferredHeight: 200
-                            Layout.maximumWidth:  1000000
-                            Layout.maximumHeight: 1000000
+//                            Layout.fillWidth: true
+//                             Layout.fillHeight: true
+//                            Layout.preferredWidth: 700
+//                            Layout.preferredHeight: 200
+//                            Layout.maximumWidth:  1000000
+//                            Layout.maximumHeight: 1000000
 
 
-                            objectName: '"+tmp+"'
+//                            objectName: '"+tmp+"'
 
 
-                        }
+//                        }
 
                         CustomPlotRegression {
 
@@ -549,7 +549,7 @@ import QtQuick.Controls.Styles 1.4
                             Layout.fillWidth: true
                              Layout.fillHeight: true
                             Layout.preferredWidth: 700
-                            Layout.preferredHeight: 200
+                            Layout.preferredHeight: 400
 
                             Layout.maximumWidth:  1000000
                             Layout.maximumHeight: 1000000

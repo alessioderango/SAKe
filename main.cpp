@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    srand (time(NULL));
+
     qmlRegisterType<CustomPlotItem>("CustomPlot", 1, 0, "CustomPlotItem");
     qmlRegisterType<CustomPlotMobilityFunction>("CustomPlotMobilityFunction", 1, 0, "CustomPlotMobilityFunction");
     qmlRegisterType<CustomPlotKernel>("CustomPlotKernel", 1, 0, "CustomPlotKernel");

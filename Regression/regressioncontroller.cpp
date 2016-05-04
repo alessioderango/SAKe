@@ -56,15 +56,15 @@ RegressionController::RegressionController(double percentualePeso,
 void RegressionController::startAlgorithm(){
 
 
-//    qCustomPlotRegression->setKernely(&y[0]);
-//    qCustomPlotRegression->setSize_kernely(y.size());
-//    qCustomPlotRegression->setKernelx(&x[0]);
-//    qCustomPlotRegression->setSize_kernelx(x.size());
-//    void setupQuadraticDemo(  double * kernely,
-//                              int size_kernely,
-//                              double * kernelx,
-//                              int size_kernelx
-//                              );
+    //    qCustomPlotRegression->setKernely(&y[0]);
+    //    qCustomPlotRegression->setSize_kernely(y.size());
+    //    qCustomPlotRegression->setKernelx(&x[0]);
+    //    qCustomPlotRegression->setSize_kernelx(x.size());
+    //    void setupQuadraticDemo(  double * kernely,
+    //                              int size_kernely,
+    //                              double * kernelx,
+    //                              int size_kernelx
+    //                              );
 
     time_t start_time, end_time;
     this->start=true;
@@ -80,12 +80,12 @@ void RegressionController::startAlgorithm(){
         eoParser parser(argc,input);  // for user-parameter readi ng
         // parser.setORcreateParam(eoParamParamType("Sequential(ordered)"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
         //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
-        parser.setORcreateParam(unsigned(5), "popSize", "Population Size", 'P', "Evolution Engine");
+        parser.setORcreateParam(unsigned(populationSize), "popSize", "Population Size", 'P', "Evolution Engine");
         parser.setORcreateParam(unsigned(maxGeneration), "maxGen", "Maximum number of generations () = none)",'G',"Stopping criterion");
         //          parser.setORcreateParam(relRateCrossover, "cross1Rate", "Relative rate for crossover 1", '1', "Variation Operators").value();
         //          parser.setORcreateParam(relRateMutation, "mut1Rate", "Relative rate for mutation 1", '1', "Variation Operators").value();
-//        parser.setORcreateParam(0.8, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
-//        parser.setORcreateParam(0.3, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
+        //        parser.setORcreateParam(0.8, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
+        //        parser.setORcreateParam(0.3, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
 
 
         eoState state;    // keeps all things allocated
@@ -100,10 +100,14 @@ void RegressionController::startAlgorithm(){
         eoInit<Individual>& init = do_make_genotype(parser, state, weights,weightsSize, functionTypes, functionTypesSize, parameters, parametersSize, Individual());
 
         // Build the variation operator (any seq/prop construct)
-        eoGenOp<Individual>& op = do_make_op(parser, state, init);
+//        eoGenOp<Individual>& op = do_make_op(parser, state, init);
 
         eoQuadOp<Individual> *cross = new eoOneMaxQuadCrossover<Individual> /* (varType  _anyVariable) */;
-        eoMonOp<Individual> *mut = new eoOneMaxMutation<Individual>/* (varType  _anyVariable) */;
+        eoMonOp<Individual> *mut = new eoOneMaxMutation<Individual>(    this->percentualePeso,
+                                                                        this->percentualeLineareA,
+                                                                        this->percentualeLineareB,
+                                                                        this->percentualeGammaA ,
+                                                                        this->percentualeGammaB )/* (varType  _anyVariable) */;
 
 
 
@@ -117,9 +121,9 @@ void RegressionController::startAlgorithm(){
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Individual>& pop   = do_make_pop(parser, state, init);
         QString savePath;
-        eoGenContinueMy<Individual> * stop = new eoGenContinueMy<Individual>(savePath);
+        this->stop = new eoGenContinueMy<Individual>(savePath);
         // stopping criteria
-        eoContinue<Individual> & term = do_make_continue_my(parser, state, eval,stop);
+        eoContinue<Individual> & term = do_make_continue_my(parser, state, eval, this->stop);
         // output
         eoCheckPoint<Individual> & checkpoint = do_make_checkpoint_my(parser,
                                                                       state,
@@ -137,7 +141,7 @@ void RegressionController::startAlgorithm(){
                                                                       x);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);
-        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,8);
+        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,selectionElitist);
 
         ///// End of construction of the algorithm
 
@@ -296,4 +300,19 @@ void RegressionController::setQCustomPlotFitness(CustomPlotItem *value)
 
 void RegressionController::startThread(){
     QThread::start();
+}
+
+void RegressionController::stopThread(){
+    qDebug() << "close " << "\n";
+    //this->moveToThread(QApplication::instance()->thread());
+    //  this->exit(0);
+    //    this->requestInterruption();
+    //    if(this->isInterruptionRequested())
+    //        this->stop();
+    //    this->sleep(10000);
+    if(stop){
+        qDebug() << "close2 " << "\n";
+        stop->setStop(true);
+    }
+
 }

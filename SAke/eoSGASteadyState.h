@@ -117,7 +117,7 @@ public :
                     a.setFiIndex(tmp, popTmp[counter]. getFiIndex(tmp));
                 }
                 offspring[counter]=a;
-                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+//                std::cout << "TORNEO!!!!!!! " << " " << std::endl;
                  continue;
             }
            // counter=-1;
@@ -125,10 +125,10 @@ public :
             int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
             int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
 
-            double tmpFitnessGen1 = popTmp[gen1].fitness();
-            double tmpFitnessGen2 = popTmp[gen2].fitness();
-            if(roundMy(tmpFitnessGen1,3) > roundMy(tmpFitnessGen2,3) ){
+//            if(roundMy(tmpFitnessGen1,3) > roundMy(tmpFitnessGen2,3) ){
+              if(popTmp[gen1].fitness() > popTmp[gen2].fitness() ){
                 EOT a;
+
                 double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
                 a.setFi(r);
                 a.setSize(popTmp[gen1]. getSize());

@@ -29,13 +29,23 @@ public:
      * Ctor - no requirement
      */
     // START eventually add or modify the anyVariable argument
-    eoOneMaxMutation()
+    eoOneMaxMutation(    double _percentualePeso,
+                         double _percentualeLineareA,
+                         double _percentualeLineareB,
+                         double _percentualeGammaA,
+                         double _percentualeGammaB)
     //  eoOneMaxMutation( varType  _anyVariable) : anyVariable(_anyVariable)
     // END eventually add or modify the anyVariable argument
-	{
-	    // START Code of Ctor of an eoOneMaxEvalFunc object
-	    // END   Code of Ctor of an eoOneMaxEvalFunc object
-	}
+    {
+        // START Code of Ctor of an eoOneMaxEvalFunc object
+        // END   Code of Ctor of an eoOneMaxEvalFunc object
+
+        percentualePeso= _percentualePeso;
+        percentualeLineareA = _percentualeLineareA;
+        percentualeLineareB = _percentualeLineareB;
+        percentualeGammaA = _percentualeGammaA;
+        percentualeGammaB = _percentualeGammaB;
+    }
 
     /// The class name. Used to display statistics
     string className() const { return "eoOneMaxMutation"; }
@@ -51,92 +61,97 @@ public:
      * @param _genotype The parent genotype (will be modified)
      */
     bool operator()(GenotypeT & _genotype)
-	{
-	    bool isModified(true);
-	    // START code for mutation of the _genotype object
+    {
+        bool isModified(true);
+        // START code for mutation of the _genotype object
 
-	    /** Requirement
-	     * if (_genotype has been modified)
-	     *     isModified = true;
-	     * else
-	     *     isModified = false;
-	     */
+        /** Requirement
+         * if (_genotype has been modified)
+         *     isModified = true;
+         * else
+         *     isModified = false;
+         */
 
         int rndMaxMut= rand() %  _genotype.getParConst().size();
 
-//        _genotype.B().setParametersExponential(rnd,_genotype.B().getParametersExponential(rnd)+150);
-//         double percentuale=0.01;
-         double percentualePeso=0.09;
-         double percentualeLineareA=0.06;
-         double percentualeLineareB=0.06;
-         double percentualeGammaA=0.12;
-         double percentualeGammaB=0.12;
+        //        _genotype.B().setParametersExponential(rnd,_genotype.B().getParametersExponential(rnd)+150);
+        //         double percentuale=0.01;
+        //         double percentualePeso=0.09;
+        //         double percentualeLineareA=0.06;
+        //         double percentualeLineareB=0.06;
+        //         double percentualeGammaA=0.12;
+        //         double percentualeGammaB=0.12;
 
-         for (int i = 0; i < rndMaxMut; i++) {
+        for (int i = 0; i < rndMaxMut; i++) {
 
-             if(_genotype.getFunctionType(i) == 0){
-                 double tmp1 =_genotype.getPar(i).getParameters(0);
-                 double tmp2 = _genotype.getPar(i).getParameters(1);
-                 double rndDoubleAlfa= fRand(-(tmp1*percentualeLineareA),tmp1*percentualeLineareA);
-                 double rndDoubleBeta= fRand(-(tmp2*percentualeLineareB),tmp2*percentualeLineareB);
-                 double tmpAlfa = tmp1 + rndDoubleAlfa;
-                 double tmpBeta = tmp2+ rndDoubleBeta;
-                    _genotype.setParameters(i,0,tmpAlfa);
-                    _genotype.setParameters(i,1,tmpBeta);
+            if(_genotype.getFunctionType(i) == 0){
+                double tmp1 =_genotype.getPar(i).getParameters(0);
+                double tmp2 = _genotype.getPar(i).getParameters(1);
+                double rndDoubleAlfa= fRand(-(tmp1*percentualeLineareA),tmp1*percentualeLineareA);
+                double rndDoubleBeta= fRand(-(tmp2*percentualeLineareB),tmp2*percentualeLineareB);
+                double tmpAlfa = tmp1 + rndDoubleAlfa;
+                double tmpBeta = tmp2+ rndDoubleBeta;
+                _genotype.setParameters(i,0,tmpAlfa);
+                _genotype.setParameters(i,1,tmpBeta);
 
-                 //controllo > 0
+                //controllo > 0
 
-             }else
-             if(_genotype.getFunctionType(i) == 1){
-                 //double tmp =_genotype.getPar(i).getParameters(0);
-                 double rndDouble= fRand(-(_genotype.getPar(i).getParameters(0)*0.0001),_genotype.getPar(i).getParameters(0)*0.0001);
-                 _genotype.setParameters(i,0,_genotype.getPar(i).getParameters(0)+ rndDouble);
+            }else
+                if(_genotype.getFunctionType(i) == 1){
+                    //double tmp =_genotype.getPar(i).getParameters(0);
+                    double rndDouble= fRand(-(_genotype.getPar(i).getParameters(0)*0.0001),_genotype.getPar(i).getParameters(0)*0.0001);
+                    _genotype.setParameters(i,0,_genotype.getPar(i).getParameters(0)+ rndDouble);
 
-                 //controllo > 0
+                    //controllo > 0
 
-             }else
-                 if(_genotype.getFunctionType(i) == 2){
-                     double tmp1 =_genotype.getPar(i).getParameters(0);
-                     double tmp2 = _genotype.getPar(i).getParameters(1);
-                     double rndDoubleAlfa= fRand(-(tmp1*percentualeGammaA),tmp1*percentualeGammaA);
-                     double rndDoubleBeta= fRand(-(tmp2*percentualeGammaB),tmp2*percentualeGammaB);
+                }else
+                    if(_genotype.getFunctionType(i) == 2){
+                        double tmp1 =_genotype.getPar(i).getParameters(0);
+                        double tmp2 = _genotype.getPar(i).getParameters(1);
+                        double rndDoubleAlfa= fRand(-(tmp1*percentualeGammaA),tmp1*percentualeGammaA);
+                        double rndDoubleBeta= fRand(-(tmp2*percentualeGammaB),tmp2*percentualeGammaB);
 
-                     double tmpAlfa = tmp1 + rndDoubleAlfa;
-                       if(tmpAlfa < 0)
-                         tmpAlfa = 0.00001;
+                        double tmpAlfa = tmp1 + rndDoubleAlfa;
+                        if(tmpAlfa < 0)
+                            tmpAlfa = 0.00001;
 
-                     double tmpBeta = tmp2+ rndDoubleBeta;
+                        double tmpBeta = tmp2+ rndDoubleBeta;
                         if(tmpBeta < 0)
-                          tmpBeta = 0.00001;
+                            tmpBeta = 0.00001;
                         _genotype.setParameters(i,0,tmpAlfa);
                         _genotype.setParameters(i,1,tmpBeta);
 
-                     //controllo > 0
+                        //controllo > 0
                         double rndDoubleW= fRand(-(_genotype.getW(i)*percentualePeso),_genotype.getW(i)*percentualePeso);
 
                         _genotype.setW(i,_genotype.getW(i)+rndDoubleW);
-                 }
+                    }
 
-             //pesi fissi all'inizio
-
-
-
-
-
-         }
+            //pesi fissi all'inizio
 
 
 
 
 
-	    return isModified;
-	    // END code for mutation of the _genotype object
-	}
+        }
+
+
+
+
+
+        return isModified;
+        // END code for mutation of the _genotype object
+    }
 
 private:
-// START Private data of an eoOneMaxMutation object
+    // START Private data of an eoOneMaxMutation object
     //  varType anyVariable;		   // for example ...
-// END   Private data of an eoOneMaxMutation object
+    double percentualePeso;
+    double percentualeLineareA;
+    double percentualeLineareB;
+    double percentualeGammaA;
+    double percentualeGammaB;
+    // END   Private data of an eoOneMaxMutation object
 };
 
 #endif

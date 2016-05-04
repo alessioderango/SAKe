@@ -139,12 +139,14 @@ public:
 public slots:
     void startThread();
     void startAlgorithm();
+     void stopThread();
 private:
     void run();
     bool start;
     bool finish;
 
     int numberProcessor;
+    eoGenContinueMy<Individual> *stop;
 
     //Parameters Algorithm
     double percentualePeso;

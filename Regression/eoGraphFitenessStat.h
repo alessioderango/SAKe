@@ -95,7 +95,22 @@ private :
            yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
        }
 
+       if(_pop.size() <50 && steps%30 ==0)
        qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+       else
+           if(_pop.size() >50)
+                 qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+
+       std::cout << "WEIGHT" << std::endl;
+       for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
+           std::cout << _pop.best_element().getWConst()[i] << std::endl;
+       }
+
+       std::cout << "PARAMETER" << std::endl;
+       for (int i = 0; i < _pop.best_element().getParConst().size(); ++i) {
+           std::cout << _pop.best_element().getParConst()[i].getParameters(0) << std::endl;
+           std::cout << _pop.best_element().getParConst()[i].getParameters(1) << std::endl;
+       }
 
        QString genString= QString("Gen:    %1").arg(steps);
        Q_EMIT update->valueGenRegression(genString);
