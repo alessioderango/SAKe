@@ -367,7 +367,7 @@ ApplicationWindow {
                         TextField {
                             id: textFieldMaxGeneration
                             width: 63
-                            text: "5000"
+                            text: "50000"
                             placeholderText: "Max Number of Generation"
                             validator: RegExpValidator {
                                 regExp: /^[1-9]\d+/
@@ -426,7 +426,7 @@ ApplicationWindow {
                         }
 
                         width: 63
-                        text: "5"
+                        text: "0"
                         placeholderText: "Number of gamma functions"
                         validator: RegExpValidator {
                             regExp: /^[0-9]\d+/
@@ -516,7 +516,7 @@ ApplicationWindow {
                             }
                         }
                         width: 63
-                        text: "2"
+                        text: "0"
                         placeholderText: "Number of linear functions"
                         validator: RegExpValidator {
                             regExp: /^[0-9]\d+/

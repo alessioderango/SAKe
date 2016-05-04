@@ -94,10 +94,10 @@ HEADERS += \
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686
 QMAKE_LFLAGS+= --enable-auto-import
-#QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_CXXFLAGS+= -fopenmp
 QMAKE_CXXFLAGS+= -static-libgcc
 QMAKE_CXXFLAGS+= -static-libstdc++
-#QMAKE_LFLAGS +=  -fopenmp
+QMAKE_LFLAGS +=  -fopenmp
 #LIBS += -fopenm
 
 #QMAKE_CXXFLAGS+= -D__NO_INLINE__

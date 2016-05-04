@@ -94,6 +94,11 @@ public:
                 _genotype.setParameters(i,0,tmpAlfa);
                 _genotype.setParameters(i,1,tmpBeta);
 
+                double rndDoubleW= fRand(-(_genotype.getW(i)*percentualePeso),_genotype.getW(i)*percentualePeso);
+                if(_genotype.getW(i)+rndDoubleW < 0)
+                    _genotype.setW(i,_genotype.getW(i)-rndDoubleW);
+                else
+                 _genotype.setW(i,_genotype.getW(i)+rndDoubleW);
                 //controllo > 0
 
             }else
@@ -123,8 +128,10 @@ public:
 
                         //controllo > 0
                         double rndDoubleW= fRand(-(_genotype.getW(i)*percentualePeso),_genotype.getW(i)*percentualePeso);
-
-                        _genotype.setW(i,_genotype.getW(i)+rndDoubleW);
+                        if(_genotype.getW(i)+rndDoubleW < 0)
+                            _genotype.setW(i,_genotype.getW(i)-rndDoubleW);
+                        else
+                         _genotype.setW(i,_genotype.getW(i)+rndDoubleW);
                     }
 
             //pesi fissi all'inizio

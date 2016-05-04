@@ -95,10 +95,10 @@ private :
            yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
        }
 
-       if(_pop.size() <50 && steps%30 ==0)
+       if(_pop.size() < 200 && steps%30 ==0)
        qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
        else
-           if(_pop.size() >50)
+           if(_pop.size() >200)
                  qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
 
        std::cout << "WEIGHT" << std::endl;

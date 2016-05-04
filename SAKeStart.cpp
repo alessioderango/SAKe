@@ -462,8 +462,12 @@ void SAKeStart::startRegression(   const QVariant &selection,
     int dimension=inumberGamma+inumberLinear;
    double * weight = new double[dimension];
    std::cout << "weight !!!!!!!!" << endl;
-    for (int i = 0; i < dimension; ++i) {
-        double tmp1=fRand(0,100);
+
+    for (int i = 0; i < inumberLinear; ++i) {
+        weight[i] = 1;
+    }
+    for (int i = inumberLinear; i < dimension; ++i) {
+        double tmp1=fRand(0,1);
         std::cout << tmp1 << endl;
         weight[i] = tmp1;
     }
@@ -554,10 +558,10 @@ void SAKeStart::startRegression(   const QVariant &selection,
     std::cout << "Parameters !!!!!!!!" << endl;
     for (int i = 0; i < inumberLinear; ++i) {
         Parameters tmp;
-        double tmp1=fRand(0,500);
+        double tmp1=fRand(0.00003,0.00008);
         std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
-        double tmp2=fRand(0,500);
+        double tmp2=0.01;
         std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
         parameters[i]=tmp;
@@ -565,15 +569,15 @@ void SAKeStart::startRegression(   const QVariant &selection,
      std::cout << "Parameters FINE LINEAR!!!!!!!!" << endl;
     for (int i = inumberLinear; i < dimension; ++i) {
         Parameters tmp;
-        double tmp1=fRand(0,500);
+        double tmp1=fRand(0,1000);
         std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
-        double tmp2=fRand(0,500);
+        double tmp2=fRand(0,1);
         std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
         parameters[i]=tmp;
     }
-     std::cout << "Parameters FINE!!!!!!!!" << endl;
+//     std::cout << "Parameters FINE!!!!!!!!" << endl;
 //#define SIZE 148
 
 //    double kernel[SIZE]={0.0331607, 0, 0.0761892, 0.0299802, 0, 0.0308658, 0.0205697, 0.0215048, 0, 0.0119944, 0, 0.0409908, 0, 0.0083374, 0.0810852, 0, 0.0250647, 0, 0, 0.0400473, 0, 0, 0.0254148, 0, 0, 0.0131141, 0.0172503, 0.0432308, 0.0231627, 0, 0.0299524, 0.0166024, 0.0468721, 0, 0, 0.012991, 0.00460058, 0, 0, 0.0539517, 0.0041918, 0.0105375, 0, 0.0419468, 0, 0.00508404, 0.00906833, 0, 0.00123015, 0, 0, 0, 0, 0, 0, 0.0120725, 0.00637761, 0.00306278, 0.00116989, 0, 0.00104368, 0.0101821, 0, 0, 0, 0, 0.000840633, 0, 0, 0.00578786, 0.000361475, 0, 0.00212797, 0, 2.81101e-005, 0, 0, 0.000642682, 0, 7.75736e-005, 0, 0, 0.00150183, 0.000354716, 0, 0.00066226, 0.000382005, 0.00698852, 0, 0.000524334, 0, 0, 0, 0.00221679, 0, 0.00843141, 0.00281996, 0, 0.00582132, 0, 0.0072355, 0.00355681, 0, 0, 0, 0, 0, 0, 0.00324608, 0.00113272, 0, 0, 0, 0, 0.0133326, 0, 0, 0, 0, 0, 0.0219186, 0.000480746, 0, 0, 0.0123283, 0.011458, 0, 0, 0, 0, 0, 0.00487881, 0, 0, 0, 0, 0, 0.0167193, 0.0102274, 0.0110751, 0.00210047, 0, 0.00115638, 0.0228124, 0.00387118, 0, 0, 0};
