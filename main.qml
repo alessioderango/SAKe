@@ -6,7 +6,6 @@ import CustomPlotKernel 1.0
 import CustomPlotRegression 1.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.4
-import QtMultimedia 5.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
 
@@ -64,22 +63,58 @@ ApplicationWindow {
                 onTriggered: Qt.quit();
             }
         }
+
+        Menu {
+            title: qsTr("Help")
+
+
+                MenuItem {
+                    text: qsTr("&About");
+                    onTriggered:{
+                        console.log("Open action triggered Calibration Project");
+                    }
+                }
+                MenuItem {
+                    text: qsTr("&License");
+                    onTriggered:{
+                        console.log("Open action triggered Validation Project");
+
+                    }
+
+                }
+
+
+            }
+
     }//MenuBar
 
 
     toolBar:ToolBar {
         Layout.fillHeight: true
-        height: 50
+        height: 80
 
+        style: ToolBarStyle {
+            padding {
+                left: 8
+                right: 8
+                top: 3
+                bottom: 3
+            }
+            background: Rectangle {
+                implicitWidth: 100
+                implicitHeight: 40
+                border.color: "#d4d4d4"
+                gradient: Gradient {
+                    GradientStop { position: 0 ; color: "#fff" }
+                    GradientStop { position: 1 ; color: "#d4d4d4" }
+                }
+            }
+        }
         RowLayout {
-            anchors.rightMargin: 6
-            anchors.fill: parent
-            ToolButton{
+//            anchors.fill: parent
 
-                iconSource: "qrc:/img/download.png"
-                id:calibration
-                text: qsTr("Calibration")
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+             ToolButton {
+                 id :myToolButton
                 onClicked: {
                     console.log("Action Calibration Project");
                     var component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
@@ -87,20 +122,31 @@ ApplicationWindow {
                     var window    = component.createObject(applicationWindow1)
 
                 }
-                //                Text {
-                //                    text: parent.text
-                //                    anchors.bottom: parent.bottom
-                //                    anchors.horizontalCenter: parent.horizontalCenter
-                //                    Layout.fillWidth: true
 
-                //                }
-                Layout.fillHeight: true
+                Layout.minimumHeight: 77
+                Layout.minimumWidth:  70
+                Image {
+                    id: myToolButtonIcon
+                    width: 24
+                    height:  24
+                    source: "qrc:/img/regression.png"
+                    y: myToolButton.y + 5
+                    anchors.horizontalCenter: myToolButton.horizontalCenter
+                }
+
+                Text {
+                    text: qsTr("New\nRegression\nProject")
+                    y: myToolButtonIcon.y + myToolButtonIcon.height + 3
+                    anchors.horizontalCenter: myToolButtonIcon.horizontalCenter
+                    horizontalAlignment: Text.AlignJustify | Text.AlignHCenter | Text.AlignVCenter
+                }
+
 
             }
 
             ToolButton{
-                iconSource: "qrc:/img/check.png"
-                id:validation
+//                iconSource: "qrc:/img/check.png"
+                id:calibration
                 width: parent.height
                 onClicked: {
                     console.log("Action Validation Project");
@@ -110,11 +156,30 @@ ApplicationWindow {
 
                 }
 
+                Layout.minimumHeight: 77
+                Layout.minimumWidth:  70
+                Image {
+                    id: myToolButtonIconCalibration
+                    source: "qrc:/img/download.png"
+                    width: 24
+                    height:  24
+                    y: calibration.y + 5
+                    anchors.horizontalCenter: calibration.horizontalCenter
+                }
+
+                Text {
+                    text: qsTr("New\nCalibration\nProject")
+                    y: myToolButtonIconCalibration.y + myToolButtonIconCalibration.height + 3
+                    anchors.horizontalCenter: myToolButtonIconCalibration.horizontalCenter
+                    horizontalAlignment: Text.AlignJustify | Text.AlignHCenter | Text.AlignVCenter
+                }
+
             }
 
             ToolButton{
-                iconSource: "qrc:/img/check.png"
+//                iconSource: "qrc:/img/check.png"
                 width: parent.height
+                id: validation
                 onClicked: {
                     console.log("Action Validation Project2");
                     var component = Qt.createComponent("parametersValidationLayout.qml")
@@ -123,20 +188,43 @@ ApplicationWindow {
 
                 }
 
-            }
+                Layout.minimumHeight: 77
+                Layout.minimumWidth:  70
+                Image {
+                    id: myToolButtonIconValidation
+                    width: 24
+                    height:  24
+                    source: "qrc:/img/check.png"
+                    y: validation.y + 5
+                    anchors.horizontalCenter: validation.horizontalCenter
+                }
 
-            ToolButton{
-                iconSource: "qrc:/img/check.png"
-                width: parent.height
-                onClicked: {
-                    console.log("Regression Validation Project2");
-//                    var component = Qt.createComponent("parametersValidationLayout.qml")
+                Text {
+                    text: qsTr("New\nValidation\nProject")
+                    font.family: "Helvetica"
+                    font.pointSize: 9
+                    y: myToolButtonIconValidation.y + myToolButtonIconValidation.height + 3
+                    anchors.horizontalCenter: myToolButtonIconValidation.horizontalCenter
+                    horizontalAlignment: Text.AlignJustify | Text.AlignHCenter | Text.AlignVCenter
 
-//                    var window    = component.createObject(applicationWindow1)
-                      sakeStart.startRegression();
                 }
 
             }
+
+            ToolBarSeparator{}
+
+//            ToolButton{
+//                iconSource: "qrc:/img/check.png"
+//                width: parent.height
+//                onClicked: {
+//                    console.log("Regression Validation Project2");
+////                    var component = Qt.createComponent("parametersValidationLayout.qml")
+
+////                    var window    = component.createObject(applicationWindow1)
+////                      sakeStart.startRegression();
+//                }
+
+//            }
 
             Item { Layout.fillWidth: true }
 
@@ -256,7 +344,6 @@ import CustomPlotMobilityFunction 1.0
 import CustomPlotKernel 1.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.4
-import QtMultimedia 5.5
 import QtQuick.Controls.Styles 1.4
                         Tab {
                            title:   '"+msg+"'
@@ -503,7 +590,6 @@ import CustomPlot 1.0
 import CustomPlotRegression 1.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.4
-import QtMultimedia 5.5
 import QtQuick.Controls.Styles 1.4
                         Tab {
                            title:   '"+msg+"'
@@ -704,7 +790,6 @@ import CustomPlotMobilityFunction 1.0
 import CustomPlotKernel 1.0
 import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.4
-import QtMultimedia 5.5
 import QtQuick.Controls.Styles 1.4
                         Tab {
                            title:   '"+msg+"'

@@ -4,14 +4,14 @@ XMLManager::XMLManager(QObject *_listProjects)
 {
 
 #ifdef __arm__ //on the target
-    xmlFilePath = QString(QDir::currentPath()+"/main.xml");
+    xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
     qDebug() << xmlFilePath << endl;
 #else
 #ifdef __WIN32 //for those developing on windows
-    xmlFilePath = QString(QDir::currentPath()+"/main.xml");
+    xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
     qDebug() << xmlFilePath << endl;
 #else //for those developing on linux
-    xmlFilePath = QString(QDir::currentPath()+"/main.xml");
+    xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
     qDebug() << xmlFilePath << endl;
 #endif
 #endif
@@ -23,7 +23,19 @@ XMLManager::XMLManager(QObject *_listProjects)
 
 int findAllElementsByProject(QString xmlFilePath,QString nameProject){
 
+    QFile* filetmp = new QFile(xmlFilePath);
+    if( !filetmp->exists()){
+        filetmp->open(QIODevice::ReadWrite);
+        QTextStream stream( filetmp );
+        stream << "<?xml version='1.0' encoding='UTF-8'?>"<< endl;
+        stream <<  "<Projects>" << endl;
+        stream <<  "</Projects>" << endl;
+        filetmp->close();
+
+    }
     QFile inFile( xmlFilePath );
+
+
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
         qDebug( "Failed to open file for reading." );
@@ -54,7 +66,18 @@ int findAllElementsByProject(QString xmlFilePath,QString nameProject){
 
 QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
     QVariantList list;
+    QFile* filetmp = new QFile(xmlFilePath);
+    if( !filetmp->exists()){
+        filetmp->open(QIODevice::ReadWrite);
+        QTextStream stream( filetmp );
+        stream << "<?xml version='1.0' encoding='UTF-8'?>"<< endl;
+        stream <<  "<Projects>" << endl;
+        stream <<  "</Projects>" << endl;
+        filetmp->close();
+
+    }
     QFile inFile( xmlFilePath );
+
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
         qDebug( "Failed to open file for reading." );
@@ -384,6 +407,16 @@ void XMLManager::ReadMainXML()
     QVariant returnedValue;
     QVariantList a;
     qDebug() << "ReadMainXML ";
+    QFile* filetmp = new QFile(xmlFilePath);
+    if( !filetmp->exists()){
+        filetmp->open(QIODevice::ReadWrite);
+        QTextStream stream( filetmp );
+        stream << "<?xml version='1.0' encoding='UTF-8'?>"<< endl;
+        stream <<  "<Projects>" << endl;
+        stream <<  "</Projects>" << endl;
+        filetmp->close();
+
+    }
     QFile* file = new QFile(xmlFilePath);
     if(!file->open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug() << "File not prensent ";

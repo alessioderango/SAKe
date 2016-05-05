@@ -98,6 +98,7 @@ QMAKE_CXXFLAGS+= -fopenmp
 QMAKE_CXXFLAGS+= -static-libgcc
 QMAKE_CXXFLAGS+= -static-libstdc++
 QMAKE_LFLAGS +=  -fopenmp
+#CONFIG += static
 #LIBS += -fopenm
 
 #QMAKE_CXXFLAGS+= -D__NO_INLINE__

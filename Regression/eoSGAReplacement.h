@@ -168,7 +168,7 @@ public :
 // }
 
         //for (i=0; i<_pop.size()/2; i++)
-        for (i=1; i<_pop.size()/2; i++)
+        for (i=0; i<_pop.size()/2; i++)
           {
             if ( rng.flip(crossoverRate) )
             {
@@ -193,7 +193,7 @@ public :
 //        }
 
 
-        for (i=1; i < offspring.size(); i++)
+        for (i=0; i < offspring.size(); i++)
           {
             if (rng.flip(mutationRate) )
             {

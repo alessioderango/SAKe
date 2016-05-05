@@ -18,5 +18,9 @@
         <file>parameterMultiObjects.qml</file>
         <file>parametersRegression.qml</file>
         <file>parametersRegressionProjectAlreadyExist.qml</file>
+        <file>MyToolButton.qml</file>
+        <file>provaToolBar.qml</file>
+        <file>img/regression.png</file>
+        <file>ToolBarSeparator.qml</file>
     </qresource>
 </RCC>

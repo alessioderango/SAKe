@@ -103,17 +103,15 @@ ApplicationWindow {
                                 comboSelectinParameterSequential.visible=false;
                             }
 
-                            if(currentIndex ===5 || currentIndex ===7 ){
+                            if(currentIndex ===5 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
                                 selectionParameterTournamentWithoutReplacement.visible=true;
-                                gridLayout5.visible=true;
                             }else{
                                 selectionParameterTournamentWithoutReplacement.visible=false;
                             }
                             if(currentIndex ===6 || currentIndex ===8){
-                                selectionParameterTournamentWithoutReplacement.visible=true;
-                                gridLayout5.visible=false;
+                                gridLayout5.visible=true;
                             }else{
-                                selectionParameterTournamentWithoutReplacement.visible=fals;
+                                gridLayout5.visible=false;
                             }
                         }
 
@@ -777,32 +775,32 @@ ApplicationWindow {
                                     if(textfileActivation.text == "Empty"){
                                         messageDialogActivation.open()
                                     }else{
-//                                        sakeStart.InitAlgo(comboSelection.currentText,
-//                                                           textFieldPopulation.text,
-//                                                           textFieldMaxGen.text,
-//                                                           textFieldtbMax.text,
-//                                                           textFieldtbMin.text,
-//                                                           textFielddHpMax.text,
-//                                                           textFielddHpMin.text,
-//                                                           textFieldPropCrossover.text,
-//                                                           textFieldPropMutation.text,
-//                                                           textFieldPme.text,
-//                                                           textFieldPmb.text,
-//                                                           comboPattern.currentText,
-//                                                           fileDialogRain.fileUrl,
-//                                                           fileDialogActivation.fileUrl,
-//                                                           textProjectName.text,
-//                                                           textNumberProcessor.text,
-//                                                           para1,
-//                                                           para2,
-//                                                           false,
-//                                                           0,
-//                                                           typeAlgorithm,
-//                                                           order1,
-//                                                           order2,
-//                                                           order3,
-//                                                           order4
-//                                                           )
+                                        sakeStart.InitAlgo(comboSelection.currentText,
+                                                           textFieldPopulation.text,
+                                                           textFieldMaxGen.text,
+                                                           textFieldtbMax.text,
+                                                           textFieldtbMin.text,
+                                                           textFielddHpMax.text,
+                                                           textFielddHpMin.text,
+                                                           textFieldPropCrossover.text,
+                                                           textFieldPropMutation.text,
+                                                           textFieldPme.text,
+                                                           textFieldPmb.text,
+                                                           comboPattern.currentText,
+                                                           fileDialogRain.fileUrl,
+                                                           fileDialogActivation.fileUrl,
+                                                           textProjectName.text,
+                                                           textNumberProcessor.text,
+                                                           para1,
+                                                           para2,
+                                                           false,
+                                                           0,
+                                                           typeAlgorithm,
+                                                           order1,
+                                                           order2,
+                                                           order3,
+                                                           order4
+                                                           )
 
                                         close()
                                     }
