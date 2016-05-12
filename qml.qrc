@@ -22,5 +22,7 @@
         <file>provaToolBar.qml</file>
         <file>img/regression.png</file>
         <file>ToolBarSeparator.qml</file>
+        <file>img/SAKe.png</file>
+        <file>TableColumnTreeView.qml</file>
     </qresource>
 </RCC>

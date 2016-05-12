@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     HandlerCSV.cpp \
     Regression/parameters.cpp \
     Regression/regressioncontroller.cpp \
-    CustomPlotRegression.cpp
+    CustomPlotRegression.cpp \
+    TreeModel.cpp
 
 RESOURCES += qml.qrc
 
@@ -68,7 +69,6 @@ HEADERS += \
     SAke/selectionmomentoprimoordine.h \
     SAke/selectionsize.h \
     SAke/selectionstrategy.h \
-    SAke/eoSGAReplacementMultiObjects - Copia.h \
     SAke/eoSGAGenerational.h \
     SAke/eoSGAGenerationalMultiObjects.h \
     SAke/eoSGASteadyState.h \
@@ -89,7 +89,8 @@ HEADERS += \
     CustomPlotRegression.h \
     Regression/make_checkpoint_my.h \
     Regression/eoGenContinueMy.h \
-    Regression/make_continue_my.h
+    Regression/make_continue_my.h \
+    TreeModel.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686

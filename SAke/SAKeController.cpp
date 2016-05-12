@@ -114,10 +114,6 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     absoluteAverageFitness=_absoluteAverageFitness;
     update = _update;
 
-    QDir dir(QDir::currentPath()+"/workspace");
-    if (!dir.exists()){
-        dir.mkdir(".");
-    }
     QString tmp1 = QDir::currentPath()+"/workspace/"+projectName;
     QDir dir2(tmp1);
     if (!dir2.exists()){

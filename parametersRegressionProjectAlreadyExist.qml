@@ -20,67 +20,57 @@ ApplicationWindow {
     function f(list){
         console.log("Ok funzia")
         labelProjectNameFromFile.text=list[0]
-        if(list[1]=="TournamentWithoutReplacement"){
-            comboSelection.currentIndex=5
+        if(list[1]==="TournamentWithoutReplacement" || list[1]==="Generational"){
+            comboSelection.currentIndex=0
             selectionParameterTournamentWithoutReplacement.text=list[2]
-        }else
-            if(list[1]=="StochTour(t)"){
-                comboSelection.currentIndex=0
-                selectionParameter.text=list[2]
-            }else
-                if(list[1]=="DetTour(T)"){
-                    comboSelection.currentIndex=1
-                    selectionParameter.text=list[2]
-                }else
-                    if(list[1]=="Ranking(p,e)"){
-                        comboSelection.currentIndex=2
-                        selectParameterRanking1.text=list[2]
-                        selectParameterRanking2.text=list[3]
-                    }else
-                        if(list[1]=="Sequential(ordered/unordered)"){
-                            comboSelection.currentIndex=4
-                            if(list[2]=="ordered")
-                            {
-                                comboSelectinParameterSequential.currentIndex=0;
-                            }else
-                                comboSelectinParameterSequential.currentIndex=1;
+        }
+//        else
+//            if(list[1]=="StochTour(t)"){
+//                comboSelection.currentIndex=0
+//                selectionParameter.text=list[2]
+//            }else
+//                if(list[1]=="DetTour(T)"){
+//                    comboSelection.currentIndex=1
+//                    selectionParameter.text=list[2]
+//                }else
+//                    if(list[1]=="Ranking(p,e)"){
+//                        comboSelection.currentIndex=2
+//                        selectParameterRanking1.text=list[2]
+//                        selectParameterRanking2.text=list[3]
+//                    }else
+//                        if(list[1]=="Sequential(ordered/unordered)"){
+//                            comboSelection.currentIndex=4
+//                            if(list[2]=="ordered")
+//                            {
+//                                comboSelectinParameterSequential.currentIndex=0;
+//                            }else
+//                                comboSelectinParameterSequential.currentIndex=1;
 
-                            //comboSelectinParameterSequentialList.text=list[2]
-                        }else
-                            if(list[1]=="Roulette"){
-                                comboSelection.currentIndex=3
-                            }
+//                            //comboSelectinParameterSequentialList.text=list[2]
+//                        }else
+//                            if(list[1]=="Roulette"){
+//                                comboSelection.currentIndex=3
+//                            }
 
 
-        textNumberProcessor.text=list[4]
-        textPercentageWeight.text=list[5]
-        textFieldNumberProcessor.text=list[6]
-        textFieldtbMax.text=list[7]
-        textFieldtbMin.text=list[8]
-        textFielddHpMax.text=list[9]
-        textFielddHpMin.text=list[10]
-        textFieldPropCrossover.text=list[11]
-        textFieldPropMutation.text=list[12]
-        textFieldPme.text=list[13]
-        textFieldPmb.text=list[14]
-        if(list[15]=="Rettangolare")
-            comboPattern.currentIndex=2
-        else
-            if(list[15]=="Triangolare Disc")
-                comboPattern.currentIndex=0
-            else
-                if(list[15]=="Triangolare Asc")
-                    comboPattern.currentIndex=1
+        textFieldPopulationSize.text=list[4]
+        textFieldProbabiltyCrossOver.text=list[5]
+        textFieldProbabiltyMutation.text=list[6]
+        textPercentageWeight.text=list[7]
+        textFieldNumberProcessor.text=list[8]
+        textFieldGammaFunctions.text=list[9]
+        textFieldGammaA.text=list[10]
+        textFieldGammaB.text=list[11]
+        textFieldLinearFunction.text=list[12]
+        textFieldLinearA.text=list[13]
+        textFieldLinearB.text=list[14]
+        textFieldMaxGeneration.text=list[15]
 
         var split = list[16].split("/")
         console.log("AAAAAAAAAAAAAAAAAAAAAAAAA ../"+split[split.length-1]);
         textfileRain.text = "../"+split[split.length-1]
         pathrain=list[16]
 
-        var split2 = list[17].split("/")
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAA ../"+split2[split2.length-1]);
-        textfileActivation.text = "../"+split2[split2.length-1]
-        pathactivation=list[17]
 
     }
 
@@ -612,30 +602,6 @@ ApplicationWindow {
                 }
 
 
-                FileDialog {
-                    id: fileDialogActivation
-                    title: "Please choose a file"
-                    folder: shortcuts.home
-                    property string  tmp
-                    property variant split
-                    onAccepted: {
-                        pathactivation=fileDialogActivation.fileUrl
-                        tmp = fileDialogActivation.fileUrl
-                        split = tmp.split("/")
-                        console.log("You chose: " + split[0])
-                        console.log("You chose: " + split.length)
-                        textfileActivation.text = "../"+split[split.length-1]
-                        //handlerCSV.loadCSV(fileDialogActivation.fileUrl)
-                        //Qt.quit()
-                    }
-                    onRejected: {
-                        console.log("Canceled")
-                        //Qt.quit()
-                    }
-                    nameFilters: [ "files (*.csv)" ]
-                    Component.onCompleted: visible = false
-                }
-
                 Button {
                     id: button1
                     text: qsTr("Load Kernel")
@@ -713,7 +679,7 @@ ApplicationWindow {
                         selection =  selections.get(selections.currentIndex).text;
                         selectionElitist =  selectionParameterTournamentWithoutReplacement.text;
                         typeAlgorithm = 4;
-                        fileUrl = fileDialogRain.fileUrl;
+                        fileUrl = pathrain;
 
                         console.log("populationSize : "+populationSize +
                                     "\n percentageCrossover : "+percentageCrossover+
@@ -734,6 +700,7 @@ ApplicationWindow {
 
 
                                     sakeStart.startRegression(
+                                          labelProjectNameFromFile.text,
                                           selection  ,
                                           selectionElitist  ,
                                           populationSize  ,
@@ -748,7 +715,8 @@ ApplicationWindow {
                                           percentageLinearA  ,
                                           percentageLinearB  ,
                                           maxGeneration,
-                                          fileUrl
+                                          fileUrl,
+                                          1
                                         )
 //                                                            sakeStart.startRegression()
                                         close();

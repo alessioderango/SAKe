@@ -41,45 +41,51 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 
     // **** converto e verifico che siano arrrivati dal QML tutti i parametri
     qDebug() << "Tipo arrivato " << tipo.toInt() << "\n";
+
+    QDir dir(QDir::currentPath()+"/workspace");
+    if (!dir.exists()){
+        dir.mkdir(".");
+    }
+
     if(tipo.toInt()==1 )
     {
-        xmlManager->SaveXMLFileAlreadyExist(_projectName.toString(),
-                                            selection.toString(),
-                                            _para1.toString(),
-                                            _para2.toString(),
-                                            _numberProcessor.toString(),
-                                            pop.toString(),
-                                            maxGen.toString(),
-                                            tbMax.toString(),
-                                            tbMin.toString(),
-                                            dHpMax.toString(),
-                                            dHpMin.toString(),
-                                            propCrossover.toString(),
-                                            propMutation.toString(),
-                                            pme.toString(),
-                                            pmb.toString(),
-                                            pattern.toString(),
-                                            filename.toString(),
-                                            _filenameActivation.toString());
+        xmlManager->SaveXMLFileAlreadyExistCalibrationProject(_projectName.toString(),
+                                                              selection.toString(),
+                                                              _para1.toString(),
+                                                              _para2.toString(),
+                                                              _numberProcessor.toString(),
+                                                              pop.toString(),
+                                                              maxGen.toString(),
+                                                              tbMax.toString(),
+                                                              tbMin.toString(),
+                                                              dHpMax.toString(),
+                                                              dHpMin.toString(),
+                                                              propCrossover.toString(),
+                                                              propMutation.toString(),
+                                                              pme.toString(),
+                                                              pmb.toString(),
+                                                              pattern.toString(),
+                                                              filename.toString(),
+                                                              _filenameActivation.toString());
     }else{
-        xmlManager->SaveXMLFile(_projectName.toString(),
-                                selection.toString(),
-                                _para1.toString(),
-                                _para2.toString(),
-                                _numberProcessor.toString(),
-                                pop.toString(),
-                                maxGen.toString(),
-                                tbMax.toString(),
-                                tbMin.toString(),
-                                dHpMax.toString(),
-                                dHpMin.toString(),
-                                propCrossover.toString(),
-                                propMutation.toString(),
-                                pme.toString(),
-                                pmb.toString(),
-                                pattern.toString(),
-                                filename.toString(),
-                                _filenameActivation.toString());
+        xmlManager->SaveXMLFileCalibrationProject(_projectName.toString(),
+                                                  selection.toString(),
+                                                  _para1.toString(),
+                                                  _para2.toString(),
+                                                  _numberProcessor.toString(),
+                                                  pop.toString(),
+                                                  maxGen.toString(),
+                                                  tbMax.toString(),
+                                                  tbMin.toString(),
+                                                  dHpMax.toString(),
+                                                  dHpMin.toString(),
+                                                  propCrossover.toString(),
+                                                  propMutation.toString(),
+                                                  pme.toString(),
+                                                  pmb.toString(),
+                                                  pattern.toString(),
+                                                  filename.toString(),
+                                                  _filenameActivation.toString());
     }
     // INIZIO
     QString  sselection          = selection.toString();
@@ -256,7 +262,10 @@ void SAKeStart::startValidation(
         const QVariant &folderSave
         )
 {
-
+    QDir dir(QDir::currentPath()+"/workspace");
+    if (!dir.exists()){
+        dir.mkdir(".");
+    }
 
     ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
     int idProject = threadsController.size();
@@ -265,6 +274,8 @@ void SAKeStart::startValidation(
     QVariant msg = "Validation - "+_projectName.toString();
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+
+
 
 
 
@@ -368,7 +379,8 @@ double fRand(double fMin, double fMax)
 }
 
 
-void SAKeStart::startRegression(   const QVariant &selection,
+void SAKeStart::startRegression(   const QVariant &_projectaname,
+                                   const QVariant &selection,
                                    const QVariant &selectionElitist,
                                    const QVariant &populationSize,
                                    const QVariant &percentageCrossover,
@@ -382,8 +394,54 @@ void SAKeStart::startRegression(   const QVariant &selection,
                                    const  QVariant& percentageLinearA,
                                    const  QVariant &percentageLinearB,
                                    const  QVariant &maxGeneration,
-                                   const  QVariant &fileurl)
+                                   const  QVariant &fileurl,
+                                    const QVariant &tipo)
 {
+    QDir dir(QDir::currentPath()+"/workspace");
+    if (!dir.exists()){
+        dir.mkdir(".");
+    }
+
+    if(tipo.toInt()==1 )
+    {
+        xmlManager->SaveXMLFileAlreadyExistRegressionProject(_projectaname.toString(),
+                                                  selection.toString(),
+                                                  selectionElitist.toString(),
+                                                  "-1",
+                                                  populationSize.toString(),
+                                                  percentageCrossover.toString(),
+                                                  percentageMutation.toString(),
+                                                  percentageWeight.toString(),
+                                                  numberProcessor.toString(),
+                                                  numberGamma.toString(),
+                                                  percentageGammaA.toString(),
+                                                  percentageGammaB.toString(),
+                                                  numberLinear.toString(),
+                                                  percentageLinearA.toString(),
+                                                  percentageLinearB.toString(),
+                                                  maxGeneration.toString(),
+                                                  fileurl.toString());
+
+
+    }else{
+    xmlManager->SaveXMLFileRegressionProject(_projectaname.toString(),
+                                              selection.toString(),
+                                              selectionElitist.toString(),
+                                              "-1",
+                                              populationSize.toString(),
+                                              percentageCrossover.toString(),
+                                              percentageMutation.toString(),
+                                              percentageWeight.toString(),
+                                              numberProcessor.toString(),
+                                              numberGamma.toString(),
+                                              percentageGammaA.toString(),
+                                              percentageGammaB.toString(),
+                                              numberLinear.toString(),
+                                              percentageLinearA.toString(),
+                                              percentageLinearB.toString(),
+                                              maxGeneration.toString(),
+                                              fileurl.toString());
+    }
 
     QString sselction= selection.toString();
     int iselectionElitist = selectionElitist.toInt();
@@ -427,7 +485,7 @@ void SAKeStart::startRegression(   const QVariant &selection,
 
     //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
     //INIZIO
-//    CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(idProject));
+    //    CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(idProject));
     //    CustomPlotRegression *qCustomPlotRegression = rootObject->findChild<CustomPlotRegression*>( QString("customPlotRegression%1").arg(numberProject) );
     CustomPlotRegression *qCustomPlotRegression = rootObject->findChild<CustomPlotRegression*>( QString("customPlotRegression%1").arg(idProject) );
     QObject *gen = rootObject->findChild<QObject*>(QString("gen%1").arg(idProject));
@@ -460,8 +518,8 @@ void SAKeStart::startRegression(   const QVariant &selection,
             percentualeGammaB=dpercentageLinearB;
 
     int dimension=inumberGamma+inumberLinear;
-   double * weight = new double[dimension];
-   std::cout << "weight !!!!!!!!" << endl;
+    double * weight = new double[dimension];
+    std::cout << "weight !!!!!!!!" << endl;
 
     for (int i = 0; i < inumberLinear; ++i) {
         weight[i] = 1;
@@ -472,13 +530,13 @@ void SAKeStart::startRegression(   const QVariant &selection,
         weight[i] = tmp1;
     }
     std::cout << "weight FINE!!!!!!!!" << endl;
-//        weight[0]=1;
-//        weight[1]=1;
-//        weight[2]=0.073;
-//        weight[3]=0.99;
-//        weight[4]=0.83;
-//        weight[5]=0.974;
-//        weight[6]=0.907;
+    //        weight[0]=1;
+    //        weight[1]=1;
+    //        weight[2]=0.073;
+    //        weight[3]=0.99;
+    //        weight[4]=0.83;
+    //        weight[5]=0.974;
+    //        weight[6]=0.907;
 
     int * functionType = new int[dimension];
 
@@ -489,13 +547,13 @@ void SAKeStart::startRegression(   const QVariant &selection,
         functionType[i]=2;
     }
 
-//        functionType[0]=0;
-//        functionType[1]=0;
-//        functionType[2]=2;
-//        functionType[3]=2;
-//        functionType[4]=2;
-//        functionType[5]=2;
-//        functionType[6]=2;
+    //        functionType[0]=0;
+    //        functionType[1]=0;
+    //        functionType[2]=2;
+    //        functionType[3]=2;
+    //        functionType[4]=2;
+    //        functionType[5]=2;
+    //        functionType[6]=2;
 
     Parameters *parameters = new Parameters[dimension];
 
@@ -518,42 +576,42 @@ void SAKeStart::startRegression(   const QVariant &selection,
     //              _genotype.addFunctionType(2);
 
     //              //linear par
-//        Parameters tmp;
-//        tmp.addParameters(0.000046);
-//        tmp.addParameters(0);
-//        parameters[0]=tmp;
+    //        Parameters tmp;
+    //        tmp.addParameters(0.000046);
+    //        tmp.addParameters(0);
+    //        parameters[0]=tmp;
 
-//        Parameters tmp1;
-//        tmp1.addParameters(-0.04);
-//        tmp1.addParameters(0.55);
-//        parameters[1]=tmp1;
-//        //gamma par
+    //        Parameters tmp1;
+    //        tmp1.addParameters(-0.04);
+    //        tmp1.addParameters(0.55);
+    //        parameters[1]=tmp1;
+    //        //gamma par
 
-//        Parameters tmp2;
-//        tmp2.addParameters(52.9);
-//        tmp2.addParameters(0.05);
-//        parameters[2]=tmp2;
+    //        Parameters tmp2;
+    //        tmp2.addParameters(52.9);
+    //        tmp2.addParameters(0.05);
+    //        parameters[2]=tmp2;
 
-//        Parameters tmp3;
-//        tmp3.addParameters(1000);
-//        tmp3.addParameters(0.120119);
-//        parameters[3]=tmp3;
+    //        Parameters tmp3;
+    //        tmp3.addParameters(1000);
+    //        tmp3.addParameters(0.120119);
+    //        parameters[3]=tmp3;
 
 
-//        Parameters tmp4;
-//        tmp4.addParameters(899);
-//        tmp4.addParameters(0.0173);
-//        parameters[4]=tmp4;
+    //        Parameters tmp4;
+    //        tmp4.addParameters(899);
+    //        tmp4.addParameters(0.0173);
+    //        parameters[4]=tmp4;
 
-//        Parameters tmp5;
-//        tmp5.addParameters(4.37);
-//        tmp5.addParameters(7.18);
-//        parameters[5]=tmp5;
+    //        Parameters tmp5;
+    //        tmp5.addParameters(4.37);
+    //        tmp5.addParameters(7.18);
+    //        parameters[5]=tmp5;
 
-//        Parameters tmp6;
-//        tmp6.addParameters(699);
-//        tmp6.addParameters(40);
-//        parameters[6]=tmp6;
+    //        Parameters tmp6;
+    //        tmp6.addParameters(699);
+    //        tmp6.addParameters(40);
+    //        parameters[6]=tmp6;
 
     std::cout << "Parameters !!!!!!!!" << endl;
     for (int i = 0; i < inumberLinear; ++i) {
@@ -566,7 +624,7 @@ void SAKeStart::startRegression(   const QVariant &selection,
         tmp.addParameters(tmp2);
         parameters[i]=tmp;
     }
-     std::cout << "Parameters FINE LINEAR!!!!!!!!" << endl;
+    std::cout << "Parameters FINE LINEAR!!!!!!!!" << endl;
     for (int i = inumberLinear; i < dimension; ++i) {
         Parameters tmp;
         double tmp1=fRand(0,1000);
@@ -577,20 +635,20 @@ void SAKeStart::startRegression(   const QVariant &selection,
         tmp.addParameters(tmp2);
         parameters[i]=tmp;
     }
-//     std::cout << "Parameters FINE!!!!!!!!" << endl;
-//#define SIZE 148
+    //     std::cout << "Parameters FINE!!!!!!!!" << endl;
+    //#define SIZE 148
 
-//    double kernel[SIZE]={0.0331607, 0, 0.0761892, 0.0299802, 0, 0.0308658, 0.0205697, 0.0215048, 0, 0.0119944, 0, 0.0409908, 0, 0.0083374, 0.0810852, 0, 0.0250647, 0, 0, 0.0400473, 0, 0, 0.0254148, 0, 0, 0.0131141, 0.0172503, 0.0432308, 0.0231627, 0, 0.0299524, 0.0166024, 0.0468721, 0, 0, 0.012991, 0.00460058, 0, 0, 0.0539517, 0.0041918, 0.0105375, 0, 0.0419468, 0, 0.00508404, 0.00906833, 0, 0.00123015, 0, 0, 0, 0, 0, 0, 0.0120725, 0.00637761, 0.00306278, 0.00116989, 0, 0.00104368, 0.0101821, 0, 0, 0, 0, 0.000840633, 0, 0, 0.00578786, 0.000361475, 0, 0.00212797, 0, 2.81101e-005, 0, 0, 0.000642682, 0, 7.75736e-005, 0, 0, 0.00150183, 0.000354716, 0, 0.00066226, 0.000382005, 0.00698852, 0, 0.000524334, 0, 0, 0, 0.00221679, 0, 0.00843141, 0.00281996, 0, 0.00582132, 0, 0.0072355, 0.00355681, 0, 0, 0, 0, 0, 0, 0.00324608, 0.00113272, 0, 0, 0, 0, 0.0133326, 0, 0, 0, 0, 0, 0.0219186, 0.000480746, 0, 0, 0.0123283, 0.011458, 0, 0, 0, 0, 0, 0.00487881, 0, 0, 0, 0, 0, 0.0167193, 0.0102274, 0.0110751, 0.00210047, 0, 0.00115638, 0.0228124, 0.00387118, 0, 0, 0};
+    //    double kernel[SIZE]={0.0331607, 0, 0.0761892, 0.0299802, 0, 0.0308658, 0.0205697, 0.0215048, 0, 0.0119944, 0, 0.0409908, 0, 0.0083374, 0.0810852, 0, 0.0250647, 0, 0, 0.0400473, 0, 0, 0.0254148, 0, 0, 0.0131141, 0.0172503, 0.0432308, 0.0231627, 0, 0.0299524, 0.0166024, 0.0468721, 0, 0, 0.012991, 0.00460058, 0, 0, 0.0539517, 0.0041918, 0.0105375, 0, 0.0419468, 0, 0.00508404, 0.00906833, 0, 0.00123015, 0, 0, 0, 0, 0, 0, 0.0120725, 0.00637761, 0.00306278, 0.00116989, 0, 0.00104368, 0.0101821, 0, 0, 0, 0, 0.000840633, 0, 0, 0.00578786, 0.000361475, 0, 0.00212797, 0, 2.81101e-005, 0, 0, 0.000642682, 0, 7.75736e-005, 0, 0, 0.00150183, 0.000354716, 0, 0.00066226, 0.000382005, 0.00698852, 0, 0.000524334, 0, 0, 0, 0.00221679, 0, 0.00843141, 0.00281996, 0, 0.00582132, 0, 0.0072355, 0.00355681, 0, 0, 0, 0, 0, 0, 0.00324608, 0.00113272, 0, 0, 0, 0, 0.0133326, 0, 0, 0, 0, 0, 0.0219186, 0.000480746, 0, 0, 0.0123283, 0.011458, 0, 0, 0, 0, 0, 0.00487881, 0, 0, 0, 0, 0, 0.0167193, 0.0102274, 0.0110751, 0.00210047, 0, 0.00115638, 0.0228124, 0.00387118, 0, 0, 0};
 
-//    double *p = new double[SIZE];
-//    for (int i = 0; i < SIZE; ++i) {
-//        p[i]=kernel[i];
-//    }
+    //    double *p = new double[SIZE];
+    //    for (int i = 0; i < SIZE; ++i) {
+    //        p[i]=kernel[i];
+    //    }
 
-        double *kernel;
-        int size_kernel;
-        double Delta_cr;
-        HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr);
+    double *kernel;
+    int size_kernel;
+    double Delta_cr;
+    HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr);
     RegressionController * regressionController= new RegressionController(
                 percentualePeso,
                 percentualeLineareA,
@@ -895,7 +953,7 @@ void SAKeStart::stopSAKeController(int count){
 
         }
 
-        threadsController.erase(threadsController.begin() + (count));
+        threadsController[count]=NULL;
     }
 }
 void SAKeStart::stopValidationController(int count){
@@ -907,7 +965,7 @@ void SAKeStart::stopValidationController(int count){
 
     //            }
     //        }
-    threadsController.erase(threadsController.begin() + (count));
+  threadsController[count]=NULL;
 }
 void SAKeStart::stopRegressionController(int count){
     cout << "count " << count << endl;
@@ -918,7 +976,7 @@ void SAKeStart::stopRegressionController(int count){
 
         }
     }
-    threadsController.erase(threadsController.begin() + (count));
+    threadsController[count]=NULL;
 }
 
 //void SAKeStart::updateCurrentMaximumFitness(QString s){
