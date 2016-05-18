@@ -82,7 +82,8 @@ class RegressionController: public QThread
 {
     Q_OBJECT
 public:
-    RegressionController(    double percentualePeso,
+    RegressionController(    QString projectName,
+                             double percentualePeso,
                              double percentualeLineareA,
                              double percentualeLineareB,
                              double percentualeGammaA,
@@ -180,6 +181,8 @@ private:
 
     std::vector< double> x;
     std::vector< double> y;
+
+    QString savePath;
 
 };
 

@@ -26,6 +26,18 @@ public:
     void setKernelPlot(CustomPlotKernel *value);
     void updateKernelPlot();
     void updatePlot();
+    Rain *getRain() const;
+    void setRain(Rain *value);
+
+    Activation *getActivations() const;
+    void setActivations(Activation *value);
+
+    int getRain_size() const;
+    void setRain_size(int value);
+
+    int getActivations_size() const;
+    void setActivations_size(int value);
+
 private:
     CustomPlotMobilityFunction * plotMobility;
     CustomPlotKernel * plotkernel;

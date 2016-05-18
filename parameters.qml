@@ -13,6 +13,8 @@ ApplicationWindow {
     minimumWidth: 700
     maximumHeight: minimumHeight
     maximumWidth: minimumWidth
+
+    modality: "ApplicationModal"
     Rectangle{
         id: parameter
         x: 0
@@ -395,7 +397,7 @@ ApplicationWindow {
                             width: 63
                             text: "20"
 
-                            placeholderText: ""
+                            placeholderText: "20"
                         }
 
 
@@ -409,7 +411,7 @@ ApplicationWindow {
                             id: textFieldMaxGen
                             width: 63
                             text: "5000"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("5000")
                         }
 
 
@@ -423,7 +425,7 @@ ApplicationWindow {
                             id: textFieldtbMax
                             width: 63
                             text: "180"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("180")
                         }
 
                         Label {
@@ -435,33 +437,33 @@ ApplicationWindow {
                             id: textFieldtbMin
                             width: 63
                             text: "30"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("30")
                         }
 
                         Label {
                             id: label9
-                            text: qsTr("dHpMin")
+                            text: qsTr("dHpMax")
                         }
 
                         TextField {
                             id: textFielddHpMax
                             width: 63
                             text: "50"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("50")
                         }
 
 
 
                         Label {
                             id: label10
-                            text: qsTr("dHpMax")
+                            text: qsTr("dHpMin")
                         }
 
                         TextField {
                             id: textFielddHpMin
                             width: 63
                             text: "-50"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("-50")
                         }
 
                         //CheckBox {id:lastGeneration; text: qsTr("Start From Last Generation")   }
@@ -488,7 +490,7 @@ ApplicationWindow {
                             id: textFieldPropCrossover
                             width: 63
                             text: "0.75"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("0.75")
                         }
 
                         Label {
@@ -504,7 +506,7 @@ ApplicationWindow {
                             id: textFieldPropMutation
                             width: 63
                             text: "0.25"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("0.25")
                         }
 
 
@@ -519,7 +521,7 @@ ApplicationWindow {
                             id: textFieldPme
                             width: 63
                             text: "25"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("25")
                         }
 
 
@@ -532,7 +534,7 @@ ApplicationWindow {
                             id: textFieldPmb
                             width: 63
                             text: "0.5"
-                            placeholderText: qsTr("")
+                            placeholderText: qsTr("0.5")
                         }
 
                         Label {
@@ -563,7 +565,7 @@ ApplicationWindow {
                             width: 63
                             visible: true
                             text: "1"
-                            placeholderText: "Number of Processor"
+                            placeholderText: "1"
                         }
 
                         Label {
@@ -774,33 +776,68 @@ ApplicationWindow {
                                 }else
                                     if(textfileActivation.text == "Empty"){
                                         messageDialogActivation.open()
-                                    }else{
-                                        sakeStart.InitAlgo(comboSelection.currentText,
-                                                           textFieldPopulation.text,
-                                                           textFieldMaxGen.text,
-                                                           textFieldtbMax.text,
-                                                           textFieldtbMin.text,
-                                                           textFielddHpMax.text,
-                                                           textFielddHpMin.text,
-                                                           textFieldPropCrossover.text,
-                                                           textFieldPropMutation.text,
-                                                           textFieldPme.text,
-                                                           textFieldPmb.text,
-                                                           comboPattern.currentText,
-                                                           fileDialogRain.fileUrl,
-                                                           fileDialogActivation.fileUrl,
-                                                           textProjectName.text,
-                                                           textNumberProcessor.text,
-                                                           para1,
-                                                           para2,
-                                                           false,
-                                                           0,
-                                                           typeAlgorithm,
-                                                           order1,
-                                                           order2,
-                                                           order3,
-                                                           order4
-                                                           )
+                                    }else
+                                        if(textFieldPopulation.text == ""){
+                                            messageError.text = "Field Population can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldMaxGen.text == ""){
+                                            messageError.text = "Field max generations can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldtbMax.text == ""){
+                                            messageError.text = "Field tb Max can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldtbMin.text == ""){
+                                            messageError.text = "Field tb Min can not be empty"
+                                            messageError.open()
+                                        }else if(textFielddHpMax.text == ""){
+                                            messageError.text = "Field dHpMax can not be empty"
+                                            messageError.open()
+                                        }else if(textFielddHpMin.text == ""){
+                                            messageError.text = "Field dHpMin can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldPropCrossover.text == ""){
+                                            messageError.text = "Field Probability Crossover can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldPropMutation.text == ""){
+                                            messageError.text = "Field Probability Mutation can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldPme.text == ""){
+                                            messageError.text = "Field Pme can not be empty"
+                                            messageError.open()
+                                        }else if(textFieldPmb.text == ""){
+                                            messageError.text = "Field Pmb can not be empty"
+                                            messageError.open()
+                                        }else if(textNumberProcessor.text == ""){
+                                            messageError.text = "Field Number of Processor can not be empty"
+                                            messageError.open()
+                                        }else {
+
+//                                        sakeStart.InitAlgo(comboSelection.currentText,
+//                                                           textFieldPopulation.text,
+//                                                           textFieldMaxGen.text,
+//                                                           textFieldtbMax.text,
+//                                                           textFieldtbMin.text,
+//                                                           textFielddHpMax.text,
+//                                                           textFielddHpMin.text,
+//                                                           textFieldPropCrossover.text,
+//                                                           textFieldPropMutation.text,
+//                                                           textFieldPme.text,
+//                                                           textFieldPmb.text,
+//                                                           comboPattern.currentText,
+//                                                           fileDialogRain.fileUrl,
+//                                                           fileDialogActivation.fileUrl,
+//                                                           textProjectName.text,
+//                                                           textNumberProcessor.text,
+//                                                           para1,
+//                                                           para2,
+//                                                           false,
+//                                                           0,
+//                                                           typeAlgorithm,
+//                                                           order1,
+//                                                           order2,
+//                                                           order3,
+//                                                           order4
+//                                                           )
 
                                         close()
                                     }
@@ -827,40 +864,48 @@ ApplicationWindow {
     }
 
 
-    MessageDialog {
-        id: messageDialogRain
-        title: "Input error"
-        text: "Please enter rain csv path."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogRain
+//        title: "Input error"
+//        text: "Please enter rain csv path."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
-    MessageDialog {
-        id: messageDialogActivation
-        title: "Input error"
-        text: "Please enter Activation csv path."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogActivation
+//        title: "Input error"
+//        text: "Please enter Activation csv path."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
-    MessageDialog {
-        id: messageDialogProjectName
-        title: "Input error"
-        text: "The project name already exists."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
-    MessageDialog {
-        id: messageDialogProjectNameEmpty
-        title: "Input error"
-        text: "The project name is empty."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogProjectName
+//        title: "Input error"
+//        text: "The project name already exists."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
+//    MessageDialog {
+//        id: messageDialogProjectNameEmpty
+//        title: "Input error"
+//        text: "The project name is empty."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
+//    MessageDialog {
+//        id: messageError
+//        title: "Input error"
+//        text: " "
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
 
 

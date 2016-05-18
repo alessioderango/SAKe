@@ -38,6 +38,46 @@ void ValidationController::updatePlot(){
    plotMobility->updateGraph(Y,zCr);
 }
 
+Rain *ValidationController::getRain() const
+{
+    return rain;
+}
+
+void ValidationController::setRain(Rain *value)
+{
+    rain = value;
+}
+
+Activation *ValidationController::getActivations() const
+{
+    return activations;
+}
+
+void ValidationController::setActivations(Activation *value)
+{
+    activations = value;
+}
+
+int ValidationController::getRain_size() const
+{
+    return rain_size;
+}
+
+void ValidationController::setRain_size(int value)
+{
+    rain_size = value;
+}
+
+int ValidationController::getActivations_size() const
+{
+    return activations_size;
+}
+
+void ValidationController::setActivations_size(int value)
+{
+    activations_size = value;
+}
+
 void ValidationController::setKernelPlot(CustomPlotKernel *value){
     plotkernel = value;
     plotkernel->initCustomPlotFitness();

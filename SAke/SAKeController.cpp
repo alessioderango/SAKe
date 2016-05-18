@@ -114,12 +114,12 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     absoluteAverageFitness=_absoluteAverageFitness;
     update = _update;
 
-    QString tmp1 = QDir::currentPath()+"/workspace/"+projectName;
+    QString tmp1 = QDir::currentPath()+"/workspace/calibration";
     QDir dir2(tmp1);
     if (!dir2.exists()){
         dir2.mkdir(".");
     }
-    QString tmp2 = QDir::currentPath()+"/workspace/"+projectName+"/calibration";
+    QString tmp2 = QDir::currentPath()+"/workspace/calibration/"+projectName;
     QDir dir3(tmp2);
     if (!dir3.exists()){
         dir3.mkdir(".");
@@ -232,7 +232,7 @@ void SAKeController::startAlgorithm()
         eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile,lastGeneration);
 
         // Build the variation operator (any seq/prop construct)
-        eoGenOp<Indi>& op = do_make_op(parser, state, init,tbMin,tbMax,pme,pmb,dHpMin,dHpMax);
+        //eoGenOp<Indi>& op = do_make_op(parser, state, init,tbMin,tbMax,pme,pmb,dHpMin,dHpMax);
 
         eoQuadOp<Indi> *cross = new eoSAKeQuadCrossover<Indi> /* (varType  _anyVariable) */;
         eoMonOp<Indi> *mut = new eoSAKeMutation<Indi>(tbMin,tbMax, pme, pmb,dHpMin,dHpMax)/* (varType  _anyVariable) */;

@@ -7,43 +7,9 @@
 #include "Qt"
 #include "CustomPlotMobilityFunction.h"
 #include "CustomPlotRegression.h"
+#include "CustomPlotRegressionPreviewKernel.h"
 #include "TreeModel.h"
-
-
-static void initStandardTreeModel(QStandardItemModel *model)
-{
-//    QStandardItem *item;
-//    item = new QStandardItem(QLatin1String("Row 1 Item"));
-//    model->insertRow(0, item);
-
-//    item = new QStandardItem(QLatin1String("Row 2 Item"));
-//    item->setCheckable(true);
-//    model->insertRow(1, item);
-
-//    QStandardItem *childItem = new QStandardItem(QLatin1String("Row 2 Child Item"));
-//    item->setChild(0, childItem);
-
-//    item = new QStandardItem(QLatin1String("Row 3 Item"));
-//    item->setIcon(QIcon());
-//    model->insertRow(2, item);
-
-    auto childEntry = new QStandardItem( "CAIO" );
-    //childEntry->setData();
-    //childEntry->setData( description, TreeModel_Role_Description );
-    //childEntry->parent();
-    QStandardItem* entry;
-    auto entries = model->findItems( "branchName" );
-    if ( entries.count() > 0 )
-    {
-        entry = entries.at(0);
-    }
-    else
-    {
-        entry = new QStandardItem( "branchName" );
-        model->appendRow( entry );
-    }
-    entry->appendRow( childEntry );
-}
+#include "TableModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -56,11 +22,14 @@ int main(int argc, char *argv[])
     qmlRegisterType<CustomPlotMobilityFunction>("CustomPlotMobilityFunction", 1, 0, "CustomPlotMobilityFunction");
     qmlRegisterType<CustomPlotKernel>("CustomPlotKernel", 1, 0, "CustomPlotKernel");
     qmlRegisterType<CustomPlotRegression>("CustomPlotRegression", 1, 0, "CustomPlotRegression");
-    qmlRegisterType<TreeModel>("ca.imaginativethinking.tutorials.models", 1, 0, "TreeModel" );
+    qmlRegisterType<CustomPlotRegressionPreviewKernel>("CustomPlotRegressionPreviewKernel", 1, 0, "CustomPlotRegressionPreviewKernel");
+//    qmlRegisterType<TableModel>("TableModel", 1, 0, "TableModel" );
 
     QQmlApplicationEngine engine;
     TreeModel* model = new TreeModel();
+    TableModel * modelTable = new TableModel();
     engine.rootContext()->setContextProperty("theModel", model);
+    engine.rootContext()->setContextProperty("TableModel", modelTable);
 
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

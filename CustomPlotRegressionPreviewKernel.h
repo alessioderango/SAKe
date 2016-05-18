@@ -8,18 +8,25 @@
 using namespace std;
 class QCustomPlot;
 
-class CustomPlotKernel : public QQuickPaintedItem
+class CustomPlotRegressionPreviewKernel : public QQuickPaintedItem
 {
     Q_OBJECT
 
 public:
-    CustomPlotKernel( QQuickItem* parent = 0 );
-    virtual ~CustomPlotKernel();
+    CustomPlotRegressionPreviewKernel(double * kernel, int size_kernel, QQuickItem* parent = 0 );
+    CustomPlotRegressionPreviewKernel(QQuickItem* parent = 0 );
+    virtual ~CustomPlotRegressionPreviewKernel();
+    void updateGraph0(QVector<double> x,QVector<double> y);
     void updateGraph1(QVector<double> x,QVector<double> y);
+    void updateGraph(double* Fi,int tb) const;
     void paint( QPainter* painter );
 
-    void updateGraph(double* x,int y) const;
-    Q_INVOKABLE void initCustomPlotFitness();
+    Q_INVOKABLE void initCustomPlotRegressionPreviewKernel();
+    Q_INVOKABLE void initCustomPlotRegressionPreviewKernel(const QVariant& filename);
+    Q_INVOKABLE void initCustomPlotKernelComtrolPoints(const QVariant& filename);
+
+
+    void setupQuadraticDemo(QCustomPlot* m);
 
 
 protected:
@@ -29,18 +36,16 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void mouseMoveEvent( QMouseEvent* event );
     virtual void mouseDoubleClickEvent( QMouseEvent* event );
+    virtual void wheelEvent(QWheelEvent *event);
     virtual void resizeEvent(QResizeEvent *event);
-    void setupQuadraticDemo( QCustomPlot* customPlot );
+
 
 private:
   QCustomPlot*  m_CustomPlot;
-   QCPBars *myBars;
-
+  QCPBars *myBars;
 private slots:
     void graphClicked( QCPAbstractPlottable* plottable );
     void onCustomReplot();
     void updateCustomPlotSize();
-    void mouseWheel();
-    void mousePress();
 
 };

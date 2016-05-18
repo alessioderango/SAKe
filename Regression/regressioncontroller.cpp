@@ -5,7 +5,8 @@ RegressionController::RegressionController()
 
 }
 
-RegressionController::RegressionController(double percentualePeso,
+RegressionController::RegressionController(QString projectName,
+                                           double percentualePeso,
                                            double percentualeLineareA,
                                            double percentualeLineareB,
                                            double percentualeGammaA,
@@ -48,6 +49,14 @@ RegressionController::RegressionController(double percentualePeso,
     this->maxGeneration = imaxGeneration;
     this->percentageCrossover = dpercentageCrossover;
     this->percentageMutation = dpercentageMutation;
+
+    QString tmp2 = QDir::currentPath()+"/workspace/regression/"+projectName;
+    QDir dir3(tmp2);
+    if (!dir3.exists()){
+        dir3.mkdir(".");
+    }
+
+    savePath = tmp2;
 
 }
 
@@ -120,7 +129,7 @@ void RegressionController::startAlgorithm(){
         // initialize the population
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Individual>& pop   = do_make_pop(parser, state, init);
-        QString savePath;
+
         this->stop = new eoGenContinueMy<Individual>(savePath);
         // stopping criteria
         eoContinue<Individual> & term = do_make_continue_my(parser, state, eval, this->stop);

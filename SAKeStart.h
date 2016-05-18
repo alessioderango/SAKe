@@ -16,6 +16,7 @@
 #include "xmlmanager.h"
 #include "update.h"
 #include "validationcontroller.h"
+#include "controlpoints.h"
 
 
 class SAKeStart : public QObject

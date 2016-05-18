@@ -860,7 +860,41 @@ ApplicationWindow {
                                                                    }else
                                                                        if(textfileActivation.text == "Empty"){
                                                                            messageDialogActivation.open()
-                                                                       }else{
+                                                                       }else
+                                                                   if(textFieldPopulation.text == ""){
+                                                                       messageError.text = "Field Population can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldMaxGen.text == ""){
+                                                                       messageError.text = "Field max generations can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldtbMax.text == ""){
+                                                                       messageError.text = "Field tb Max can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldtbMin.text == ""){
+                                                                       messageError.text = "Field tb Min can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFielddHpMax.text == ""){
+                                                                       messageError.text = "Field dHpMax can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFielddHpMin.text == ""){
+                                                                       messageError.text = "Field dHpMin can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldPropCrossover.text == ""){
+                                                                       messageError.text = "Field Probability Crossover can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldPropMutation.text == ""){
+                                                                       messageError.text = "Field Probability Mutation can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldPme.text == ""){
+                                                                       messageError.text = "Field Pme can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textFieldPmb.text == ""){
+                                                                       messageError.text = "Field Pmb can not be empty"
+                                                                       messageError.open()
+                                                                   }else if(textNumberProcessor.text == ""){
+                                                                       messageError.text = "Field Number of Processor can not be empty"
+                                                                       messageError.open()
+                                                                   }else {
                                                             sakeStart.InitAlgo(comboSelection.currentText,
                                                                                textFieldPopulation.text,
                                                                                textFieldMaxGen.text,
@@ -909,39 +943,47 @@ ApplicationWindow {
         }
 
     }
-//    MessageDialog {
-//        id: messageDialogRain
-//        title: "Input error"
-//        text: "Please enter rain csv path."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
+        MessageDialog {
+            id: messageDialogRain
+            title: "Input error"
+            text: "Please enter rain csv path."
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
 
-//    MessageDialog {
-//        id: messageDialogActivation
-//        title: "Input error"
-//        text: "Please enter Activation csv path."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
+        MessageDialog {
+            id: messageDialogActivation
+            title: "Input error"
+            text: "Please enter Activation csv path."
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
 
-//    MessageDialog {
-//        id: messageDialogProjectName
-//        title: "Input error"
-//        text: "The project name already exists."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
-//    MessageDialog {
-//        id: messageDialogProjectNameEmpty
-//        title: "Input error"
-//        text: "The project name is empty."
-//        onAccepted: close()
-//        Component.onCompleted: visible = false
-//        modality: "ApplicationModal"
-//    }
+        MessageDialog {
+            id: messageDialogProjectName
+            title: "Input error"
+            text: "The project name already exists."
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
+        MessageDialog {
+            id: messageDialogProjectNameEmpty
+            title: "Input error"
+            text: "The project name is empty."
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
+        MessageDialog {
+            id: messageError
+            title: "Input error"
+            text: " "
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
 
 }

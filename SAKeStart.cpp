@@ -157,12 +157,12 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     QVariant msg = "Calibration - "+sprojectname;
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
-    QObject *errorHandlerRain = rootObject->findChild<QObject*>("errorcsvRain");
-    QObject *errorHandlerActivation = rootObject->findChild<QObject*>("errorcsvRain");
     Rain * rain;
     int rain_size;
     Activation * activation;
     int activation_size;
+    QObject *errorHandlerRain = rootObject->findChild<QObject*>("errorcsvRain");
+    QObject *errorHandlerActivation = rootObject->findChild<QObject*>("errorcsvActivation");
     int errorRain = HandlerCSV::loadCSVRain(sfilenameRain, rain, rain_size, errorHandlerRain);
     if(errorRain){
         int errorActivation = HandlerCSV::loadCSVActivation(sfilenameActivation, activation, activation_size, errorHandlerActivation);
@@ -267,110 +267,128 @@ void SAKeStart::startValidation(
         dir.mkdir(".");
     }
 
-    ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
-    int idProject = threadsController.size();
-
-    QVariant returnedValue;
-    QVariant msg = "Validation - "+_projectName.toString();
+    Rain * rain;
+    int rain_size;
+    Activation * activation;
+    int activation_size;
     QObject *rootObject = engine->rootObjects().first();
-    QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+
+    QObject *errorHandlerRain = rootObject->findChild<QObject*>("errorcsvRain");
+    QObject *errorHandlerActivation = rootObject->findChild<QObject*>("errorcsvActivation");
+//    int errorRain = HandlerCSV::loadCSVRain(filenameRainPath, rain, rain_size, errorHandlerRain);
+//    if(errorRain){
+//        int errorActivation = HandlerCSV::loadCSVActivation(filenameActivaionPath, activation, activation_size, errorHandlerActivation);
+//        if(errorActivation){
+
+            ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
+            int idProject = threadsController.size();
+            validationController->setActivations(activation);
+            validationController->setActivations_size(activation_size);
+            validationController->setRain(rain);
+            validationController->setRain_size(rain_size);
+            QVariant returnedValue;
+            QVariant msg = "Validation - "+_projectName.toString();
+            QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
 
 
 
 
 
-    QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, idProject));
-    //FINE
+            QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, idProject));
+            //FINE
 
-    //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
-    //INIZIO
-    CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
-    validationController->setPlotMobility(qCustomPlotMobilityFunction);
-    validationController->updatePlot();
+            //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
+            //INIZIO
+            CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
+            validationController->setPlotMobility(qCustomPlotMobilityFunction);
+            validationController->updatePlot();
 
-    CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
-    validationController->setKernelPlot(qCustomPlotKernel);
-    validationController->updateKernelPlot();
-    SAKeController* tmp =new SAKeController();
-    threadsController.push_back(tmp);
+            CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
+            validationController->setKernelPlot(qCustomPlotKernel);
+            validationController->updateKernelPlot();
+            SAKeController* tmp =new SAKeController();
+            threadsController.push_back(tmp);
+//        }
+//    }
+
     
 }
 
-double getHMed(double *kernel, int SIZE){
-    double sum=0;
-    for (int i = 0; i < SIZE; i++) {
-        sum+=kernel[i];
-    }
-    return sum/SIZE;
+//double getHMed(double *kernel, int SIZE){
+//    double sum=0;
+//    for (int i = 0; i < SIZE; i++) {
+//        sum+=kernel[i];
+//    }
+//    return sum/SIZE;
 
-}
+//}
 
-double getHMax(double *kernel, int SIZE){
-    double max=-1;
-    for (int i = 0; i < SIZE; i++) {
-        if(max< kernel[i])
-            max = kernel[i];
-    }
-    return max;
+//double getHMax(double *kernel, int SIZE){
+//    double max=-1;
+//    for (int i = 0; i < SIZE; i++) {
+//        if(max< kernel[i])
+//            max = kernel[i];
+//    }
+//    return max;
 
-}
+//}
 
-void initAlreadyConsidered(double *&alreadyConsidered, int SIZE){
-    for (int i = 0; i < SIZE; i++) {
-        alreadyConsidered[i]=-1;
-    }
-}
+//void initAlreadyConsidered(double *&alreadyConsidered, int SIZE){
+//    for (int i = 0; i < SIZE; i++) {
+//        alreadyConsidered[i]=-1;
+//    }
+//}
 
-void stampa(double *kernel, int SIZE){
-    for (int i = 0; i < SIZE; i++) {
-        cout << kernel[i] << " ";
-    }
-    cout << endl;
-}
-int getInterset(double *kernel,double *&alreadyConsidered,double *&alreadyConsideredTemp,double boundary, int SIZE){
-    int count=0;
-    for (int i = 0; i < SIZE; i++) {
-        if(alreadyConsidered[i]==-1  && kernel[i] >= boundary){
-            alreadyConsideredTemp[i]=kernel[i];
-            alreadyConsidered[i]=kernel[i];
-            count++;
-        }
-    }
-    return count;
-}
+//void stampa(double *kernel, int SIZE){
+//    for (int i = 0; i < SIZE; i++) {
+//        cout << kernel[i] << " ";
+//    }
+//    cout << endl;
+//}
+//int getInterset(double *kernel,double *&alreadyConsidered,double *&alreadyConsideredTemp,double boundary, int SIZE){
+//    int count=0;
+//    for (int i = 0; i < SIZE; i++) {
+//        if(alreadyConsidered[i]==-1  && kernel[i] >= boundary){
+//            alreadyConsideredTemp[i]=kernel[i];
+//            alreadyConsidered[i]=kernel[i];
+//            count++;
+//        }
+//    }
+//    return count;
+//}
 
-void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec, int SIZE){
-
-
-    double sum=0;
-    double x=0;
-    int count=0;
-    for (int i = 0; i < SIZE-1; i++) {
-        if(a[i]!=-1){
-            if(a[i+1]==-1 && a[i-1] ==-1){
-                //write << i+1 << "; " << a[i] << "; " << endl;
-                xVec.push_back(i+1);
-                yVec.push_back(a[i]);
-                cout << " x = " << i+1 << " y = " << a[i] << endl;
-            }else{
-                sum+=a[i];
-                x+=i;
-                count++;
-                if(a[i+1]==-1){
-                    //write << (x/count)+1 << "; " << sum/count << "; " << endl;
-                    xVec.push_back((x/count)+1);
-                    yVec.push_back(sum/count);
-                    cout << " x = " << (x/count)+1 << " y = " << sum/count << endl;
-                    sum=0;
-                    count=0;
-                    x=0;
-                }
-            }
-        }
-    }
+//void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec, int SIZE){
 
 
-}
+//    double sum=0;
+//    double x=0;
+//    int count=0;
+//    for (int i = 0; i < SIZE-1; i++) {
+//        if(a[i]!=-1){
+//            if(a[i+1]==-1 && a[i-1] ==-1){
+//                //write << i+1 << "; " << a[i] << "; " << endl;
+//                xVec.push_back(i+1);
+//                yVec.push_back(a[i]);
+//                cout << " x = " << i+1 << " y = " << a[i] << endl;
+//            }else{
+//                sum+=a[i];
+//                x+=i;
+//                count++;
+//                if(a[i+1]==-1){
+//                    //write << (x/count)+1 << "; " << sum/count << "; " << endl;
+//                    xVec.push_back((x/count)+1);
+//                    yVec.push_back(sum/count);
+//                    cout << " x = " << (x/count)+1 << " y = " << sum/count << endl;
+//                    sum=0;
+//                    count=0;
+//                    x=0;
+//                }
+//            }
+//        }
+//    }
+
+
+//}
 
 double fRand(double fMin, double fMax)
 {
@@ -397,7 +415,12 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const  QVariant &fileurl,
                                     const QVariant &tipo)
 {
-    QDir dir(QDir::currentPath()+"/workspace");
+    QDir dir1(QDir::currentPath()+"/workspace");
+    if (!dir1.exists()){
+        dir1.mkdir(".");
+    }
+
+    QDir dir(QDir::currentPath()+"/workspace/regression");
     if (!dir.exists()){
         dir.mkdir(".");
     }
@@ -649,7 +672,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     int size_kernel;
     double Delta_cr;
     HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr);
-    RegressionController * regressionController= new RegressionController(
+    RegressionController * regressionController= new RegressionController(_projectaname.toString(),
                 percentualePeso,
                 percentualeLineareA,
                 percentualeLineareB,
@@ -670,7 +693,11 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                 dpercentageMutation,
                 inumberProcessor
                 );
-
+    ControlPoints * controlPoints = new ControlPoints();
+    controlPoints->calculateControlPoints(kernel,size_kernel);
+    std::vector< double> x = controlPoints->getX();
+    std::vector< double> y = controlPoints->getY();
+    delete controlPoints;
 
 
 
@@ -685,86 +712,90 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     std::cout << "setQCustomPlotRegression" << std::endl;
 
 
-    std::vector< double> x;
-    std::vector< double> y;
-
-    double hmed= getHMed(kernel,size_kernel);
-    double hmax = getHMax(kernel,size_kernel);
-    double hmed2= hmed/2;
-    double hmedmax= (hmed+hmax)/2;
-
-    cout << "hmax = " << hmax << endl;
-    cout << "hmedmax = " << hmedmax << endl;
-    cout << "hmed = "<< hmed << endl;
-    cout << "hmed2 = " << hmed2 <<endl;
-
-    //    double alreadyConsideredHMax[size_kernel];
-    //    double alreadyConsideredHMedMax[size_kernel];
-    //    double alreadyConsideredHMed[size_kernel];
-    //    double alreadyConsideredHMed2[size_kernel];
-    //    double alreadyConsidered[size_kernel];
-    double *alreadyConsideredHMax = new double[size_kernel];
-    double *alreadyConsideredHMedMax= new double[size_kernel];
-    double *alreadyConsideredHMed= new double[size_kernel];
-    double *alreadyConsideredHMed2= new double[size_kernel];
-    double *alreadyConsidered= new double[size_kernel];
-    initAlreadyConsidered(alreadyConsidered,size_kernel);
-    initAlreadyConsidered(alreadyConsideredHMax,size_kernel);
-    initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
-    initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
-    initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
-    int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
-    cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
-    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
-    cout << "ho trovato " << count << " barre superiori a " << hmedmax << endl;
-    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed,hmed,size_kernel);
-    cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
-    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
-    cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
-    //stampa(alreadyConsideredHMax);
-    //stampa(alreadyConsideredHMedMax);
-    //stampa(alreadyConsideredHMed);
-    //stampa(alreadyConsideredHMed2);
-    cout << " points from hmax" << endl;
-    getPoints(alreadyConsideredHMax,x,y,size_kernel);
-    cout << " points from hmedhmax" << endl;
-    getPoints(alreadyConsideredHMedMax,x,y,size_kernel);
-    cout << " points from hmed" << endl;
-    getPoints(alreadyConsideredHMed,x,y,size_kernel);
-    cout << " points from hmed2" << endl;
-    getPoints(alreadyConsideredHMed2,x,y,size_kernel);
-    for (int i = 0; i < x.size(); i++) {
-        cout << x[i] <<" " << y[i] << endl;
-    }
 
 
-    int alto;
-    for (alto = x.size() - 1; alto > 0; alto-- )
-    {
-        for (int i=0; i<alto; i++)
-        {
-            if (x[i]>x[i+1]) /* sostituire ">" con "<" per avere un ordinamento decrescente */
-            {
-                double tmp = x[i];
-                x[i] = x[i+1];
-                x[i+1] = tmp;
-                double tmp2 = y[i];
-                y[i] = y[i+1];
-                y[i+1] = tmp2;
+//    std::vector< double> x;
+//    std::vector< double> y;
 
-            }
-        }
-    }
+//    double hmed= getHMed(kernel,size_kernel);
+//    double hmax = getHMax(kernel,size_kernel);
+//    double hmed2= hmed/2;
+//    double hmedmax= (hmed+hmax)/2;
 
-    delete [] alreadyConsideredHMax;
-    delete [] alreadyConsideredHMedMax;
-    delete [] alreadyConsideredHMed;
-    delete [] alreadyConsideredHMed2;
-    delete [] alreadyConsidered;
+//    cout << "hmax = " << hmax << endl;
+//    cout << "hmedmax = " << hmedmax << endl;
+//    cout << "hmed = "<< hmed << endl;
+//    cout << "hmed2 = " << hmed2 <<endl;
 
-    for (int i = 0; i < x.size(); i++) {
-        cout << x[i] <<" " << y[i] << endl;
-    }
+//    //    double alreadyConsideredHMax[size_kernel];
+//    //    double alreadyConsideredHMedMax[size_kernel];
+//    //    double alreadyConsideredHMed[size_kernel];
+//    //    double alreadyConsideredHMed2[size_kernel];
+//    //    double alreadyConsidered[size_kernel];
+//    double *alreadyConsideredHMax = new double[size_kernel];
+//    double *alreadyConsideredHMedMax= new double[size_kernel];
+//    double *alreadyConsideredHMed= new double[size_kernel];
+//    double *alreadyConsideredHMed2= new double[size_kernel];
+//    double *alreadyConsidered= new double[size_kernel];
+//    initAlreadyConsidered(alreadyConsidered,size_kernel);
+//    initAlreadyConsidered(alreadyConsideredHMax,size_kernel);
+//    initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
+//    initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
+//    initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
+//    int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
+//    cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
+//    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
+//    cout << "ho trovato " << count << " barre superiori a " << hmedmax << endl;
+//    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed,hmed,size_kernel);
+//    cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
+//    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
+//    cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
+//    //stampa(alreadyConsideredHMax);
+//    //stampa(alreadyConsideredHMedMax);
+//    //stampa(alreadyConsideredHMed);
+//    //stampa(alreadyConsideredHMed2);
+//    cout << " points from hmax" << endl;
+//    getPoints(alreadyConsideredHMax,x,y,size_kernel);
+//    cout << " points from hmedhmax" << endl;
+//    getPoints(alreadyConsideredHMedMax,x,y,size_kernel);
+//    cout << " points from hmed" << endl;
+//    getPoints(alreadyConsideredHMed,x,y,size_kernel);
+//    cout << " points from hmed2" << endl;
+//    getPoints(alreadyConsideredHMed2,x,y,size_kernel);
+//    for (int i = 0; i < x.size(); i++) {
+//        cout << x[i] <<" " << y[i] << endl;
+//    }
+
+
+//    int alto;
+//    for (alto = x.size() - 1; alto > 0; alto-- )
+//    {
+//        for (int i=0; i<alto; i++)
+//        {
+//            if (x[i]>x[i+1]) /* sostituire ">" con "<" per avere un ordinamento decrescente */
+//            {
+//                double tmp = x[i];
+//                x[i] = x[i+1];
+//                x[i+1] = tmp;
+//                double tmp2 = y[i];
+//                y[i] = y[i+1];
+//                y[i+1] = tmp2;
+
+//            }
+//        }
+//    }
+
+//    delete [] alreadyConsideredHMax;
+//    delete [] alreadyConsideredHMedMax;
+//    delete [] alreadyConsideredHMed;
+//    delete [] alreadyConsideredHMed2;
+//    delete [] alreadyConsidered;
+
+//    for (int i = 0; i < x.size(); i++) {
+//        cout << x[i] <<" " << y[i] << endl;
+//    }
+
+
     regressionController->setQCustomPlotRegression(qCustomPlotRegression);
     qCustomPlotRegression->setupQuadraticDemo(&y[0],y.size(),&x[0],x.size());
     regressionController->setX(x);

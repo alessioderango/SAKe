@@ -1,6 +1,7 @@
 #include "CustomPlotKernel.h"
 
 #include <QDebug>
+#include "HandlerCSV.h"
 
 CustomPlotKernel::CustomPlotKernel( QQuickItem* parent ) : QQuickPaintedItem( parent )
   , m_CustomPlot( nullptr )
@@ -36,6 +37,7 @@ void CustomPlotKernel::initCustomPlotFitness()
 }
 
 
+
 void CustomPlotKernel::paint( QPainter* painter )
 {
     if (m_CustomPlot)
@@ -58,6 +60,7 @@ void CustomPlotKernel::mousePressEvent( QMouseEvent* event )
     //qDebug() << Q_FUNC_INFO;
     routeMouseEvents( event );
 }
+
 //void CustomPlotKernel::mouseWheel( QMouseEvent* event )
 //{
 //    event->accept();
@@ -208,7 +211,7 @@ void CustomPlotKernel::updateGraph1(QVector<double> x,QVector<double> y){
 
     if(x.size() > 20)
         m_CustomPlot->xAxis->setRange( 0, x.size() );
-    m_CustomPlot->graph( 1 )->setData( x, y);
+    myBars->setData( x, y);
     m_CustomPlot->replot();
 
 }

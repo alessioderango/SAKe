@@ -22,7 +22,10 @@ SOURCES += main.cpp \
     Regression/parameters.cpp \
     Regression/regressioncontroller.cpp \
     CustomPlotRegression.cpp \
-    TreeModel.cpp
+    TreeModel.cpp \
+    tablemodel.cpp \
+    controlpoints.cpp \
+    CustomPlotRegressionPreviewKernel.cpp
 
 RESOURCES += qml.qrc
 
@@ -90,7 +93,10 @@ HEADERS += \
     Regression/make_checkpoint_my.h \
     Regression/eoGenContinueMy.h \
     Regression/make_continue_my.h \
-    TreeModel.h
+    TreeModel.h \
+    tablemodel.h \
+    controlpoints.h \
+    CustomPlotRegressionPreviewKernel.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686

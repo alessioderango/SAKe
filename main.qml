@@ -8,7 +8,6 @@ import QtQuick.Layouts 1.2
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Dialogs 1.2
-import ca.imaginativethinking.tutorials.models 1.0
 import QtQml.Models 2.2
 
 ApplicationWindow {
@@ -116,36 +115,7 @@ ApplicationWindow {
         RowLayout {
             //            anchors.fill: parent
 
-            ToolButton {
-                id :myToolButton
-                onClicked: {
-                    console.log("Action Calibration Project");
-                    var component = Qt.createComponent("parametersRegression.qml")
 
-                    var window    = component.createObject(applicationWindow1)
-
-                }
-
-                Layout.minimumHeight: 77
-                Layout.minimumWidth:  70
-                Image {
-                    id: myToolButtonIcon
-                    width: 24
-                    height:  24
-                    source: "qrc:/img/regression.png"
-                    y: myToolButton.y + 5
-                    anchors.horizontalCenter: myToolButton.horizontalCenter
-                }
-
-                Text {
-                    text: qsTr("New\nRegression\nProject")
-                    y: myToolButtonIcon.y + myToolButtonIcon.height + 3
-                    anchors.horizontalCenter: myToolButtonIcon.horizontalCenter
-                    horizontalAlignment: Text.AlignJustify | Text.AlignHCenter | Text.AlignVCenter
-                }
-
-
-            }
 
             ToolButton{
                 //                iconSource: "qrc:/img/check.png"
@@ -209,6 +179,37 @@ ApplicationWindow {
                     horizontalAlignment: Text.AlignJustify | Text.AlignHCenter | Text.AlignVCenter
 
                 }
+
+            }
+
+            ToolButton {
+                id :myToolButton
+                onClicked: {
+                    console.log("Action Calibration Project");
+                    var component = Qt.createComponent("parametersRegression.qml")
+
+                    var window    = component.createObject(applicationWindow1)
+
+                }
+
+                Layout.minimumHeight: 77
+                Layout.minimumWidth:  70
+                Image {
+                    id: myToolButtonIcon
+                    width: 24
+                    height:  24
+                    source: "qrc:/img/regression.png"
+                    y: myToolButton.y + 5
+                    anchors.horizontalCenter: myToolButton.horizontalCenter
+                }
+
+                Text {
+                    text: qsTr("New\nRegression\nProject")
+                    y: myToolButtonIcon.y + myToolButtonIcon.height + 3
+                    anchors.horizontalCenter: myToolButtonIcon.horizontalCenter
+                    horizontalAlignment: Text.AlignJustify | Text.AlignHCenter | Text.AlignVCenter
+                }
+
 
             }
 
@@ -1069,19 +1070,19 @@ import QtQuick.Controls.Styles 1.4
                     }
                 }
 
-                Tab {
-                   title:   "Welcome"
-                    active: true
+//                Tab {
+//                   title:   "Welcome"
+//                    active: true
 
-                    Text {
-                        text: qsTr("Welcome to SAKe.")
-                        horizontalAlignment   :Text.AlignHCenter
-                        verticalAlignment    :Text.AlignVCenter
-                        font.family: "Helvetica"
-                        font.pointSize: 56
-                    }
+//                    Text {
+//                        text: qsTr("Welcome to SAKe.")
+//                        horizontalAlignment   :Text.AlignHCenter
+//                        verticalAlignment    :Text.AlignVCenter
+//                        font.family: "Helvetica"
+//                        font.pointSize: 56
+//                    }
 
-                }
+//                }
 
             }
 
