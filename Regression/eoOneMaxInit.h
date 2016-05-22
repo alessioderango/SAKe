@@ -35,7 +35,18 @@ public:
                   int functionTypesSize,
                   Parameters *parameters,
                   int parametersSize,
-                  unsigned  _vecSize) : vecSize(_vecSize)
+                  unsigned  _vecSize,
+                  double* _percentualePeso,
+                  int _percentualePesoSize,
+                  double* _percentualeLineareA,
+                  int _percentualeLineareASize,
+                  double* _percentualeLineareB,
+                  int _percentualeLineareBSize,
+                  double* _percentualeGammaA,
+                  int _percentualeGammaASize,
+                  double* _percentualeGammaB,
+                  int _percentualeGammaBSize
+                  ) : vecSize(_vecSize)
       // END eventually add or modify the anyVariable argument
     {
         // START Code of Ctor of an eoOneMaxInit object
@@ -45,6 +56,16 @@ public:
         this->functionTypesSize = functionTypesSize;
         this->parameters = parameters;
         this->parametersSize = parametersSize;
+        percentualePeso =_percentualePeso;
+        percentualePesoSize= _percentualePesoSize;
+        percentualeLineareA=_percentualeLineareA;
+        percentualeLineareASize=_percentualeLineareASize;
+        percentualeLineareB= _percentualeLineareB;
+        percentualeLineareBSize=_percentualeLineareBSize;
+        percentualeGammaA=_percentualeGammaA;
+        percentualeGammaASize=_percentualeGammaASize;
+        percentualeGammaB=_percentualeGammaB;
+        percentualeGammaBSize=_percentualeGammaBSize;
 
 
         // END   Code of Ctor of an eoOneMaxInit object
@@ -75,159 +96,40 @@ public:
         //    _genotype.invalidate();	   // IMPORTANT in case the _genotype is old
 
         //        linear
-//              _genotype.addW(0.0171199623121444);
+        //              _genotype.addW(0.0171199623121444);
 
         for (int i = 0; i < weightsSize; i++) {
-             _genotype.addW(this->weights[i]);
+            _genotype.addW(this->weights[i]);
         }
 
         for (int i = 0; i < functionTypesSize; i++) {
-             _genotype.addFunctionType(this->functionTypes[i]);
+            _genotype.addFunctionType(this->functionTypes[i]);
         }
 
         for (int i = 0; i < parametersSize; i++) {
-             _genotype.addPar(this->parameters[i]);
+            _genotype.addPar(this->parameters[i]);
         }
 
-
-//              _genotype.addW(1);
-//              _genotype.addW(1);
-
-//                //gamma
-//              _genotype.addW(0.073);
-//              _genotype.addW(0.99);
-//              _genotype.addW(0.83);
-//              _genotype.addW(0.974);
-//              _genotype.addW(0.907);
-
-//              _genotype.addFunctionType(0);
-//              _genotype.addFunctionType(0);
-//              _genotype.addFunctionType(2);
-//              _genotype.addFunctionType(2);
-//              _genotype.addFunctionType(2);
-//              _genotype.addFunctionType(2);
-//              _genotype.addFunctionType(2);
-
-//              //linear par
-//              Parameters tmp;
-//              tmp.addParameters(0.000046);
-//              tmp.addParameters(0);
-//              _genotype.addPar(tmp);
-
-//              Parameters tmp1;
-//              tmp1.addParameters(-0.04);
-//              tmp1.addParameters(0.55);
-//              _genotype.addPar(tmp1);
-
-//              //gamma par
-
-//              Parameters tmp2;
-//              tmp2.addParameters(52.9);
-//              tmp2.addParameters(0.05);
-//              _genotype.addPar(tmp2);
-
-
-//              Parameters tmp3;
-//              tmp3.addParameters(1000);
-//              tmp3.addParameters(0.120119);
-//              _genotype.addPar(tmp3);
-
-
-//              Parameters tmp4;
-//              tmp4.addParameters(899);
-//              tmp4.addParameters(0.0173);
-//              _genotype.addPar(tmp4);
-
-//              Parameters tmp5;
-//              tmp5.addParameters(4.37);
-//              tmp5.addParameters(7.18);
-//              _genotype.addPar(tmp5);
-
-//              Parameters tmp6;
-//              tmp6.addParameters(699);
-//              tmp6.addParameters(40);
-//              _genotype.addPar(tmp6);
-
-        //RANDOM
-
-//        double random=fRand(0,1000);
-//        _genotype.addW(random);
-//        random=fRand(0,1000);
-//        _genotype.addW(random);
-
-//        //gamma
-//        random=fRand(0,1000);
-//        _genotype.addW(random);
-//        random=fRand(0,1000);
-//        _genotype.addW(random);
-//        random=fRand(0,1000);
-//        _genotype.addW(random);
-//        random=fRand(0,1000);
-//        _genotype.addW(random);
-//        random=fRand(0,1000);
-//        _genotype.addW(random);
-
-//        _genotype.addFunctionType(0);
-//        _genotype.addFunctionType(0);
-//        _genotype.addFunctionType(2);
-//        _genotype.addFunctionType(2);
-//        _genotype.addFunctionType(2);
-//        _genotype.addFunctionType(2);
-//        _genotype.addFunctionType(2);
-
-//        //linear par
-//        Parameters tmp;
-//        random=fRand(-100,100);
-//        tmp.addParameters(random);
-//        random=fRand(-100,100);
-//        tmp.addParameters(random);
-//        _genotype.addPar(tmp);
-
-//        Parameters tmp1;
-//        random=fRand(-100,100);
-//        tmp1.addParameters(random);
-//        random=fRand(-100,100);
-//        tmp1.addParameters(random);
-//        _genotype.addPar(tmp1);
-
-//        //gamma par
-
-//        Parameters tmp2;
-//        random=fRand(0,2000);
-//        tmp2.addParameters(random);
-//        random=fRand(0,2000);
-//        tmp2.addParameters(random);
-//        _genotype.addPar(tmp2);
-
-
-//        Parameters tmp3;
-//        random=fRand(0,2000);
-//        tmp3.addParameters(random);
-//        random=fRand(0,2000);
-//        tmp3.addParameters(random);
-//        _genotype.addPar(tmp3);
-
-
-//        Parameters tmp4;
-//        random=fRand(0,2000);
-//        tmp4.addParameters(random);
-//        random=fRand(0,2000);
-//        tmp4.addParameters(random);
-//        _genotype.addPar(tmp4);
-
-//        Parameters tmp5;
-//        random=fRand(0,2000);
-//        tmp5.addParameters(random);
-//        random=fRand(0,2000);
-//        tmp5.addParameters(random);
-//        _genotype.addPar(tmp5);
-
-//        Parameters tmp6;
-//        random=fRand(0,2000);
-//        tmp6.addParameters(random);
-//        random=fRand(0,2000);
-//        tmp6.addParameters(random);
-//        _genotype.addPar(tmp6);
+        for (int i = 0; i < percentualePesoSize; i++) {
+            _genotype.addPercentageVariationWeight(percentualePeso[i]);
+        }
+        for (int i = 0; i < percentualeLineareASize; i++) {
+            _genotype.addPercentageVariationLinearA(this->percentualeLineareA[i]);
+        }
+        for (int i = 0; i <  percentualeLineareBSize; i++) {
+            _genotype.addPercentageVariationLinearB(this->percentualeLineareB[i]);
+        }
+        for (int i = 0; i < percentualeGammaASize; i++) {
+            _genotype.addPercentageVariationGammaA(this->percentualeGammaA[i]);
+        }
+        for (int i = 0; i < percentualeGammaBSize; i++) {
+            _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
+        }
+//        _genotype.setPercentageVariationWeight(percentageWeight);
+//        _genotype.setPercentageVariationLinearA(percentageLineareA);
+//        _genotype.setPercentageVariationLinearB(percentageLineareB);
+//        _genotype.setPercentageVariationGammaA(percentageGammaA);
+//        _genotype.setPercentageVariationGammaB(percentageGammaB);
 
     }
 
@@ -240,6 +142,18 @@ private:
     int functionTypesSize;
     Parameters * parameters;
     int parametersSize;
+
+
+    double* percentualePeso;
+    int percentualePesoSize;
+    double* percentualeLineareA;
+    int percentualeLineareASize;
+    double* percentualeLineareB;
+    int percentualeLineareBSize;
+    double* percentualeGammaA;
+    int percentualeGammaASize;
+    double* percentualeGammaB;
+    int percentualeGammaBSize;
     //  varType anyVariable;		   // for example ...
     // END   Private data of an eoOneMaxInit object
 };

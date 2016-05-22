@@ -29,22 +29,18 @@ public:
      * Ctor - no requirement
      */
     // START eventually add or modify the anyVariable argument
-    eoOneMaxMutation(    double _percentualePeso,
-                         double _percentualeLineareA,
-                         double _percentualeLineareB,
-                         double _percentualeGammaA,
-                         double _percentualeGammaB)
+    eoOneMaxMutation()
     //  eoOneMaxMutation( varType  _anyVariable) : anyVariable(_anyVariable)
     // END eventually add or modify the anyVariable argument
     {
         // START Code of Ctor of an eoOneMaxEvalFunc object
         // END   Code of Ctor of an eoOneMaxEvalFunc object
 
-        percentualePeso= _percentualePeso;
-        percentualeLineareA = _percentualeLineareA;
-        percentualeLineareB = _percentualeLineareB;
-        percentualeGammaA = _percentualeGammaA;
-        percentualeGammaB = _percentualeGammaB;
+//        percentualePeso= _percentualePeso;
+//        percentualeLineareA = _percentualeLineareA;
+//        percentualeLineareB = _percentualeLineareB;
+//        percentualeGammaA = _percentualeGammaA;
+//        percentualeGammaB = _percentualeGammaB;
     }
 
     /// The class name. Used to display statistics
@@ -87,14 +83,14 @@ public:
             if(_genotype.getFunctionType(i) == 0){
                 double tmp1 =_genotype.getPar(i).getParameters(0);
                 double tmp2 = _genotype.getPar(i).getParameters(1);
-                double rndDoubleAlfa= fRand(-(tmp1*percentualeLineareA),tmp1*percentualeLineareA);
-                double rndDoubleBeta= fRand(-(tmp2*percentualeLineareB),tmp2*percentualeLineareB);
+                double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationLinearA(i)),tmp1*_genotype.getPercentageVariationLinearA(i));
+                double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationLinearB(i)),tmp2*_genotype.getPercentageVariationLinearB(i));
                 double tmpAlfa = tmp1 + rndDoubleAlfa;
                 double tmpBeta = tmp2+ rndDoubleBeta;
                 _genotype.setParameters(i,0,tmpAlfa);
                 _genotype.setParameters(i,1,tmpBeta);
 
-                double rndDoubleW= fRand(-(_genotype.getW(i)*percentualePeso),_genotype.getW(i)*percentualePeso);
+                double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
                 if(_genotype.getW(i)+rndDoubleW < 0)
                     _genotype.setW(i,_genotype.getW(i)-rndDoubleW);
                 else
@@ -113,8 +109,8 @@ public:
                     if(_genotype.getFunctionType(i) == 2){
                         double tmp1 =_genotype.getPar(i).getParameters(0);
                         double tmp2 = _genotype.getPar(i).getParameters(1);
-                        double rndDoubleAlfa= fRand(-(tmp1*percentualeGammaA),tmp1*percentualeGammaA);
-                        double rndDoubleBeta= fRand(-(tmp2*percentualeGammaB),tmp2*percentualeGammaB);
+                        double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationGammaA(i)),tmp1*_genotype.getPercentageVariationGammaA(i));
+                        double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationGammaB(i)),tmp2*_genotype.getPercentageVariationGammaB(i));
 
                         double tmpAlfa = tmp1 + rndDoubleAlfa;
                         if(tmpAlfa < 0)
@@ -127,7 +123,7 @@ public:
                         _genotype.setParameters(i,1,tmpBeta);
 
                         //controllo > 0
-                        double rndDoubleW= fRand(-(_genotype.getW(i)*percentualePeso),_genotype.getW(i)*percentualePeso);
+                        double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
                         if(_genotype.getW(i)+rndDoubleW < 0)
                             _genotype.setW(i,_genotype.getW(i)-rndDoubleW);
                         else
@@ -153,11 +149,11 @@ public:
 private:
     // START Private data of an eoOneMaxMutation object
     //  varType anyVariable;		   // for example ...
-    double percentualePeso;
-    double percentualeLineareA;
-    double percentualeLineareB;
-    double percentualeGammaA;
-    double percentualeGammaB;
+//    std::vector<double> percentualePeso;
+//    std::vector<double> percentualeLineareA;
+//    std::vector<double> percentualeLineareB;
+//    std::vector<double> percentualeGammaA;
+//    std::vector<double> percentualeGammaB;
     // END   Private data of an eoOneMaxMutation object
 };
 

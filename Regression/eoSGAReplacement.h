@@ -112,6 +112,11 @@ public :
                 a.setParFromNew(popTmp[counter].getPar());
                 a.setFunctionTypeFromNew(popTmp[counter].getFunctionType());
                 a.setYcombinataFromNew(popTmp[counter].getYCombinata());
+                a.setPercentageVariationWeight(popTmp[counter].getPercentageVariationWeight());
+                a.setPercentageVariationLinearA(popTmp[counter].getPercentageVariationLinearA());
+                a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
+                a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
+                a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
 
                 offspring[counter]=a;
                 // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
@@ -134,6 +139,12 @@ public :
                 a.setParFromNew(popTmp[counter].getPar());
                 a.setFunctionTypeFromNew(popTmp[counter].getFunctionType());
                 a.setYcombinataFromNew(popTmp[counter].getYCombinata());
+                a.setPercentageVariationWeight(popTmp[counter].getPercentageVariationWeight());
+                a.setPercentageVariationLinearA(popTmp[counter].getPercentageVariationLinearA());
+                a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
+                a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
+                a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
+
                 offspring[counter]= a;
             }
             else{
@@ -142,6 +153,12 @@ public :
                 a.setParFromNew(popTmp[counter].getPar());
                 a.setFunctionTypeFromNew(popTmp[counter].getFunctionType());
                 a.setYcombinataFromNew(popTmp[counter].getYCombinata());
+                a.setPercentageVariationWeight(popTmp[counter].getPercentageVariationWeight());
+                a.setPercentageVariationLinearA(popTmp[counter].getPercentageVariationLinearA());
+                a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
+                a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
+                a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
+
                 offspring[counter]= a;
             }
 
@@ -168,7 +185,7 @@ public :
 // }
 
         //for (i=0; i<_pop.size()/2; i++)
-        for (i=1; i<_pop.size()/2; i++)
+        for (i=0; i<_pop.size()/2; i++)
           {
             if ( rng.flip(crossoverRate) )
             {
@@ -193,7 +210,7 @@ public :
 //        }
 
 
-        for (i=1; i < offspring.size(); i++)
+        for (i=0; i < offspring.size(); i++)
           {
             if (rng.flip(mutationRate) )
             {

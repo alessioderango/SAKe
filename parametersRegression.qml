@@ -124,8 +124,8 @@ ApplicationWindow {
                             rows: 2
                             columns: 1
 
-                            Layout.preferredWidth: 309
-                            Layout.preferredHeight: 250
+                            Layout.preferredWidth: -1
+                            Layout.preferredHeight: -1
 
                             ColumnLayout {
                                 id: columnLayout4
@@ -334,16 +334,39 @@ ApplicationWindow {
                                     transformOrigin: Item.Center
                                 }
                                 TextField {
-                                    id: textPercentageWeight
+                                    id: textPercentageN
                                     width: 63
-                                    text: "0.03"
+                                    text: "0"
                                     //text: "30"
                                     //inputMethodHints: Qt.ImhDigitsOnly
                                     validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                                     placeholderText: "Population Size"
+                                    onTextChanged: {
+                                        if(text >0 && pathrain != ""){
+                                            if(lastGeneration.checked){
+                                                customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
+                                            }
+                                            else{
+                                                customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                            }
+                                        }
+                                    }
                                 }
 
-                                CheckBox {id:lastGeneration; text: qsTr("Use Control Points")   }
+                                CheckBox {
+                                            id:lastGeneration;
+                                            text: qsTr("Use Control Points")
+                                            onCheckedChanged: {
+                                                if(textPercentageN.text >0 && pathrain != ""){
+                                                    if(lastGeneration.checked){
+                                                        customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
+                                                    }
+                                                    else{
+                                                        customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                                    }
+                                                }
+                                            }
+                                          }
 
 
 
@@ -400,8 +423,18 @@ ApplicationWindow {
                                         //tableModel.get(0).pw = "9"
                                         //console.log(tableModel.get(0).amin)
                                         tableModel.clear()
+
                                         for(var i = 0;i< text;i++){
-                                            tableModel.append({nFunction: i+1})
+                                            tableModel.append({ nFunction:i+1,
+                                                                  amax: "0.8",
+                                                                  amin: "0.2",
+                                                                  bmax: "50",
+                                                                  bmin: "5",
+                                                                  wmax: "2",
+                                                                  wmin: "0.2",
+                                                                  pa: "0.3",
+                                                                  pb: "0.3",
+                                                                  pw: "0.3"})
                                         }
 
 
@@ -411,14 +444,32 @@ ApplicationWindow {
                                     }
                                 }
 
+                                function showLabelFirstTime(text){
+                                        for(var i = 0;i< text;i++){
+                                            tableModel.append({ nFunction:i+1,
+                                                                  amax: "0.8",
+                                                                  amin: "0.2",
+                                                                  bmax: "50",
+                                                                  bmin: "5",
+                                                                  wmax: "2",
+                                                                  wmin: "0.2",
+                                                                  pa: "0.3",
+                                                                  pb: "0.3",
+                                                                  pw: "0.3"})
+                                        }
+                                        textFieldGammaFunctions.text="1"
+                                }
+
                                 width: 63
-                                text: "0"
+                                text: showLabelFirstTime(1)
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
                                 }
                                 //                                editingFinished: console.log("CIAO")
                                 onTextChanged: showLabel(text)
+
+
 
 
                             }
@@ -450,11 +501,12 @@ ApplicationWindow {
                             Layout.fillHeight: false
 
                             TableViewColumn {
-                                width: 50
+                                width: 20
                                 movable: false
                                 title: "N."
                                 role: "nFunction"
                                 delegate: Text {
+                                    text: model.nFunction
                                 }
                             }
 
@@ -464,6 +516,18 @@ ApplicationWindow {
                                 title: "α max"
                                 role: "amax"
                                 delegate: TextField {
+                                    text: model.amax
+                                    validator:  RegExpValidator { regExp:  /0[.]\d{1,3}|1/}
+                                    onTextChanged: {
+                                        console.log("amax")
+                                        console.log(tableModel.get(styleData.row).amin)
+                                        console.log(tableModel.get(styleData.row).amax)
+                                       tableModel.get(styleData.row).amax = text
+                                        console.log("End")
+                                        if(parseFloat(tableModel.get(styleData.row).amin) > parseFloat(tableModel.get(styleData.row).amax)){
+                                            tableModel.get(styleData.row).amin=0;
+                                        }
+                                    }
                                 }
                             }
 
@@ -473,6 +537,19 @@ ApplicationWindow {
                                 title: "α min"
                                 role: "amin"
                                 delegate: TextField {
+                                    //validator:
+                                    text: model.amin
+                                    validator:  RegExpValidator { regExp:  /0[.]\d{1,3}|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).amin = text
+                                        console.log("amin")
+                                        console.log(tableModel.get(styleData.row).amin)
+                                        console.log(tableModel.get(styleData.row).amax)
+                                        console.log("End")
+                                        if(parseFloat(tableModel.get(styleData.row).amax) < parseFloat(tableModel.get(styleData.row).amin)){
+                                            tableModel.get(styleData.row).amax=1;
+                                        }
+                                    }
                                 }
                                 resizable: false
 
@@ -484,6 +561,20 @@ ApplicationWindow {
                                 title: "β max"
                                 role: "bmax"
                                 delegate: TextField {
+                                    text: model.bmax
+
+                                    validator:  RegExpValidator { regExp:  /^([0123][0-9][0-9]|400)$/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).bmax = text
+                                        console.log("bmax")
+                                        console.log(tableModel.get(styleData.row).bmin)
+                                        console.log(tableModel.get(styleData.row).bmax)
+                                        console.log("End")
+                                        if( parseFloat(tableModel.get(styleData.row).bmin) > parseFloat(tableModel.get(styleData.row).bmax)){
+
+                                            tableModel.get(styleData.row).bmin=0;
+                                        }
+                                    }
                                 }
                             }
 
@@ -493,6 +584,18 @@ ApplicationWindow {
                                 title: "β min"
                                 role: "bmin"
                                 delegate: TextField {
+                                    text: model.bmin
+                                    validator:  RegExpValidator { regExp:  /^([0123][0-9][0-9]|400)$/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).bmin = text
+                                        console.log("bmin")
+                                        console.log(tableModel.get(styleData.row).bmin)
+                                        console.log(tableModel.get(styleData.row).bmax)
+                                        console.log("End")
+                                        if(parseFloat(tableModel.get(styleData.row).bmax) < parseFloat(tableModel.get(styleData.row).bmin)){
+                                            tableModel.get(styleData.row).bmax=400;
+                                        }
+                                    }
                                 }
                                 resizable: false
                             }
@@ -502,6 +605,14 @@ ApplicationWindow {
                                 title: "Weight max"
                                 role: "wmax"
                                 delegate: TextField {
+                                    text: model.wmax
+                                    validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).wmax = text
+                                        if(parseFloat(tableModel.get(styleData.row).wmin) > parseFloat(tableModel.get(styleData.row).wmax)){
+                                            tableModel.get(styleData.row).wmin=0;
+                                        }
+                                    }
                                 }
                             }
 
@@ -511,6 +622,14 @@ ApplicationWindow {
                                 title: "Weight min"
                                 role: "wmin"
                                 delegate: TextField {
+                                    text: model.wmin
+                                    validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
+                                    onTextChanged: {
+                                         tableModel.get(styleData.row).wmin = text
+                                        if(parseFloat(tableModel.get(styleData.row).wmax) < parseFloat(tableModel.get(styleData.row).wmin)){
+                                            tableModel.get(styleData.row).wmax=1000;
+                                        }
+                                    }
                                 }
                                 resizable: false
                             }
@@ -521,6 +640,12 @@ ApplicationWindow {
                                 title: "Percentage α"
                                 role: "pa"
                                 delegate: TextField {
+                                    text: model.pa
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel.get(styleData.row).pa = text
+                                    }
+
                                 }
                                 resizable: false
                             }
@@ -530,6 +655,11 @@ ApplicationWindow {
                                 title: "Percentage β"
                                 role: "pb"
                                 delegate: TextField {
+                                    text: model.pb
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel.get(styleData.row).pb = text
+                                    }
                                 }
                                 resizable: false
                             }
@@ -537,8 +667,13 @@ ApplicationWindow {
                                 width: 100
                                 movable: false
                                 title: "Percentage Weight "
-                                role: "Percentage Weight "
+                                role: "pw"
                                 delegate: TextField {
+                                    text: model.pw
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel.get(styleData.row).pw = text
+                                    }
 
                                 }
 
@@ -574,22 +709,19 @@ ApplicationWindow {
 
                                 function showLabel(text){
                                     if(text > 0){
-
-
-                                        //console.log(tableModel.count)
-                                        //tableModel.get(0).amax = "1"
-                                        //tableModel.get(0).amin = "2"
-                                        //tableModel.get(0).bmax = "3"
-                                        //tableModel.get(0).bmin = "4"
-                                        //tableModel.get(0).wmax = "5"
-                                        //tableModel.get(0).wmin = "6"
-                                        //tableModel.get(0).pa = "7"
-                                        //tableModel.get(0).pb = "8"
-                                        //tableModel.get(0).pw = "9"
-                                        //console.log(tableModel.get(0).amin)
                                         tableModel2.clear()
                                         for(var i = 0;i< text;i++){
-                                            tableModel2.append({nFunction:i+1})
+                                            tableModel2.append({nFunction:i+1,
+                                                                   bmax: "8",
+                                                                   bmin: "1",
+                                                                   amax: "200",
+                                                                   amin: "20",
+                                                                   wmax: "2",
+                                                                   wmin: "0.2",
+                                                                   pa: "0.3",
+                                                                   pb: "0.3",
+                                                                   pw: "0.3"
+                                                               })
                                         }
 
 
@@ -599,8 +731,47 @@ ApplicationWindow {
                                     }
                                 }
 
+                                function showLabelFirstTime(){
+                                    textFieldGammaFunctionsGreaterthan1.text="3"
+                                    tableModel2.clear()
+
+                                    tableModel2.append({ nFunction:1,
+                                                                  bmax: "8",
+                                                                  bmin: "1",
+                                                                  amax: "200",
+                                                                  amin: "20",
+                                                                  wmax: "2",
+                                                                  wmin: "0.2",
+                                                                  pa: "0.3",
+                                                                  pb: "0.3",
+                                                                  pw: "0.3"})
+                                    console.log("ENTRATO")
+                                    tableModel2.append({ nFunction:2,
+                                                          bmax: "80",
+                                                          bmin: "20",
+                                                          amax: "30",
+                                                          amin: "2",
+                                                          wmax: "2",
+                                                          wmin: "0.2",
+                                                          pa: "0.3",
+                                                          pb: "0.3",
+                                                          pw: "0.3"})
+                                    tableModel2.append({ nFunction:3,
+                                                           bmax: "350",
+                                                           bmin: "150",
+                                                           amax: "7",
+                                                           amin: "2",
+                                                           wmax: "2",
+                                                           wmin: "0.2",
+                                                           pa: "0.3",
+                                                           pb: "0.3",
+                                                           pw: "0.3"})
+
+
+                                }
+
                                 width: 63
-                                text: "0"
+                                text: showLabelFirstTime()
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
@@ -638,34 +809,17 @@ ApplicationWindow {
                             Layout.fillHeight: false
 
                             TableViewColumn {
-                                width: 50
+                                width: 20
                                 movable: false
                                 title: "N."
                                 role: "nFunction"
                                 delegate: Text {
+                                    text: model.nFunction
                                 }
                             }
 
 
-                            TableViewColumn {
-                                width: 50
-                                movable: false
-                                title: "α max"
-                                role: "amax"
-                                delegate: TextField {
-                                }
-                            }
 
-                            TableViewColumn {
-                                width: 50
-                                movable: false
-                                title: "α min"
-                                role: "amin"
-                                delegate: TextField {
-                                }
-                                resizable: false
-
-                            }
 
                             TableViewColumn {
                                 width: 50
@@ -673,6 +827,18 @@ ApplicationWindow {
                                 title: "β max"
                                 role: "bmax"
                                 delegate: TextField {
+                                    text: model.bmax
+                                    onTextChanged: {
+                                         tableModel2.get(styleData.row).bmax = text
+                                        console.log("bmax")
+                                        console.log(tableModel2.get(styleData.row).bmin)
+                                        console.log(tableModel2.get(styleData.row).bmax)
+                                        console.log("End")
+                                        if( parseFloat(tableModel2.get(styleData.row).bmin) > parseFloat(tableModel2.get(styleData.row).bmax)){
+
+                                            tableModel2.get(styleData.row).bmin=0;
+                                        }
+                                    }
                                 }
                             }
 
@@ -682,8 +848,60 @@ ApplicationWindow {
                                 title: "β min"
                                 role: "bmin"
                                 delegate: TextField {
+                                    text: model.bmin
+                                    onTextChanged: {
+                                         tableModel2.get(styleData.row).bmin = text
+                                        console.log("bmin")
+                                        console.log(tableModel2.get(styleData.row).bmin)
+                                        console.log(tableModel2.get(styleData.row).bmax)
+                                        console.log("End")
+                                        if(parseFloat(tableModel2.get(styleData.row).bmax) < parseFloat(tableModel2.get(styleData.row).bmin)){
+                                            tableModel2.get(styleData.row).bmax=400;
+                                        }
+                                    }
                                 }
                                 resizable: false
+                            }
+
+
+                            TableViewColumn {
+                                width: 50
+                                movable: false
+                                title: "α max"
+                                role: "amax"
+                                delegate: TextField {
+                                    id: textid
+                                    text: model.amax
+                                    validator:
+
+//                                        if( 0 < (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin) &&
+//                                        1 > (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin))
+                                         RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
+
+                                    onTextChanged: {
+                                        tableModel2.get(styleData.row).amax = text;
+
+
+                                    }
+                                }
+
+
+
+                            }
+
+                            TableViewColumn {
+                                width: 50
+                                movable: false
+                                title: "α min"
+                                role: "amin"
+                                delegate: TextField {
+                                    text: model.amin
+                                    onTextChanged: {
+                                        tableModel2.get(styleData.row).amin = text
+                                    }
+                                }
+                                resizable: false
+
                             }
                             TableViewColumn {
                                 width: 70
@@ -691,6 +909,10 @@ ApplicationWindow {
                                 title: "Weight max"
                                 role: "wmax"
                                 delegate: TextField {
+                                    text: model.wmax
+                                    onTextChanged: {
+                                        tableModel2.get(styleData.row).wmax = text
+                                    }
                                 }
                             }
 
@@ -700,6 +922,10 @@ ApplicationWindow {
                                 title: "Weight min"
                                 role: "wmin"
                                 delegate: TextField {
+                                    text: model.wmin
+                                    onTextChanged: {
+                                        tableModel2.get(styleData.row).wmin = text
+                                    }
                                 }
                                 resizable: false
                             }
@@ -710,6 +936,13 @@ ApplicationWindow {
                                 title: "Percentage α"
                                 role: "pa"
                                 delegate: TextField {
+                                    text: model.pa
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel2.get(styleData.row).pa = text
+                                    }
+
+
                                 }
                                 resizable: false
                             }
@@ -719,15 +952,26 @@ ApplicationWindow {
                                 title: "Percentage β"
                                 role: "pb"
                                 delegate: TextField {
+                                    text: model.pb
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel2.get(styleData.row).pb = text
+                                    }
                                 }
+
                                 resizable: false
                             }
                             TableViewColumn {
                                 width: 100
                                 movable: false
                                 title: "Percentage Weight "
-                                role: "Percentage Weight "
+                                role: "pw"
                                 delegate: TextField {
+                                    text: model.pw
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel2.get(styleData.row).pw = text
+                                    }
 
                                 }
 
@@ -758,7 +1002,7 @@ ApplicationWindow {
                             }
 
                             TextField {
-                                id: textFieldGammaFunctionsLinear
+                                id: textFieldLinearFunction
 
                                 function showLabel(text){
                                     if(text > 0){
@@ -776,7 +1020,16 @@ ApplicationWindow {
                                         //console.log(tableModel.get(0).amin)
                                         tableModel3.clear()
                                         for(var i = 0;i< text;i++){
-                                            tableModel3.append({nFunction:i+1})
+                                            tableModel3.append({ nFunction:i+1,
+                                                                   amax: 0,
+                                                                   amin: 0,
+                                                                   bmax: 0,
+                                                                   bmin: 0,
+                                                                   wmax: 0,
+                                                                   wmin: 0,
+                                                                   pa: 0,
+                                                                   pb: 0,
+                                                                   pw: 0})
                                         }
 
 
@@ -787,8 +1040,24 @@ ApplicationWindow {
                                     }
                                 }
 
+                                function showLabelFirstTime(){
+                                    textFieldLinearFunction.text="1"
+                                    tableModel3.clear()
+                                    tableModel3.append({ nFunction:1,
+                                                                  bmax: "0.5",
+                                                                  bmin: "0",
+                                                                  amax: "0.5",
+                                                                  amin: "-0.5",
+                                                                  wmax: "2",
+                                                                  wmin: "0.2",
+                                                                  pa: "0.3",
+                                                                  pb: "0.3",
+                                                                  pw: "0.3"})
+                                }
+
+
                                 width: 63
-                                text: "0"
+                                text: showLabelFirstTime()
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
@@ -826,11 +1095,12 @@ ApplicationWindow {
                             Layout.fillHeight: false
 
                             TableViewColumn {
-                                width: 50
+                                width: 20
                                 movable: false
                                 title: "N."
                                 role: "nFunction"
                                 delegate: Text {
+                                    text: model.nFunction
                                 }
                             }
 
@@ -840,6 +1110,7 @@ ApplicationWindow {
                                 title: "α max"
                                 role: "amax"
                                 delegate: TextField {
+                                    text: model.amax
                                 }
                             }
 
@@ -849,6 +1120,7 @@ ApplicationWindow {
                                 title: "α min"
                                 role: "amin"
                                 delegate: TextField {
+                                    text: model.amin
                                 }
                                 resizable: false
 
@@ -860,6 +1132,7 @@ ApplicationWindow {
                                 title: "β max"
                                 role: "bmax"
                                 delegate: TextField {
+                                     text: model.bmax
                                 }
                             }
 
@@ -869,6 +1142,7 @@ ApplicationWindow {
                                 title: "β min"
                                 role: "bmin"
                                 delegate: TextField {
+                                    text: model.bmin
                                 }
                                 resizable: false
                             }
@@ -878,6 +1152,7 @@ ApplicationWindow {
                                 title: "Weight max"
                                 role: "wmax"
                                 delegate: TextField {
+                                    text: model.wmax
                                 }
                             }
 
@@ -887,6 +1162,7 @@ ApplicationWindow {
                                 title: "Weight min"
                                 role: "wmin"
                                 delegate: TextField {
+                                    text: model.wmin
                                 }
                                 resizable: false
                             }
@@ -897,6 +1173,11 @@ ApplicationWindow {
                                 title: "Percentage α"
                                 role: "pa"
                                 delegate: TextField {
+                                    text: model.pa
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel3.get(styleData.row).pa = text
+                                    }
                                 }
                                 resizable: false
                             }
@@ -906,6 +1187,11 @@ ApplicationWindow {
                                 title: "Percentage β"
                                 role: "pb"
                                 delegate: TextField {
+                                    text: model.pb
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel3.get(styleData.row).pb = text
+                                    }
                                 }
                                 resizable: false
                             }
@@ -913,9 +1199,13 @@ ApplicationWindow {
                                 width: 100
                                 movable: false
                                 title: "Percentage Weight "
-                                role: "Percentage Weight "
+                                role: "pw"
                                 delegate: TextField {
-
+                                    text: model.pw
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                         tableModel3.get(styleData.row).pw = text
+                                    }
                                 }
 
                                 resizable: false
@@ -958,9 +1248,17 @@ ApplicationWindow {
                                 console.log("You chose: " + split.length)
                                 textfileRain.text = "../"+split[split.length-1]
                                 customPlotKernelRegression1.initCustomPlotRegressionPreviewKernel(fileDialogRain.fileUrl)
-//                                customPlotKernelRegression1.initCustomPlotKernelComtrolPoints(fileDialogRain.fileUrl)
+                                //                                customPlotKernelRegression1.initCustomPlotKernelComtrolPoints(fileDialogRain.fileUrl)
                                 //handlerCSV.loadCSV(fileDialogRain.fileUrl)
                                 //Qt.quit()
+
+
+
+
+
+
+
+
                             }
                             onRejected: {
                                 console.log("Canceled")
@@ -975,7 +1273,8 @@ ApplicationWindow {
                             id: button1
                             text: qsTr("Load Kernel")
                             onClicked: {
-                                 fileDialogRain.open()
+                                fileDialogRain.open()
+
                             }
                         }
 
@@ -1017,20 +1316,20 @@ ApplicationWindow {
                         Component.onCompleted: initCustomPlotRegressionPreviewKernel()
 
                     }
-                    CustomPlotRegressionPreviewKernel {
-                        id: customPlotKernelRegression2
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
+                    //                    CustomPlotRegressionPreviewKernel {
+                    //                        id: customPlotKernelRegression2
+                    //                        Layout.fillWidth: true
+                    //                        Layout.fillHeight: true
 
-                        Layout.preferredWidth: 700
-                        Layout.preferredHeight: 200
-                        Layout.maximumWidth:  1000000
-                        Layout.maximumHeight: 1000000
-                        //objectName:  'customPlotKernelRegression'
-                        //anchors.top: customPlot1.bottom
-                        Component.onCompleted: initCustomPlotRegressionPreviewKernel()
+                    //                        Layout.preferredWidth: 700
+                    //                        Layout.preferredHeight: 200
+                    //                        Layout.maximumWidth:  1000000
+                    //                        Layout.maximumHeight: 1000000
+                    //                        //objectName:  'customPlotKernelRegression'
+                    //                        //anchors.top: customPlot1.bottom
+                    //                        Component.onCompleted: initCustomPlotRegressionPreviewKernel()
 
-                    }
+                    //                    }
 
                 }
             }
@@ -1079,14 +1378,9 @@ ApplicationWindow {
                         populationSize = textFieldPopulationSize.text;
                         percentageCrossover = textFieldProbabiltyCrossOver.text;
                         percentageMutation = textFieldProbabiltyMutation.text;
-                        percentageWeight = textPercentageWeight.text;
                         numberProcessor = textFieldNumberProcessor.text;
                         numberGamma = textFieldGammaFunctions.text;
-                        percentageGammaA = textFieldGammaA.text;
-                        percentageGammaB = textFieldGammaB.text;
                         numberLinear = textFieldLinearFunction.text;
-                        percentageLinearA = textFieldLinearA.text;
-                        percentageLinearB = textFieldLinearB.text;
                         maxGeneration = textFieldMaxGeneration.text;
                         selection =  selections.get(selections.currentIndex).text;
                         selectionElitist =  selectionParameterTournamentWithoutReplacement.text;
@@ -1096,19 +1390,79 @@ ApplicationWindow {
                         console.log("populationSize : "+populationSize +
                                     "\n percentageCrossover : "+percentageCrossover+
                                     "\n percentageMutation : "+percentageMutation+
-                                    "\n percentageWeight : "+percentageWeight+
                                     "\n numberProcessor : "+numberProcessor+
                                     "\n numberGamma : "+numberGamma+
-                                    "\n percentageGammaA : "+percentageGammaA+
-                                    "\n percentageGammaB : "+percentageGammaB+
                                     "\n numberLinear : "+numberLinear+
-                                    "\n percentageLinearA : "+percentageLinearA+
-                                    "\n percentageLinearB : "+percentageLinearB+
                                     "\n maxGeneration : "+maxGeneration+
                                     "\n selection : "+selection+
                                     "\n selectionElitist : "+selectionElitist+
                                     "\n fileUrl : "+fileUrl
                                     )
+
+                        var numberArguments = 9;
+                        var matrixGamma1 = new Array(tableModel.count+1);
+                        for (var i = 0; i < tableModel.count+1; i++) {
+                          matrixGamma1[i] = new Array(numberArguments);
+                        }
+                        matrixGamma1[0][0]=tableModel.count;
+                        for(var i = 0; i < tableModel.count; i++){
+                            var tmp = tableModel.get(i);
+                            matrixGamma1[i+1][0]=tmp.amax
+                            matrixGamma1[i+1][1]=tmp.amin
+                            matrixGamma1[i+1][2]=tmp.bmax
+                            matrixGamma1[i+1][3]=tmp.bmin
+                            matrixGamma1[i+1][4]=tmp.wmax
+                            matrixGamma1[i+1][5]=tmp.wmin
+                            matrixGamma1[i+1][6]=tmp.pa
+                            matrixGamma1[i+1][7]=tmp.pb
+                            matrixGamma1[i+1][8]=tmp.pw
+                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                        }
+
+                        var matrixGamma2 = new Array(tableModel2.count+1);
+                        for (var i = 0; i < tableModel2.count+1; i++) {
+                          matrixGamma2[i] = new Array(numberArguments);
+                        }
+                        matrixGamma2[0][0]=tableModel2.count;
+                        for(var i = 0; i < tableModel2.count; i++){
+                            var tmp = tableModel2.get(i);
+                            matrixGamma2[i+1][0]=tmp.amax
+                            matrixGamma2[i+1][1]=tmp.amin
+                            matrixGamma2[i+1][2]=tmp.bmax
+                            matrixGamma2[i+1][3]=tmp.bmin
+                            matrixGamma2[i+1][4]=tmp.wmax
+                            matrixGamma2[i+1][5]=tmp.wmin
+                            matrixGamma2[i+1][6]=tmp.pa
+                            matrixGamma2[i+1][7]=tmp.pb
+                            matrixGamma2[i+1][8]=tmp.pw
+                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                        }
+
+                        var matrixGamma3 = new Array(tableModel3.count+1);
+                        for (var i = 0; i < tableModel3.count+1; i++) {
+                          matrixGamma3[i] = new Array(numberArguments);
+                        }
+                        matrixGamma3[0][0]=tableModel3.count;
+                        for(var i = 0; i < tableModel3.count; i++){
+                            var tmp = tableModel3.get(i);
+                            matrixGamma3[i+1][0]=tmp.amax
+                            matrixGamma3[i+1][1]=tmp.amin
+                            matrixGamma3[i+1][2]=tmp.bmax
+                            matrixGamma3[i+1][3]=tmp.bmin
+                            matrixGamma3[i+1][4]=tmp.wmax
+                            matrixGamma3[i+1][5]=tmp.wmin
+                            matrixGamma3[i+1][6]=tmp.pa
+                            matrixGamma3[i+1][7]=tmp.pb
+                            matrixGamma3[i+1][8]=tmp.pw
+                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                        }
+
+                        console.log(matrixGamma1)
+                        console.log(matrixGamma2)
+                        console.log(matrixGamma3)
 
 
                         sakeStart.startRegression(
@@ -1118,17 +1472,20 @@ ApplicationWindow {
                                     populationSize  ,
                                     percentageCrossover  ,
                                     percentageMutation  ,
-                                    percentageWeight  ,
+                                    0.2  ,
                                     numberProcessor  ,
                                     numberGamma  ,
-                                    percentageGammaA  ,
-                                    percentageGammaB  ,
+                                    0.2  ,
+                                    0.2  ,
                                     numberLinear  ,
-                                    percentageLinearA  ,
-                                    percentageLinearB  ,
+                                    0.2  ,
+                                    0.2  ,
                                     maxGeneration,
                                     fileUrl,
-                                    0
+                                    0,
+                                    matrixGamma1,
+                                    matrixGamma2,
+                                    matrixGamma3
                                     )
                         //                                                            sakeStart.startRegression()
                         close();

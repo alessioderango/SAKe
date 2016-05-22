@@ -96,8 +96,37 @@ public:
             //                          tmp4.setParameters(1,tmpPar2);
             //                      }
 
-            _genotype1.setPar(i,tmp3);
-            _genotype2.setPar(i,tmp4);
+            _genotype1.setPar(i,tmp4);
+            _genotype2.setPar(i,tmp3);
+
+            double tmpWeight1 = _genotype1.getPercentageVariationWeight(i);
+            double tmpWeight2 = _genotype2.getPercentageVariationWeight(i);
+            _genotype1.setPercentageVariationWeight(i,tmpWeight2);
+            _genotype2.setPercentageVariationWeight(i,tmpWeight1);
+
+            double tmpLinearA1 = _genotype1.getPercentageVariationLinearA(i);
+            double tmpLinearA2 = _genotype2.getPercentageVariationLinearA(i);
+            _genotype1.setPercentageVariationLinearA(i,tmpLinearA2);
+            _genotype2.setPercentageVariationLinearA(i,tmpLinearA1);
+
+            double tmpLinearB1 = _genotype1.getPercentageVariationLinearB(i);
+            double tmpLinearB2 = _genotype2.getPercentageVariationLinearB(i);
+            _genotype1.setPercentageVariationLinearB(i,tmpLinearB2);
+            _genotype2.setPercentageVariationLinearB(i,tmpLinearB1);
+
+            double tmpGammaA1 = _genotype1.getPercentageVariationGammaA(i);
+            double tmpGammaA2 = _genotype2.getPercentageVariationGammaA(i);
+            _genotype1.setPercentageVariationGammaA(i,tmpGammaA2);
+            _genotype2.setPercentageVariationGammaA(i,tmpGammaA1);
+
+            double tmpGammaB1 = _genotype1.getPercentageVariationGammaB(i);
+            double tmpGammaB2 = _genotype2.getPercentageVariationGammaB(i);
+            _genotype1.setPercentageVariationGammaB(i,tmpGammaB2);
+            _genotype2.setPercentageVariationGammaB(i,tmpGammaB1);
+
+
+
+
 
         }
 

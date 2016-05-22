@@ -43,6 +43,11 @@ public:
     w.resize(0);
     par.resize(0);
     functionType.resize(0);
+    percentageVariationWeight.resize(0);
+    percentageVariationLinearA.resize(0);
+    percentageVariationLinearB.resize(0);
+    percentageVariationGammaA.resize(0);
+    percentageVariationGammaB.resize(0);
     // END   Code of default Ctor of an eoOneMax object
   }
 
@@ -178,44 +183,131 @@ public:
       yCombinata=_w;
   }
 
-
-  /** printing... */
-//     void printOn(ostream& _os) const
-//     {
-//       // First write the fitness
-//       EO<FitT>::printOn(_os);
-//       _os << " pesi ";
-//     // START Code of default output
-
-//       for (int i = 0; i < w.size(); i++) {
-//           _os << w[i]<< ' ';
-//       }
-//        _os << endl;
-
-//       for (int i = 0; i < functionType.size(); i++) {
-//          _os << "Function type " << functionType[i]<< ' ';
-//          _os << endl;
-
-//          if(functionType[i]==0){
-//                 _os << "linear primo a  = " <<par[i].getParametersConst()[0] << ' ' << endl;
-//                 _os << "linear primo b = " <<par[i].getParametersConst()[1] << ' ' << endl;
-//          }
-//          else
-//          if(functionType[i]==1)
-//                 _os << "espo primo a  = "  <<par[i].getParametersConst()[0] << ' ' << endl;
-//          else
-//          {
-//              if(functionType[i]==2){
-//               _os << "gamma alfa = "<<par[i].getParametersConst()[0]<< ' ' << endl;
-//               _os << "gamma beta = "<< par[i].getParametersConst()[1]<< ' ' << endl;
-//              }
-//          }
-//       }
-//       _os << endl;
-     // END   Code of default output
-//     }
+   std::vector<double> getPercentageVariationWeight(){
+       return percentageVariationWeight;
+   }
+   std::vector<double> getPercentageVariationLinearA(){
+       return percentageVariationLinearA;
+   }
+   std::vector<double> getPercentageVariationLinearB(){
+       return percentageVariationLinearB;
+   }
+   std::vector<double> getPercentageVariationGammaA(){
+       return percentageVariationGammaA;
+   }
+   std::vector<double> getPercentageVariationGammaB(){
+       return percentageVariationGammaB;
+   }
 
 
+   std::vector<double> getPercentageVariationWeightConst() const{
+       return percentageVariationWeight;
+   }
+   std::vector<double> getPercentageVariationLinearAConst() const{
+       return percentageVariationLinearA;
+   }
+   std::vector<double> getPercentageVariationLinearBConst() const{
+       return percentageVariationLinearB;
+   }
+   std::vector<double> getPercentageVariationGammaAConst() const{
+       return percentageVariationGammaA;
+   }
+   std::vector<double> getPercentageVariationGammaBConst() const{
+       return percentageVariationGammaB;
+   }
+
+
+   void setPercentageVariationWeight(std::vector<double> a){
+       for (int i = 0; i < a.size(); ++i) {
+           percentageVariationWeight.push_back(a[i]);
+       }
+
+   }
+   void setPercentageVariationLinearA(std::vector<double> a){
+       for (int i = 0; i < a.size(); ++i) {
+           percentageVariationLinearA.push_back(a[i]);
+       }
+   }
+   void setPercentageVariationLinearB(std::vector<double> a){
+       for (int i = 0; i < a.size(); ++i) {
+           percentageVariationLinearB.push_back(a[i]);
+       }
+   }
+   void setPercentageVariationGammaA(std::vector<double> a){
+       for (int i = 0; i < a.size(); ++i) {
+           percentageVariationGammaA.push_back(a[i]);
+       }
+
+   }
+   void setPercentageVariationGammaB(std::vector<double> a){
+       for (int i = 0; i < a.size(); ++i) {
+           percentageVariationGammaB.push_back(a[i]);
+       }
+   }
+
+   double getPercentageVariationWeight(int i){
+       return percentageVariationWeight[i];
+   }
+   double getPercentageVariationLinearA(int i){
+       return percentageVariationLinearA[i];
+   }
+   double getPercentageVariationLinearB(int i){
+       return percentageVariationLinearB[i];
+   }
+   double getPercentageVariationGammaA(int i){
+       return percentageVariationGammaA[i];
+   }
+   double getPercentageVariationGammaB(int i){
+       return percentageVariationGammaB[i];
+   }
+
+   void setPercentageVariationWeight(int i,double a){
+       percentageVariationWeight[i] = a;
+   }
+   void setPercentageVariationLinearA(int i,double a){
+       percentageVariationLinearA[i] = a;
+   }
+   void setPercentageVariationLinearB(int i,double a){
+       percentageVariationLinearB[i] = a;
+   }
+   void setPercentageVariationGammaA(int i,double a){
+       percentageVariationGammaA[i] = a;
+   }
+   void setPercentageVariationGammaB(int i,double a){
+       percentageVariationGammaB[i] = a;
+   }
+
+   void addPercentageVariationWeight(double a){
+       percentageVariationWeight.push_back(a);
+   }
+   void addPercentageVariationLinearA(double a){
+       percentageVariationLinearA.push_back(a);
+   }
+   void addPercentageVariationLinearB(double a){
+       percentageVariationLinearB.push_back(a);
+   }
+   void addPercentageVariationGammaA(double a){
+       percentageVariationGammaA.push_back(a);
+   }
+   void addPercentageVariationGammaB(double a){
+       percentageVariationGammaB.push_back(a);
+   }
+
+   void newVariationWeight(double a){
+      percentageVariationWeight = new vector<double>(a);
+   }
+   void newVariationLinearA(double a){
+       percentageVariationLinearA= new vector<double>(a);
+   }
+   void newVariationLinearB(double a){
+       percentageVariationLinearB= new vector<double>(a);
+   }
+   void newVariationGammaA(double a){
+       percentageVariationGammaA= new vector<double>(a);
+   }
+   void newVariationGammaB(double a){
+       percentageVariationGammaB= new vector<double>(a);
+   }
 
 
 private:			   // put all data here
@@ -223,6 +315,11 @@ private:			   // put all data here
     std::vector<double> w;
     std::vector<Parameters> par;
     std::vector<int> functionType;
+    std::vector<double> percentageVariationWeight;
+    std::vector<double> percentageVariationLinearA;
+    std::vector<double> percentageVariationLinearB;
+    std::vector<double> percentageVariationGammaA;
+    std::vector<double> percentageVariationGammaB;
     QVector<double> yCombinata;
     // END   Private data of an eoOneMax object
 };

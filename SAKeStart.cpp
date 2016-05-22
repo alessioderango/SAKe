@@ -275,41 +275,41 @@ void SAKeStart::startValidation(
 
     QObject *errorHandlerRain = rootObject->findChild<QObject*>("errorcsvRain");
     QObject *errorHandlerActivation = rootObject->findChild<QObject*>("errorcsvActivation");
-//    int errorRain = HandlerCSV::loadCSVRain(filenameRainPath, rain, rain_size, errorHandlerRain);
-//    if(errorRain){
-//        int errorActivation = HandlerCSV::loadCSVActivation(filenameActivaionPath, activation, activation_size, errorHandlerActivation);
-//        if(errorActivation){
+    //    int errorRain = HandlerCSV::loadCSVRain(filenameRainPath, rain, rain_size, errorHandlerRain);
+    //    if(errorRain){
+    //        int errorActivation = HandlerCSV::loadCSVActivation(filenameActivaionPath, activation, activation_size, errorHandlerActivation);
+    //        if(errorActivation){
 
-            ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
-            int idProject = threadsController.size();
-            validationController->setActivations(activation);
-            validationController->setActivations_size(activation_size);
-            validationController->setRain(rain);
-            validationController->setRain_size(rain_size);
-            QVariant returnedValue;
-            QVariant msg = "Validation - "+_projectName.toString();
-            QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
-
-
+    ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
+    int idProject = threadsController.size();
+    validationController->setActivations(activation);
+    validationController->setActivations_size(activation_size);
+    validationController->setRain(rain);
+    validationController->setRain_size(rain_size);
+    QVariant returnedValue;
+    QVariant msg = "Validation - "+_projectName.toString();
+    QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
 
 
 
-            QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, idProject));
-            //FINE
 
-            //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
-            //INIZIO
-            CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
-            validationController->setPlotMobility(qCustomPlotMobilityFunction);
-            validationController->updatePlot();
 
-            CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
-            validationController->setKernelPlot(qCustomPlotKernel);
-            validationController->updateKernelPlot();
-            SAKeController* tmp =new SAKeController();
-            threadsController.push_back(tmp);
-//        }
-//    }
+    QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, idProject));
+    //FINE
+
+    //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
+    //INIZIO
+    CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
+    validationController->setPlotMobility(qCustomPlotMobilityFunction);
+    validationController->updatePlot();
+
+    CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
+    validationController->setKernelPlot(qCustomPlotKernel);
+    validationController->updateKernelPlot();
+    SAKeController* tmp =new SAKeController();
+    threadsController.push_back(tmp);
+    //        }
+    //    }
 
     
 }
@@ -413,8 +413,51 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const  QVariant &percentageLinearB,
                                    const  QVariant &maxGeneration,
                                    const  QVariant &fileurl,
-                                    const QVariant &tipo)
+                                   const QVariant &tipo,
+                                   const QVariantList &matrxGamma1QML,
+                                   const QVariantList &matrixGamma2QML,
+                                   const QVariantList &matrixLinearQML)
 {
+    std::vector<std::vector<double> > matrixGamma1;
+    QList <QVariant> tmpGamma1 = matrxGamma1QML[0].toList();
+    for (int i = 1; i < tmpGamma1[0].toInt()+1; ++i) {
+        QList <QVariant> tmpGammat1 = matrxGamma1QML[i].toList();
+        std::vector<double> tmp;
+        for (int j = 0; j < 9; ++j) {
+            cout << tmpGammat1[j].toDouble() << " ";
+            tmp.push_back(tmpGammat1[j].toDouble());
+        }
+        matrixGamma1.push_back(tmp);
+        cout << endl;
+    }
+
+    std::vector<std::vector<double> > matrixGamma2;
+    QList <QVariant> tmpGamma2 = matrixGamma2QML[0].toList();
+    for (int i = 1; i < tmpGamma2[0].toInt()+1; ++i) {
+        QList <QVariant> tmpGammat2 = matrixGamma2QML[i].toList();
+        std::vector<double> tmp;
+        for (int j = 0; j < 9; ++j) {
+            cout << tmpGammat2[j].toDouble() << " ";
+            tmp.push_back(tmpGammat2[j].toDouble());
+        }
+        matrixGamma2.push_back(tmp);
+        cout << endl;
+    }
+
+    std::vector<std::vector<double> > matrixLinear;
+    QList <QVariant> tmpGamma3 = matrixLinearQML[0].toList();
+    for (int i = 1; i < tmpGamma3[0].toInt()+1; ++i) {
+        QList <QVariant> tmpGammat3 = matrixLinearQML[i].toList();
+        std::vector<double> tmp;
+        for (int j = 0; j < 9; ++j) {
+            cout << tmpGammat3[j].toDouble() << " ";
+            tmp.push_back(tmpGammat3[j].toDouble());
+        }
+        matrixLinear.push_back(tmp);
+        cout << endl;
+    }
+
+
     QDir dir1(QDir::currentPath()+"/workspace");
     if (!dir1.exists()){
         dir1.mkdir(".");
@@ -428,42 +471,42 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     if(tipo.toInt()==1 )
     {
         xmlManager->SaveXMLFileAlreadyExistRegressionProject(_projectaname.toString(),
-                                                  selection.toString(),
-                                                  selectionElitist.toString(),
-                                                  "-1",
-                                                  populationSize.toString(),
-                                                  percentageCrossover.toString(),
-                                                  percentageMutation.toString(),
-                                                  percentageWeight.toString(),
-                                                  numberProcessor.toString(),
-                                                  numberGamma.toString(),
-                                                  percentageGammaA.toString(),
-                                                  percentageGammaB.toString(),
-                                                  numberLinear.toString(),
-                                                  percentageLinearA.toString(),
-                                                  percentageLinearB.toString(),
-                                                  maxGeneration.toString(),
-                                                  fileurl.toString());
+                                                             selection.toString(),
+                                                             selectionElitist.toString(),
+                                                             "-1",
+                                                             populationSize.toString(),
+                                                             percentageCrossover.toString(),
+                                                             percentageMutation.toString(),
+                                                             percentageWeight.toString(),
+                                                             numberProcessor.toString(),
+                                                             numberGamma.toString(),
+                                                             percentageGammaA.toString(),
+                                                             percentageGammaB.toString(),
+                                                             numberLinear.toString(),
+                                                             percentageLinearA.toString(),
+                                                             percentageLinearB.toString(),
+                                                             maxGeneration.toString(),
+                                                             fileurl.toString());
 
 
     }else{
-    xmlManager->SaveXMLFileRegressionProject(_projectaname.toString(),
-                                              selection.toString(),
-                                              selectionElitist.toString(),
-                                              "-1",
-                                              populationSize.toString(),
-                                              percentageCrossover.toString(),
-                                              percentageMutation.toString(),
-                                              percentageWeight.toString(),
-                                              numberProcessor.toString(),
-                                              numberGamma.toString(),
-                                              percentageGammaA.toString(),
-                                              percentageGammaB.toString(),
-                                              numberLinear.toString(),
-                                              percentageLinearA.toString(),
-                                              percentageLinearB.toString(),
-                                              maxGeneration.toString(),
-                                              fileurl.toString());
+        xmlManager->SaveXMLFileRegressionProject(_projectaname.toString(),
+                                                 selection.toString(),
+                                                 selectionElitist.toString(),
+                                                 "-1",
+                                                 populationSize.toString(),
+                                                 percentageCrossover.toString(),
+                                                 percentageMutation.toString(),
+                                                 percentageWeight.toString(),
+                                                 numberProcessor.toString(),
+                                                 numberGamma.toString(),
+                                                 percentageGammaA.toString(),
+                                                 percentageGammaB.toString(),
+                                                 numberLinear.toString(),
+                                                 percentageLinearA.toString(),
+                                                 percentageLinearB.toString(),
+                                                 maxGeneration.toString(),
+                                                 fileurl.toString());
     }
 
     QString sselction= selection.toString();
@@ -540,123 +583,122 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
             percentualeGammaA=dpercentageLinearA,
             percentualeGammaB=dpercentageLinearB;
 
-    int dimension=inumberGamma+inumberLinear;
+    int dimension=matrixGamma1.size()+matrixGamma2.size()+inumberLinear;
     double * weight = new double[dimension];
-    std::cout << "weight !!!!!!!!" << endl;
-
+    int count =0;
     for (int i = 0; i < inumberLinear; ++i) {
-        weight[i] = 1;
+        double tmp1=fRand(matrixLinear[i][4],matrixLinear[i][5]);
+        std::cout << tmp1 << std::endl;
+        weight[count] = tmp1;
+        count++;
     }
-    for (int i = inumberLinear; i < dimension; ++i) {
-        double tmp1=fRand(0,1);
-        std::cout << tmp1 << endl;
-        weight[i] = tmp1;
+    for (int i = 0; i < matrixGamma1.size(); ++i) {
+        double tmp1=fRand(matrixGamma1[i][4],matrixGamma1[i][5]);
+        std::cout << tmp1 << std::endl;
+        weight[count] = tmp1;
+        count++;
     }
-    std::cout << "weight FINE!!!!!!!!" << endl;
-    //        weight[0]=1;
-    //        weight[1]=1;
-    //        weight[2]=0.073;
-    //        weight[3]=0.99;
-    //        weight[4]=0.83;
-    //        weight[5]=0.974;
-    //        weight[6]=0.907;
+    for (int i = 0; i <  matrixGamma2.size(); ++i) {
+        double tmp1=fRand(matrixGamma2[i][4],matrixGamma2[i][5]);
+        std::cout << tmp1 << std::endl;
+        weight[count] = tmp1;
+        count++;
+    }
 
     int * functionType = new int[dimension];
 
+    double * percantageGammaA;
+    percantageGammaA= new double[dimension];
+    double * percantageGammaB;
+    percantageGammaB= new double[dimension];
+    double * percantageLinearA;
+    percantageLinearA= new double[dimension];
+    double * percantageLinearB;
+    percantageLinearB= new double[dimension];
+    double * percantageW;
+    percantageW= new double[dimension];
+    count = 0;
     for (int i = 0; i < inumberLinear; ++i) {
-        functionType[i]=0;
+        functionType[count]=0;
+        percantageLinearA[count]=matrixLinear[i][6];
+        percantageLinearB[count]=matrixLinear[i][7];
+        percantageW[count]=matrixLinear[i][8];
+        count++;
     }
-    for (int i = inumberLinear; i < dimension; ++i) {
-        functionType[i]=2;
+    for (int i = 0; i < matrixGamma1.size(); ++i) {
+        functionType[count]=2;
+        percantageGammaA[count]=(matrixGamma1[i][6]);
+        percantageGammaB[count]=(matrixGamma1[i][7]);
+        percantageW[count]=(matrixGamma1[i][8]);
+        count++;
     }
-
-    //        functionType[0]=0;
-    //        functionType[1]=0;
-    //        functionType[2]=2;
-    //        functionType[3]=2;
-    //        functionType[4]=2;
-    //        functionType[5]=2;
-    //        functionType[6]=2;
+    for (int i =  0; i <  matrixGamma2.size(); ++i) {
+        functionType[count]=2;
+        percantageGammaA[count]=(matrixGamma2[i][6]);
+        percantageGammaB[count]=(matrixGamma2[i][7]);
+        percantageW[count]=(matrixGamma2[i][8]);
+        count++;
+    }
 
     Parameters *parameters = new Parameters[dimension];
 
-    //              _genotype.addW(1);
-    //              _genotype.addW(1);
-
-    //                //gamma
-    //              _genotype.addW(0.073);
-    //              _genotype.addW(0.99);
-    //              _genotype.addW(0.83);
-    //              _genotype.addW(0.974);
-    //              _genotype.addW(0.907);
-
-    //              _genotype.addFunctionType(0);
-    //              _genotype.addFunctionType(0);
-    //              _genotype.addFunctionType(2);
-    //              _genotype.addFunctionType(2);
-    //              _genotype.addFunctionType(2);
-    //              _genotype.addFunctionType(2);
-    //              _genotype.addFunctionType(2);
-
-    //              //linear par
+    //    for (int i = 0; i < inumberLinear; ++i) {
     //        Parameters tmp;
-    //        tmp.addParameters(0.000046);
-    //        tmp.addParameters(0);
-    //        parameters[0]=tmp;
-
-    //        Parameters tmp1;
-    //        tmp1.addParameters(-0.04);
-    //        tmp1.addParameters(0.55);
-    //        parameters[1]=tmp1;
-    //        //gamma par
-
-    //        Parameters tmp2;
-    //        tmp2.addParameters(52.9);
-    //        tmp2.addParameters(0.05);
-    //        parameters[2]=tmp2;
-
-    //        Parameters tmp3;
-    //        tmp3.addParameters(1000);
-    //        tmp3.addParameters(0.120119);
-    //        parameters[3]=tmp3;
-
-
-    //        Parameters tmp4;
-    //        tmp4.addParameters(899);
-    //        tmp4.addParameters(0.0173);
-    //        parameters[4]=tmp4;
-
-    //        Parameters tmp5;
-    //        tmp5.addParameters(4.37);
-    //        tmp5.addParameters(7.18);
-    //        parameters[5]=tmp5;
-
-    //        Parameters tmp6;
-    //        tmp6.addParameters(699);
-    //        tmp6.addParameters(40);
-    //        parameters[6]=tmp6;
-
-    std::cout << "Parameters !!!!!!!!" << endl;
+    //        double tmp1=fRand(0.00003,0.00008);
+    //        std::cout <<tmp1<< std::endl;
+    //        tmp.addParameters(tmp1);
+    //        double tmp2=0.01;
+    //        std::cout <<tmp2<< std::endl;
+    //        tmp.addParameters(tmp2);
+    //        parameters[i]=tmp;
+    //    }
+    //    std::cout << "Parameters FINE LINEAR!!!!!!!!" << endl;
+    //    for (int i = inumberLinear; i < dimension; ++i) {
+    //        Parameters tmp;
+    //        double tmp1=fRand(0,1000);
+    //        std::cout <<tmp1<< std::endl;
+    //        tmp.addParameters(tmp1);
+    //        double tmp2=fRand(0,1);
+    //        std::cout <<tmp2<< std::endl;
+    //        tmp.addParameters(tmp2);
+    //        parameters[i]=tmp;
+    //    }
+    count = 0;
     for (int i = 0; i < inumberLinear; ++i) {
         Parameters tmp;
-        double tmp1=fRand(0.00003,0.00008);
+        double tmp1=fRand(matrixLinear[i][0],matrixLinear[i][1]);
         std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
-        double tmp2=0.01;
+        double tmp2=fRand(matrixLinear[i][2],matrixLinear[i][3]);
         std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
-        parameters[i]=tmp;
+        parameters[count]=tmp;
+        count++;
     }
-    std::cout << "Parameters FINE LINEAR!!!!!!!!" << endl;
-    for (int i = inumberLinear; i < dimension; ++i) {
+
+    for (int i = 0; i < matrixGamma1.size(); ++i) {
         Parameters tmp;
-        double tmp1=fRand(0,1000);
+        double tmp1=fRand(matrixGamma1[i][0],matrixGamma1[i][1]);
         std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
-        double tmp2=fRand(0,1);
+        double tmp2=fRand(matrixGamma1[i][2],matrixGamma1[i][3]);
         std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
-        parameters[i]=tmp;
+        parameters[count]=tmp;
+        count++;
+
+    }
+    for (int i = 0; i < matrixGamma2.size(); ++i) {
+        Parameters tmp;
+        double tmp1=fRand(matrixGamma2[i][0],matrixGamma2[i][1]);
+        std::cout <<tmp1<< std::endl;
+        tmp.addParameters(tmp1);
+        double tmp2=fRand(matrixGamma2[i][2],matrixGamma2[i][3]);
+        std::cout <<tmp2<< std::endl;
+        tmp.addParameters(tmp2);
+        parameters[count]=tmp;
+        count++;
+
     }
     //     std::cout << "Parameters FINE!!!!!!!!" << endl;
     //#define SIZE 148
@@ -672,12 +714,13 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     int size_kernel;
     double Delta_cr;
     HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr);
-    RegressionController * regressionController= new RegressionController(_projectaname.toString(),
-                percentualePeso,
-                percentualeLineareA,
-                percentualeLineareB,
-                percentualeGammaA,
-                percentualeGammaB,
+    RegressionController * regressionController= new RegressionController(
+                _projectaname.toString(),
+                percantageW,
+                percantageLinearA,
+                percantageLinearB,
+                percantageGammaA,
+                percantageGammaB,
                 weight,
                 dimension,
                 functionType,
@@ -714,86 +757,86 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
 
 
 
-//    std::vector< double> x;
-//    std::vector< double> y;
+    //    std::vector< double> x;
+    //    std::vector< double> y;
 
-//    double hmed= getHMed(kernel,size_kernel);
-//    double hmax = getHMax(kernel,size_kernel);
-//    double hmed2= hmed/2;
-//    double hmedmax= (hmed+hmax)/2;
+    //    double hmed= getHMed(kernel,size_kernel);
+    //    double hmax = getHMax(kernel,size_kernel);
+    //    double hmed2= hmed/2;
+    //    double hmedmax= (hmed+hmax)/2;
 
-//    cout << "hmax = " << hmax << endl;
-//    cout << "hmedmax = " << hmedmax << endl;
-//    cout << "hmed = "<< hmed << endl;
-//    cout << "hmed2 = " << hmed2 <<endl;
+    //    cout << "hmax = " << hmax << endl;
+    //    cout << "hmedmax = " << hmedmax << endl;
+    //    cout << "hmed = "<< hmed << endl;
+    //    cout << "hmed2 = " << hmed2 <<endl;
 
-//    //    double alreadyConsideredHMax[size_kernel];
-//    //    double alreadyConsideredHMedMax[size_kernel];
-//    //    double alreadyConsideredHMed[size_kernel];
-//    //    double alreadyConsideredHMed2[size_kernel];
-//    //    double alreadyConsidered[size_kernel];
-//    double *alreadyConsideredHMax = new double[size_kernel];
-//    double *alreadyConsideredHMedMax= new double[size_kernel];
-//    double *alreadyConsideredHMed= new double[size_kernel];
-//    double *alreadyConsideredHMed2= new double[size_kernel];
-//    double *alreadyConsidered= new double[size_kernel];
-//    initAlreadyConsidered(alreadyConsidered,size_kernel);
-//    initAlreadyConsidered(alreadyConsideredHMax,size_kernel);
-//    initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
-//    initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
-//    initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
-//    int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
-//    cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
-//    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
-//    cout << "ho trovato " << count << " barre superiori a " << hmedmax << endl;
-//    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed,hmed,size_kernel);
-//    cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
-//    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
-//    cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
-//    //stampa(alreadyConsideredHMax);
-//    //stampa(alreadyConsideredHMedMax);
-//    //stampa(alreadyConsideredHMed);
-//    //stampa(alreadyConsideredHMed2);
-//    cout << " points from hmax" << endl;
-//    getPoints(alreadyConsideredHMax,x,y,size_kernel);
-//    cout << " points from hmedhmax" << endl;
-//    getPoints(alreadyConsideredHMedMax,x,y,size_kernel);
-//    cout << " points from hmed" << endl;
-//    getPoints(alreadyConsideredHMed,x,y,size_kernel);
-//    cout << " points from hmed2" << endl;
-//    getPoints(alreadyConsideredHMed2,x,y,size_kernel);
-//    for (int i = 0; i < x.size(); i++) {
-//        cout << x[i] <<" " << y[i] << endl;
-//    }
+    //    //    double alreadyConsideredHMax[size_kernel];
+    //    //    double alreadyConsideredHMedMax[size_kernel];
+    //    //    double alreadyConsideredHMed[size_kernel];
+    //    //    double alreadyConsideredHMed2[size_kernel];
+    //    //    double alreadyConsidered[size_kernel];
+    //    double *alreadyConsideredHMax = new double[size_kernel];
+    //    double *alreadyConsideredHMedMax= new double[size_kernel];
+    //    double *alreadyConsideredHMed= new double[size_kernel];
+    //    double *alreadyConsideredHMed2= new double[size_kernel];
+    //    double *alreadyConsidered= new double[size_kernel];
+    //    initAlreadyConsidered(alreadyConsidered,size_kernel);
+    //    initAlreadyConsidered(alreadyConsideredHMax,size_kernel);
+    //    initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
+    //    initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
+    //    initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
+    //    int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
+    //    cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
+    //    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
+    //    cout << "ho trovato " << count << " barre superiori a " << hmedmax << endl;
+    //    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed,hmed,size_kernel);
+    //    cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
+    //    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
+    //    cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
+    //    //stampa(alreadyConsideredHMax);
+    //    //stampa(alreadyConsideredHMedMax);
+    //    //stampa(alreadyConsideredHMed);
+    //    //stampa(alreadyConsideredHMed2);
+    //    cout << " points from hmax" << endl;
+    //    getPoints(alreadyConsideredHMax,x,y,size_kernel);
+    //    cout << " points from hmedhmax" << endl;
+    //    getPoints(alreadyConsideredHMedMax,x,y,size_kernel);
+    //    cout << " points from hmed" << endl;
+    //    getPoints(alreadyConsideredHMed,x,y,size_kernel);
+    //    cout << " points from hmed2" << endl;
+    //    getPoints(alreadyConsideredHMed2,x,y,size_kernel);
+    //    for (int i = 0; i < x.size(); i++) {
+    //        cout << x[i] <<" " << y[i] << endl;
+    //    }
 
 
-//    int alto;
-//    for (alto = x.size() - 1; alto > 0; alto-- )
-//    {
-//        for (int i=0; i<alto; i++)
-//        {
-//            if (x[i]>x[i+1]) /* sostituire ">" con "<" per avere un ordinamento decrescente */
-//            {
-//                double tmp = x[i];
-//                x[i] = x[i+1];
-//                x[i+1] = tmp;
-//                double tmp2 = y[i];
-//                y[i] = y[i+1];
-//                y[i+1] = tmp2;
+    //    int alto;
+    //    for (alto = x.size() - 1; alto > 0; alto-- )
+    //    {
+    //        for (int i=0; i<alto; i++)
+    //        {
+    //            if (x[i]>x[i+1]) /* sostituire ">" con "<" per avere un ordinamento decrescente */
+    //            {
+    //                double tmp = x[i];
+    //                x[i] = x[i+1];
+    //                x[i+1] = tmp;
+    //                double tmp2 = y[i];
+    //                y[i] = y[i+1];
+    //                y[i+1] = tmp2;
 
-//            }
-//        }
-//    }
+    //            }
+    //        }
+    //    }
 
-//    delete [] alreadyConsideredHMax;
-//    delete [] alreadyConsideredHMedMax;
-//    delete [] alreadyConsideredHMed;
-//    delete [] alreadyConsideredHMed2;
-//    delete [] alreadyConsidered;
+    //    delete [] alreadyConsideredHMax;
+    //    delete [] alreadyConsideredHMedMax;
+    //    delete [] alreadyConsideredHMed;
+    //    delete [] alreadyConsideredHMed2;
+    //    delete [] alreadyConsidered;
 
-//    for (int i = 0; i < x.size(); i++) {
-//        cout << x[i] <<" " << y[i] << endl;
-//    }
+    //    for (int i = 0; i < x.size(); i++) {
+    //        cout << x[i] <<" " << y[i] << endl;
+    //    }
 
 
     regressionController->setQCustomPlotRegression(qCustomPlotRegression);
@@ -996,7 +1039,7 @@ void SAKeStart::stopValidationController(int count){
 
     //            }
     //        }
-  threadsController[count]=NULL;
+    threadsController[count]=NULL;
 }
 void SAKeStart::stopRegressionController(int count){
     cout << "count " << count << endl;

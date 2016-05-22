@@ -83,11 +83,11 @@ class RegressionController: public QThread
     Q_OBJECT
 public:
     RegressionController(    QString projectName,
-                             double percentualePeso,
-                             double percentualeLineareA,
-                             double percentualeLineareB,
-                             double percentualeGammaA,
-                             double percentualeGammaB,
+                             double* percentualePeso,
+                             double* percentualeLineareA,
+                             double* percentualeLineareB,
+                             double* percentualeGammaA,
+                             double* percentualeGammaB,
                              double *weights,
                              int weightsSize,
                              int *functionTypes,
@@ -150,11 +150,16 @@ private:
     eoGenContinueMy<Individual> *stop;
 
     //Parameters Algorithm
-    double percentualePeso;
-    double percentualeLineareA;
-    double percentualeLineareB;
-    double percentualeGammaA;
-    double percentualeGammaB;
+    double* percentualePeso;
+    int percentualePesoSize;
+    double* percentualeLineareA;
+    int percentualeLineareASize;
+    double* percentualeLineareB;
+    int percentualeLineareBSize;
+    double* percentualeGammaA;
+    int percentualeGammaASize;
+    double* percentualeGammaB;
+    int percentualeGammaBSize;
 
     double *weights;
     int weightsSize;

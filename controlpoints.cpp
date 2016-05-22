@@ -88,6 +88,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      double hmax = getHMax(kernel,size_kernel);
      double hmed2= hmed/2;
      double hmedmax= (hmed+hmax)/2;
+     double hzero = 0;
 
      cout << "hmax = " << hmax << endl;
      cout << "hmedmax = " << hmedmax << endl;
@@ -104,11 +105,13 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      double *alreadyConsideredHMed= new double[size_kernel];
      double *alreadyConsideredHMed2= new double[size_kernel];
      double *alreadyConsidered= new double[size_kernel];
+     double *alreadyConsideredZero= new double[size_kernel];
      initAlreadyConsidered(alreadyConsidered,size_kernel);
      initAlreadyConsidered(alreadyConsideredHMax,size_kernel);
      initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
      initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
      initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
+     //initAlreadyConsidered(alreadyConsideredZero,size_kernel);
      int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
      cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
      count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
@@ -117,6 +120,10 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
      count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
      cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
+     count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
+     cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
+     //count=getInterset(kernel,alreadyConsidered,alreadyConsideredZero,hzero,size_kernel);
+     cout << "ho trovato " << count << " barre superiori a " << hzero << endl;
      //stampa(alreadyConsideredHMax);
      //stampa(alreadyConsideredHMedMax);
      //stampa(alreadyConsideredHMed);
@@ -129,6 +136,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      getPoints(alreadyConsideredHMed,x,y,size_kernel);
      cout << " points from hmed2" << endl;
      getPoints(alreadyConsideredHMed2,x,y,size_kernel);
+     //getPoints(alreadyConsideredZero,x,y,size_kernel);
 //     for (int i = 0; i < x.size(); i++) {
 //         cout << x[i] <<" " << y[i] << endl;
 //     }

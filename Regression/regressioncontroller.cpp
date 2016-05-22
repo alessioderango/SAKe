@@ -6,11 +6,11 @@ RegressionController::RegressionController()
 }
 
 RegressionController::RegressionController(QString projectName,
-                                           double percentualePeso,
-                                           double percentualeLineareA,
-                                           double percentualeLineareB,
-                                           double percentualeGammaA,
-                                           double percentualeGammaB,
+                                           double* _percentualePeso,
+                                           double* _percentualeLineareA,
+                                           double* _percentualeLineareB,
+                                           double* _percentualeGammaA,
+                                           double* _percentualeGammaB,
                                            double *weights,
                                            int weightsSize,
                                            int *functionTypes,
@@ -26,11 +26,20 @@ RegressionController::RegressionController(QString projectName,
                                            double dpercentageMutation,
                                            int inumberProcessor ){
 
-    this->percentualePeso = percentualePeso;
-    this->percentualeLineareA = percentualeLineareA;
-    this->percentualeLineareB = percentualeLineareB;
-    this->percentualeGammaA = percentualeGammaA;
-    this->percentualeGammaB = percentualeGammaB;
+    this->percentualePesoSize = weightsSize;
+    percentualePeso=_percentualePeso;
+
+    this->percentualeLineareASize = weightsSize;
+    percentualeLineareA=_percentualeLineareA;
+
+    this->percentualeLineareBSize = weightsSize;
+    percentualeLineareB= _percentualeLineareB;
+
+    this->percentualeGammaASize = weightsSize;
+    percentualeGammaA= _percentualeGammaA;
+
+    this->percentualeGammaBSize = weightsSize;
+    percentualeGammaB= _percentualeGammaB;
 
     this->weights = weights;
     this->weightsSize =weightsSize;
@@ -106,17 +115,31 @@ void RegressionController::startAlgorithm(){
         eoEvalFuncCounter<Individual> eval(plainEval);
 
         // the genotype - through a genotype initializer
-        eoInit<Individual>& init = do_make_genotype(parser, state, weights,weightsSize, functionTypes, functionTypesSize, parameters, parametersSize, Individual());
+        eoInit<Individual>& init = do_make_genotype(parser,
+                                                    state,
+                                                    weights,
+                                                    weightsSize,
+                                                    functionTypes,
+                                                    functionTypesSize,
+                                                    parameters,
+                                                    parametersSize,
+                                                    percentualePeso,
+                                                    percentualePesoSize,
+                                                    percentualeLineareA,
+                                                    percentualeLineareASize,
+                                                    percentualeLineareB,
+                                                    percentualeLineareBSize,
+                                                    percentualeGammaA,
+                                                    percentualeGammaASize,
+                                                    percentualeGammaB,
+                                                    percentualeGammaBSize,
+                                                    Individual());
 
         // Build the variation operator (any seq/prop construct)
-//        eoGenOp<Individual>& op = do_make_op(parser, state, init);
+        //        eoGenOp<Individual>& op = do_make_op(parser, state, init);
 
         eoQuadOp<Individual> *cross = new eoOneMaxQuadCrossover<Individual> /* (varType  _anyVariable) */;
-        eoMonOp<Individual> *mut = new eoOneMaxMutation<Individual>(    this->percentualePeso,
-                                                                        this->percentualeLineareA,
-                                                                        this->percentualeLineareB,
-                                                                        this->percentualeGammaA ,
-                                                                        this->percentualeGammaB )/* (varType  _anyVariable) */;
+        eoMonOp<Individual> *mut = new eoOneMaxMutation<Individual>()/* (varType  _anyVariable) */;
 
 
 

@@ -206,7 +206,8 @@ void getSubdividePointsFromKernel( double *kernel,int size_kernel,int n,QVector<
 
     double sumx=0;
     double sumy=0;
-    for (int i = 0; i < (size_kernel); i+=n) {
+    int end = ((size_kernel%n)==0) ? size_kernel : (size_kernel-n);
+    for (int i = 0; i < end; i+=n) {
         sumx=0;
         sumy=0;
         for (int j = 0; j < n; j++) {
@@ -219,21 +220,20 @@ void getSubdividePointsFromKernel( double *kernel,int size_kernel,int n,QVector<
     if(size_kernel%n !=0){
         sumx=0;
         sumy=0;
-        for (int i = (size_kernel/n); i < size_kernel; i++) {
+        int count=0;
+        for (int i = (size_kernel-(n-1)); i < size_kernel; i++) {
             sumx+=(i+1);
             sumy+=kernel[i];
+             count++;
         }
-        x.push_back(sumx/(size_kernel-size_kernel/n));
-        y.push_back(sumy/(size_kernel-size_kernel/n));
+        x.push_back(sumx/count);
+        y.push_back(sumy/count);
     }
 }
 
 void getSubdividePointsFromControlPoints(std::vector< double> x,std::vector< double> y,int n,QVector<double> &xOutput, QVector<double> &yOutput){
     double sumx=0;
     double sumy=0;
-
-
-
     int end = ((y.size()%n)==0) ? y.size() : (y.size()-n);
     for (int i = 0; i < end; i+=n) {
         sumx=0;
@@ -261,6 +261,37 @@ void getSubdividePointsFromControlPoints(std::vector< double> x,std::vector< dou
 
 
 }
+void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromControlPoints(const QVariant& filename,const QVariant& n)
+{
+    double *kernel;
+    int size_kernel;
+    double Delta_cr;
+    //    customPlot->yAxis->setRange( 0, maxy);
+    HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
+    m_CustomPlot->xAxis->setRange( 0, size_kernel );
+    ControlPoints * controlPoints = new ControlPoints();
+    controlPoints->calculateControlPoints(kernel,size_kernel);
+    std::vector< double> x = controlPoints->getX();
+    std::vector< double> y = controlPoints->getY();
+    QVector<double> xOutput;
+    QVector<double> yOutput;
+    getSubdividePointsFromControlPoints(x,y,n.toInt(),xOutput,yOutput);
+    updateGraph0(xOutput,yOutput);
+}
+void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromKernel(const QVariant& filename,const QVariant& n)
+{
+    double *kernel;
+    int size_kernel;
+    double Delta_cr;
+    //    customPlot->yAxis->setRange( 0, maxy);
+    HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
+    m_CustomPlot->xAxis->setRange( 0, size_kernel );
+
+    QVector<double> xOutput;
+    QVector<double> yOutput;
+    getSubdividePointsFromKernel(kernel,size_kernel,n.toInt(),xOutput,yOutput);
+    updateGraph0(xOutput,yOutput);
+}
 
 void CustomPlotRegressionPreviewKernel::initCustomPlotRegressionPreviewKernel(const QVariant& filename)
 {
@@ -279,10 +310,7 @@ void CustomPlotRegressionPreviewKernel::initCustomPlotRegressionPreviewKernel(co
     std::vector< double> y = controlPoints->getY();
 
     updateGraph1(QVector<double>::fromStdVector (x),QVector<double>::fromStdVector (y));
-    QVector<double> xOutput;
-    QVector<double> yOutput;
-    getSubdividePointsFromControlPoints(x,y,4,xOutput,yOutput);
-    updateGraph0(xOutput,yOutput);
+
 
     delete controlPoints;
 

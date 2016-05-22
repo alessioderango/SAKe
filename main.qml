@@ -1030,13 +1030,14 @@ import QtQuick.Controls.Styles 1.4
                         Rectangle { height: 1 ; width: parent.width ; color: frameColor}
                         Rectangle { height: parent.height ; width: 1; color: frameColor}
                         Rectangle { x: parent.width -1; height: parent.height ; width: 1; color: frameColor}
+                        border.width: 1
                         Text {
                             id: text
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.leftMargin: 6
                             text: styleData.title
-                            color: styleData.selected ? "black" : "white"
+                            color: styleData.selected ? "black" : "black"
                         }
                         Button {
 

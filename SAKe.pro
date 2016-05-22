@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     TreeModel.cpp \
     tablemodel.cpp \
     controlpoints.cpp \
-    CustomPlotRegressionPreviewKernel.cpp
+    CustomPlotRegressionPreviewKernel.cpp \
+    Regression/funtciontype.cpp
 
 RESOURCES += qml.qrc
 
@@ -96,7 +97,8 @@ HEADERS += \
     TreeModel.h \
     tablemodel.h \
     controlpoints.h \
-    CustomPlotRegressionPreviewKernel.h
+    CustomPlotRegressionPreviewKernel.h \
+    Regression/funtciontype.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686

@@ -55,7 +55,25 @@
 */
 
 template <class EOT>
-eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser, eoState& _state,double * weights,int weightsSize, int * functionTypes,int functionTypesSize, Parameters * parameters, int parametersSize, EOT)
+eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser,
+                               eoState& _state,
+                               double * weights,
+                               int weightsSize,
+                               int * functionTypes,
+                               int functionTypesSize,
+                               Parameters * parameters,
+                               int parametersSize,
+                               double* _percentualePeso,
+                               int _percentualePesoSize,
+                               double* _percentualeLineareA,
+                               int _percentualeLineareASize,
+                               double* _percentualeLineareB,
+                               int _percentualeLineareBSize,
+                               double* _percentualeGammaA,
+                               int _percentualeGammaASize,
+                               double* _percentualeGammaB,
+                               int _percentualeGammaBSize,
+                               EOT)
 {
   // read any useful parameter here from the parser
   // the param itself will belong to the parser (as far as memory is concerned)
@@ -65,7 +83,24 @@ eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser, eoState& _state,doubl
   unsigned vecSize = _parser.createParam(unsigned(8), "VecSize", "Size of the bitstrings", 'v',"Representation").value();
 
   // Then built the initializer - a pointer, stored in the eoState
-  eoInit<EOT>* init = new eoOneMaxInit<EOT>(weights, weightsSize, functionTypes, functionTypesSize, parameters,parametersSize, vecSize);
+  eoInit<EOT>* init = new eoOneMaxInit<EOT>(
+              weights,
+              weightsSize,
+              functionTypes,
+              functionTypesSize,
+              parameters,
+              parametersSize,
+              vecSize,
+              _percentualePeso,
+              _percentualePesoSize,
+              _percentualeLineareA,
+              _percentualeLineareASize,
+              _percentualeLineareB,
+              _percentualeLineareBSize,
+              _percentualeGammaA,
+              _percentualeGammaASize,
+              _percentualeGammaB,
+              _percentualeGammaBSize);
   // store in state
   _state.storeFunctor(init);
   // and return a reference

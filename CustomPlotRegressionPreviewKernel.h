@@ -24,6 +24,9 @@ public:
     Q_INVOKABLE void initCustomPlotRegressionPreviewKernel();
     Q_INVOKABLE void initCustomPlotRegressionPreviewKernel(const QVariant& filename);
     Q_INVOKABLE void initCustomPlotKernelComtrolPoints(const QVariant& filename);
+    Q_INVOKABLE void customPlotRegressionSubdivideFromControlPoints(const QVariant& filename,const QVariant& n);
+    Q_INVOKABLE void customPlotRegressionSubdivideFromKernel(const QVariant& filename,const QVariant& n);
+
 
 
     void setupQuadraticDemo(QCustomPlot* m);

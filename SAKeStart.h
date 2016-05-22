@@ -128,7 +128,14 @@ public slots:
                             const  QVariant &percentageLinearB,
                             const  QVariant &maxGeneration,
                             const  QVariant &fileurl,
-                            const QVariant &tipo);
+                            const QVariant &tipo,
+                            const QVariantList &matrxGamma1,
+                            const QVariantList &matrxGamma2,
+                            const QVariantList &matrixLinear);
+
+
+
+
       int existProjectName(const QVariant &_projectName);
       QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
 //    void updateCurrentMaximumFitness(QString);
