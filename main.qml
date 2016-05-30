@@ -247,10 +247,10 @@ ApplicationWindow {
 
 
 
-//            MyTreeModel {
-//                id: theModel
+            //            MyTreeModel {
+            //                id: theModel
 
-//            }
+            //            }
             //@disable-check M300
             TreeView {
                 anchors.fill: parent
@@ -313,11 +313,11 @@ ApplicationWindow {
                             console.log("onClicked "+styleData.value
                                         +" "+model.description_role );
                             // parent.color =fillColor
-//                              var list = sakeStart.getAllElementsFromProjectName(model.description_role)
-                              var list = sakeStart.getAllElementsFromProjectName(model.description_role)
+                            //                              var list = sakeStart.getAllElementsFromProjectName(model.description_role)
+                            var list = sakeStart.getAllElementsFromProjectName(model.description_role)
                             console.log("tipo Progetto = "+list[list.length -1])
                             var component;
-                             var window  ;
+                            var window  ;
                             if(list[list.length -1] === "CalibrationProject"){
                                 component = Qt.createComponent("parametersProjectAlreadyExist.qml")
                                 window= component.createObject(applicationWindow1)
@@ -325,22 +325,22 @@ ApplicationWindow {
                             }else
                                 if(list[list.length -1] === "RegressionProject"){
                                     component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
-                                     window = component.createObject(applicationWindow1)
+                                    window = component.createObject(applicationWindow1)
                                     console.log(window.f(list))
                                 }
-//                                else
-//                                    if(list[list.length -1] === "ValidationProject"){
-//                                        component = Qt.createComponent("parametersProjectAlreadyExist.qml")
-//                                        console.log("listview1.model.get(listview1.currentIndex).name")
-//                                    }
+                            //                                else
+                            //                                    if(list[list.length -1] === "ValidationProject"){
+                            //                                        component = Qt.createComponent("parametersProjectAlreadyExist.qml")
+                            //                                        console.log("listview1.model.get(listview1.currentIndex).name")
+                            //                                    }
 
-//                            console.log("ciao"+list.length )
-//                            for(var i = 0; i < list.length-1 ; i++){
-//                                console.log(list[i])
-//                            }
+                            //                            console.log("ciao"+list.length )
+                            //                            for(var i = 0; i < list.length-1 ; i++){
+                            //                                console.log(list[i])
+                            //                            }
 
 
-//                            insert();
+                            //                            insert();
 
                         }
                         //                        onDoubleClicked: {
@@ -361,11 +361,11 @@ ApplicationWindow {
                 //                    title: "Description"
                 //                }
 
-//                function insert(){
-//                    component = Qt.createComponent("TableColumnTreeView.qml");
-//                        sprite = component.createObject(treeViewId, {"x": 100, "y": 100});
-//                       treeViewId.insertColumn(0,sprite);
-//                }
+                //                function insert(){
+                //                    component = Qt.createComponent("TableColumnTreeView.qml");
+                //                        sprite = component.createObject(treeViewId, {"x": 100, "y": 100});
+                //                       treeViewId.insertColumn(0,sprite);
+                //                }
 
 
             }
@@ -1071,19 +1071,19 @@ import QtQuick.Controls.Styles 1.4
                     }
                 }
 
-//                Tab {
-//                   title:   "Welcome"
-//                    active: true
+                //                Tab {
+                //                   title:   "Welcome"
+                //                    active: true
 
-//                    Text {
-//                        text: qsTr("Welcome to SAKe.")
-//                        horizontalAlignment   :Text.AlignHCenter
-//                        verticalAlignment    :Text.AlignVCenter
-//                        font.family: "Helvetica"
-//                        font.pointSize: 56
-//                    }
+                //                    Text {
+                //                        text: qsTr("Welcome to SAKe.")
+                //                        horizontalAlignment   :Text.AlignHCenter
+                //                        verticalAlignment    :Text.AlignVCenter
+                //                        font.family: "Helvetica"
+                //                        font.pointSize: 56
+                //                    }
 
-//                }
+                //                }
 
             }
 

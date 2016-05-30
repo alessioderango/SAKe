@@ -68,33 +68,82 @@ public:
          *     isModified = false;
          */
 
-        int rndMaxMut= rand() %  _genotype.getParConst().size();
+        int rndMaxMut= rand() %  (_genotype.getParConst().size()+1);
 
-        //        _genotype.B().setParametersExponential(rnd,_genotype.B().getParametersExponential(rnd)+150);
-        //         double percentuale=0.01;
-        //         double percentualePeso=0.09;
-        //         double percentualeLineareA=0.06;
-        //         double percentualeLineareB=0.06;
-        //         double percentualeGammaA=0.12;
-        //         double percentualeGammaB=0.12;
+        //TODO sostituire i valoroi costanti con i parametri in maschera
+        double maxLinearFactor = 1;
+        double minLinearFactor = -1;
 
-        for (int i = 0; i < rndMaxMut; i++) {
+        double maxLinearIntercept = 2;
+        double minLinearIntercept  = -2;
 
+        double maxLinearWeight  = 2;
+        double minLinearWeight  = 0.2;
+
+        double maxGammaBeta = 400;
+        double minGammaBeta  = 0.0001;
+
+        double maxGammaWeight  = 2;
+        double minGammaWeight  = 0.2;
+
+
+
+
+        std::cout << "MUTATION " << std::endl;
+
+        for (int j = 0; j < rndMaxMut; j++) {
+            int i =  rand() %  (_genotype.getParConst().size());
+            //Linear
             if(_genotype.getFunctionType(i) == 0){
+                //coefficiente angolare
                 double tmp1 =_genotype.getPar(i).getParameters(0);
+                //termine noto
                 double tmp2 = _genotype.getPar(i).getParameters(1);
-                double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationLinearA(i)),tmp1*_genotype.getPercentageVariationLinearA(i));
-                double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationLinearB(i)),tmp2*_genotype.getPercentageVariationLinearB(i));
-                double tmpAlfa = tmp1 + rndDoubleAlfa;
-                double tmpBeta = tmp2+ rndDoubleBeta;
-                _genotype.setParameters(i,0,tmpAlfa);
-                _genotype.setParameters(i,1,tmpBeta);
+                // random tra (- tmpi, +tmpi)
+                double rndLinearFactor= fRand(-(tmp1*_genotype.getPercentageVariationLinearA(i)),tmp1*_genotype.getPercentageVariationLinearA(i));
+
+                double rndLinearIntercept= fRand(-(tmp2*_genotype.getPercentageVariationLinearB(i)),tmp2*_genotype.getPercentageVariationLinearB(i));
+
+//                std::cout << "tmp1 :" << tmp1 << std::endl;
+//                std::cout << "tmp2 :" << tmp2 << std::endl;
+//                std::cout << "random b linear :" << rndDoubleBeta << std::endl;
+//                std::cout << "random a linear :" << rndDoubleAlfa << std::endl;
+//                std::cout << "percentuale a :" << _genotype.getPercentageVariationLinearA(i) << std::endl;
+//                std::cout << "percentuale b :" << _genotype.getPercentageVariationLinearB(i) << std::endl;
+                double tmpLinearFactor = tmp1 + rndLinearFactor;
+                double tmpLinearIntercept = tmp2 + rndLinearIntercept;
+
+
+                if(tmpLinearFactor > maxLinearFactor)
+                    tmpLinearFactor = maxLinearFactor;
+
+                if(tmpLinearFactor < minLinearFactor)
+                    tmpLinearFactor = minLinearFactor;
+
+                if(tmpLinearIntercept > maxLinearIntercept)
+                    tmpLinearIntercept = maxLinearIntercept;
+
+                if(tmpLinearIntercept < minLinearIntercept)
+                    tmpLinearIntercept = minLinearIntercept;
+
+
+                _genotype.setParameters(i,0,tmpLinearFactor);
+                _genotype.setParameters(i,1,tmpLinearIntercept);
 
                 double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
-                if(_genotype.getW(i)+rndDoubleW < 0)
-                    _genotype.setW(i,_genotype.getW(i)-rndDoubleW);
-                else
-                 _genotype.setW(i,_genotype.getW(i)+rndDoubleW);
+//                std::cout << "W :" << _genotype.getW(i) << std::endl;
+//                std::cout << "random w :" << rndDoubleW << std::endl;
+//                std::cout << "percentuale w :" << _genotype.getPercentageVariationWeight(i) << std::endl;
+                double tmpLinearWeight=_genotype.getW(i)+rndDoubleW;
+
+                if(tmpLinearWeight > maxLinearWeight)
+                    tmpLinearWeight = maxLinearWeight;
+
+                if(tmpLinearWeight < minLinearWeight)
+                    tmpLinearWeight = minLinearWeight;
+
+                 _genotype.setW(i,tmpLinearWeight);
+
                 //controllo > 0
 
             }else
@@ -107,37 +156,91 @@ public:
 
                 }else
                     if(_genotype.getFunctionType(i) == 2){
+                        std::cout << "GAMMA MUTATION " << std::endl;
                         double tmp1 =_genotype.getPar(i).getParameters(0);
                         double tmp2 = _genotype.getPar(i).getParameters(1);
                         double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationGammaA(i)),tmp1*_genotype.getPercentageVariationGammaA(i));
                         double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationGammaB(i)),tmp2*_genotype.getPercentageVariationGammaB(i));
 
-                        double tmpAlfa = tmp1 + rndDoubleAlfa;
-                        if(tmpAlfa < 0)
-                            tmpAlfa = 0.00001;
+//                        std::cout << "tmp1 :" << tmp1 << std::endl;
+//                        std::cout << "tmp2 :" << tmp2 << std::endl;
+//                        std::cout << "random a gamma :" << rndDoubleAlfa << std::endl;
+//                        std::cout << "random b gamma :" << rndDoubleBeta << std::endl;
+//                        std::cout << "percentuale w :" << _genotype.getPercentageVariationGammaA(i) << std::endl;
+//                        std::cout << "percentuale w :" << _genotype.getPercentageVariationGammaB(i) << std::endl;
+
+
 
                         double tmpBeta = tmp2+ rndDoubleBeta;
-                        if(tmpBeta < 0)
-                            tmpBeta = 0.00001;
+
+                        if(tmpBeta > maxGammaBeta)
+                            tmpBeta = maxGammaBeta;
+
+                        if(tmpBeta <= minGammaBeta)
+                            tmpBeta = minGammaBeta;
+
+
+                        double tmpAlfa = tmp1 + rndDoubleAlfa;
+
+                        if(tmpBeta > 0 && tmpBeta <= 1)
+                        {
+                            if(tmpAlfa > 1000)
+                                tmpAlfa = 1000;
+
+                            if(tmpAlfa <= 0)
+                                tmpAlfa = 0.0001;
+                        }else
+                            if(tmpBeta > 1 && tmpBeta <= 10)
+                            {
+                                if(tmpAlfa > 300)
+                                    tmpAlfa = 300;
+
+                                if(tmpAlfa <= 0)
+                                    tmpAlfa = 0.0001;
+                            }
+                            else
+                                if(tmpBeta > 10 && tmpBeta <= 100)
+                                {
+                                    if(tmpAlfa > 40)
+                                        tmpAlfa = 40;
+
+                                    if(tmpAlfa <= 0)
+                                        tmpAlfa = 0.0001;
+                                }else
+                                    if(tmpBeta > 100 && tmpBeta <= 400)
+                                    {
+                                        if(tmpAlfa > 8)
+                                            tmpAlfa = 8;
+
+                                        if(tmpAlfa <= 0)
+                                            tmpAlfa = 0.0001;
+                                    }
+
                         _genotype.setParameters(i,0,tmpAlfa);
                         _genotype.setParameters(i,1,tmpBeta);
 
                         //controllo > 0
                         double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
-                        if(_genotype.getW(i)+rndDoubleW < 0)
-                            _genotype.setW(i,_genotype.getW(i)-rndDoubleW);
-                        else
-                         _genotype.setW(i,_genotype.getW(i)+rndDoubleW);
-                    }
+//                        std::cout << "W :" << _genotype.getW(i) << std::endl;
+//                        std::cout << "random w :" << rndDoubleW << std::endl;
+//                        std::cout << "percentuale w :" << _genotype.getPercentageVariationWeight(i) << std::endl;
+                        double tmpGammaWeight=_genotype.getW(i)+rndDoubleW;
+                        if(tmpGammaWeight > maxGammaWeight)
+                            tmpGammaWeight = maxGammaWeight;
 
-            //pesi fissi all'inizio
+                        if(tmpGammaWeight < minGammaWeight)
+                            tmpGammaWeight = minGammaWeight;
+
+                        _genotype.setW(i,tmpGammaWeight);
+                        std::cout << "GAMMA MUTATION END" << std::endl;
+                    }
 
 
 
 
 
         }
-
+        std::cout << "FINE MUTATION " << std::endl;
 
 
 

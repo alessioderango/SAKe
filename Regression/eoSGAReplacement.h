@@ -95,7 +95,7 @@ public :
 //            std::cout << popTmp[i].fitness() << " -  " << _pop[i].fitness() << endl;
 
 //        }
-        //std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+        std::cout << "TORNEO!!!!!!! " << " " << std::endl;
         //_pop.sort(result);
         //SELECTION
         offspring.clear();
@@ -124,14 +124,15 @@ public :
             }
            // counter=-1;
             counter++;
-            int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
-            int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
+           // = min + rand()%(max - min);
+            int gen1=maxNumberToConsider+(rand()%(_pop.size()-maxNumberToConsider));//-maxNumberToConsider) + maxNumberToConsider;
+            int gen2=maxNumberToConsider+(rand()%(_pop.size()-maxNumberToConsider));//-maxNumberToConsider) + maxNumberToConsider;
 
-            //std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+
            // std::cout << popTmp[gen1].fitness() << " ";
 
             //std::cout << popTmp[gen2].fitness() << " ";
-            //std::cout << " FINE TORNEO!!!!!!! " << " " << std::endl;
+            std::cout << " FINE TORNEO!!!!!!! " << " " << std::endl;
 
             if(popTmp[gen1].fitness() < popTmp[gen2].fitness() ){
                 EOT a;
@@ -171,7 +172,7 @@ public :
 
         unsigned i;
 
- //std::cout << "BEFORE CROSSOVER AND MUTATION  " << std::endl;
+ std::cout << "BEFORE CROSSOVER AND MUTATION  " << std::endl;
 
 // for (int tmp = 0; tmp < offspring.size(); tmp++) {
 //      if(!offspring[tmp].invalid())
@@ -197,7 +198,7 @@ public :
                        }
             }
           }
-// std::cout << "DOPO CROSSOVER  " << std::endl;
+ std::cout << "DOPO CROSSOVER  " << std::endl;
 
 //        for (int tmp = 0; tmp < offspring.size(); tmp++) {
 //            if(!offspring[tmp].invalid())
@@ -220,7 +221,7 @@ public :
 
           }
 
-     //  std::cout << "DOPO MUTATION  " << std::endl;
+       std::cout << "DOPO MUTATION  " << std::endl;
 
 
 //        for (int tmp = 0; tmp < offspring.size(); tmp++) {

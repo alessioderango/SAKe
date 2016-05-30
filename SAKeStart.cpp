@@ -572,35 +572,24 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                              absoluteAverageFitness,
                                              gen);
 
-    //    double percentualePeso=0.09,
-    //            percentualeLineareA=0.01,
-    //            percentualeLineareB=0.01,
-    //            percentualeGammaA=0.06,
-    //            percentualeGammaB=0.06;
-    double percentualePeso=dpercentageWeight,
-            percentualeLineareA=dpercentageGammaA,
-            percentualeLineareB=dpercentageGammaB,
-            percentualeGammaA=dpercentageLinearA,
-            percentualeGammaB=dpercentageLinearB;
-
     int dimension=matrixGamma1.size()+matrixGamma2.size()+inumberLinear;
     double * weight = new double[dimension];
     int count =0;
     for (int i = 0; i < inumberLinear; ++i) {
         double tmp1=fRand(matrixLinear[i][4],matrixLinear[i][5]);
-        std::cout << tmp1 << std::endl;
+        //std::cout << tmp1 << std::endl;
         weight[count] = tmp1;
         count++;
     }
     for (int i = 0; i < matrixGamma1.size(); ++i) {
         double tmp1=fRand(matrixGamma1[i][4],matrixGamma1[i][5]);
-        std::cout << tmp1 << std::endl;
+        //std::cout << tmp1 << std::endl;
         weight[count] = tmp1;
         count++;
     }
     for (int i = 0; i <  matrixGamma2.size(); ++i) {
         double tmp1=fRand(matrixGamma2[i][4],matrixGamma2[i][5]);
-        std::cout << tmp1 << std::endl;
+        //std::cout << tmp1 << std::endl;
         weight[count] = tmp1;
         count++;
     }
@@ -667,10 +656,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 0; i < inumberLinear; ++i) {
         Parameters tmp;
         double tmp1=fRand(matrixLinear[i][0],matrixLinear[i][1]);
-        std::cout <<tmp1<< std::endl;
+        //std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
         double tmp2=fRand(matrixLinear[i][2],matrixLinear[i][3]);
-        std::cout <<tmp2<< std::endl;
+        //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
         parameters[count]=tmp;
         count++;
@@ -679,10 +668,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 0; i < matrixGamma1.size(); ++i) {
         Parameters tmp;
         double tmp1=fRand(matrixGamma1[i][0],matrixGamma1[i][1]);
-        std::cout <<tmp1<< std::endl;
+        //std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
         double tmp2=fRand(matrixGamma1[i][2],matrixGamma1[i][3]);
-        std::cout <<tmp2<< std::endl;
+        //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
         parameters[count]=tmp;
         count++;
@@ -691,10 +680,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 0; i < matrixGamma2.size(); ++i) {
         Parameters tmp;
         double tmp1=fRand(matrixGamma2[i][0],matrixGamma2[i][1]);
-        std::cout <<tmp1<< std::endl;
+        //std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
         double tmp2=fRand(matrixGamma2[i][2],matrixGamma2[i][3]);
-        std::cout <<tmp2<< std::endl;
+        //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
         parameters[count]=tmp;
         count++;

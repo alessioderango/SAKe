@@ -431,10 +431,10 @@ ApplicationWindow {
                                                                   bmax: "50",
                                                                   bmin: "5",
                                                                   wmax: "2",
-                                                                  wmin: "0.2",
-                                                                  pa: "0.3",
-                                                                  pb: "0.3",
-                                                                  pw: "0.3"})
+                                                                  wmin: "0.02",
+                                                                  pa: "0.03",
+                                                                  pb: "0.03",
+                                                                  pw: "0.03"})
                                         }
 
 
@@ -452,10 +452,10 @@ ApplicationWindow {
                                                                   bmax: "50",
                                                                   bmin: "5",
                                                                   wmax: "2",
-                                                                  wmin: "0.2",
-                                                                  pa: "0.3",
-                                                                  pb: "0.3",
-                                                                  pw: "0.3"})
+                                                                  wmin: "0.02",
+                                                                  pa: "0.03",
+                                                                  pb: "0.03",
+                                                                  pw: "0.03"})
                                         }
                                         textFieldGammaFunctions.text="1"
                                 }
@@ -717,10 +717,10 @@ ApplicationWindow {
                                                                    amax: "200",
                                                                    amin: "20",
                                                                    wmax: "2",
-                                                                   wmin: "0.2",
-                                                                   pa: "0.3",
-                                                                   pb: "0.3",
-                                                                   pw: "0.3"
+                                                                   wmin: "0.02",
+                                                                   pa: "0.03",
+                                                                   pb: "0.03",
+                                                                   pw: "0.03"
                                                                })
                                         }
 
@@ -742,9 +742,9 @@ ApplicationWindow {
                                                                   amin: "20",
                                                                   wmax: "2",
                                                                   wmin: "0.2",
-                                                                  pa: "0.3",
-                                                                  pb: "0.3",
-                                                                  pw: "0.3"})
+                                                                  pa: "0.03",
+                                                                  pb: "0.03",
+                                                                  pw: "0.03"})
                                     console.log("ENTRATO")
                                     tableModel2.append({ nFunction:2,
                                                           bmax: "80",
@@ -753,9 +753,9 @@ ApplicationWindow {
                                                           amin: "2",
                                                           wmax: "2",
                                                           wmin: "0.2",
-                                                          pa: "0.3",
-                                                          pb: "0.3",
-                                                          pw: "0.3"})
+                                                          pa: "0.03",
+                                                          pb: "0.03",
+                                                          pw: "0.03"})
                                     tableModel2.append({ nFunction:3,
                                                            bmax: "350",
                                                            bmin: "150",
@@ -763,9 +763,9 @@ ApplicationWindow {
                                                            amin: "2",
                                                            wmax: "2",
                                                            wmin: "0.2",
-                                                           pa: "0.3",
-                                                           pb: "0.3",
-                                                           pw: "0.3"})
+                                                           pa: "0.03",
+                                                           pb: "0.03",
+                                                           pw: "0.03"})
 
 
                                 }
@@ -872,11 +872,11 @@ ApplicationWindow {
                                 delegate: TextField {
                                     id: textid
                                     text: model.amax
-                                    validator:
+
 
 //                                        if( 0 < (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin) &&
 //                                        1 > (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin))
-                                         RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
+                                    //RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
 
                                     onTextChanged: {
                                         tableModel2.get(styleData.row).amax = text;
@@ -937,7 +937,7 @@ ApplicationWindow {
                                 role: "pa"
                                 delegate: TextField {
                                     text: model.pa
-                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
                                          tableModel2.get(styleData.row).pa = text
                                     }
@@ -953,7 +953,7 @@ ApplicationWindow {
                                 role: "pb"
                                 delegate: TextField {
                                     text: model.pb
-                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
                                          tableModel2.get(styleData.row).pb = text
                                     }
@@ -968,7 +968,7 @@ ApplicationWindow {
                                 role: "pw"
                                 delegate: TextField {
                                     text: model.pw
-                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                   // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
                                          tableModel2.get(styleData.row).pw = text
                                     }
@@ -1050,9 +1050,9 @@ ApplicationWindow {
                                                                   amin: "-0.5",
                                                                   wmax: "2",
                                                                   wmin: "0.2",
-                                                                  pa: "0.3",
-                                                                  pb: "0.3",
-                                                                  pw: "0.3"})
+                                                                  pa: "0.03",
+                                                                  pb: "0.03",
+                                                                  pw: "0.03"})
                                 }
 
 

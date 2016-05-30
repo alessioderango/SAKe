@@ -111,7 +111,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
      initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
      initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
-     //initAlreadyConsidered(alreadyConsideredZero,size_kernel);
+     initAlreadyConsidered(alreadyConsideredZero,size_kernel);
      int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
      cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
      count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
@@ -122,7 +122,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
      count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
      cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
-     //count=getInterset(kernel,alreadyConsidered,alreadyConsideredZero,hzero,size_kernel);
+     count=getInterset(kernel,alreadyConsidered,alreadyConsideredZero,hzero,size_kernel);
      cout << "ho trovato " << count << " barre superiori a " << hzero << endl;
      //stampa(alreadyConsideredHMax);
      //stampa(alreadyConsideredHMedMax);
@@ -136,7 +136,8 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      getPoints(alreadyConsideredHMed,x,y,size_kernel);
      cout << " points from hmed2" << endl;
      getPoints(alreadyConsideredHMed2,x,y,size_kernel);
-     //getPoints(alreadyConsideredZero,x,y,size_kernel);
+     cout << " points from zero" << endl;
+     getPoints(alreadyConsideredZero,x,y,size_kernel);
 //     for (int i = 0; i < x.size(); i++) {
 //         cout << x[i] <<" " << y[i] << endl;
 //     }

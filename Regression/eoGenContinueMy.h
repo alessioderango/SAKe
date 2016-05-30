@@ -43,9 +43,27 @@ public:
         ofstream myfile;
         myfile.open (savePath.toStdString(),ios::out);
 
+        myfile << "Y calcolata : ";
         for (int t = 0; t < _vEO.best_element().getYCombinataConst().size(); t++) {
             myfile <<  _vEO.best_element().getYCombinataConst(t) << " ;";
         }
+
+        myfile << "Equation : \n";
+
+        for (int t = 0; t < _vEO.best_element().getWConst().size(); t++) {
+            myfile <<  _vEO.best_element().getWConst(t) << " ;";
+            if(_vEO.best_element().getFunctionTypeConst(t) == 0 )
+                myfile <<  "lineare" << " ;";
+            else
+                 myfile <<  "gamma" << " ;";
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(0) << " ;";
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(1) << " ;";
+            myfile <<  "NSE : " <<_vEO.best_element().fitness();
+            myfile << "\n";
+
+        }
+
+
 
         myfile.close();
 
