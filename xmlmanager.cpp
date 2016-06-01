@@ -709,7 +709,11 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
                                               const  QString& _percentageLinearA,
                                               const  QString &_percentageLinearB,
                                               const  QString &maxGeneration,
-                                              const  QString &_fileKernel){
+                                              const  QString &_fileKernel,
+                                              std::vector<std::vector<double> > matrixGamma1,
+                                              std::vector<std::vector<double> > matrixGamma2,
+                                              std::vector<std::vector<double> > matrixLinear
+                                              ){
     QString filename = QString(xmlFilePath);
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
@@ -755,14 +759,6 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     QDomElement populationSizeElement = document.createElement( "PopulationSize" );
     QDomElement probabilityOfCrossoverElement = document.createElement( "ProbabilityOfCrossover" );
     QDomElement probabilityOfMutationElement = document.createElement( "ProbabilityOfMutation" );
-    QDomElement percentageWeightElement = document.createElement( "PercentageWeight" );
-    QDomElement numberProcessorElement = document.createElement( "NumberProcessor" );
-    QDomElement numberGamma = document.createElement( "NumberGamma" );
-    QDomElement percentageGammaA = document.createElement( "PercentageGammaA" );
-    QDomElement percentageGammaB = document.createElement( "PercentageGammaB" );
-    QDomElement numberLinear = document.createElement( "NumberLinear" );
-    QDomElement percentageLinearA = document.createElement( "PercentageLinearA" );
-    QDomElement percentageLinearB = document.createElement( "PercentageLinearB" );
     QDomElement maximumNumberOfGenerationsElement = document.createElement( "MaximumNumberOfGenerations" );
     QDomElement fileKernel = document.createElement( "FileKernel" );
 
@@ -775,14 +771,6 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     QDomText populationSizeElementText = document.createTextNode( populationSize );
     QDomText probabilityOfCrossoverElementText = document.createTextNode( percentageCrossover );
     QDomText probabilityOfMutationElementText = document.createTextNode( percentageMutation );
-    QDomText percentageWeightText = document.createTextNode( _percentageWeight );
-    QDomText numberProcessorElementText = document.createTextNode( numberProcessor );
-    QDomText numberGammaText = document.createTextNode( _numberGamma );
-    QDomText percentageGammaAText = document.createTextNode( _percentageGammaA );
-    QDomText percentageGammaBText = document.createTextNode( _percentageGammaB );
-    QDomText numberLinearText = document.createTextNode( _numberLinear );
-    QDomText percentageLinearAText = document.createTextNode( _percentageLinearA );
-    QDomText percentageLinearBText = document.createTextNode( _percentageLinearB );
     QDomText maximumNumberOfGenerationsElementText = document.createTextNode( maxGeneration );
     QDomText fileKernelText = document.createTextNode( _fileKernel );
 
@@ -812,31 +800,150 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     probabilityOfMutationElement.appendChild(probabilityOfMutationElementText);
     project.appendChild(probabilityOfMutationElement);
 
-    percentageWeightElement.appendChild(percentageWeightText);
-    project.appendChild(percentageWeightElement);
-
-    numberProcessorElement.appendChild(numberProcessorElementText);
-    project.appendChild(numberProcessorElement);
-
-    numberGamma.appendChild(numberGammaText);
-    project.appendChild(numberGamma);
-    percentageGammaA.appendChild(percentageGammaAText);
-    project.appendChild(percentageGammaA);
-    percentageGammaB.appendChild(percentageGammaBText);
-    project.appendChild(percentageGammaB);
-
-    numberLinear.appendChild(numberLinearText);
-    project.appendChild(numberLinear);
-    percentageLinearA.appendChild(percentageLinearAText);
-    project.appendChild(percentageLinearA);
-    percentageLinearB.appendChild(percentageLinearBText);
-    project.appendChild(percentageLinearB);
-
     maximumNumberOfGenerationsElement.appendChild(maximumNumberOfGenerationsElementText);
     project.appendChild(maximumNumberOfGenerationsElement);
 
     fileKernel.appendChild(fileKernelText);
     project.appendChild(fileKernel);
+
+    QDomElement gammaFunction1 =document.createElement( "GammaFunction1" );
+    QDomElement numberGammaFunction1 =document.createElement( "Number" );
+    numberGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1.size())));
+    gammaFunction1.appendChild(numberGammaFunction1);
+    for (int i = 0; i < matrixGamma1.size(); i++) {
+        QDomElement gammaParameters =document.createElement( "Parameters" );
+        QDomElement amaxGammaFunction1 =document.createElement( "amax" );
+        amaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][0])));
+        gammaParameters.appendChild(amaxGammaFunction1);
+
+        QDomElement aminGammaFunction1 =document.createElement( "amin" );
+        aminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][1])));
+        gammaParameters.appendChild(aminGammaFunction1);
+
+        QDomElement bmaxGammaFunction1 =document.createElement( "bmax" );
+        bmaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][2])));
+        gammaParameters.appendChild(bmaxGammaFunction1);
+
+        QDomElement bminGammaFunction1 =document.createElement( "bmin" );
+        bminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][3])));
+        gammaParameters.appendChild(bminGammaFunction1);
+
+        QDomElement wmaxGammaFunction1 =document.createElement( "wmax" );
+        wmaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][4])));
+        gammaParameters.appendChild(wmaxGammaFunction1);
+
+        QDomElement wminGammaFunction1 =document.createElement( "wmin" );
+        wminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][5])));
+        gammaParameters.appendChild(wminGammaFunction1);
+
+        QDomElement paGammaFunction1 =document.createElement( "pa" );
+        paGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][6])));
+        gammaParameters.appendChild(paGammaFunction1);
+
+        QDomElement pbGammaFunction1 =document.createElement( "pb" );
+        pbGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][7])));
+        gammaParameters.appendChild(pbGammaFunction1);
+
+        QDomElement pwGammaFunction1 =document.createElement( "pw" );
+        pwGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][8])));
+        gammaParameters.appendChild(pwGammaFunction1);
+        gammaFunction1.appendChild(gammaParameters);
+    }
+
+    project.appendChild(gammaFunction1);
+
+    QDomElement gammaFunction2 =document.createElement( "GammaFunction2" );
+    QDomElement numberGammaFunction2 =document.createElement( "Number" );
+    numberGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2.size())));
+    gammaFunction2.appendChild(numberGammaFunction2);
+
+    for (int i = 0; i < matrixGamma2.size(); i++) {
+        QDomElement gammaParameters2 =document.createElement( "Parameters" );
+        QDomElement amaxGammaFunction2 =document.createElement( "amax" );
+        amaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][0])));
+        gammaParameters2.appendChild(amaxGammaFunction2);
+
+        QDomElement aminGammaFunction2 =document.createElement( "amin" );
+        aminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][1])));
+        gammaParameters2.appendChild(aminGammaFunction2);
+
+        QDomElement bmaxGammaFunction2 =document.createElement( "bmax" );
+        bmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][2])));
+        gammaParameters2.appendChild(bmaxGammaFunction2);
+
+        QDomElement bminGammaFunction2 =document.createElement( "bmin" );
+        bminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][3])));
+        gammaParameters2.appendChild(bminGammaFunction2);
+
+        QDomElement wmaxGammaFunction2 =document.createElement( "wmax" );
+        wmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][4])));
+        gammaParameters2.appendChild(wmaxGammaFunction2);
+
+        QDomElement wminGammaFunction2 =document.createElement( "wmin" );
+        wminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][5])));
+        gammaParameters2.appendChild(wminGammaFunction2);
+
+        QDomElement paGammaFunction2 =document.createElement( "pa" );
+        paGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][6])));
+        gammaParameters2.appendChild(paGammaFunction2);
+
+        QDomElement pbGammaFunction2 =document.createElement( "pb" );
+        pbGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][7])));
+        gammaParameters2.appendChild(pbGammaFunction2);
+
+        QDomElement pwGammaFunction2 =document.createElement( "pw" );
+        pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][8])));
+        gammaParameters2.appendChild(pwGammaFunction2);
+        gammaFunction2.appendChild(gammaParameters2);
+    }
+    project.appendChild(gammaFunction2);
+
+    QDomElement linearFunction =document.createElement( "LinearFunction" );
+    QDomElement numberLinearFunction =document.createElement( "Number" );
+    numberLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear.size())));
+    linearFunction.appendChild(numberLinearFunction);
+
+    for (int i = 0; i < matrixLinear.size(); i++) {
+        QDomElement linearParameters =document.createElement( "Parameters" );
+        QDomElement factorMaxLinearFunction =document.createElement( "factormax" );
+        factorMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][0])));
+        linearParameters.appendChild(factorMaxLinearFunction);
+
+        QDomElement factorMinLinearFunction =document.createElement( "factormin" );
+        factorMinLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][1])));
+        linearParameters.appendChild(factorMinLinearFunction);
+
+        QDomElement interceptMaxLinearFunction =document.createElement( "interceptmax" );
+        interceptMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][2])));
+        linearParameters.appendChild(interceptMaxLinearFunction);
+
+        QDomElement interceptMinLinearFunction =document.createElement( "interceptmin" );
+        interceptMinLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][3])));
+        linearParameters.appendChild(interceptMinLinearFunction);
+
+        QDomElement wmaxGammaFunction2 =document.createElement( "wmax" );
+        wmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][4])));
+        linearParameters.appendChild(wmaxGammaFunction2);
+
+        QDomElement wminGammaFunction2 =document.createElement( "wmin" );
+        wminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][5])));
+        linearParameters.appendChild(wminGammaFunction2);
+
+        QDomElement paGammaFunction2 =document.createElement( "pa" );
+        paGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][6])));
+        linearParameters.appendChild(paGammaFunction2);
+
+        QDomElement pbGammaFunction2 =document.createElement( "pb" );
+        pbGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][7])));
+        linearParameters.appendChild(pbGammaFunction2);
+
+        QDomElement pwGammaFunction2 =document.createElement( "pw" );
+        pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][8])));
+        linearParameters.appendChild(pwGammaFunction2);
+        linearFunction.appendChild(linearParameters);
+    }
+    project.appendChild(linearFunction);
+
     id.appendChild(idText);
     project.appendChild(id);
 

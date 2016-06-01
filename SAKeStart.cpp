@@ -506,7 +506,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                                  percentageLinearA.toString(),
                                                  percentageLinearB.toString(),
                                                  maxGeneration.toString(),
-                                                 fileurl.toString());
+                                                 fileurl.toString(),
+                                                 matrixGamma1,
+                                                 matrixGamma2,
+                                                 matrixLinear);
     }
 
     QString sselction= selection.toString();
