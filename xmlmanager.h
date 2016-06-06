@@ -86,16 +86,12 @@ public:
                                                  const QString &populationSize,
                                                  const QString &percentageCrossover,
                                                  const QString &percentageMutation,
-                                                 const  QString &_percentageWeight,
                                                  const  QString &numberProcessor,
-                                                 const  QString &_numberGamma,
-                                                 const  QString& _percentageGammaA,
-                                                 const  QString &_percentageGammaB,
-                                                 const  QString &_numberLinear,
-                                                 const  QString& _percentageLinearA,
-                                                 const  QString &_percentageLinearB,
                                                  const  QString &maxGeneration,
-                                                 const  QString &_fileKernel);
+                                                 const  QString &_fileKernel,
+                                                 std::vector<std::vector<double> > matrixGamma1,
+                                                 std::vector<std::vector<double> > matrixGamma2,
+                                                 std::vector<std::vector<double> > matrixLinear);
 
 
     int findProjectName(QString nameProject);
@@ -109,6 +105,9 @@ public:
 private:
     QObject * listProjects;
     TreeModel * treeview;
+    QDomElement getGamma1ElementXML(std::vector<std::vector<double> > matrixGamma1, QDomDocument document);
+    QDomElement getGamma2ElementXML(std::vector<std::vector<double> > matrixGamma2, QDomDocument document);
+    QDomElement getLinearElementXML(std::vector<std::vector<double> > matrixLinear, QDomDocument document);
 };
 
 #endif // XMLMANAGER_H

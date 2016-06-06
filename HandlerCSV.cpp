@@ -72,7 +72,6 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,QObject * err
             size++;
 
         }catch(std::exception& e){
-            std::cout << "  Exception: " <<  e.what() << std::endl;
 
             QVariant returnedValue;
             QMetaObject::invokeMethod(errorHandler, "errorcsvFunction",
@@ -109,7 +108,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
         std::vector<std::string> x;
         x = split(line, ';');
         rows.push_back(x);
-        cout << line << endl;
+//        cout << line << endl;
     }
 //    clock_t stop=clock();
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
@@ -157,7 +156,7 @@ int HandlerCSV::loadCSVKernel(QString fileurl,double *& Fi,int & size, double & 
     x = split(line, ';');
     zCr = std::stod(x[3]);
     x.erase(x.begin(),x.begin()+6);
-    cout << line << endl;
+//    cout << line << endl;
 
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
     //           qDebug() << activation_size;
@@ -171,12 +170,12 @@ int HandlerCSV::loadCSVKernel(QString fileurl,double *& Fi,int & size, double & 
         Fi[i]= tmp;
     }
 
-    for (int i = 0; i < x.size(); ++i) {
-        cout << Fi[i] <<  endl;
-    }
-    cout << "zCr = " << zCr << endl;
-    cout << "size = " << size << endl;
-    cout << "x.size() = " << x.size() << endl;
+//    for (int i = 0; i < x.size(); ++i) {
+//        cout << Fi[i] <<  endl;
+//    }
+//    cout << "zCr = " << zCr << endl;
+//    cout << "size = " << size << endl;
+//    cout << "x.size() = " << x.size() << endl;
 
     return 0;
 }
@@ -195,12 +194,12 @@ int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFr
             tmp.push_back(std::stod(x[i]));
         }
         popFromFile.push_back(tmp);
-        cout << line << endl;
+//        cout << line << endl;
     }
-    cout << popFromFile.size()<< endl;
-    for(int i=0;i <popFromFile.size();i++){
-        cout << popFromFile[i].size() << endl;
-    }
-    cout << numberGen << endl;
+//    cout << popFromFile.size()<< endl;
+//    for(int i=0;i <popFromFile.size();i++){
+//        cout << popFromFile[i].size() << endl;
+//    }
+//    cout << numberGen << endl;
     return 0;
 }

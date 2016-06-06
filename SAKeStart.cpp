@@ -234,7 +234,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                              sprojectname,
                                                              orders,
                                                              itypeAlgorithm);
-            std::cout << "OK" << std::endl;
             controller->setPlotMobility(qCustomPlotMobilityFunction);
             controller->setPlotkernel(qCustomPlotKernel);
             controller->setApplication(a);
@@ -245,10 +244,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
             //FINE
             QObject::connect(buttonStop, SIGNAL(clicked()),controller, SLOT( stopThread()));
             //eseguo l'algoritmo genetico e setto il segnale di stop
-            std::cout << "OK" << std::endl;
             controller->startThread();
             threadsController.push_back(controller);
-            std::cout << "OK" << std::endl;
         }
     }
 }
@@ -477,16 +474,12 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                                              populationSize.toString(),
                                                              percentageCrossover.toString(),
                                                              percentageMutation.toString(),
-                                                             percentageWeight.toString(),
                                                              numberProcessor.toString(),
-                                                             numberGamma.toString(),
-                                                             percentageGammaA.toString(),
-                                                             percentageGammaB.toString(),
-                                                             numberLinear.toString(),
-                                                             percentageLinearA.toString(),
-                                                             percentageLinearB.toString(),
                                                              maxGeneration.toString(),
-                                                             fileurl.toString());
+                                                             fileurl.toString(),
+                                                             matrixGamma1,
+                                                             matrixGamma2,
+                                                             matrixLinear);
 
 
     }else{
@@ -852,6 +845,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
 
 
 QVariantList SAKeStart::getAllElementsFromProjectName(const QVariant &_projectName){
+
     return xmlManager->getAllElementsFromProjectName(_projectName.toString());
 }
 

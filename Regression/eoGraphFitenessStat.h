@@ -50,8 +50,8 @@ public:
         absoluteMaximumFitness=_absoluteMaximumFitness;
         currentAverageFitness= _currentAverageFitness;
         absoluteAverageFitness=_absoluteAverageFitness;
-        AbsoluteMaximumFitness=0;
-        AbsoluteAvarageFitness=0;
+        AbsoluteMaximumFitness=-DBL_MIN;
+        AbsoluteAvarageFitness=-DBL_MIN;
         update=_update;
         //dsakecontroller =_sakecontroller;
     }

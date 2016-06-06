@@ -812,32 +812,32 @@ ApplicationWindow {
                                             messageError.open()
                                         }else {
 
-//                                        sakeStart.InitAlgo(comboSelection.currentText,
-//                                                           textFieldPopulation.text,
-//                                                           textFieldMaxGen.text,
-//                                                           textFieldtbMax.text,
-//                                                           textFieldtbMin.text,
-//                                                           textFielddHpMax.text,
-//                                                           textFielddHpMin.text,
-//                                                           textFieldPropCrossover.text,
-//                                                           textFieldPropMutation.text,
-//                                                           textFieldPme.text,
-//                                                           textFieldPmb.text,
-//                                                           comboPattern.currentText,
-//                                                           fileDialogRain.fileUrl,
-//                                                           fileDialogActivation.fileUrl,
-//                                                           textProjectName.text,
-//                                                           textNumberProcessor.text,
-//                                                           para1,
-//                                                           para2,
-//                                                           false,
-//                                                           0,
-//                                                           typeAlgorithm,
-//                                                           order1,
-//                                                           order2,
-//                                                           order3,
-//                                                           order4
-//                                                           )
+                                        sakeStart.InitAlgo(comboSelection.currentText,
+                                                           textFieldPopulation.text,
+                                                           textFieldMaxGen.text,
+                                                           textFieldtbMax.text,
+                                                           textFieldtbMin.text,
+                                                           textFielddHpMax.text,
+                                                           textFielddHpMin.text,
+                                                           textFieldPropCrossover.text,
+                                                           textFieldPropMutation.text,
+                                                           textFieldPme.text,
+                                                           textFieldPmb.text,
+                                                           comboPattern.currentText,
+                                                           fileDialogRain.fileUrl,
+                                                           fileDialogActivation.fileUrl,
+                                                           textProjectName.text,
+                                                           textNumberProcessor.text,
+                                                           para1,
+                                                           para2,
+                                                           false,
+                                                           0,
+                                                           typeAlgorithm,
+                                                           order1,
+                                                           order2,
+                                                           order3,
+                                                           order4
+                                                           )
 
                                         close()
                                     }

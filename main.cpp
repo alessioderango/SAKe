@@ -10,10 +10,12 @@
 #include "CustomPlotRegressionPreviewKernel.h"
 #include "TreeModel.h"
 #include "TableModel.h"
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {
 
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication a(argc, argv);
 
     srand (time(NULL));

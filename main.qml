@@ -314,30 +314,72 @@ ApplicationWindow {
                                         +" "+model.description_role );
                             // parent.color =fillColor
                             //                              var list = sakeStart.getAllElementsFromProjectName(model.description_role)
+
                             var list = sakeStart.getAllElementsFromProjectName(model.description_role)
+                            var matrix= [];
+                            matrix[0] = [];
+
+
+
                             console.log("tipo Progetto = "+list[list.length -1])
                             var component;
                             var window  ;
+
+
+                            console.log("End List \n");
+
+
+
                             if(list[list.length -1] === "CalibrationProject"){
                                 component = Qt.createComponent("parametersProjectAlreadyExist.qml")
                                 window= component.createObject(applicationWindow1)
-                                console.log(window.f(list))
+                                var countRows = 0;
+                                for (var i = 0; i < list.length; i++) {
+                                    if(list[i] !== "-"){
+                                        console.log(list[i]+ "\n");
+                                        matrix[countRows].push(list[i]);
+                                    }else
+                                    {
+                                        break;
+                                    }
+
+                                }
+                                var parameter  = matrix[0];
+                                console.log(parameter)
+                                console.log(window.f(parameter))
                             }else
                                 if(list[list.length -1] === "RegressionProject"){
                                     component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
-                                    window = component.createObject(applicationWindow1)
-                                    console.log(window.f(list))
-                                }
-                            //                                else
-                            //                                    if(list[list.length -1] === "ValidationProject"){
-                            //                                        component = Qt.createComponent("parametersProjectAlreadyExist.qml")
-                            //                                        console.log("listview1.model.get(listview1.currentIndex).name")
-                            //                                    }
+                                    var countRows = 0;
+                                    for (var i = 0; i < list.length; i++) {
+                                        if(list[i] !== "-"){
+                                            console.log(list[i]+ "\n");
+                                            matrix[countRows].push(list[i]);
+                                        }else
+                                        {
+                                            countRows++;
+                                            matrix[countRows] = [];
+                                        }
 
-                            //                            console.log("ciao"+list.length )
-                            //                            for(var i = 0; i < list.length-1 ; i++){
-                            //                                console.log(list[i])
-                            //                            }
+                                    }
+                                    var parameter  = matrix[0];
+                                    console.log(parameter)
+                                    var listGamma1 = matrix[1];
+                                    console.log(listGamma1)
+                                    var listGamma2 = matrix[2];
+                                    console.log(listGamma2)
+                                    var listLinear = matrix[3];
+                                    console.log(listLinear)
+
+                                    window = component.createObject(applicationWindow1)
+                                    console.log(window.loadParameter(parameter,listGamma1,listGamma2,listLinear))
+                                }
+                                else
+                                    if(list[list.length -1] === "ValidationProject"){
+                                        component = Qt.createComponent("parametersProjectAlreadyExist.qml")
+                                        console.log("listview1.model.get(listview1.currentIndex).name")
+                                    }
+
 
 
                             //                            insert();
@@ -422,7 +464,7 @@ ApplicationWindow {
                             onDoubleClicked: {
 
                                 var component = Qt.createComponent("parametersProjectAlreadyExist.qml")
-                                console.log(listview1.model.get(listview1.currentIndex).name)
+                                console.log(listview1.model.get(listview1.currentIndex).parent.name)
                                 var list = sakeStart.getAllElementsFromProjectName(listview1.model.get(listview1.currentIndex).name)
                                 console.log("ciao"+list.length )
                                 for(var i = 0; i < list.length ; i++){

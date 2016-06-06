@@ -65,8 +65,13 @@ int findAllElementsByProject(QString xmlFilePath,QString nameProject){
     return 0;
 }
 
-QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
+QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
+    QVariantList matrix;
     QVariantList list;
+    QVariantList listGamma1;
+    QVariantList listGamma2;
+    QVariantList listLinear;
+
     // QString typeProject="CalibrationProject";
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
@@ -83,7 +88,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
         qDebug( "Failed to open file for reading." );
-        return list;
+        return matrix;
     }
 
     QDomDocument document;
@@ -91,7 +96,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
     {
         qDebug( "Failed to parse the file into a DOM tree." );
         inFile.close();
-        return list;
+        return matrix;
     }
 
     inFile.close();
@@ -103,7 +108,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
     for (int i = 0; i < a.length(); i++) {
         qDebug() << a.at(i).firstChild().nodeValue();
         qDebug() << a.at(i).parentNode().nodeName();
-        if(QString::compare(a.at(i).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0){
+        if(QString::compare(a.at(i).firstChild().nodeValue(), idProject, Qt::CaseInsensitive)==0){
             typeProject = a.at(i).parentNode().nodeName();
             for (int j = 0; j <a.at(i).parentNode().childNodes().length()-1; j++) {
                 if(QString::compare(a.at(i).parentNode().nodeName(), "ValidationProject", Qt::CaseInsensitive)==0)
@@ -111,17 +116,132 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
                     list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
                     qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
                 }else
-                    if(j==1)
+                    if(QString::compare(a.at(i).parentNode().nodeName(), "RegressionProject", Qt::CaseInsensitive)==0)
                     {
-                        list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
-                        list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue());
-                        list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue());
-                        qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
-                        qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
-                        qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
-                    }else{
-                        list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
-                        qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+                        //1 Selection Type
+                        //2 Selection Parameter 1
+                        //3 Selection Parameter 2
+
+                        //4 PopSize
+                        //5 numberProcessor
+                        //6 Probability crossover
+                        //7 Probability mutation
+                        //8 Max gen
+                        //9 file kernel
+
+                        //10 file kernel
+
+                        if(j==1)
+                        {
+                            //Selection
+                            list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
+                            list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue());
+                            list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue());
+                            qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
+                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
+                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
+                        }else
+                            if(j==8){
+                                //Gamma1
+                                qDebug() << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
+                                int numberFunctionGamma1 = a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue().toInt();
+                                for (int k = 1; k <= numberFunctionGamma1; k++)
+                                {
+                                    //amax
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(0).firstChild().nodeValue());
+                                    qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(0).firstChild().nodeValue();
+                                    //amin
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(1).firstChild().nodeValue());
+                                    //bmax
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(2).firstChild().nodeValue());
+                                    //bmin
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(3).firstChild().nodeValue());
+                                    //wmax
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(4).firstChild().nodeValue());
+                                    //wmin
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(5).firstChild().nodeValue());
+                                    //pa
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(6).firstChild().nodeValue());
+                                    //pb
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(7).firstChild().nodeValue());
+                                    //pw
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
+                                }
+                            }else
+                                if(j==9){
+                                    //Gamma2
+                                    int numberFunctionGamma2 = a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue().toInt();
+
+                                    for (int k = 1; k <= numberFunctionGamma2; k++)
+                                    {
+                                        //amax
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(0).firstChild().nodeValue());
+                                        //amin
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(1).firstChild().nodeValue());
+                                        //bmax
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(2).firstChild().nodeValue());
+                                        //bmin
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(3).firstChild().nodeValue());
+                                        //wmax
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(4).firstChild().nodeValue());
+                                        //wmin
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(5).firstChild().nodeValue());
+                                        //pa
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(6).firstChild().nodeValue());
+                                        //pb
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(7).firstChild().nodeValue());
+                                        //pw
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
+                                    }
+                                }else
+                                    if(j==10){
+                                        //Linear
+                                        int numberLinearFunction = a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue().toInt();
+
+                                        for (int k = 1; k <= numberLinearFunction; k++)
+                                        {
+                                            //amax
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(0).firstChild().nodeValue());
+                                            //amin
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(1).firstChild().nodeValue());
+                                            //bmax
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(2).firstChild().nodeValue());
+                                            //bmin
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(3).firstChild().nodeValue());
+                                            //wmax
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(4).firstChild().nodeValue());
+                                            //wmin
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(5).firstChild().nodeValue());
+                                            //pa
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(6).firstChild().nodeValue());
+                                            //pb
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(7).firstChild().nodeValue());
+                                            //pw
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
+                                        }
+                                    }else{
+
+                                        list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
+                                        qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+                                    }
+                    }else
+                    {
+                        if(QString::compare(a.at(i).parentNode().nodeName(), "CalibrationProject", Qt::CaseInsensitive)==0)
+                        {
+                            if(j==1)
+                            {
+                                //Selection
+                                list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
+                                list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue());
+                                list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue());
+                                qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
+                                qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
+                                qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
+                            }else
+
+                            list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
+                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+                        }
                     }
 
             }
@@ -129,8 +249,18 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString nameProject){
 
 
     }
-    list.append(typeProject);
-    return list;
+
+    matrix.append(list);
+    matrix.append("-");
+    matrix.append(listGamma1);
+    matrix.append("-");
+    matrix.append(listGamma2);
+    matrix.append("-");
+    matrix.append(listLinear);
+    matrix.append("-");
+    matrix.append(typeProject);
+
+    return matrix;
 }
 
 TreeModel *XMLManager::getTreeview()
@@ -503,10 +633,10 @@ void XMLManager::ReadCalibrationProjectXML()
 
     QDomNodeList calibrationProject = documentElement.elementsByTagName("CalibrationProject");
 
-     for (int i = 0; i < calibrationProject.length(); i++) {
+    for (int i = 0; i < calibrationProject.length(); i++) {
 
-         treeview->addEntry(calibrationProject.at(i).childNodes().at(0).firstChild().nodeValue(),"Calibration",calibrationProject.at(i).childNodes().at(calibrationProject.at(i).childNodes().length()-1).firstChild().nodeValue(), treeview);
-     }
+        treeview->addEntry(calibrationProject.at(i).childNodes().at(0).firstChild().nodeValue(),"Calibration",calibrationProject.at(i).childNodes().at(calibrationProject.at(i).childNodes().length()-1).firstChild().nodeValue(), treeview);
+    }
 
     QDomNodeList validationProject = documentElement.elementsByTagName("ValidationProject");
 
@@ -693,6 +823,155 @@ int XMLManager::SaveXMLFileAlreadyExistValidationProject(const QString &name,
     return 1;
 }
 
+QDomElement XMLManager::getGamma1ElementXML(std::vector<std::vector<double> > matrixGamma1, QDomDocument document)
+{
+    QDomElement gammaFunction1 =document.createElement( "GammaFunction1" );
+    QDomElement numberGammaFunction1 =document.createElement( "Number" );
+    numberGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1.size())));
+    gammaFunction1.appendChild(numberGammaFunction1);
+    for (int i = 0; i < matrixGamma1.size(); i++) {
+        QDomElement gammaParameters =document.createElement( "Parameters" );
+        QDomElement amaxGammaFunction1 =document.createElement( "amax" );
+        amaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][0])));
+        gammaParameters.appendChild(amaxGammaFunction1);
+
+        QDomElement aminGammaFunction1 =document.createElement( "amin" );
+        aminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][1])));
+        gammaParameters.appendChild(aminGammaFunction1);
+
+        QDomElement bmaxGammaFunction1 =document.createElement( "bmax" );
+        bmaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][2])));
+        gammaParameters.appendChild(bmaxGammaFunction1);
+
+        QDomElement bminGammaFunction1 =document.createElement( "bmin" );
+        bminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][3])));
+        gammaParameters.appendChild(bminGammaFunction1);
+
+        QDomElement wmaxGammaFunction1 =document.createElement( "wmax" );
+        wmaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][4])));
+        gammaParameters.appendChild(wmaxGammaFunction1);
+
+        QDomElement wminGammaFunction1 =document.createElement( "wmin" );
+        wminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][5])));
+        gammaParameters.appendChild(wminGammaFunction1);
+
+        QDomElement paGammaFunction1 =document.createElement( "pa" );
+        paGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][6])));
+        gammaParameters.appendChild(paGammaFunction1);
+
+        QDomElement pbGammaFunction1 =document.createElement( "pb" );
+        pbGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][7])));
+        gammaParameters.appendChild(pbGammaFunction1);
+
+        QDomElement pwGammaFunction1 =document.createElement( "pw" );
+        pwGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][8])));
+        gammaParameters.appendChild(pwGammaFunction1);
+        gammaFunction1.appendChild(gammaParameters);
+    }
+
+    return gammaFunction1;
+}
+
+QDomElement XMLManager::getGamma2ElementXML(std::vector<std::vector<double> > matrixGamma2, QDomDocument document)
+{
+    QDomElement gammaFunction2 =document.createElement( "GammaFunction2" );
+    QDomElement numberGammaFunction2 =document.createElement( "Number" );
+    numberGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2.size())));
+    gammaFunction2.appendChild(numberGammaFunction2);
+
+    for (int i = 0; i < matrixGamma2.size(); i++) {
+        QDomElement gammaParameters2 =document.createElement( "Parameters" );
+        QDomElement amaxGammaFunction2 =document.createElement( "amax" );
+        amaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][0])));
+        gammaParameters2.appendChild(amaxGammaFunction2);
+
+        QDomElement aminGammaFunction2 =document.createElement( "amin" );
+        aminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][1])));
+        gammaParameters2.appendChild(aminGammaFunction2);
+
+        QDomElement bmaxGammaFunction2 =document.createElement( "bmax" );
+        bmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][2])));
+        gammaParameters2.appendChild(bmaxGammaFunction2);
+
+        QDomElement bminGammaFunction2 =document.createElement( "bmin" );
+        bminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][3])));
+        gammaParameters2.appendChild(bminGammaFunction2);
+
+        QDomElement wmaxGammaFunction2 =document.createElement( "wmax" );
+        wmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][4])));
+        gammaParameters2.appendChild(wmaxGammaFunction2);
+
+        QDomElement wminGammaFunction2 =document.createElement( "wmin" );
+        wminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][5])));
+        gammaParameters2.appendChild(wminGammaFunction2);
+
+        QDomElement paGammaFunction2 =document.createElement( "pa" );
+        paGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][6])));
+        gammaParameters2.appendChild(paGammaFunction2);
+
+        QDomElement pbGammaFunction2 =document.createElement( "pb" );
+        pbGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][7])));
+        gammaParameters2.appendChild(pbGammaFunction2);
+
+        QDomElement pwGammaFunction2 =document.createElement( "pw" );
+        pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][8])));
+        gammaParameters2.appendChild(pwGammaFunction2);
+        gammaFunction2.appendChild(gammaParameters2);
+    }
+
+    return gammaFunction2;
+}
+
+QDomElement XMLManager::getLinearElementXML(std::vector<std::vector<double> > matrixLinear, QDomDocument document)
+{
+    QDomElement linearFunction =document.createElement( "LinearFunction" );
+    QDomElement numberLinearFunction =document.createElement( "Number" );
+    numberLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear.size())));
+    linearFunction.appendChild(numberLinearFunction);
+
+    for (int i = 0; i < matrixLinear.size(); i++) {
+        QDomElement linearParameters =document.createElement( "Parameters" );
+        QDomElement factorMaxLinearFunction =document.createElement( "factormax" );
+        factorMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear[i][0])));
+        linearParameters.appendChild(factorMaxLinearFunction);
+
+        QDomElement factorMinLinearFunction =document.createElement( "factormin" );
+        factorMinLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear[i][1])));
+        linearParameters.appendChild(factorMinLinearFunction);
+
+        QDomElement interceptMaxLinearFunction =document.createElement( "interceptmax" );
+        interceptMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear[i][2])));
+        linearParameters.appendChild(interceptMaxLinearFunction);
+
+        QDomElement interceptMinLinearFunction =document.createElement( "interceptmin" );
+        interceptMinLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear[i][3])));
+        linearParameters.appendChild(interceptMinLinearFunction);
+
+        QDomElement wmaxGammaFunction2 =document.createElement( "wmax" );
+        wmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixLinear[i][4])));
+        linearParameters.appendChild(wmaxGammaFunction2);
+
+        QDomElement wminGammaFunction2 =document.createElement( "wmin" );
+        wminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixLinear[i][5])));
+        linearParameters.appendChild(wminGammaFunction2);
+
+        QDomElement paGammaFunction2 =document.createElement( "pa" );
+        paGammaFunction2.appendChild(document.createTextNode(QString::number(matrixLinear[i][6])));
+        linearParameters.appendChild(paGammaFunction2);
+
+        QDomElement pbGammaFunction2 =document.createElement( "pb" );
+        pbGammaFunction2.appendChild(document.createTextNode(QString::number(matrixLinear[i][7])));
+        linearParameters.appendChild(pbGammaFunction2);
+
+        QDomElement pwGammaFunction2 =document.createElement( "pw" );
+        pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixLinear[i][8])));
+        linearParameters.appendChild(pwGammaFunction2);
+        linearFunction.appendChild(linearParameters);
+    }
+
+    return linearFunction;
+}
+
 int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
                                               const QString &selection,
                                               const QString &value1,
@@ -757,6 +1036,7 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     QDomElement value1Element = document.createElement( "value1" );
     QDomElement value2Element = document.createElement( "value2" );
     QDomElement populationSizeElement = document.createElement( "PopulationSize" );
+    QDomElement numberProcessorElement = document.createElement( "numberProcessor" );
     QDomElement probabilityOfCrossoverElement = document.createElement( "ProbabilityOfCrossover" );
     QDomElement probabilityOfMutationElement = document.createElement( "ProbabilityOfMutation" );
     QDomElement maximumNumberOfGenerationsElement = document.createElement( "MaximumNumberOfGenerations" );
@@ -794,6 +1074,9 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     populationSizeElement.appendChild(populationSizeElementText);
     project.appendChild(populationSizeElement);
 
+    numberProcessorElement.appendChild(document.createTextNode(QString("%1").arg(numberProcessor)));
+    project.appendChild(numberProcessorElement);
+
     probabilityOfCrossoverElement.appendChild(probabilityOfCrossoverElementText);
     project.appendChild(probabilityOfCrossoverElement);
 
@@ -806,142 +1089,14 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     fileKernel.appendChild(fileKernelText);
     project.appendChild(fileKernel);
 
-    QDomElement gammaFunction1 =document.createElement( "GammaFunction1" );
-    QDomElement numberGammaFunction1 =document.createElement( "Number" );
-    numberGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1.size())));
-    gammaFunction1.appendChild(numberGammaFunction1);
-    for (int i = 0; i < matrixGamma1.size(); i++) {
-        QDomElement gammaParameters =document.createElement( "Parameters" );
-        QDomElement amaxGammaFunction1 =document.createElement( "amax" );
-        amaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][0])));
-        gammaParameters.appendChild(amaxGammaFunction1);
-
-        QDomElement aminGammaFunction1 =document.createElement( "amin" );
-        aminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][1])));
-        gammaParameters.appendChild(aminGammaFunction1);
-
-        QDomElement bmaxGammaFunction1 =document.createElement( "bmax" );
-        bmaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][2])));
-        gammaParameters.appendChild(bmaxGammaFunction1);
-
-        QDomElement bminGammaFunction1 =document.createElement( "bmin" );
-        bminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][3])));
-        gammaParameters.appendChild(bminGammaFunction1);
-
-        QDomElement wmaxGammaFunction1 =document.createElement( "wmax" );
-        wmaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][4])));
-        gammaParameters.appendChild(wmaxGammaFunction1);
-
-        QDomElement wminGammaFunction1 =document.createElement( "wmin" );
-        wminGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][5])));
-        gammaParameters.appendChild(wminGammaFunction1);
-
-        QDomElement paGammaFunction1 =document.createElement( "pa" );
-        paGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][6])));
-        gammaParameters.appendChild(paGammaFunction1);
-
-        QDomElement pbGammaFunction1 =document.createElement( "pb" );
-        pbGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][7])));
-        gammaParameters.appendChild(pbGammaFunction1);
-
-        QDomElement pwGammaFunction1 =document.createElement( "pw" );
-        pwGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][8])));
-        gammaParameters.appendChild(pwGammaFunction1);
-        gammaFunction1.appendChild(gammaParameters);
-    }
+    QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
 
     project.appendChild(gammaFunction1);
 
-    QDomElement gammaFunction2 =document.createElement( "GammaFunction2" );
-    QDomElement numberGammaFunction2 =document.createElement( "Number" );
-    numberGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2.size())));
-    gammaFunction2.appendChild(numberGammaFunction2);
-
-    for (int i = 0; i < matrixGamma2.size(); i++) {
-        QDomElement gammaParameters2 =document.createElement( "Parameters" );
-        QDomElement amaxGammaFunction2 =document.createElement( "amax" );
-        amaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][0])));
-        gammaParameters2.appendChild(amaxGammaFunction2);
-
-        QDomElement aminGammaFunction2 =document.createElement( "amin" );
-        aminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][1])));
-        gammaParameters2.appendChild(aminGammaFunction2);
-
-        QDomElement bmaxGammaFunction2 =document.createElement( "bmax" );
-        bmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][2])));
-        gammaParameters2.appendChild(bmaxGammaFunction2);
-
-        QDomElement bminGammaFunction2 =document.createElement( "bmin" );
-        bminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][3])));
-        gammaParameters2.appendChild(bminGammaFunction2);
-
-        QDomElement wmaxGammaFunction2 =document.createElement( "wmax" );
-        wmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][4])));
-        gammaParameters2.appendChild(wmaxGammaFunction2);
-
-        QDomElement wminGammaFunction2 =document.createElement( "wmin" );
-        wminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][5])));
-        gammaParameters2.appendChild(wminGammaFunction2);
-
-        QDomElement paGammaFunction2 =document.createElement( "pa" );
-        paGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][6])));
-        gammaParameters2.appendChild(paGammaFunction2);
-
-        QDomElement pbGammaFunction2 =document.createElement( "pb" );
-        pbGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][7])));
-        gammaParameters2.appendChild(pbGammaFunction2);
-
-        QDomElement pwGammaFunction2 =document.createElement( "pw" );
-        pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][8])));
-        gammaParameters2.appendChild(pwGammaFunction2);
-        gammaFunction2.appendChild(gammaParameters2);
-    }
+    QDomElement gammaFunction2 = getGamma2ElementXML(matrixGamma2, document);
     project.appendChild(gammaFunction2);
 
-    QDomElement linearFunction =document.createElement( "LinearFunction" );
-    QDomElement numberLinearFunction =document.createElement( "Number" );
-    numberLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear.size())));
-    linearFunction.appendChild(numberLinearFunction);
-
-    for (int i = 0; i < matrixLinear.size(); i++) {
-        QDomElement linearParameters =document.createElement( "Parameters" );
-        QDomElement factorMaxLinearFunction =document.createElement( "factormax" );
-        factorMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][0])));
-        linearParameters.appendChild(factorMaxLinearFunction);
-
-        QDomElement factorMinLinearFunction =document.createElement( "factormin" );
-        factorMinLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][1])));
-        linearParameters.appendChild(factorMinLinearFunction);
-
-        QDomElement interceptMaxLinearFunction =document.createElement( "interceptmax" );
-        interceptMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][2])));
-        linearParameters.appendChild(interceptMaxLinearFunction);
-
-        QDomElement interceptMinLinearFunction =document.createElement( "interceptmin" );
-        interceptMinLinearFunction.appendChild(document.createTextNode(QString::number(matrixGamma2[i][3])));
-        linearParameters.appendChild(interceptMinLinearFunction);
-
-        QDomElement wmaxGammaFunction2 =document.createElement( "wmax" );
-        wmaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][4])));
-        linearParameters.appendChild(wmaxGammaFunction2);
-
-        QDomElement wminGammaFunction2 =document.createElement( "wmin" );
-        wminGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][5])));
-        linearParameters.appendChild(wminGammaFunction2);
-
-        QDomElement paGammaFunction2 =document.createElement( "pa" );
-        paGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][6])));
-        linearParameters.appendChild(paGammaFunction2);
-
-        QDomElement pbGammaFunction2 =document.createElement( "pb" );
-        pbGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][7])));
-        linearParameters.appendChild(pbGammaFunction2);
-
-        QDomElement pwGammaFunction2 =document.createElement( "pw" );
-        pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][8])));
-        linearParameters.appendChild(pwGammaFunction2);
-        linearFunction.appendChild(linearParameters);
-    }
+    QDomElement linearFunction = getLinearElementXML(matrixLinear, document);
     project.appendChild(linearFunction);
 
     id.appendChild(idText);
@@ -970,16 +1125,12 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
                                                          const QString &populationSize,
                                                          const QString &percentageCrossover,
                                                          const QString &percentageMutation,
-                                                         const  QString &_percentageWeight,
                                                          const  QString &numberProcessor,
-                                                         const  QString &_numberGamma,
-                                                         const  QString& _percentageGammaA,
-                                                         const  QString &_percentageGammaB,
-                                                         const  QString &_numberLinear,
-                                                         const  QString& _percentageLinearA,
-                                                         const  QString &_percentageLinearB,
                                                          const  QString &maxGeneration,
-                                                         const  QString &_fileKernel){
+                                                         const  QString &_fileKernel,
+                                                         std::vector<std::vector<double> > matrixGamma1,
+                                                         std::vector<std::vector<double> > matrixGamma2,
+                                                         std::vector<std::vector<double> > matrixLinear){
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -998,31 +1149,43 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
     inFile.close();
 
     QDomElement documentElement = document.documentElement();
-    QDomNodeList a = documentElement.elementsByTagName("RegressionProject");
-    qDebug() << a.length();
-    for (int i = 0; i < a.length(); i++) {
-        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+    QDomNodeList project = documentElement.elementsByTagName("RegressionProject");
+    qDebug() << project.length();
+    for (int i = 0; i < project.length(); i++) {
+        qDebug() << project.at(i).childNodes().at(0).firstChild().nodeValue();
         qDebug() << name;
-        qDebug() << QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
-        int result = QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+        qDebug() << QString::compare(project.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+        int result = QString::compare(project.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         if(result==0){
-            a.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
-            a.at(i).childNodes().at(1).childNodes().at(1).firstChild().setNodeValue(value1);
-            a.at(i).childNodes().at(1).childNodes().at(2).firstChild().setNodeValue(value2);
+            project.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
+            project.at(i).childNodes().at(1).childNodes().at(1).firstChild().setNodeValue(value1);
+            project.at(i).childNodes().at(1).childNodes().at(2).firstChild().setNodeValue(value2);
+            project.at(i).childNodes().at(2).firstChild().setNodeValue(populationSize);
+            project.at(i).childNodes().at(3).firstChild().setNodeValue(numberProcessor);
+            project.at(i).childNodes().at(4).firstChild().setNodeValue(percentageCrossover);
+            project.at(i).childNodes().at(5).firstChild().setNodeValue(percentageMutation);
+            project.at(i).childNodes().at(6).firstChild().setNodeValue(maxGeneration);
+            project.at(i).childNodes().at(7).firstChild().setNodeValue(_fileKernel);
+            qDebug()<< "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ->>>>>>>>>>>"<<project.at(i).childNodes().at(8).firstChild().nodeName() ;
 
-            a.at(i).childNodes().at(2).firstChild().setNodeValue(populationSize);
-            a.at(i).childNodes().at(3).firstChild().setNodeValue(percentageCrossover);
-            a.at(i).childNodes().at(4).firstChild().setNodeValue(percentageMutation);
-            a.at(i).childNodes().at(5).firstChild().setNodeValue(_percentageWeight);
-            a.at(i).childNodes().at(6).firstChild().setNodeValue(numberProcessor);
-            a.at(i).childNodes().at(7).firstChild().setNodeValue(_numberGamma);
-            a.at(i).childNodes().at(8).firstChild().setNodeValue(_percentageGammaA);
-            a.at(i).childNodes().at(9).firstChild().setNodeValue(_percentageGammaB);
-            a.at(i).childNodes().at(10).firstChild().setNodeValue(_numberLinear);
-            a.at(i).childNodes().at(11).firstChild().setNodeValue(_percentageLinearA);
-            a.at(i).childNodes().at(12).firstChild().setNodeValue(_percentageLinearB);
-            a.at(i).childNodes().at(13).firstChild().setNodeValue(maxGeneration);
-            a.at(i).childNodes().at(14).firstChild().setNodeValue(_fileKernel);
+            int tmpID = project.at(i).childNodes().at(11).firstChild().nodeValue().toInt();
+            qDebug() << "AAAAAAAAAAAAAAAAAAAAAv ------------>" <<tmpID;
+            project.at(i).removeChild(project.at(i).childNodes().at(11));
+            project.at(i).removeChild(project.at(i).childNodes().at(10));
+            project.at(i).removeChild(project.at(i).childNodes().at(9));
+            project.at(i).removeChild(project.at(i).childNodes().at(8));
+
+            QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
+            project.at(i).appendChild(gammaFunction1);
+            QDomElement gammaFunction2 = getGamma2ElementXML(matrixGamma2, document);
+            project.at(i).appendChild(gammaFunction2);
+            QDomElement linearFunction = getLinearElementXML(matrixLinear, document);
+            project.at(i).appendChild(linearFunction);
+            QDomElement id = document.createElement( "ID" );
+            id.appendChild(document.createTextNode(QString("%1").arg(tmpID)));
+            project.at(i).appendChild(id);
+
+
         }
 
     }

@@ -20,36 +20,48 @@ ApplicationWindow {
     function f(list){
         console.log("Ok funzia")
         labelProjectNameFromFile.text=list[0]
-        if(list[1]=="TournamentWithoutReplacement"){
+        if(list[1]=="Genarational"){
             comboSelection.currentIndex=5
             selectionParameterTournamentWithoutReplacement.text=list[2]
         }else
-            if(list[1]=="StochTour(t)"){
-                comboSelection.currentIndex=0
-                selectionParameter.text=list[2]
+            if(list[1]=="Steady-State"){
+                comboSelection.currentIndex=7
+                selectionParameterTournamentWithoutReplacement.text=list[2]
             }else
-                if(list[1]=="DetTour(T)"){
-                    comboSelection.currentIndex=1
-                    selectionParameter.text=list[2]
+                if(list[1]=="MultiObject Steady-State"){
+                    comboSelection.currentIndex=8
+                    selectionParameterTournamentWithoutReplacement.text=list[2]
                 }else
-                    if(list[1]=="Ranking(p,e)"){
-                        comboSelection.currentIndex=2
-                        selectParameterRanking1.text=list[2]
-                        selectParameterRanking2.text=list[3]
+                    if(list[1]=="MultiObject Genarational"){
+                        comboSelection.currentIndex=6
+                        selectionParameterTournamentWithoutReplacement.text=list[2]
                     }else
-                        if(list[1]=="Sequential(ordered/unordered)"){
-                            comboSelection.currentIndex=4
-                            if(list[2]=="ordered")
-                            {
-                                comboSelectinParameterSequential.currentIndex=0;
-                            }else
-                                comboSelectinParameterSequential.currentIndex=1;
-
-                            //comboSelectinParameterSequentialList.text=list[2]
+                        if(list[1]=="StochTour(t)"){
+                            comboSelection.currentIndex=0
+                            selectionParameter.text=list[2]
                         }else
-                            if(list[1]=="Roulette"){
-                                comboSelection.currentIndex=3
-                            }
+                            if(list[1]=="DetTour(T)"){
+                                comboSelection.currentIndex=1
+                                selectionParameter.text=list[2]
+                            }else
+                                if(list[1]=="Ranking(p,e)"){
+                                    comboSelection.currentIndex=2
+                                    selectParameterRanking1.text=list[2]
+                                    selectParameterRanking2.text=list[3]
+                                }else
+                                    if(list[1]=="Sequential(ordered/unordered)"){
+                                        comboSelection.currentIndex=4
+                                        if(list[2]=="ordered")
+                                        {
+                                            comboSelectinParameterSequential.currentIndex=0;
+                                        }else
+                                            comboSelectinParameterSequential.currentIndex=1;
+
+                                        //comboSelectinParameterSequentialList.text=list[2]
+                                    }else
+                                        if(list[1]=="Roulette"){
+                                            comboSelection.currentIndex=3
+                                        }
 
 
         textNumberProcessor.text=list[4]
@@ -78,7 +90,7 @@ ApplicationWindow {
         pathrain=list[16]
 
         var split2 = list[17].split("/")
-         console.log("AAAAAAAAAAAAAAAAAAAAAAAA ../"+split2[split2.length-1]);
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAA ../"+split2[split2.length-1]);
         textfileActivation.text = "../"+split2[split2.length-1]
         pathactivation=list[17]
 
@@ -153,7 +165,7 @@ ApplicationWindow {
                         function show( currentIndex){
 
                             if(currentIndex === 0 ||
-                               currentIndex === 1  ){
+                                    currentIndex === 1  ){
                                 selectionParameter.visible=true;
                             }else
                                 selectionParameter.visible=false;
@@ -197,7 +209,7 @@ ApplicationWindow {
                             ListElement { text: "Steady-State"; }
                             ListElement { text: "MultiObjects Steady-State"; }
                         }
-                         onCurrentIndexChanged: show(currentIndex)
+                        onCurrentIndexChanged: show(currentIndex)
                     }
 
                     TextField {
@@ -537,7 +549,7 @@ ApplicationWindow {
                             id: textFielddHpMin
                             width: 63
                             text: "-50"
-                             validator: RegExpValidator { regExp: /^-?[0-9]\d+/ }
+                            validator: RegExpValidator { regExp: /^-?[0-9]\d+/ }
                             placeholderText: qsTr("")
                         }
 
@@ -801,130 +813,130 @@ ApplicationWindow {
                     property  string order4;
                     property  int typeAlgorithm;
 
-                                                onClicked: {
-                                                    order1="";
-                                                    order2="";
-                                                    order3="";
-                                                    order4="";
-                                                    typeAlgorithm=4;
-                                                           if(comboSelection.currentText == "StochTour(t)"
-                                                              || comboSelection.currentText == "DetTour(T)"){
-                                                               para1=selectionParameter.text;
-                                                               para2=-1;
-                                                           }else
-                                                               if(comboSelection.currentText == "Ranking(p,e)"){
-                                                                   para1=selectParameterRanking1.text;
-                                                                   para2=selectParameterRanking2.text;
-                                                               }else
-                                                                    if(comboSelection.currentText == "Roulette"){
-                                                                        para1=-1;
-                                                                        para2=-1;
-                                                                    }else
-                                                                        if(comboSelection.currentText == "Sequential(ordered/unordered)")
-                                                                        {
-                                                                            para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
-                                                                            para2=-1;
-                                                                        }else
-                                                                            if(comboSelection.currentText == "Generational"){
-                                                                                para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                para2=-1;
-                                                                                typeAlgorithm=2;
-                                                                            }else
-                                                                                if(comboSelection.currentText == "MultiObjects Generational"){
-                                                                                    para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                    para2=-1;
-                                                                                    typeAlgorithm=3;
-                                                                                    order1=selectionsOrder.get(selectionsOrder.currentIndex).text
-                                                                                    order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
-                                                                                    order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
-                                                                                    order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
-                                                                                }else
-                                                                                    if(comboSelection.currentText == "Steady-State"){
-                                                                                        para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                        para2=-1;
-                                                                                        typeAlgorithm=0;
-                                                                                    }else
-                                                                                        if(comboSelection.currentText == "MultiObjects Steady-State"){
-                                                                                            para1=selectionParameterTournamentWithoutReplacement.text;
-                                                                                            para2=-1;
-                                                                                            typeAlgorithm=1;
-                                                                                            order1=selectionsOrder.get(selectionsOrder.currentIndex).text
-                                                                                            order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
-                                                                                            order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
-                                                                                            order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
-                                                                                        }
-                                                           // if(textfileRain.text != "empty")
+                    onClicked: {
+                        order1="";
+                        order2="";
+                        order3="";
+                        order4="";
+                        typeAlgorithm=4;
+                        if(comboSelection.currentText == "StochTour(t)"
+                                || comboSelection.currentText == "DetTour(T)"){
+                            para1=selectionParameter.text;
+                            para2=-1;
+                        }else
+                            if(comboSelection.currentText == "Ranking(p,e)"){
+                                para1=selectParameterRanking1.text;
+                                para2=selectParameterRanking2.text;
+                            }else
+                                if(comboSelection.currentText == "Roulette"){
+                                    para1=-1;
+                                    para2=-1;
+                                }else
+                                    if(comboSelection.currentText == "Sequential(ordered/unordered)")
+                                    {
+                                        para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
+                                        para2=-1;
+                                    }else
+                                        if(comboSelection.currentText == "Generational"){
+                                            para1=selectionParameterTournamentWithoutReplacement.text;
+                                            para2=-1;
+                                            typeAlgorithm=2;
+                                        }else
+                                            if(comboSelection.currentText == "MultiObjects Generational"){
+                                                para1=selectionParameterTournamentWithoutReplacement.text;
+                                                para2=-1;
+                                                typeAlgorithm=3;
+                                                order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                                                order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                                                order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                                                order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
+                                            }else
+                                                if(comboSelection.currentText == "Steady-State"){
+                                                    para1=selectionParameterTournamentWithoutReplacement.text;
+                                                    para2=-1;
+                                                    typeAlgorithm=0;
+                                                }else
+                                                    if(comboSelection.currentText == "MultiObjects Steady-State"){
+                                                        para1=selectionParameterTournamentWithoutReplacement.text;
+                                                        para2=-1;
+                                                        typeAlgorithm=1;
+                                                        order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                                                        order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                                                        order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                                                        order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
+                                                    }
+                        // if(textfileRain.text != "empty")
 
-                                                                   if(textfileRain.text == "Empty"){
-                                                                       messageDialogRain.open()
-                                                                   }else
-                                                                       if(textfileActivation.text == "Empty"){
-                                                                           messageDialogActivation.open()
-                                                                       }else
-                                                                   if(textFieldPopulation.text == ""){
-                                                                       messageError.text = "Field Population can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldMaxGen.text == ""){
-                                                                       messageError.text = "Field max generations can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldtbMax.text == ""){
-                                                                       messageError.text = "Field tb Max can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldtbMin.text == ""){
-                                                                       messageError.text = "Field tb Min can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFielddHpMax.text == ""){
-                                                                       messageError.text = "Field dHpMax can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFielddHpMin.text == ""){
-                                                                       messageError.text = "Field dHpMin can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldPropCrossover.text == ""){
-                                                                       messageError.text = "Field Probability Crossover can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldPropMutation.text == ""){
-                                                                       messageError.text = "Field Probability Mutation can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldPme.text == ""){
-                                                                       messageError.text = "Field Pme can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textFieldPmb.text == ""){
-                                                                       messageError.text = "Field Pmb can not be empty"
-                                                                       messageError.open()
-                                                                   }else if(textNumberProcessor.text == ""){
-                                                                       messageError.text = "Field Number of Processor can not be empty"
-                                                                       messageError.open()
-                                                                   }else {
-                                                            sakeStart.InitAlgo(comboSelection.currentText,
-                                                                               textFieldPopulation.text,
-                                                                               textFieldMaxGen.text,
-                                                                               textFieldtbMax.text,
-                                                                               textFieldtbMin.text,
-                                                                               textFielddHpMax.text,
-                                                                               textFielddHpMin.text,
-                                                                               textFieldPropCrossover.text,
-                                                                               textFieldPropMutation.text,
-                                                                               textFieldPme.text,
-                                                                               textFieldPmb.text,
-                                                                               comboPattern.currentText,
-                                                                               pathrain,
-                                                                               pathactivation,
-                                                                               labelProjectNameFromFile.text,
-                                                                               textNumberProcessor.text,
-                                                                               para1,
-                                                                               para2,
-                                                                               lastGeneration.checked,
-                                                                               1,
-                                                                               typeAlgorithm,
-                                                                               order1,
-                                                                               order2,
-                                                                               order3,
-                                                                               order4
-                                                                               )
-                                                           close()
-                                                         }
+                        if(textfileRain.text == "Empty"){
+                            messageDialogRain.open()
+                        }else
+                            if(textfileActivation.text == "Empty"){
+                                messageDialogActivation.open()
+                            }else
+                                if(textFieldPopulation.text == ""){
+                                    messageError.text = "Field Population can not be empty"
+                                    messageError.open()
+                                }else if(textFieldMaxGen.text == ""){
+                                    messageError.text = "Field max generations can not be empty"
+                                    messageError.open()
+                                }else if(textFieldtbMax.text == ""){
+                                    messageError.text = "Field tb Max can not be empty"
+                                    messageError.open()
+                                }else if(textFieldtbMin.text == ""){
+                                    messageError.text = "Field tb Min can not be empty"
+                                    messageError.open()
+                                }else if(textFielddHpMax.text == ""){
+                                    messageError.text = "Field dHpMax can not be empty"
+                                    messageError.open()
+                                }else if(textFielddHpMin.text == ""){
+                                    messageError.text = "Field dHpMin can not be empty"
+                                    messageError.open()
+                                }else if(textFieldPropCrossover.text == ""){
+                                    messageError.text = "Field Probability Crossover can not be empty"
+                                    messageError.open()
+                                }else if(textFieldPropMutation.text == ""){
+                                    messageError.text = "Field Probability Mutation can not be empty"
+                                    messageError.open()
+                                }else if(textFieldPme.text == ""){
+                                    messageError.text = "Field Pme can not be empty"
+                                    messageError.open()
+                                }else if(textFieldPmb.text == ""){
+                                    messageError.text = "Field Pmb can not be empty"
+                                    messageError.open()
+                                }else if(textNumberProcessor.text == ""){
+                                    messageError.text = "Field Number of Processor can not be empty"
+                                    messageError.open()
+                                }else {
+                                    sakeStart.InitAlgo(comboSelection.currentText,
+                                                       textFieldPopulation.text,
+                                                       textFieldMaxGen.text,
+                                                       textFieldtbMax.text,
+                                                       textFieldtbMin.text,
+                                                       textFielddHpMax.text,
+                                                       textFielddHpMin.text,
+                                                       textFieldPropCrossover.text,
+                                                       textFieldPropMutation.text,
+                                                       textFieldPme.text,
+                                                       textFieldPmb.text,
+                                                       comboPattern.currentText,
+                                                       pathrain,
+                                                       pathactivation,
+                                                       labelProjectNameFromFile.text,
+                                                       textNumberProcessor.text,
+                                                       para1,
+                                                       para2,
+                                                       lastGeneration.checked,
+                                                       1,
+                                                       typeAlgorithm,
+                                                       order1,
+                                                       order2,
+                                                       order3,
+                                                       order4
+                                                       )
+                                    close()
+                                }
 
-                                                }
+                    }
 
                 }
 
@@ -943,47 +955,47 @@ ApplicationWindow {
         }
 
     }
-        MessageDialog {
-            id: messageDialogRain
-            title: "Input error"
-            text: "Please enter rain csv path."
-            onAccepted: close()
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
+    MessageDialog {
+        id: messageDialogRain
+        title: "Input error"
+        text: "Please enter rain csv path."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
 
-        MessageDialog {
-            id: messageDialogActivation
-            title: "Input error"
-            text: "Please enter Activation csv path."
-            onAccepted: close()
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
+    MessageDialog {
+        id: messageDialogActivation
+        title: "Input error"
+        text: "Please enter Activation csv path."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
 
-        MessageDialog {
-            id: messageDialogProjectName
-            title: "Input error"
-            text: "The project name already exists."
-            onAccepted: close()
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
-        MessageDialog {
-            id: messageDialogProjectNameEmpty
-            title: "Input error"
-            text: "The project name is empty."
-            onAccepted: close()
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
-        MessageDialog {
-            id: messageError
-            title: "Input error"
-            text: " "
-            onAccepted: close()
-            Component.onCompleted: visible = false
-            modality: "ApplicationModal"
-        }
+    MessageDialog {
+        id: messageDialogProjectName
+        title: "Input error"
+        text: "The project name already exists."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+    MessageDialog {
+        id: messageDialogProjectNameEmpty
+        title: "Input error"
+        text: "The project name is empty."
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
+    MessageDialog {
+        id: messageError
+        title: "Input error"
+        text: " "
+        onAccepted: close()
+        Component.onCompleted: visible = false
+        modality: "ApplicationModal"
+    }
 
 }

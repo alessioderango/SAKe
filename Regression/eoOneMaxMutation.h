@@ -85,12 +85,6 @@ public:
 
         double maxGammaWeight  = 2;
         double minGammaWeight  = 0.2;
-
-
-
-
-        std::cout << "MUTATION " << std::endl;
-
         for (int j = 0; j < rndMaxMut; j++) {
             int i =  rand() %  (_genotype.getParConst().size());
             //Linear
@@ -103,13 +97,6 @@ public:
                 double rndLinearFactor= fRand(-(tmp1*_genotype.getPercentageVariationLinearA(i)),tmp1*_genotype.getPercentageVariationLinearA(i));
 
                 double rndLinearIntercept= fRand(-(tmp2*_genotype.getPercentageVariationLinearB(i)),tmp2*_genotype.getPercentageVariationLinearB(i));
-
-//                std::cout << "tmp1 :" << tmp1 << std::endl;
-//                std::cout << "tmp2 :" << tmp2 << std::endl;
-//                std::cout << "random b linear :" << rndDoubleBeta << std::endl;
-//                std::cout << "random a linear :" << rndDoubleAlfa << std::endl;
-//                std::cout << "percentuale a :" << _genotype.getPercentageVariationLinearA(i) << std::endl;
-//                std::cout << "percentuale b :" << _genotype.getPercentageVariationLinearB(i) << std::endl;
                 double tmpLinearFactor = tmp1 + rndLinearFactor;
                 double tmpLinearIntercept = tmp2 + rndLinearIntercept;
 
@@ -131,9 +118,6 @@ public:
                 _genotype.setParameters(i,1,tmpLinearIntercept);
 
                 double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
-//                std::cout << "W :" << _genotype.getW(i) << std::endl;
-//                std::cout << "random w :" << rndDoubleW << std::endl;
-//                std::cout << "percentuale w :" << _genotype.getPercentageVariationWeight(i) << std::endl;
                 double tmpLinearWeight=_genotype.getW(i)+rndDoubleW;
 
                 if(tmpLinearWeight > maxLinearWeight)
@@ -156,20 +140,10 @@ public:
 
                 }else
                     if(_genotype.getFunctionType(i) == 2){
-                        std::cout << "GAMMA MUTATION " << std::endl;
                         double tmp1 =_genotype.getPar(i).getParameters(0);
                         double tmp2 = _genotype.getPar(i).getParameters(1);
                         double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationGammaA(i)),tmp1*_genotype.getPercentageVariationGammaA(i));
                         double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationGammaB(i)),tmp2*_genotype.getPercentageVariationGammaB(i));
-
-//                        std::cout << "tmp1 :" << tmp1 << std::endl;
-//                        std::cout << "tmp2 :" << tmp2 << std::endl;
-//                        std::cout << "random a gamma :" << rndDoubleAlfa << std::endl;
-//                        std::cout << "random b gamma :" << rndDoubleBeta << std::endl;
-//                        std::cout << "percentuale w :" << _genotype.getPercentageVariationGammaA(i) << std::endl;
-//                        std::cout << "percentuale w :" << _genotype.getPercentageVariationGammaB(i) << std::endl;
-
-
 
                         double tmpBeta = tmp2+ rndDoubleBeta;
 
@@ -221,9 +195,6 @@ public:
 
                         //controllo > 0
                         double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
-//                        std::cout << "W :" << _genotype.getW(i) << std::endl;
-//                        std::cout << "random w :" << rndDoubleW << std::endl;
-//                        std::cout << "percentuale w :" << _genotype.getPercentageVariationWeight(i) << std::endl;
                         double tmpGammaWeight=_genotype.getW(i)+rndDoubleW;
                         if(tmpGammaWeight > maxGammaWeight)
                             tmpGammaWeight = maxGammaWeight;
@@ -232,7 +203,6 @@ public:
                             tmpGammaWeight = minGammaWeight;
 
                         _genotype.setW(i,tmpGammaWeight);
-                        std::cout << "GAMMA MUTATION END" << std::endl;
                     }
 
 
@@ -240,7 +210,6 @@ public:
 
 
         }
-        std::cout << "FINE MUTATION " << std::endl;
 
 
 
