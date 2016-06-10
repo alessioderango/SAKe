@@ -179,13 +179,6 @@ void SAKeController::startAlgorithm()
     {
 
         eoParser parser(argc,x);  // for user-parameter readi ng
-        //              qDebug() << "Start Algorithm %d /n"<< "/n";
-
-        /* TODO
-                GESTIRE ElitistReplacement(10) GUI
-              replacement.toStdString()
-
-          */
         vector<vector<double>> popFromFile;
         if(lastGeneration){
             int numGen;

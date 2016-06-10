@@ -33,8 +33,6 @@ void ValidationController::updatePlot(){
             }
         Y[t] = ym;
     }
-    //AGGIORNO IL GRAFICO
-    //TODO creare funzione
    plotMobility->updateGraph(Y,zCr);
 }
 

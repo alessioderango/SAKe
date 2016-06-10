@@ -21,43 +21,17 @@ ApplicationWindow {
         setY(Screen.height / 2 - height / 2);
     }
 
-    function f(list){
-        labelProjectNameFromFile.text=list[0]
-        if(list[1]==="TournamentWithoutReplacement" || list[1]==="Generational"){
-            comboSelection.currentIndex=0
-            selectionParameterTournamentWithoutReplacement.text=list[2]
-        }
-
-
-        textFieldPopulationSize.text=list[4]
-        textFieldProbabiltyCrossOver.text=list[5]
-        textFieldProbabiltyMutation.text=list[6]
-        textPercentageWeight.text=list[7]
-        textFieldNumberProcessor.text=list[8]
-        textFieldGammaFunctions.text=list[9]
-        textFieldGammaA.text=list[10]
-        textFieldGammaB.text=list[11]
-        textFieldLinearFunction.text=list[12]
-        textFieldLinearA.text=list[13]
-        textFieldLinearB.text=list[14]
-        textFieldMaxGeneration.text=list[15]
-
-        var split = list[16].split("/")
-        textfileRain.text = "../"+split[split.length-1]
-        pathrain=list[16]
-
-
-    }
-
-
     Rectangle{
         id: parameter
+        x: 0
+        y: 0
         color:"#f2f2f2"
         width: parent.width
-        height: parent.height
+        height: 1000
 
         ColumnLayout {
             id: columnLayout5
+            height: 1000
             anchors.right: parent.right
             anchors.rightMargin: 0
             anchors.left: parent.left
@@ -78,34 +52,36 @@ ApplicationWindow {
 
             GridLayout {
                 id: gridLayout2
-                anchors.left: parent.left
-                anchors.leftMargin: 7
+                height: 881
+                layoutDirection: Qt.RightToLeft
+                flow: GridLayout.TopToBottom
+                rows: 1
                 columns: 2
 
                 ColumnLayout {
                     id: columnLayout2
+                    width: 676
                     spacing: 2
 
-
-                    ColumnLayout{
+                    RowLayout {
+                        id: rowLayout
                         spacing: 20
-                        RowLayout {
-                            id: rowLayout
-                            spacing: 20
+                        anchors.bottomMargin: 10
 
-                            Label {
-                                id: projectName
-                                text: qsTr("Project Name")
-                                Layout.alignment: Qt.AlignHCenter
-                            }
-
-                            TextField {
-                                id: textFiledProjectName
-                                placeholderText: qsTr("Text Field")
-                            }
+                        Label {
+                            id: projectName1
+                            text: qsTr("Project Name")
+                            Layout.alignment: Qt.AlignHCenter
                         }
 
+                        Label {
+                            id: projectName
+                            text: qsTr("Name")
+                            Layout.alignment: Qt.AlignHCenter
+                        }
                     }
+
+
                     RowLayout {
                         id: rowLayout1
                         width: 630
@@ -343,7 +319,7 @@ ApplicationWindow {
                                     placeholderText: "Population Size"
                                     onTextChanged: {
                                         if(text >0 && pathrain != ""){
-                                            if(lastGeneration.checked){
+                                            if(checkUseControlPointsWithN.checked){
                                                 customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
                                             }
                                             else{
@@ -354,19 +330,19 @@ ApplicationWindow {
                                 }
 
                                 CheckBox {
-                                            id:lastGeneration;
-                                            text: qsTr("Use Control Points")
-                                            onCheckedChanged: {
-                                                if(textPercentageN.text >0 && pathrain != ""){
-                                                    if(lastGeneration.checked){
-                                                        customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
-                                                    }
-                                                    else{
-                                                        customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
-                                                    }
-                                                }
+                                    id:checkUseControlPointsWithN;
+                                    text: qsTr("Use Control Points")
+                                    onCheckedChanged: {
+                                        if(textPercentageN.text >0 && pathrain != ""){
+                                            if(checkUseControlPointsWithN.checked){
+                                                customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
                                             }
-                                          }
+                                            else{
+                                                customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                            }
+                                        }
+                                    }
+                                }
 
 
 
@@ -383,9 +359,12 @@ ApplicationWindow {
                         id: columnLayout3
                         width: 500
                         height: 100
+                        Layout.fillWidth: false
+                        scale: 1
+                        spacing: 2
                         Layout.minimumHeight: height
                         Layout.minimumWidth: width
-                        Layout.fillHeight: true
+                        Layout.fillHeight: false
                         visible: true
 
                         RowLayout {
@@ -393,7 +372,7 @@ ApplicationWindow {
                             width: 100
                             height: 50
                             visible: true
-                            spacing: 15
+                            spacing: 2
 
                             Label {
                                 id: labelGammaFunctions
@@ -410,58 +389,77 @@ ApplicationWindow {
                                 id: textFieldGammaFunctions
 
                                 function showLabel(text){
-                                    if(text > 0){
-                                        //console.log(tableModel.count)
-                                        //tableModel.get(0).amax = "1"
-                                        //tableModel.get(0).amin = "2"
-                                        //tableModel.get(0).bmax = "3"
-                                        //tableModel.get(0).bmin = "4"
-                                        //tableModel.get(0).wmax = "5"
-                                        //tableModel.get(0).wmin = "6"
-                                        //tableModel.get(0).pa = "7"
-                                        //tableModel.get(0).pb = "8"
-                                        //tableModel.get(0).pw = "9"
-                                        //console.log(tableModel.get(0).amin)
-                                        tableModel.clear()
 
-                                        for(var i = 0;i< text;i++){
-                                            tableModel.append({ nFunction:i+1,
-                                                                  amax: "0.8",
-                                                                  amin: "0.2",
-                                                                  bmax: "50",
-                                                                  bmin: "5",
-                                                                  wmax: "2",
-                                                                  wmin: "0.02",
-                                                                  pa: "0.03",
-                                                                  pb: "0.03",
-                                                                  pw: "0.03"})
+                                    if(text >= 0 && text !== ""){
+                                        if(text > tableModel.count){
+                                            for(var i = 0;i< tableModel.count;i++){
+                                                tableModel.set(i,{ nFunction:i+1,
+                                                                   amax: tableModel.get(i).amax,
+                                                                   amin: tableModel.get(i).amin,
+                                                                   bmax: tableModel.get(i).bmax,
+                                                                   bmin: tableModel.get(i).bmin,
+                                                                   wmax: tableModel.get(i).wmax,
+                                                                   wmin: tableModel.get(i).wmin,
+                                                                   pa: tableModel.get(i).pa,
+                                                                   pb: tableModel.get(i).pb,
+                                                                   pw: tableModel.get(i).pw})
+                                            }
+                                            for(var i = tableModel.count;i< text;i++){
+                                                tableModel.set(i,{nFunction:i+1,
+                                                                   amax: "0.8",
+                                                                   amin: "0.2",
+                                                                   bmax: "50",
+                                                                   bmin: "5",
+                                                                   wmax: "2",
+                                                                   wmin: "0.02",
+                                                                   pa: "0.03",
+                                                                   pb: "0.03",
+                                                                   pw: "0.03"})
+                                            }
                                         }
+                                        else
+                                            if(text < tableModel.count){
+                                                for(var i = 0;i< text;i++){
+                                                    tableModel.set(i,{ nFunction:i+1,
+                                                                       amax: tableModel.get(i).amax,
+                                                                       amin: tableModel.get(i).amin,
+                                                                       bmax: tableModel.get(i).bmax,
+                                                                       bmin: tableModel.get(i).bmin,
+                                                                       wmax: tableModel.get(i).wmax,
+                                                                       wmin: tableModel.get(i).wmin,
+                                                                       pa: tableModel.get(i).pa,
+                                                                       pb: tableModel.get(i).pb,
+                                                                       pw: tableModel.get(i).pw})
+                                                }
+                                                for(var i = text;i< tableModel.count;i++){
+                                                    tableModel.remove(i);
+                                                }
 
 
-                                    }else
-                                    {
-                                        tableModel.clear()
+                                            }
                                     }
+
+                                }
+                                function showLabelFirstTime(text){
+                                    for(var i = 0;i< text;i++){
+                                        tableModel.append({ nFunction:i+1,
+                                                              amax: "0.8",
+                                                              amin: "0.2",
+                                                              bmax: "50",
+                                                              bmin: "5",
+                                                              wmax: "2",
+                                                              wmin: "0.02",
+                                                              pa: "0.03",
+                                                              pb: "0.03",
+                                                              pw: "0.03"})
+                                    }
+                                    textFieldGammaFunctions.text="1"
                                 }
 
-                                function showLabelFirstTime(text){
-                                        for(var i = 0;i< text;i++){
-                                            tableModel.append({ nFunction:i+1,
-                                                                  amax: "0.8",
-                                                                  amin: "0.2",
-                                                                  bmax: "50",
-                                                                  bmin: "5",
-                                                                  wmax: "2",
-                                                                  wmin: "0.02",
-                                                                  pa: "0.03",
-                                                                  pb: "0.03",
-                                                                  pw: "0.03"})
-                                        }
-                                        textFieldGammaFunctions.text="1"
-                                }
 
                                 width: 63
-                                text: showLabelFirstTime(1)
+                                text: showLabelFirstTime()
+                                //                                text: showLabelFirstTime(1)
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
@@ -496,7 +494,10 @@ ApplicationWindow {
                         TableView {
                             id: tableView1
                             width: 672
-                            height: 50
+                            height: 53
+                            visible: true
+                            Layout.fillWidth: false
+                            selectionMode: 0
                             Layout.minimumWidth:  width
                             Layout.fillHeight: false
 
@@ -522,7 +523,7 @@ ApplicationWindow {
                                         console.log("amax")
                                         console.log(tableModel.get(styleData.row).amin)
                                         console.log(tableModel.get(styleData.row).amax)
-                                       tableModel.get(styleData.row).amax = text
+                                        tableModel.get(styleData.row).amax = text
                                         console.log("End")
                                         if(parseFloat(tableModel.get(styleData.row).amin) > parseFloat(tableModel.get(styleData.row).amax)){
                                             tableModel.get(styleData.row).amin=0;
@@ -625,7 +626,7 @@ ApplicationWindow {
                                     text: model.wmin
                                     validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
                                     onTextChanged: {
-                                         tableModel.get(styleData.row).wmin = text
+                                        tableModel.get(styleData.row).wmin = text
                                         if(parseFloat(tableModel.get(styleData.row).wmax) < parseFloat(tableModel.get(styleData.row).wmin)){
                                             tableModel.get(styleData.row).wmax=1000;
                                         }
@@ -643,7 +644,7 @@ ApplicationWindow {
                                     text: model.pa
                                     validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel.get(styleData.row).pa = text
+                                        tableModel.get(styleData.row).pa = text
                                     }
 
                                 }
@@ -658,7 +659,7 @@ ApplicationWindow {
                                     text: model.pb
                                     validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel.get(styleData.row).pb = text
+                                        tableModel.get(styleData.row).pb = text
                                     }
                                 }
                                 resizable: false
@@ -672,7 +673,7 @@ ApplicationWindow {
                                     text: model.pw
                                     validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel.get(styleData.row).pw = text
+                                        tableModel.get(styleData.row).pw = text
                                     }
 
                                 }
@@ -708,26 +709,53 @@ ApplicationWindow {
                                 id: textFieldGammaFunctionsGreaterthan1
 
                                 function showLabel(text){
-                                    if(text > 0){
-                                        tableModel2.clear()
-                                        for(var i = 0;i< text;i++){
-                                            tableModel2.append({nFunction:i+1,
-                                                                   bmax: "8",
-                                                                   bmin: "1",
-                                                                   amax: "200",
-                                                                   amin: "20",
-                                                                   wmax: "2",
-                                                                   wmin: "0.02",
-                                                                   pa: "0.03",
-                                                                   pb: "0.03",
-                                                                   pw: "0.03"
-                                                               })
+
+                                    if(text >= 0 && text !== ""){
+                                        if(text > tableModel2.count){
+                                            for(var i = 0;i< tableModel2.count;i++){
+                                                tableModel2.set(i,{ nFunction:i+1,
+                                                                    amax: tableModel2.get(i).amax,
+                                                                    amin: tableModel2.get(i).amin,
+                                                                    bmax: tableModel2.get(i).bmax,
+                                                                    bmin: tableModel2.get(i).bmin,
+                                                                    wmax: tableModel2.get(i).wmax,
+                                                                    wmin: tableModel2.get(i).wmin,
+                                                                    pa: tableModel2.get(i).pa,
+                                                                    pb: tableModel2.get(i).pb,
+                                                                    pw: tableModel2.get(i).pw})
+                                            }
+                                            for(var i = tableModel2.count;i< text;i++){
+                                                tableModel2.set(i,{nFunction:i+1,
+                                                                    bmax: "8",
+                                                                    bmin: "1",
+                                                                    amax: "200",
+                                                                    amin: "20",
+                                                                    wmax: "2",
+                                                                    wmin: "0.02",
+                                                                    pa: "0.03",
+                                                                    pb: "0.03",
+                                                                    pw: "0.03"
+                                                                })
+                                            }
                                         }
-
-
-                                    }else
-                                    {
-                                        tableModel2.clear()
+                                        else
+                                            if(text < tableModel2.count){
+                                                for(var i = 0;i< text;i++){
+                                                    tableModel2.set(i,{ nFunction:i+1,
+                                                                        amax: tableModel2.get(i).amax,
+                                                                        amin: tableModel2.get(i).amin,
+                                                                        bmax: tableModel2.get(i).bmax,
+                                                                        bmin: tableModel2.get(i).bmin,
+                                                                        wmax: tableModel2.get(i).wmax,
+                                                                        wmin: tableModel2.get(i).wmin,
+                                                                        pa: tableModel2.get(i).pa,
+                                                                        pb: tableModel2.get(i).pb,
+                                                                        pw: tableModel2.get(i).pw})
+                                                }
+                                                for(var i = text;i< tableModel2.count;i++){
+                                                    tableModel2.remove(i);
+                                                }
+                                            }
                                     }
                                 }
 
@@ -736,26 +764,25 @@ ApplicationWindow {
                                     tableModel2.clear()
 
                                     tableModel2.append({ nFunction:1,
-                                                                  bmax: "8",
-                                                                  bmin: "1",
-                                                                  amax: "200",
-                                                                  amin: "20",
-                                                                  wmax: "2",
-                                                                  wmin: "0.2",
-                                                                  pa: "0.03",
-                                                                  pb: "0.03",
-                                                                  pw: "0.03"})
-                                    console.log("ENTRATO")
+                                                           bmax: "8",
+                                                           bmin: "1",
+                                                           amax: "200",
+                                                           amin: "20",
+                                                           wmax: "2",
+                                                           wmin: "0.2",
+                                                           pa: "0.03",
+                                                           pb: "0.03",
+                                                           pw: "0.03"})
                                     tableModel2.append({ nFunction:2,
-                                                          bmax: "80",
-                                                          bmin: "20",
-                                                          amax: "30",
-                                                          amin: "2",
-                                                          wmax: "2",
-                                                          wmin: "0.2",
-                                                          pa: "0.03",
-                                                          pb: "0.03",
-                                                          pw: "0.03"})
+                                                           bmax: "80",
+                                                           bmin: "20",
+                                                           amax: "30",
+                                                           amin: "2",
+                                                           wmax: "2",
+                                                           wmin: "0.2",
+                                                           pa: "0.03",
+                                                           pb: "0.03",
+                                                           pw: "0.03"})
                                     tableModel2.append({ nFunction:3,
                                                            bmax: "350",
                                                            bmin: "150",
@@ -771,12 +798,11 @@ ApplicationWindow {
                                 }
 
                                 width: 63
-                                text: showLabelFirstTime()
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
                                 }
-                                //                                editingFinished: console.log("CIAO")
+                                text: showLabelFirstTime()
                                 onTextChanged: showLabel(text)
 
 
@@ -829,7 +855,7 @@ ApplicationWindow {
                                 delegate: TextField {
                                     text: model.bmax
                                     onTextChanged: {
-                                         tableModel2.get(styleData.row).bmax = text
+                                        tableModel2.get(styleData.row).bmax = text
                                         console.log("bmax")
                                         console.log(tableModel2.get(styleData.row).bmin)
                                         console.log(tableModel2.get(styleData.row).bmax)
@@ -850,7 +876,7 @@ ApplicationWindow {
                                 delegate: TextField {
                                     text: model.bmin
                                     onTextChanged: {
-                                         tableModel2.get(styleData.row).bmin = text
+                                        tableModel2.get(styleData.row).bmin = text
                                         console.log("bmin")
                                         console.log(tableModel2.get(styleData.row).bmin)
                                         console.log(tableModel2.get(styleData.row).bmax)
@@ -874,8 +900,8 @@ ApplicationWindow {
                                     text: model.amax
 
 
-//                                        if( 0 < (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin) &&
-//                                        1 > (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin))
+                                    //                                        if( 0 < (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin) &&
+                                    //                                        1 > (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin))
                                     //RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
 
                                     onTextChanged: {
@@ -939,7 +965,7 @@ ApplicationWindow {
                                     text: model.pa
                                     //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel2.get(styleData.row).pa = text
+                                        tableModel2.get(styleData.row).pa = text
                                     }
 
 
@@ -955,7 +981,7 @@ ApplicationWindow {
                                     text: model.pb
                                     //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel2.get(styleData.row).pb = text
+                                        tableModel2.get(styleData.row).pb = text
                                     }
                                 }
 
@@ -968,9 +994,9 @@ ApplicationWindow {
                                 role: "pw"
                                 delegate: TextField {
                                     text: model.pw
-                                   // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel2.get(styleData.row).pw = text
+                                        tableModel2.get(styleData.row).pw = text
                                     }
 
                                 }
@@ -1005,64 +1031,77 @@ ApplicationWindow {
                                 id: textFieldLinearFunction
 
                                 function showLabel(text){
-                                    if(text > 0){
-
-                                        //console.log(tableModel.count)
-                                        //tableModel.get(0).amax = "1"
-                                        //tableModel.get(0).amin = "2"
-                                        //tableModel.get(0).bmax = "3"
-                                        //tableModel.get(0).bmin = "4"
-                                        //tableModel.get(0).wmax = "5"
-                                        //tableModel.get(0).wmin = "6"
-                                        //tableModel.get(0).pa = "7"
-                                        //tableModel.get(0).pb = "8"
-                                        //tableModel.get(0).pw = "9"
-                                        //console.log(tableModel.get(0).amin)
-                                        tableModel3.clear()
-                                        for(var i = 0;i< text;i++){
-                                            tableModel3.append({ nFunction:i+1,
-                                                                   amax: 0,
-                                                                   amin: 0,
-                                                                   bmax: 0,
-                                                                   bmin: 0,
-                                                                   wmax: 0,
-                                                                   wmin: 0,
-                                                                   pa: 0,
-                                                                   pb: 0,
-                                                                   pw: 0})
+                                    if(text >= 0 && text !== ""){
+                                        if(text > tableModel3.count){
+                                            for(var i = 0;i< tableModel3.count;i++){
+                                                tableModel3.set(i,{ nFunction:i+1,
+                                                                    amax: tableModel3.get(i).amax,
+                                                                    amin: tableModel3.get(i).amin,
+                                                                    bmax: tableModel3.get(i).bmax,
+                                                                    bmin: tableModel3.get(i).bmin,
+                                                                    wmax: tableModel3.get(i).wmax,
+                                                                    wmin: tableModel3.get(i).wmin,
+                                                                    pa: tableModel3.get(i).pa,
+                                                                    pb: tableModel3.get(i).pb,
+                                                                    pw: tableModel3.get(i).pw})
+                                            }
+                                            for(var i = tableModel3.count;i< text;i++){
+                                                tableModel3.insert(i,{ nFunction:i+1,
+                                                                       bmax: "350",
+                                                                       bmin: "150",
+                                                                       amax: "7",
+                                                                       amin: "2",
+                                                                       wmax: "2",
+                                                                       wmin: "0.2",
+                                                                       pa: "0.03",
+                                                                       pb: "0.03",
+                                                                       pw: "0.03"})
+                                            }
                                         }
+                                        else
+                                            if(text < tableModel3.count){
+                                                for(var i = 0;i< text;i++){
+                                                    tableModel3.set(i,{ nFunction:i+1,
+                                                                        amax: tableModel3.get(i).amax,
+                                                                        amin: tableModel3.get(i).amin,
+                                                                        bmax: tableModel3.get(i).bmax,
+                                                                        bmin: tableModel3.get(i).bmin,
+                                                                        wmax: tableModel3.get(i).wmax,
+                                                                        wmin: tableModel3.get(i).wmin,
+                                                                        pa: tableModel3.get(i).pa,
+                                                                        pb: tableModel3.get(i).pb,
+                                                                        pw: tableModel3.get(i).pw})
+                                                }
+                                                for(var i = text;i< tableModel3.count;i++){
+                                                    tableModel3.remove(i);
+                                                }
 
 
-                                    }else
-                                    {
-                                        tableModel3.clear()
-
+                                            }
                                     }
+
                                 }
 
                                 function showLabelFirstTime(){
                                     textFieldLinearFunction.text="1"
                                     tableModel3.clear()
                                     tableModel3.append({ nFunction:1,
-                                                                  bmax: "0.5",
-                                                                  bmin: "0",
-                                                                  amax: "0.5",
-                                                                  amin: "-0.5",
-                                                                  wmax: "2",
-                                                                  wmin: "0.2",
-                                                                  pa: "0.03",
-                                                                  pb: "0.03",
-                                                                  pw: "0.03"})
+                                                           bmax: "0.5",
+                                                           bmin: "0",
+                                                           amax: "0.5",
+                                                           amin: "-0.5",
+                                                           wmax: "2",
+                                                           wmin: "0.2",
+                                                           pa: "0.03",
+                                                           pb: "0.03",
+                                                           pw: "0.03"})
                                 }
-
-
                                 width: 63
-                                text: showLabelFirstTime()
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
                                 }
-                                //                                editingFinished: console.log("CIAO")
+                                text: showLabelFirstTime()
                                 onTextChanged: showLabel(text)
 
 
@@ -1074,17 +1113,6 @@ ApplicationWindow {
                         ListModel {
                             id: tableModel3
                             dynamicRoles: true
-                            //                    ListElement {
-                            //                        amax: ""
-                            //                        amin: ""
-                            //                        bmax: ""
-                            //                        bmin: ""
-                            //                        wmax: ""
-                            //                        wmin: ""
-                            //                        pa: ""
-                            //                        pb: ""
-                            //                        pw: ""
-                            //                    }
                         }
 
                         TableView {
@@ -1111,6 +1139,9 @@ ApplicationWindow {
                                 role: "amax"
                                 delegate: TextField {
                                     text: model.amax
+                                    onTextChanged: {
+                                        tableModel3.get(styleData.row).amax = text
+                                    }
                                 }
                             }
 
@@ -1121,6 +1152,9 @@ ApplicationWindow {
                                 role: "amin"
                                 delegate: TextField {
                                     text: model.amin
+                                    onTextChanged: {
+                                        tableModel3.get(styleData.row).amin = text
+                                    }
                                 }
                                 resizable: false
 
@@ -1132,7 +1166,10 @@ ApplicationWindow {
                                 title: "β max"
                                 role: "bmax"
                                 delegate: TextField {
-                                     text: model.bmax
+                                    text: model.bmax
+                                    onTextChanged: {
+                                        tableModel3.get(styleData.row).bmax = text
+                                    }
                                 }
                             }
 
@@ -1143,6 +1180,9 @@ ApplicationWindow {
                                 role: "bmin"
                                 delegate: TextField {
                                     text: model.bmin
+                                    onTextChanged: {
+                                        tableModel3.get(styleData.row).bmin = text
+                                    }
                                 }
                                 resizable: false
                             }
@@ -1153,6 +1193,9 @@ ApplicationWindow {
                                 role: "wmax"
                                 delegate: TextField {
                                     text: model.wmax
+                                    onTextChanged: {
+                                        tableModel3.get(styleData.row).wmax = text
+                                    }
                                 }
                             }
 
@@ -1163,6 +1206,11 @@ ApplicationWindow {
                                 role: "wmin"
                                 delegate: TextField {
                                     text: model.wmin
+
+                                    onTextChanged: {
+                                        tableModel3.get(styleData.row).wmin = text
+                                    }
+
                                 }
                                 resizable: false
                             }
@@ -1176,7 +1224,7 @@ ApplicationWindow {
                                     text: model.pa
                                     validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel3.get(styleData.row).pa = text
+                                        tableModel3.get(styleData.row).pa = text
                                     }
                                 }
                                 resizable: false
@@ -1190,7 +1238,7 @@ ApplicationWindow {
                                     text: model.pb
                                     validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel3.get(styleData.row).pb = text
+                                        tableModel3.get(styleData.row).pb = text
                                     }
                                 }
                                 resizable: false
@@ -1204,7 +1252,7 @@ ApplicationWindow {
                                     text: model.pw
                                     validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                     onTextChanged: {
-                                         tableModel3.get(styleData.row).pw = text
+                                        tableModel3.get(styleData.row).pw = text
                                     }
                                 }
 
@@ -1287,6 +1335,60 @@ ApplicationWindow {
                         }
                     }
 
+                    GridLayout{
+                        columnSpacing: 100
+                        columns: 3
+                        rows: 1
+
+                        CheckBox {
+                            id: checkControlPoints
+                            text: qsTr("Use Control Points(Default) ")
+                            checked: true
+                            onCheckedChanged: {
+                                if(checkControlPoints.checked)
+                                {
+                                    checkKernel.checked = false;
+                                    checkN.checked = false;
+                                }else
+                                    if(checkN.checked === false && checkKernel.checked === false){
+                                        checkControlPoints.checked=true;
+                                    }
+                            }
+
+                        }
+                        CheckBox {
+                            id: checkKernel
+                            text: qsTr("Use Kernel")
+                            onCheckedChanged: {
+                                if(checkKernel.checked)
+                                {
+                                    checkControlPoints.checked = false;
+                                    checkN.checked = false;
+                                }else
+                                    if(checkN.checked === false && checkKernel.checked === false){
+                                        checkControlPoints.checked=true;
+                                    }
+                            }
+
+                        }
+                        CheckBox {
+                            id: checkN
+                            text: qsTr("Use N")
+                            onCheckedChanged: {
+                                if(checkN.checked)
+                                {
+                                    checkControlPoints.checked = false;
+                                    checkKernel.checked = false;
+                                }else
+                                    if(checkKernel.checked === false && checkN.checked === false){
+                                        checkControlPoints.checked=true;
+                                    }
+                            }
+
+                        }
+
+                    }
+
 
 
 
@@ -1298,12 +1400,16 @@ ApplicationWindow {
                     id: gridLayout4
                     width: 100
                     height: 100
+                    rowSpacing: 0
+                    columnSpacing: 0
                     columns: 1
-                    rows: 2
+                    rows: 1
 
 
                     CustomPlotRegressionPreviewKernel {
                         id: customPlotKernelRegression1
+                        width: 798
+                        height: 886
                         Layout.fillWidth: true
                         Layout.fillHeight: true
 
@@ -1337,7 +1443,7 @@ ApplicationWindow {
             RowLayout {
                 id: columnLayout1
                 width: 328
-                height: 100
+                height: 96
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 spacing: 2
 
@@ -1387,22 +1493,22 @@ ApplicationWindow {
                         typeAlgorithm = 4;
                         fileUrl = pathrain;
 
-                        console.log("populationSize : "+populationSize +
-                                    "\n percentageCrossover : "+percentageCrossover+
-                                    "\n percentageMutation : "+percentageMutation+
-                                    "\n numberProcessor : "+numberProcessor+
-                                    "\n numberGamma : "+numberGamma+
-                                    "\n numberLinear : "+numberLinear+
-                                    "\n maxGeneration : "+maxGeneration+
-                                    "\n selection : "+selection+
-                                    "\n selectionElitist : "+selectionElitist+
-                                    "\n fileUrl : "+fileUrl
-                                    )
+                        //                        console.log("populationSize : "+populationSize +
+                        //                                    "\n percentageCrossover : "+percentageCrossover+
+                        //                                    "\n percentageMutation : "+percentageMutation+
+                        //                                    "\n numberProcessor : "+numberProcessor+
+                        //                                    "\n numberGamma : "+numberGamma+
+                        //                                    "\n numberLinear : "+numberLinear+
+                        //                                    "\n maxGeneration : "+maxGeneration+
+                        //                                    "\n selection : "+selection+
+                        //                                    "\n selectionElitist : "+selectionElitist+
+                        //                                    "\n fileUrl : "+fileUrl
+                        //                                    )
 
                         var numberArguments = 9;
                         var matrixGamma1 = new Array(tableModel.count+1);
                         for (var i = 0; i < tableModel.count+1; i++) {
-                          matrixGamma1[i] = new Array(numberArguments);
+                            matrixGamma1[i] = new Array(numberArguments);
                         }
                         matrixGamma1[0][0]=tableModel.count;
                         for(var i = 0; i < tableModel.count; i++){
@@ -1416,13 +1522,13 @@ ApplicationWindow {
                             matrixGamma1[i+1][6]=tmp.pa
                             matrixGamma1[i+1][7]=tmp.pb
                             matrixGamma1[i+1][8]=tmp.pw
-                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
-                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                            //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                            //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
 
                         var matrixGamma2 = new Array(tableModel2.count+1);
                         for (var i = 0; i < tableModel2.count+1; i++) {
-                          matrixGamma2[i] = new Array(numberArguments);
+                            matrixGamma2[i] = new Array(numberArguments);
                         }
                         matrixGamma2[0][0]=tableModel2.count;
                         for(var i = 0; i < tableModel2.count; i++){
@@ -1436,13 +1542,13 @@ ApplicationWindow {
                             matrixGamma2[i+1][6]=tmp.pa
                             matrixGamma2[i+1][7]=tmp.pb
                             matrixGamma2[i+1][8]=tmp.pw
-                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
-                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                            //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                            //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
 
                         var matrixGamma3 = new Array(tableModel3.count+1);
                         for (var i = 0; i < tableModel3.count+1; i++) {
-                          matrixGamma3[i] = new Array(numberArguments);
+                            matrixGamma3[i] = new Array(numberArguments);
                         }
                         matrixGamma3[0][0]=tableModel3.count;
                         for(var i = 0; i < tableModel3.count; i++){
@@ -1456,39 +1562,30 @@ ApplicationWindow {
                             matrixGamma3[i+1][6]=tmp.pa
                             matrixGamma3[i+1][7]=tmp.pb
                             matrixGamma3[i+1][8]=tmp.pw
-                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
-                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                            //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                            //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
-
-                        console.log(matrixGamma1)
-                        console.log(matrixGamma2)
-                        console.log(matrixGamma3)
-
-
                         sakeStart.startRegression(
-                                    textFiledProjectName.text,
+                                    projectName.text,
                                     selection  ,
                                     selectionElitist  ,
                                     populationSize  ,
                                     percentageCrossover  ,
                                     percentageMutation  ,
-                                    0.2  ,
                                     numberProcessor  ,
-                                    numberGamma  ,
-                                    0.2  ,
-                                    0.2  ,
-                                    numberLinear  ,
-                                    0.2  ,
-                                    0.2  ,
                                     maxGeneration,
                                     fileUrl,
                                     0,
                                     matrixGamma1,
                                     matrixGamma2,
-                                    matrixGamma3
+                                    matrixGamma3,
+                                    checkControlPoints.checked,
+                                    checkKernel.checked,
+                                    checkN.checked,
+                                    checkUseControlPointsWithN.checked,
+                                    textPercentageN.text
                                     )
-                        //                                                            sakeStart.startRegression()
-                        close();
+                        applicationWindow1.destroy()
                         //                        if(comboSelection.currentText == "StochTour(t)"
                         //                                || comboSelection.currentText == "DetTour(T)"){
                         //                            para1=selectionParameter.text;
@@ -1548,7 +1645,7 @@ ApplicationWindow {
                     text: qsTr("Cancel")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     checkable: false
-                    onClicked: close()
+                    onClicked: applicationWindow1.destroy()
 
                 }
             }

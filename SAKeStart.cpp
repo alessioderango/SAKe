@@ -323,14 +323,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const QVariant &populationSize,
                                    const QVariant &percentageCrossover,
                                    const QVariant &percentageMutation,
-                                   const QVariant &percentageWeight,
                                    const QVariant &numberProcessor,
-                                   const QVariant &numberGamma,
-                                   const QVariant& percentageGammaA,
-                                   const QVariant &percentageGammaB,
-                                   const QVariant &numberLinear,
-                                   const QVariant& percentageLinearA,
-                                   const QVariant &percentageLinearB,
                                    const QVariant &maxGeneration,
                                    const QVariant &fileurl,
                                    const QVariant &tipo,
@@ -393,6 +386,13 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         dir.mkdir(".");
     }
 
+    QString typeExecution="0";
+    if(checkKernel.toBool()){
+        typeExecution="1";
+        }else
+            if(checkN.toBool()){
+               typeExecution="2";
+            }
     if(tipo.toInt()==1 )
     {
         xmlManager->SaveXMLFileAlreadyExistRegressionProject(_projectaname.toString(),
@@ -407,7 +407,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                                              fileurl.toString(),
                                                              matrixGamma1,
                                                              matrixGamma2,
-                                                             matrixLinear);
+                                                             matrixLinear,
+                                                             checkControlPointsWithN,
+                                                             textN,
+                                                             typeExecution);
 
 
     }else{
@@ -418,19 +421,15 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                                  populationSize.toString(),
                                                  percentageCrossover.toString(),
                                                  percentageMutation.toString(),
-                                                 percentageWeight.toString(),
                                                  numberProcessor.toString(),
-                                                 numberGamma.toString(),
-                                                 percentageGammaA.toString(),
-                                                 percentageGammaB.toString(),
-                                                 numberLinear.toString(),
-                                                 percentageLinearA.toString(),
-                                                 percentageLinearB.toString(),
                                                  maxGeneration.toString(),
                                                  fileurl.toString(),
                                                  matrixGamma1,
                                                  matrixGamma2,
-                                                 matrixLinear);
+                                                 matrixLinear,
+                                                 checkControlPointsWithN,
+                                                 textN,
+                                                 typeExecution);
     }
 
     QString sselction= selection.toString();
@@ -440,14 +439,6 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     double dpercentageCrossover = percentageCrossover.toDouble();
     double dpercentageMutation = percentageMutation.toDouble();
     int inumberProcessor = numberProcessor.toInt();
-
-    double dpercentageWeight  = percentageWeight.toDouble();
-    int inumberGamma = numberGamma.toInt();
-    double dpercentageGammaA = percentageGammaA.toDouble();
-    double dpercentageGammaB = percentageGammaB.toDouble();
-    int inumberLinear = numberLinear.toInt();
-    double dpercentageLinearA = percentageLinearA.toDouble();
-    double dpercentageLinearB = percentageLinearB.toDouble();
     QString sfileurl = fileurl.toString();
     bool checkControlPointsBool = checkControlpoints.toBool();
     bool checkKernelBool = checkKernel.toBool();
@@ -455,25 +446,25 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     bool checkControlPointsWithNBool = checkControlPointsWithN.toBool();
     int n = textN.toInt();
 
-    qDebug() << "sselction : " << sselction ;
-    qDebug() << "iselectionElitist : " << iselectionElitist   ;
-    qDebug() << "ipopulationSize : " << ipopulationSize   ;
-    qDebug() << "dpercentageCrossover : " << dpercentageCrossover   ;
-    qDebug() << "dpercentageMutation : " << dpercentageMutation   ;
-    qDebug() << "sselctiodpercentageWeightn : " << dpercentageWeight   ;
-    qDebug() << "inumberProcessor : " << inumberProcessor   ;
-    qDebug() << "inumberGamma : " << inumberGamma   ;
-    qDebug() << "dpercentageGammaA : " << dpercentageGammaA   ;
-    qDebug() << "dpercentageGammaB : " << dpercentageGammaB   ;
-    qDebug() << "inumberLinear : " << inumberLinear   ;
-    qDebug() << "dpercentageLinearA : " << dpercentageLinearA   ;
-    qDebug() << "dpercentageLinearB : " << dpercentageLinearB   ;
-    qDebug() << "imaxGeneration : " << imaxGeneration     ;
-    qDebug() << "sfileurl : " << sfileurl     ;
+//    qDebug() << "sselction : " << sselction ;
+//    qDebug() << "iselectionElitist : " << iselectionElitist   ;
+//    qDebug() << "ipopulationSize : " << ipopulationSize   ;
+//    qDebug() << "dpercentageCrossover : " << dpercentageCrossover   ;
+//    qDebug() << "dpercentageMutation : " << dpercentageMutation   ;
+//    qDebug() << "sselctiodpercentageWeightn : " << dpercentageWeight   ;
+//    qDebug() << "inumberProcessor : " << inumberProcessor   ;
+//    qDebug() << "inumberGamma : " << inumberGamma   ;
+//    qDebug() << "dpercentageGammaA : " << dpercentageGammaA   ;
+//    qDebug() << "dpercentageGammaB : " << dpercentageGammaB   ;
+//    qDebug() << "inumberLinear : " << inumberLinear   ;
+//    qDebug() << "dpercentageLinearA : " << dpercentageLinearA   ;
+//    qDebug() << "dpercentageLinearB : " << dpercentageLinearB   ;
+//    qDebug() << "imaxGeneration : " << imaxGeneration     ;
+//    qDebug() << "sfileurl : " << sfileurl     ;
     int idProject = threadsController.size();
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
-    QVariant msg = "Regression - ";
+    QVariant msg = "Regression - "+ _projectaname.toString();
     QVariant returnedValue;
     QMetaObject::invokeMethod(rectMain, "addTabRegression", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, threadsController.size()));
     //FINE
@@ -503,10 +494,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                              absoluteAverageFitness,
                                              gen);
 
-    int dimension=matrixGamma1.size()+matrixGamma2.size()+inumberLinear;
+    int dimension=matrixGamma1.size()+matrixGamma2.size()+matrixLinear.size();
     double * weight = new double[dimension];
     int count =0;
-    for (int i = 0; i < inumberLinear; ++i) {
+    for (int i = 0; i < matrixLinear.size(); ++i) {
         double tmp1=fRand(matrixLinear[i][4],matrixLinear[i][5]);
         weight[count] = tmp1;
         count++;
@@ -535,7 +526,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     double * percantageW;
     percantageW= new double[dimension];
     count = 0;
-    for (int i = 0; i < inumberLinear; ++i) {
+    for (int i = 0; i < matrixLinear.size(); ++i) {
         functionType[count]=0;
         percantageLinearA[count]=matrixLinear[i][6];
         percantageLinearB[count]=matrixLinear[i][7];
@@ -560,7 +551,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     Parameters *parameters = new Parameters[dimension];
 
     count = 0;
-    for (int i = 0; i < inumberLinear; ++i) {
+    for (int i = 0; i < matrixLinear.size(); ++i) {
         Parameters tmp;
         double tmp1=fRand(matrixLinear[i][0],matrixLinear[i][1]);
         //std::cout <<tmp1<< std::endl;

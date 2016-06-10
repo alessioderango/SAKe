@@ -37,6 +37,27 @@ ApplicationWindow {
         var split = parameter[9].split("/")
         textfileRain.text = "../"+split[split.length-1]
         pathrain=parameter[9]
+        var checkNTmp=parameter[10]
+        if(checkNTmp){
+            checkUseControlPointsWithN.checked= true;
+        }
+
+        var textN=parameter[11]
+        textPercentageN.text = textN;
+
+
+
+        var typrExecution=parameter[12]
+        console.log(" typrExecution = "+typrExecution)
+        if(typrExecution==="0")
+            checkControlPoints.checked = true;
+        else
+            if(typrExecution==="1")
+                checkKernel.checked = true;
+                else
+                if(typrExecution ==="2")
+                    checkN.checked = true;
+
         var count=1;
         var i=0;
         textFieldGammaFunctions.text=listGamma1.length/9;
@@ -515,57 +536,8 @@ ApplicationWindow {
                                             }
                                     }
 
-
-
-                                    //                                    if(text > 0){
-                                    //console.log(tableModel.count)
-                                    //tableModel.get(0).amax = "1"
-                                    //tableModel.get(0).amin = "2"
-                                    //tableModel.get(0).bmax = "3"
-                                    //tableModel.get(0).bmin = "4"
-                                    //tableModel.get(0).wmax = "5"
-                                    //tableModel.get(0).wmin = "6"
-                                    //tableModel.get(0).pa = "7"
-                                    //tableModel.get(0).pb = "8"
-                                    //tableModel.get(0).pw = "9"
-                                    //console.log(tableModel.get(0).amin)
-                                    //                                        tableModel.clear()
-
-                                    //                                        for(var i = 0;i< text;i++){
-                                    //                                            tableModel.append({ nFunction:i+1,
-                                    //                                                                  amax: "0.8",
-                                    //                                                                  amin: "0.2",
-                                    //                                                                  bmax: "50",
-                                    //                                                                  bmin: "5",
-                                    //                                                                  wmax: "2",
-                                    //                                                                  wmin: "0.02",
-                                    //                                                                  pa: "0.03",
-                                    //                                                                  pb: "0.03",
-                                    //                                                                  pw: "0.03"})
-                                    //                                        }
-
-
-                                    //                                    }else
-                                    //                                    {
-                                    //                                        tableModel.clear()
-                                    //                                    }
                                 }
 
-                                function showLabelFirstTime(text){
-                                    //                                        for(var i = 0;i< text;i++){
-                                    //                                            tableModel.append({ nFunction:i+1,
-                                    //                                                                  amax: "0.8",
-                                    //                                                                  amin: "0.2",
-                                    //                                                                  bmax: "50",
-                                    //                                                                  bmin: "5",
-                                    //                                                                  wmax: "2",
-                                    //                                                                  wmin: "0.02",
-                                    //                                                                  pa: "0.03",
-                                    //                                                                  pb: "0.03",
-                                    //                                                                  pw: "0.03"})
-                                    //                                        }
-                                    //                                        textFieldGammaFunctions.text="1"
-                                }
 
                                 width: 63
                                 //                                text: showLabelFirstTime(1)
@@ -818,30 +790,8 @@ ApplicationWindow {
                                 id: textFieldGammaFunctionsGreaterthan1
 
                                 function showLabel(text){
-                                    //                                    if(text > 0){
-                                    //                                        tableModel2.clear()
-                                    //                                        for(var i = 0;i< text;i++){
-                                    //                                            tableModel2.append({nFunction:i+1,
-                                    //                                                                   bmax: "8",
-                                    //                                                                   bmin: "1",
-                                    //                                                                   amax: "200",
-                                    //                                                                   amin: "20",
-                                    //                                                                   wmax: "2",
-                                    //                                                                   wmin: "0.02",
-                                    //                                                                   pa: "0.03",
-                                    //                                                                   pb: "0.03",
-                                    //                                                                   pw: "0.03"
-                                    //                                                               })
-                                    //                                        }
-
-
-                                    //                                    }else
-                                    //                                    {
-                                    //                                        tableModel2.clear()
-                                    //                                    }
 
                                     if(text >= 0 && text !== ""){
-                                        console.log("ENTROOOOO =  "+text);
                                         if(text > tableModel2.count){
                                             for(var i = 0;i< tableModel2.count;i++){
                                                 tableModel2.set(i,{ nFunction:i+1,
@@ -1124,20 +1074,6 @@ ApplicationWindow {
                                 id: textFieldLinearFunction
 
                                 function showLabel(text){
-                                    //                                    if(text > 0){
-
-                                    //                                        //console.log(tableModel.count)
-                                    //                                                                            tableModel.get(0).amax = "1"
-                                    //                                                                            tableModel.get(0).amin = "2"
-                                    //                                                                            tableModel.get(0).bmax = "3"
-                                    //                                                                            tableModel.get(0).bmin = "4"
-                                    //                                                                            tableModel.get(0).wmax = "5"
-                                    //                                                                            tableModel.get(0).wmin = "6"
-                                    //                                                                            tableModel.get(0).pa = "7"
-                                    //                                                                            tableModel.get(0).pb = "8"
-                                    //                                                                            tableModel.get(0).pw = "9"
-                                    //                                        //console.log(tableModel.get(0).amin)
-                                    //                                        tableModel3.clear()
                                     if(text >= 0 && text !== ""){
                                         if(text > tableModel3.count){
                                             for(var i = 0;i< tableModel3.count;i++){
@@ -1187,37 +1123,13 @@ ApplicationWindow {
                                             }
                                     }
 
-
-                                    //                                    }else
-                                    //                                    {
-                                    //                                        tableModel3.clear()
-
-                                    //                                    }
-                                }
-
-                                function showLabelFirstTime(){
-                                    //                                    textFieldLinearFunction.text="1"
-                                    //                                    tableModel3.clear()
-                                    //                                    tableModel3.append({ nFunction:1,
-                                    //                                                                  bmax: "0.5",
-                                    //                                                                  bmin: "0",
-                                    //                                                                  amax: "0.5",
-                                    //                                                                  amin: "-0.5",
-                                    //                                                                  wmax: "2",
-                                    //                                                                  wmin: "0.2",
-                                    //                                                                  pa: "0.03",
-                                    //                                                                  pb: "0.03",
-                                    //                                                                  pw: "0.03"})
-                                }
-
+                               }
 
                                 width: 63
-                                //                                text: showLabelFirstTime()
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
                                 }
-                                //                                editingFinished: console.log("CIAO")
                                 onTextChanged: showLabel(text)
 
 
@@ -1229,17 +1141,6 @@ ApplicationWindow {
                         ListModel {
                             id: tableModel3
                             dynamicRoles: true
-                            //                    ListElement {
-                            //                        amax: ""
-                            //                        amin: ""
-                            //                        bmax: ""
-                            //                        bmin: ""
-                            //                        wmax: ""
-                            //                        wmin: ""
-                            //                        pa: ""
-                            //                        pb: ""
-                            //                        pw: ""
-                            //                    }
                         }
 
                         TableView {
@@ -1619,17 +1520,17 @@ ApplicationWindow {
                         typeAlgorithm = 4;
                         fileUrl = pathrain;
 
-                        console.log("populationSize : "+populationSize +
-                                    "\n percentageCrossover : "+percentageCrossover+
-                                    "\n percentageMutation : "+percentageMutation+
-                                    "\n numberProcessor : "+numberProcessor+
-                                    "\n numberGamma : "+numberGamma+
-                                    "\n numberLinear : "+numberLinear+
-                                    "\n maxGeneration : "+maxGeneration+
-                                    "\n selection : "+selection+
-                                    "\n selectionElitist : "+selectionElitist+
-                                    "\n fileUrl : "+fileUrl
-                                    )
+                        //                        console.log("populationSize : "+populationSize +
+                        //                                    "\n percentageCrossover : "+percentageCrossover+
+                        //                                    "\n percentageMutation : "+percentageMutation+
+                        //                                    "\n numberProcessor : "+numberProcessor+
+                        //                                    "\n numberGamma : "+numberGamma+
+                        //                                    "\n numberLinear : "+numberLinear+
+                        //                                    "\n maxGeneration : "+maxGeneration+
+                        //                                    "\n selection : "+selection+
+                        //                                    "\n selectionElitist : "+selectionElitist+
+                        //                                    "\n fileUrl : "+fileUrl
+                        //                                    )
 
                         var numberArguments = 9;
                         var matrixGamma1 = new Array(tableModel.count+1);
@@ -1648,8 +1549,8 @@ ApplicationWindow {
                             matrixGamma1[i+1][6]=tmp.pa
                             matrixGamma1[i+1][7]=tmp.pb
                             matrixGamma1[i+1][8]=tmp.pw
-                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
-                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                            //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                            //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
 
                         var matrixGamma2 = new Array(tableModel2.count+1);
@@ -1668,8 +1569,8 @@ ApplicationWindow {
                             matrixGamma2[i+1][6]=tmp.pa
                             matrixGamma2[i+1][7]=tmp.pb
                             matrixGamma2[i+1][8]=tmp.pw
-                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
-                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                            //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                            //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
 
                         var matrixGamma3 = new Array(tableModel3.count+1);
@@ -1688,15 +1589,9 @@ ApplicationWindow {
                             matrixGamma3[i+1][6]=tmp.pa
                             matrixGamma3[i+1][7]=tmp.pb
                             matrixGamma3[i+1][8]=tmp.pw
-                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
-                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
+                            //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
+                            //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
-
-                        console.log(matrixGamma1)
-                        console.log(matrixGamma2)
-                        console.log(matrixGamma3)
-
-
                         sakeStart.startRegression(
                                     projectName.text,
                                     selection  ,
@@ -1704,14 +1599,7 @@ ApplicationWindow {
                                     populationSize  ,
                                     percentageCrossover  ,
                                     percentageMutation  ,
-                                    0.2  ,
                                     numberProcessor  ,
-                                    numberGamma  ,
-                                    0.2  ,
-                                    0.2  ,
-                                    numberLinear  ,
-                                    0.2  ,
-                                    0.2  ,
                                     maxGeneration,
                                     fileUrl,
                                     1,
@@ -1724,7 +1612,6 @@ ApplicationWindow {
                                     checkUseControlPointsWithN.checked,
                                     textPercentageN.text
                                     )
-                        //                                                            sakeStart.startRegression()
                         applicationWindow1.destroy()
                         //                        if(comboSelection.currentText == "StochTour(t)"
                         //                                || comboSelection.currentText == "DetTour(T)"){

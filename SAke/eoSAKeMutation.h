@@ -54,8 +54,6 @@ public:
 				_genotype.getFi()[t] = (1 / s) * _genotype.getFi()[t];
 			}
 		}
-
-		//TODO alert if(e1.Fi > 1)
 	}
 
 	/// The class name. Used to display statistics

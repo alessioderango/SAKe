@@ -119,34 +119,8 @@ eoGenOp<EOT> & do_make_op(eoParameterLoader& _parser,
     // and of course stor it in the state
     _state.storeFunctor(propXover);
 
-
-    // Optional: A second(and third, and ...)  crossover
-    //   of course you must create the corresponding classes
-    // and all ***MUST*** derive from eoQuadOp<Indi>
-
-    /* Uncomment if necessary - and replicate as many time as you need
-      cross = new eoSAKeSecondCrossover<Indi>(varType  _anyVariable);
-      _state.storeFunctor(cross);
-      double cross2Rate = _parser.createParam(1.0, "cross2Rate", "Relative rate for crossover 2", '2', "Variation Operators").value();
-      propXover.add(*cross, cross2Rate);
-  */
-    // if you want some gentle output, the last one shoudl be like
-    //  propXover.add(*cross, crossXXXRate, true);
-
-
-    // the mutation: same story
-    ////////////////
-    // you can have more than one - combined in a proportional way
-
-    // for each mutation,
-    // - define the mutator object
-    // - read its rate from the parser
-    // - add it to the proportional combination
-
-    //TODO inizializzare parametri SAke mutazione
-
     // a first mutation
-    eoMonOp<Indi> *mut = new eoSAKeMutation<Indi>(tbMin,tbMax, Pme, Pmb,dHpMin,dHpMax)/* (varType  _anyVariable) */;
+    eoMonOp<Indi> *mut = new eoSAKeMutation<Indi>(tbMin,tbMax, Pme, Pmb,dHpMin,dHpMax);
     _state.storeFunctor(mut);
     // its relative rate in the combination
     double mut1Rate = _parser.createParam(1.0, "mut1Rate", "Relative rate for mutation 1", '1', "Variation Operators").value();

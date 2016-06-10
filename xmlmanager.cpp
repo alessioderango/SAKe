@@ -130,8 +130,9 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                         //9 file kernel
 
                         //10 file kernel
+                        qDebug() << "Name " << a.at(i).parentNode().childNodes().at(j).nodeName() << endl;
 
-                        if(j==1)
+                        if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "Selection", Qt::CaseInsensitive)==0)
                         {
                             //Selection
                             list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
@@ -141,15 +142,13 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                             qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
                             qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
                         }else
-                            if(j==8){
+                            if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "GammaFunction1", Qt::CaseInsensitive)==0){//j==8){
                                 //Gamma1
-                                qDebug() << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
                                 int numberFunctionGamma1 = a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue().toInt();
                                 for (int k = 1; k <= numberFunctionGamma1; k++)
                                 {
                                     //amax
                                     listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(0).firstChild().nodeValue());
-                                    qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(0).firstChild().nodeValue();
                                     //amin
                                     listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(1).firstChild().nodeValue());
                                     //bmax
@@ -168,7 +167,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                     listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
                                 }
                             }else
-                                if(j==9){
+                                if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "GammaFunction2", Qt::CaseInsensitive)==0){
                                     //Gamma2
                                     int numberFunctionGamma2 = a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue().toInt();
 
@@ -194,7 +193,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                         listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
                                     }
                                 }else
-                                    if(j==10){
+                                    if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "LinearFunction", Qt::CaseInsensitive)==0){
                                         //Linear
                                         int numberLinearFunction = a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue().toInt();
 
@@ -651,32 +650,6 @@ void XMLManager::ReadCalibrationProjectXML()
 
         treeview->addEntry(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue(),"Regression",regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue(), treeview);
     }
-
-    //    QFile* file = new QFile(xmlFilePath);
-    //    if(!file->open(QIODevice::ReadOnly | QIODevice::Text)){
-    //        qDebug() << "File not prensent ";
-    //        return;
-    //    }
-    //    QXmlStreamReader xml(file);
-    //    while(!xml.atEnd() && !xml.hasError()){
-
-    //        QXmlStreamReader::TokenType token = xml.readNext();
-
-    //        if(token == QXmlStreamReader::StartDocument){
-    //            continue;
-    //        }
-
-    //        if(token == QXmlStreamReader::StartElement) {
-
-    //            if(xml.name() == "CalibrationProject") {
-    //                parseProject(xml,a,treeview);
-    //            }
-    //        }//startElement
-    //    }//while
-
-
-    //QMetaObject::invokeMethod(listProjects, "addElementList", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, QVariant::fromValue(a)));
-
 }
 
 
@@ -829,7 +802,7 @@ QDomElement XMLManager::getGamma1ElementXML(std::vector<std::vector<double> > ma
     QDomElement numberGammaFunction1 =document.createElement( "Number" );
     numberGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1.size())));
     gammaFunction1.appendChild(numberGammaFunction1);
-    for (int i = 0; i < matrixGamma1.size(); i++) {
+    for (size_t i = 0; i < matrixGamma1.size(); i++) {
         QDomElement gammaParameters =document.createElement( "Parameters" );
         QDomElement amaxGammaFunction1 =document.createElement( "amax" );
         amaxGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][0])));
@@ -879,7 +852,7 @@ QDomElement XMLManager::getGamma2ElementXML(std::vector<std::vector<double> > ma
     numberGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2.size())));
     gammaFunction2.appendChild(numberGammaFunction2);
 
-    for (int i = 0; i < matrixGamma2.size(); i++) {
+    for (size_t i = 0; i < matrixGamma2.size(); i++) {
         QDomElement gammaParameters2 =document.createElement( "Parameters" );
         QDomElement amaxGammaFunction2 =document.createElement( "amax" );
         amaxGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][0])));
@@ -929,7 +902,7 @@ QDomElement XMLManager::getLinearElementXML(std::vector<std::vector<double> > ma
     numberLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear.size())));
     linearFunction.appendChild(numberLinearFunction);
 
-    for (int i = 0; i < matrixLinear.size(); i++) {
+    for (size_t i = 0; i < matrixLinear.size(); i++) {
         QDomElement linearParameters =document.createElement( "Parameters" );
         QDomElement factorMaxLinearFunction =document.createElement( "factormax" );
         factorMaxLinearFunction.appendChild(document.createTextNode(QString::number(matrixLinear[i][0])));
@@ -979,19 +952,15 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
                                               const QString &populationSize,
                                               const QString &percentageCrossover,
                                               const QString &percentageMutation,
-                                              const  QString &_percentageWeight,
                                               const  QString &numberProcessor,
-                                              const  QString &_numberGamma,
-                                              const  QString& _percentageGammaA,
-                                              const  QString &_percentageGammaB,
-                                              const  QString &_numberLinear,
-                                              const  QString& _percentageLinearA,
-                                              const  QString &_percentageLinearB,
                                               const  QString &maxGeneration,
                                               const  QString &_fileKernel,
                                               std::vector<std::vector<double> > matrixGamma1,
                                               std::vector<std::vector<double> > matrixGamma2,
-                                              std::vector<std::vector<double> > matrixLinear
+                                              std::vector<std::vector<double> > matrixLinear,
+                                              const QVariant &checkControlPointsWithN,
+                                              const QVariant &textN,
+                                              const QString typeExecution
                                               ){
     QString filename = QString(xmlFilePath);
     QFile* filetmp = new QFile(xmlFilePath);
@@ -1041,6 +1010,12 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     QDomElement probabilityOfMutationElement = document.createElement( "ProbabilityOfMutation" );
     QDomElement maximumNumberOfGenerationsElement = document.createElement( "MaximumNumberOfGenerations" );
     QDomElement fileKernel = document.createElement( "FileKernel" );
+    QDomElement checkControlPointsWithNElement = document.createElement( "CheckN" );
+    checkControlPointsWithNElement.appendChild(document.createTextNode(checkControlPointsWithN.toString()));
+    QDomElement textNElement = document.createElement( "N" );
+    textNElement.appendChild(document.createTextNode(textN.toString()));
+    QDomElement typeExcecution = document.createElement( "typeExcecution" );
+    typeExcecution.appendChild(document.createTextNode(typeExecution));
 
 
     //create TextElement
@@ -1088,6 +1063,9 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
 
     fileKernel.appendChild(fileKernelText);
     project.appendChild(fileKernel);
+    project.appendChild(checkControlPointsWithNElement);
+    project.appendChild(textNElement);
+    project.appendChild(typeExcecution);
 
     QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
 
@@ -1130,7 +1108,10 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
                                                          const  QString &_fileKernel,
                                                          std::vector<std::vector<double> > matrixGamma1,
                                                          std::vector<std::vector<double> > matrixGamma2,
-                                                         std::vector<std::vector<double> > matrixLinear){
+                                                         std::vector<std::vector<double> > matrixLinear,
+                                                         const QVariant &checkControlPointsWithN,
+                                                         const QVariant &textN,
+                                                         const QString &typeExecution){
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -1150,11 +1131,8 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
 
     QDomElement documentElement = document.documentElement();
     QDomNodeList project = documentElement.elementsByTagName("RegressionProject");
-    qDebug() << project.length();
     for (int i = 0; i < project.length(); i++) {
-        qDebug() << project.at(i).childNodes().at(0).firstChild().nodeValue();
-        qDebug() << name;
-        qDebug() << QString::compare(project.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+        //TODO Find the project with the save name (next future find with id)
         int result = QString::compare(project.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         if(result==0){
             project.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
@@ -1166,14 +1144,15 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
             project.at(i).childNodes().at(5).firstChild().setNodeValue(percentageMutation);
             project.at(i).childNodes().at(6).firstChild().setNodeValue(maxGeneration);
             project.at(i).childNodes().at(7).firstChild().setNodeValue(_fileKernel);
-            qDebug()<< "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ->>>>>>>>>>>"<<project.at(i).childNodes().at(8).firstChild().nodeName() ;
+            project.at(i).childNodes().at(8).firstChild().setNodeValue(checkControlPointsWithN.toString());
+            project.at(i).childNodes().at(9).firstChild().setNodeValue(textN.toString());
+            project.at(i).childNodes().at(10).firstChild().setNodeValue(typeExecution);
 
-            int tmpID = project.at(i).childNodes().at(11).firstChild().nodeValue().toInt();
-            qDebug() << "AAAAAAAAAAAAAAAAAAAAAv ------------>" <<tmpID;
+            int tmpID = project.at(i).childNodes().at(14).firstChild().nodeValue().toInt();
+            project.at(i).removeChild(project.at(i).childNodes().at(14));
+            project.at(i).removeChild(project.at(i).childNodes().at(13));
+            project.at(i).removeChild(project.at(i).childNodes().at(12));
             project.at(i).removeChild(project.at(i).childNodes().at(11));
-            project.at(i).removeChild(project.at(i).childNodes().at(10));
-            project.at(i).removeChild(project.at(i).childNodes().at(9));
-            project.at(i).removeChild(project.at(i).childNodes().at(8));
 
             QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
             project.at(i).appendChild(gammaFunction1);

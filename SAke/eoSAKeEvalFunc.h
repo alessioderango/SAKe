@@ -104,8 +104,7 @@ public:
         std::time_t y = diff2.total_seconds();
 	    if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) )
 	    {
-	    	//TODO differenza in ore
-	    	//									differenza in giorni
+            //TODO [differenza in minuti] [differenza in ore] [ differenza in giorni ]
 	        int difference = std::difftime(y, x) / (60*60*24);
 //	        std::cout << std::ctime(&x);
 //	        std::cout << std::ctime(&y);

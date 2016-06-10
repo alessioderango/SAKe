@@ -65,20 +65,16 @@ public:
                                      const QString &populationSize,
                                      const QString &percentageCrossover,
                                      const QString &percentageMutation,
-                                     const  QString &_percentageWeight,
                                      const  QString &numberProcessor,
-                                     const  QString &_numberGamma,
-                                     const  QString& _percentageGammaA,
-                                     const  QString &_percentageGammaB,
-                                     const  QString &_numberLinear,
-                                     const  QString& _percentageLinearA,
-                                     const  QString &_percentageLinearB,
                                      const  QString &maxGeneration,
                                      const  QString &_fileKernel,
                                      std::vector<std::vector<double> > matrixGamma1,
                                      std::vector<std::vector<double> > matrixGamma2,
-                                     std::vector<std::vector<double> > matrixLinear
-                                     );
+                                     std::vector<std::vector<double> > matrixLinear,
+                                     const QVariant &checkControlPointsWithN,
+                                     const QVariant &textN,
+                                     const QString typeExecution);
+
     int SaveXMLFileAlreadyExistRegressionProject(const QString &_projectName,
                                                  const QString &selection,
                                                  const QString &value1,
@@ -91,7 +87,10 @@ public:
                                                  const  QString &_fileKernel,
                                                  std::vector<std::vector<double> > matrixGamma1,
                                                  std::vector<std::vector<double> > matrixGamma2,
-                                                 std::vector<std::vector<double> > matrixLinear);
+                                                 std::vector<std::vector<double> > matrixLinear,
+                                                 const QVariant &checkControlPointsWithN,
+                                                 const QVariant &textN,
+                                                 const QString &typeExecution);
 
 
     int findProjectName(QString nameProject);
@@ -103,6 +102,7 @@ public:
     void setTreeview(TreeModel *value);
 
 private:
+
     QObject * listProjects;
     TreeModel * treeview;
     QDomElement getGamma1ElementXML(std::vector<std::vector<double> > matrixGamma1, QDomDocument document);

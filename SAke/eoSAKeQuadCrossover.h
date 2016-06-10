@@ -108,8 +108,6 @@ public:
 		normalizaElement(_genotype1);
 		normalizaElement(_genotype2);
 
-		//TODO Alert Fi > 1
-
 		// START code for crossover of _genotype1 and _genotype2 objects
 
 		/** Requirement
@@ -139,10 +137,6 @@ public:
 		// END code for crossover of _genotype1 and _genotype2 objects
 	}
 
-private:
-// START Private data of an eoSAKeQuadCrossover object
-	//  varType anyVariable;		   // for example ...
-// END   Private data of an eoSAKeQuadCrossover object
 };
 
 #endif
