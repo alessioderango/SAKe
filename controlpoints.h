@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <QVector>
 using namespace std;
 
 class ControlPoints
@@ -16,6 +17,8 @@ public:
     std::vector<double> getY() const;
     void setY(const std::vector<double> &value);
 
+    void getSubdividePointsFromKernel(double *kernel, int size_kernel, int n, std::vector<double> &x, std::vector<double> &y);
+    void getSubdividePointsFromControlPoints(std::vector<double> x, std::vector<double> y, int n, std::vector<double> &xOutput, std::vector<double> &yOutput);
 private:
     std::vector< double> x;
     std::vector< double> y;

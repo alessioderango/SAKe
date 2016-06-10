@@ -42,6 +42,7 @@ ApplicationWindow {
         textFieldGammaFunctions.text=listGamma1.length/9;
         textFieldGammaFunctionsGreaterthan1.text=listGamma2.length/9;
         textFieldLinearFunction.text=listLinear.length/9;
+        tableModel.clear()
         for(i=0; i < listGamma1.length; i+=9)
         {
             tableModel.append({ nFunction:count,
@@ -58,6 +59,7 @@ ApplicationWindow {
 
         }
         count=1;
+        tableModel2.clear()
         for(i=0; i < listGamma2.length; i+=9)
         {
             tableModel2.append({ nFunction:count,
@@ -74,6 +76,7 @@ ApplicationWindow {
 
         }
         count=1;
+        tableModel3.clear()
         for(i=0; i < listLinear.length; i+=9)
         {
             tableModel3.append({ nFunction:count,
@@ -96,12 +99,15 @@ ApplicationWindow {
 
     Rectangle{
         id: parameter
+        x: 0
+        y: 0
         color:"#f2f2f2"
         width: parent.width
-        height: parent.height
+        height: 1000
 
         ColumnLayout {
             id: columnLayout5
+            height: 1000
             anchors.right: parent.right
             anchors.rightMargin: 0
             anchors.left: parent.left
@@ -122,35 +128,36 @@ ApplicationWindow {
 
             GridLayout {
                 id: gridLayout2
-                anchors.left: parent.left
-                anchors.leftMargin: 7
+                height: 881
+                layoutDirection: Qt.RightToLeft
+                flow: GridLayout.TopToBottom
+                rows: 1
                 columns: 2
 
                 ColumnLayout {
                     id: columnLayout2
+                    width: 676
                     spacing: 2
 
-
-                    ColumnLayout{
+                    RowLayout {
+                        id: rowLayout
                         spacing: 20
-                        RowLayout {
-                            id: rowLayout
-                            spacing: 20
+                        anchors.bottomMargin: 10
 
-                            Label {
-                                id: projectName1
-                                text: qsTr("Project Name")
-                                Layout.alignment: Qt.AlignHCenter
-                            }
-
-                            Label {
-                                id: projectName
-                                text: qsTr("Name")
-                                Layout.alignment: Qt.AlignHCenter
-                            }
+                        Label {
+                            id: projectName1
+                            text: qsTr("Project Name")
+                            Layout.alignment: Qt.AlignHCenter
                         }
 
+                        Label {
+                            id: projectName
+                            text: qsTr("Name")
+                            Layout.alignment: Qt.AlignHCenter
+                        }
                     }
+
+
                     RowLayout {
                         id: rowLayout1
                         width: 630
@@ -388,7 +395,7 @@ ApplicationWindow {
                                     placeholderText: "Population Size"
                                     onTextChanged: {
                                         if(text >0 && pathrain != ""){
-                                            if(lastGeneration.checked){
+                                            if(checkUseControlPointsWithN.checked){
                                                 customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
                                             }
                                             else{
@@ -399,11 +406,11 @@ ApplicationWindow {
                                 }
 
                                 CheckBox {
-                                    id:lastGeneration;
+                                    id:checkUseControlPointsWithN;
                                     text: qsTr("Use Control Points")
                                     onCheckedChanged: {
                                         if(textPercentageN.text >0 && pathrain != ""){
-                                            if(lastGeneration.checked){
+                                            if(checkUseControlPointsWithN.checked){
                                                 customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
                                             }
                                             else{
@@ -428,9 +435,12 @@ ApplicationWindow {
                         id: columnLayout3
                         width: 500
                         height: 100
+                        Layout.fillWidth: false
+                        scale: 1
+                        spacing: 2
                         Layout.minimumHeight: height
                         Layout.minimumWidth: width
-                        Layout.fillHeight: true
+                        Layout.fillHeight: false
                         visible: true
 
                         RowLayout {
@@ -438,7 +448,7 @@ ApplicationWindow {
                             width: 100
                             height: 50
                             visible: true
-                            spacing: 15
+                            spacing: 2
 
                             Label {
                                 id: labelGammaFunctions
@@ -455,6 +465,58 @@ ApplicationWindow {
                                 id: textFieldGammaFunctions
 
                                 function showLabel(text){
+
+                                    if(text >= 0 && text !== ""){
+                                        if(text > tableModel.count){
+                                            for(var i = 0;i< tableModel.count;i++){
+                                                tableModel.set(i,{ nFunction:i+1,
+                                                                   amax: tableModel.get(i).amax,
+                                                                   amin: tableModel.get(i).amin,
+                                                                   bmax: tableModel.get(i).bmax,
+                                                                   bmin: tableModel.get(i).bmin,
+                                                                   wmax: tableModel.get(i).wmax,
+                                                                   wmin: tableModel.get(i).wmin,
+                                                                   pa: tableModel.get(i).pa,
+                                                                   pb: tableModel.get(i).pb,
+                                                                   pw: tableModel.get(i).pw})
+                                            }
+                                            for(var i = tableModel.count;i< text;i++){
+                                                tableModel.set(i,{nFunction:i+1,
+                                                                   amax: "0.8",
+                                                                   amin: "0.2",
+                                                                   bmax: "50",
+                                                                   bmin: "5",
+                                                                   wmax: "2",
+                                                                   wmin: "0.02",
+                                                                   pa: "0.03",
+                                                                   pb: "0.03",
+                                                                   pw: "0.03"})
+                                            }
+                                        }
+                                        else
+                                            if(text < tableModel.count){
+                                                for(var i = 0;i< text;i++){
+                                                    tableModel.set(i,{ nFunction:i+1,
+                                                                       amax: tableModel.get(i).amax,
+                                                                       amin: tableModel.get(i).amin,
+                                                                       bmax: tableModel.get(i).bmax,
+                                                                       bmin: tableModel.get(i).bmin,
+                                                                       wmax: tableModel.get(i).wmax,
+                                                                       wmin: tableModel.get(i).wmin,
+                                                                       pa: tableModel.get(i).pa,
+                                                                       pb: tableModel.get(i).pb,
+                                                                       pw: tableModel.get(i).pw})
+                                                }
+                                                for(var i = text;i< tableModel.count;i++){
+                                                    tableModel.remove(i);
+                                                }
+
+
+                                            }
+                                    }
+
+
+
                                     //                                    if(text > 0){
                                     //console.log(tableModel.count)
                                     //tableModel.get(0).amax = "1"
@@ -541,7 +603,10 @@ ApplicationWindow {
                         TableView {
                             id: tableView1
                             width: 672
-                            height: 50
+                            height: 53
+                            visible: true
+                            Layout.fillWidth: false
+                            selectionMode: 0
                             Layout.minimumWidth:  width
                             Layout.fillHeight: false
 
@@ -774,54 +839,63 @@ ApplicationWindow {
                                     //                                    {
                                     //                                        tableModel2.clear()
                                     //                                    }
+
+                                    if(text >= 0 && text !== ""){
+                                        console.log("ENTROOOOO =  "+text);
+                                        if(text > tableModel2.count){
+                                            for(var i = 0;i< tableModel2.count;i++){
+                                                tableModel2.set(i,{ nFunction:i+1,
+                                                                    amax: tableModel2.get(i).amax,
+                                                                    amin: tableModel2.get(i).amin,
+                                                                    bmax: tableModel2.get(i).bmax,
+                                                                    bmin: tableModel2.get(i).bmin,
+                                                                    wmax: tableModel2.get(i).wmax,
+                                                                    wmin: tableModel2.get(i).wmin,
+                                                                    pa: tableModel2.get(i).pa,
+                                                                    pb: tableModel2.get(i).pb,
+                                                                    pw: tableModel2.get(i).pw})
+                                            }
+                                            for(var i = tableModel2.count;i< text;i++){
+                                                tableModel2.set(i,{nFunction:i+1,
+                                                                    bmax: "8",
+                                                                    bmin: "1",
+                                                                    amax: "200",
+                                                                    amin: "20",
+                                                                    wmax: "2",
+                                                                    wmin: "0.02",
+                                                                    pa: "0.03",
+                                                                    pb: "0.03",
+                                                                    pw: "0.03"
+                                                                })
+                                            }
+                                        }
+                                        else
+                                            if(text < tableModel2.count){
+                                                for(var i = 0;i< text;i++){
+                                                    tableModel2.set(i,{ nFunction:i+1,
+                                                                        amax: tableModel2.get(i).amax,
+                                                                        amin: tableModel2.get(i).amin,
+                                                                        bmax: tableModel2.get(i).bmax,
+                                                                        bmin: tableModel2.get(i).bmin,
+                                                                        wmax: tableModel2.get(i).wmax,
+                                                                        wmin: tableModel2.get(i).wmin,
+                                                                        pa: tableModel2.get(i).pa,
+                                                                        pb: tableModel2.get(i).pb,
+                                                                        pw: tableModel2.get(i).pw})
+                                                }
+                                                for(var i = text;i< tableModel2.count;i++){
+                                                    tableModel2.remove(i);
+                                                }
+                                            }
+                                    }
                                 }
 
-                                function showLabelFirstTime(){
-                                    //                                    textFieldGammaFunctionsGreaterthan1.text="3"
-                                    //                                    tableModel2.clear()
-
-                                    //                                    tableModel2.append({ nFunction:1,
-                                    //                                                                  bmax: "8",
-                                    //                                                                  bmin: "1",
-                                    //                                                                  amax: "200",
-                                    //                                                                  amin: "20",
-                                    //                                                                  wmax: "2",
-                                    //                                                                  wmin: "0.2",
-                                    //                                                                  pa: "0.03",
-                                    //                                                                  pb: "0.03",
-                                    //                                                                  pw: "0.03"})
-                                    //                                    console.log("ENTRATO")
-                                    //                                    tableModel2.append({ nFunction:2,
-                                    //                                                          bmax: "80",
-                                    //                                                          bmin: "20",
-                                    //                                                          amax: "30",
-                                    //                                                          amin: "2",
-                                    //                                                          wmax: "2",
-                                    //                                                          wmin: "0.2",
-                                    //                                                          pa: "0.03",
-                                    //                                                          pb: "0.03",
-                                    //                                                          pw: "0.03"})
-                                    //                                    tableModel2.append({ nFunction:3,
-                                    //                                                           bmax: "350",
-                                    //                                                           bmin: "150",
-                                    //                                                           amax: "7",
-                                    //                                                           amin: "2",
-                                    //                                                           wmax: "2",
-                                    //                                                           wmin: "0.2",
-                                    //                                                           pa: "0.03",
-                                    //                                                           pb: "0.03",
-                                    //                                                           pw: "0.03"})
-
-
-                                }
 
                                 width: 63
-                                //                                text: showLabelFirstTime()
                                 placeholderText: "Number of gamma functions"
                                 validator: RegExpValidator {
                                     regExp: /^[0-9]\d+/
                                 }
-                                //                                editingFinished: console.log("CIAO")
                                 onTextChanged: showLabel(text)
 
 
@@ -1053,29 +1127,65 @@ ApplicationWindow {
                                     //                                    if(text > 0){
 
                                     //                                        //console.log(tableModel.count)
-                                    //                                        //tableModel.get(0).amax = "1"
-                                    //                                        //tableModel.get(0).amin = "2"
-                                    //                                        //tableModel.get(0).bmax = "3"
-                                    //                                        //tableModel.get(0).bmin = "4"
-                                    //                                        //tableModel.get(0).wmax = "5"
-                                    //                                        //tableModel.get(0).wmin = "6"
-                                    //                                        //tableModel.get(0).pa = "7"
-                                    //                                        //tableModel.get(0).pb = "8"
-                                    //                                        //tableModel.get(0).pw = "9"
+                                    //                                                                            tableModel.get(0).amax = "1"
+                                    //                                                                            tableModel.get(0).amin = "2"
+                                    //                                                                            tableModel.get(0).bmax = "3"
+                                    //                                                                            tableModel.get(0).bmin = "4"
+                                    //                                                                            tableModel.get(0).wmax = "5"
+                                    //                                                                            tableModel.get(0).wmin = "6"
+                                    //                                                                            tableModel.get(0).pa = "7"
+                                    //                                                                            tableModel.get(0).pb = "8"
+                                    //                                                                            tableModel.get(0).pw = "9"
                                     //                                        //console.log(tableModel.get(0).amin)
                                     //                                        tableModel3.clear()
-                                    //                                        for(var i = 0;i< text;i++){
-                                    //                                            tableModel3.append({ nFunction:i+1,
-                                    //                                                                   amax: 0,
-                                    //                                                                   amin: 0,
-                                    //                                                                   bmax: 0,
-                                    //                                                                   bmin: 0,
-                                    //                                                                   wmax: 0,
-                                    //                                                                   wmin: 0,
-                                    //                                                                   pa: 0,
-                                    //                                                                   pb: 0,
-                                    //                                                                   pw: 0})
-                                    //                                        }
+                                    if(text >= 0 && text !== ""){
+                                        if(text > tableModel3.count){
+                                            for(var i = 0;i< tableModel3.count;i++){
+                                                tableModel3.set(i,{ nFunction:i+1,
+                                                                    amax: tableModel3.get(i).amax,
+                                                                    amin: tableModel3.get(i).amin,
+                                                                    bmax: tableModel3.get(i).bmax,
+                                                                    bmin: tableModel3.get(i).bmin,
+                                                                    wmax: tableModel3.get(i).wmax,
+                                                                    wmin: tableModel3.get(i).wmin,
+                                                                    pa: tableModel3.get(i).pa,
+                                                                    pb: tableModel3.get(i).pb,
+                                                                    pw: tableModel3.get(i).pw})
+                                            }
+                                            for(var i = tableModel3.count;i< text;i++){
+                                                tableModel3.insert(i,{ nFunction:i+1,
+                                                                       bmax: "350",
+                                                                       bmin: "150",
+                                                                       amax: "7",
+                                                                       amin: "2",
+                                                                       wmax: "2",
+                                                                       wmin: "0.2",
+                                                                       pa: "0.03",
+                                                                       pb: "0.03",
+                                                                       pw: "0.03"})
+                                            }
+                                        }
+                                        else
+                                            if(text < tableModel3.count){
+                                                for(var i = 0;i< text;i++){
+                                                    tableModel3.set(i,{ nFunction:i+1,
+                                                                        amax: tableModel3.get(i).amax,
+                                                                        amin: tableModel3.get(i).amin,
+                                                                        bmax: tableModel3.get(i).bmax,
+                                                                        bmin: tableModel3.get(i).bmin,
+                                                                        wmax: tableModel3.get(i).wmax,
+                                                                        wmin: tableModel3.get(i).wmin,
+                                                                        pa: tableModel3.get(i).pa,
+                                                                        pb: tableModel3.get(i).pb,
+                                                                        pw: tableModel3.get(i).pw})
+                                                }
+                                                for(var i = text;i< tableModel3.count;i++){
+                                                    tableModel3.remove(i);
+                                                }
+
+
+                                            }
+                                    }
 
 
                                     //                                    }else
@@ -1352,6 +1462,59 @@ ApplicationWindow {
                         }
                     }
 
+                    GridLayout{
+                        columnSpacing: 100
+                        columns: 3
+                        rows: 1
+
+                        CheckBox {
+                            id: checkControlPoints
+                            text: qsTr("Use Control Points(Default) ")
+                            onCheckedChanged: {
+                                if(checkControlPoints.checked)
+                                {
+                                    checkKernel.checked = false;
+                                    checkN.checked = false;
+                                }else
+                                    if(checkN.checked === false && checkKernel.checked === false){
+                                        checkControlPoints.checked=true;
+                                    }
+                            }
+
+                        }
+                        CheckBox {
+                            id: checkKernel
+                            text: qsTr("Use Kernel")
+                            onCheckedChanged: {
+                                if(checkKernel.checked)
+                                {
+                                    checkControlPoints.checked = false;
+                                    checkN.checked = false;
+                                }else
+                                    if(checkN.checked === false && checkKernel.checked === false){
+                                        checkControlPoints.checked=true;
+                                    }
+                            }
+
+                        }
+                        CheckBox {
+                            id: checkN
+                            text: qsTr("Use N")
+                            onCheckedChanged: {
+                                if(checkN.checked)
+                                {
+                                    checkControlPoints.checked = false;
+                                    checkKernel.checked = false;
+                                }else
+                                    if(checkKernel.checked === false && checkN.checked === false){
+                                        checkControlPoints.checked=true;
+                                    }
+                            }
+
+                        }
+
+                    }
+
 
 
 
@@ -1363,12 +1526,16 @@ ApplicationWindow {
                     id: gridLayout4
                     width: 100
                     height: 100
+                    rowSpacing: 0
+                    columnSpacing: 0
                     columns: 1
-                    rows: 2
+                    rows: 1
 
 
                     CustomPlotRegressionPreviewKernel {
                         id: customPlotKernelRegression1
+                        width: 798
+                        height: 886
                         Layout.fillWidth: true
                         Layout.fillHeight: true
 
@@ -1402,7 +1569,7 @@ ApplicationWindow {
             RowLayout {
                 id: columnLayout1
                 width: 328
-                height: 100
+                height: 96
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 spacing: 2
 
@@ -1550,10 +1717,15 @@ ApplicationWindow {
                                     1,
                                     matrixGamma1,
                                     matrixGamma2,
-                                    matrixGamma3
+                                    matrixGamma3,
+                                    checkControlPoints.checked,
+                                    checkKernel.checked,
+                                    checkN.checked,
+                                    checkUseControlPointsWithN.checked,
+                                    textPercentageN.text
                                     )
                         //                                                            sakeStart.startRegression()
-                        close();
+                        applicationWindow1.destroy()
                         //                        if(comboSelection.currentText == "StochTour(t)"
                         //                                || comboSelection.currentText == "DetTour(T)"){
                         //                            para1=selectionParameter.text;
@@ -1613,7 +1785,7 @@ ApplicationWindow {
                     text: qsTr("Cancel")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     checkable: false
-                    onClicked: close()
+                    onClicked: applicationWindow1.destroy()
 
                 }
             }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.0.0, 2016-06-06T22:56:59. -->
+<!-- Written by QtCreator 4.0.0, 2016-06-10T13:15:17. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -543,6 +543,7 @@
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments">-platform windows:dpiawareness=0</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">SAKe.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
+    <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseTerminal">false</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">C:/Users/Alessio/git/SAKe/build-SAKe-MinGW_32_bit-Release</value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>

@@ -106,43 +106,48 @@ public slots:
                   const QVariant &selectionOrder4
                   );
     void startValidation(
-                  const QVariant &_projectName,
-                  const QVariant &filenameRainPath,
-                  const QVariant &filenameActivaionPath,
-                  const QVariant &filenameKernelPath,
-                  const QVariant &filenameKenrelPath
-                  );
+            const QVariant &_projectName,
+            const QVariant &filenameRainPath,
+            const QVariant &filenameActivaionPath,
+            const QVariant &filenameKernelPath,
+            const QVariant &filenameKenrelPath
+            );
     void startRegression(const QVariant &_projectaname,
-                            const QVariant &selection,
-                            const QVariant &selectionElitist,
-                            const QVariant &populationSize,
-                            const QVariant &percentageCrossover,
-                            const QVariant &percentageMutation,
-                            const  QVariant &percentageWeight,
-                            const  QVariant &numberProcessor,
-                            const  QVariant &numberGamma,
-                            const  QVariant& percentageGammaA,
-                            const  QVariant &percentageGammaB,
-                            const  QVariant &numberLinear,
-                            const  QVariant& percentageLinearA,
-                            const  QVariant &percentageLinearB,
-                            const  QVariant &maxGeneration,
-                            const  QVariant &fileurl,
-                            const QVariant &tipo,
-                            const QVariantList &matrxGamma1,
-                            const QVariantList &matrxGamma2,
-                            const QVariantList &matrixLinear);
+                         const QVariant &selection,
+                         const QVariant &selectionElitist,
+                         const QVariant &populationSize,
+                         const QVariant &percentageCrossover,
+                         const QVariant &percentageMutation,
+                         const  QVariant &percentageWeight,
+                         const  QVariant &numberProcessor,
+                         const  QVariant &numberGamma,
+                         const  QVariant& percentageGammaA,
+                         const  QVariant &percentageGammaB,
+                         const  QVariant &numberLinear,
+                         const  QVariant& percentageLinearA,
+                         const  QVariant &percentageLinearB,
+                         const  QVariant &maxGeneration,
+                         const  QVariant &fileurl,
+                         const QVariant &tipo,
+                         const QVariantList &matrxGamma1,
+                         const QVariantList &matrxGamma2,
+                         const QVariantList &matrixLinear,
+                         const QVariant &checkControlpoints,
+                         const QVariant &checkKernel,
+                         const QVariant &checkN,
+                         const QVariant &checkControlPointsWithN,
+                         const QVariant &textN);
 
 
 
 
-      int existProjectName(const QVariant &_projectName);
-      QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
-//    void updateCurrentMaximumFitness(QString);
-//    void updateAbosulteMaximumFitness(QString s);
-//    void updateCurrentAvarageFitness(QString s);
-//    void updateAbsoluteAvarageFitness(QString s);
-//    void updateGen(QString s);
+    int existProjectName(const QVariant &_projectName);
+    QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
+    //    void updateCurrentMaximumFitness(QString);
+    //    void updateAbosulteMaximumFitness(QString s);
+    //    void updateCurrentAvarageFitness(QString s);
+    //    void updateAbsoluteAvarageFitness(QString s);
+    //    void updateGen(QString s);
 
 private:
     string selection;
@@ -167,11 +172,11 @@ private:
     double thresholdKernel;
     QQmlApplicationEngine* engine;
     QApplication * a;
-//    QObject *_currentMaximumFitness;
-//    QObject *_absoluteMaximumFitness ;
-//    QObject *_currentAverageFitness;
-//    QObject *_absoluteAverageFitness;
-//    QObject *_gen;
+    //    QObject *_currentMaximumFitness;
+    //    QObject *_absoluteMaximumFitness ;
+    //    QObject *_currentAverageFitness;
+    //    QObject *_absoluteAverageFitness;
+    //    QObject *_gen;
     XMLManager * xmlManager;
 
     std::vector<QThread*> threadsController;

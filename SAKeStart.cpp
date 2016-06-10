@@ -40,7 +40,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          ){
 
     // **** converto e verifico che siano arrrivati dal QML tutti i parametri
-    qDebug() << "Tipo arrivato " << tipo.toInt() << "\n";
 
     QDir dir(QDir::currentPath()+"/workspace");
     if (!dir.exists()){
@@ -311,82 +310,6 @@ void SAKeStart::startValidation(
     
 }
 
-//double getHMed(double *kernel, int SIZE){
-//    double sum=0;
-//    for (int i = 0; i < SIZE; i++) {
-//        sum+=kernel[i];
-//    }
-//    return sum/SIZE;
-
-//}
-
-//double getHMax(double *kernel, int SIZE){
-//    double max=-1;
-//    for (int i = 0; i < SIZE; i++) {
-//        if(max< kernel[i])
-//            max = kernel[i];
-//    }
-//    return max;
-
-//}
-
-//void initAlreadyConsidered(double *&alreadyConsidered, int SIZE){
-//    for (int i = 0; i < SIZE; i++) {
-//        alreadyConsidered[i]=-1;
-//    }
-//}
-
-//void stampa(double *kernel, int SIZE){
-//    for (int i = 0; i < SIZE; i++) {
-//        cout << kernel[i] << " ";
-//    }
-//    cout << endl;
-//}
-//int getInterset(double *kernel,double *&alreadyConsidered,double *&alreadyConsideredTemp,double boundary, int SIZE){
-//    int count=0;
-//    for (int i = 0; i < SIZE; i++) {
-//        if(alreadyConsidered[i]==-1  && kernel[i] >= boundary){
-//            alreadyConsideredTemp[i]=kernel[i];
-//            alreadyConsidered[i]=kernel[i];
-//            count++;
-//        }
-//    }
-//    return count;
-//}
-
-//void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec, int SIZE){
-
-
-//    double sum=0;
-//    double x=0;
-//    int count=0;
-//    for (int i = 0; i < SIZE-1; i++) {
-//        if(a[i]!=-1){
-//            if(a[i+1]==-1 && a[i-1] ==-1){
-//                //write << i+1 << "; " << a[i] << "; " << endl;
-//                xVec.push_back(i+1);
-//                yVec.push_back(a[i]);
-//                cout << " x = " << i+1 << " y = " << a[i] << endl;
-//            }else{
-//                sum+=a[i];
-//                x+=i;
-//                count++;
-//                if(a[i+1]==-1){
-//                    //write << (x/count)+1 << "; " << sum/count << "; " << endl;
-//                    xVec.push_back((x/count)+1);
-//                    yVec.push_back(sum/count);
-//                    cout << " x = " << (x/count)+1 << " y = " << sum/count << endl;
-//                    sum=0;
-//                    count=0;
-//                    x=0;
-//                }
-//            }
-//        }
-//    }
-
-
-//}
-
 double fRand(double fMin, double fMax)
 {
     double f = (double)rand() / (double)RAND_MAX;
@@ -400,20 +323,25 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const QVariant &populationSize,
                                    const QVariant &percentageCrossover,
                                    const QVariant &percentageMutation,
-                                   const  QVariant &percentageWeight,
-                                   const  QVariant &numberProcessor,
-                                   const  QVariant &numberGamma,
-                                   const  QVariant& percentageGammaA,
-                                   const  QVariant &percentageGammaB,
-                                   const  QVariant &numberLinear,
-                                   const  QVariant& percentageLinearA,
-                                   const  QVariant &percentageLinearB,
-                                   const  QVariant &maxGeneration,
-                                   const  QVariant &fileurl,
+                                   const QVariant &percentageWeight,
+                                   const QVariant &numberProcessor,
+                                   const QVariant &numberGamma,
+                                   const QVariant& percentageGammaA,
+                                   const QVariant &percentageGammaB,
+                                   const QVariant &numberLinear,
+                                   const QVariant& percentageLinearA,
+                                   const QVariant &percentageLinearB,
+                                   const QVariant &maxGeneration,
+                                   const QVariant &fileurl,
                                    const QVariant &tipo,
                                    const QVariantList &matrxGamma1QML,
                                    const QVariantList &matrixGamma2QML,
-                                   const QVariantList &matrixLinearQML)
+                                   const QVariantList &matrixLinearQML,
+                                   const QVariant &checkControlpoints,
+                                   const QVariant &checkKernel,
+                                   const QVariant &checkN,
+                                   const QVariant &checkControlPointsWithN,
+                                   const QVariant &textN)
 {
     std::vector<std::vector<double> > matrixGamma1;
     QList <QVariant> tmpGamma1 = matrxGamma1QML[0].toList();
@@ -521,6 +449,11 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     double dpercentageLinearA = percentageLinearA.toDouble();
     double dpercentageLinearB = percentageLinearB.toDouble();
     QString sfileurl = fileurl.toString();
+    bool checkControlPointsBool = checkControlpoints.toBool();
+    bool checkKernelBool = checkKernel.toBool();
+    bool checkNBool = checkN.toBool();
+    bool checkControlPointsWithNBool = checkControlPointsWithN.toBool();
+    int n = textN.toInt();
 
     qDebug() << "sselction : " << sselction ;
     qDebug() << "iselectionElitist : " << iselectionElitist   ;
@@ -556,6 +489,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     QObject *currentAverageFitness = rootObject->findChild<QObject*>(QString("currentAverageFitness%1").arg(idProject));
     QObject *absoluteAverageFitness = rootObject->findChild<QObject*>(QString("absoluteAverageFitness%1").arg(idProject));
     QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(idProject));
+    progressBar->setProperty("maximumValue",100);
+    progressBar->setProperty("minimumValue",0);
 
     QObject *buttonStop = rootObject->findChild<QObject*>(QString("stop%1").arg(idProject));
 
@@ -573,19 +508,16 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     int count =0;
     for (int i = 0; i < inumberLinear; ++i) {
         double tmp1=fRand(matrixLinear[i][4],matrixLinear[i][5]);
-        //std::cout << tmp1 << std::endl;
         weight[count] = tmp1;
         count++;
     }
     for (int i = 0; i < matrixGamma1.size(); ++i) {
         double tmp1=fRand(matrixGamma1[i][4],matrixGamma1[i][5]);
-        //std::cout << tmp1 << std::endl;
         weight[count] = tmp1;
         count++;
     }
     for (int i = 0; i <  matrixGamma2.size(); ++i) {
         double tmp1=fRand(matrixGamma2[i][4],matrixGamma2[i][5]);
-        //std::cout << tmp1 << std::endl;
         weight[count] = tmp1;
         count++;
     }
@@ -627,27 +559,6 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
 
     Parameters *parameters = new Parameters[dimension];
 
-    //    for (int i = 0; i < inumberLinear; ++i) {
-    //        Parameters tmp;
-    //        double tmp1=fRand(0.00003,0.00008);
-    //        std::cout <<tmp1<< std::endl;
-    //        tmp.addParameters(tmp1);
-    //        double tmp2=0.01;
-    //        std::cout <<tmp2<< std::endl;
-    //        tmp.addParameters(tmp2);
-    //        parameters[i]=tmp;
-    //    }
-    //    std::cout << "Parameters FINE LINEAR!!!!!!!!" << endl;
-    //    for (int i = inumberLinear; i < dimension; ++i) {
-    //        Parameters tmp;
-    //        double tmp1=fRand(0,1000);
-    //        std::cout <<tmp1<< std::endl;
-    //        tmp.addParameters(tmp1);
-    //        double tmp2=fRand(0,1);
-    //        std::cout <<tmp2<< std::endl;
-    //        tmp.addParameters(tmp2);
-    //        parameters[i]=tmp;
-    //    }
     count = 0;
     for (int i = 0; i < inumberLinear; ++i) {
         Parameters tmp;
@@ -685,15 +596,6 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         count++;
 
     }
-    //     std::cout << "Parameters FINE!!!!!!!!" << endl;
-    //#define SIZE 148
-
-    //    double kernel[SIZE]={0.0331607, 0, 0.0761892, 0.0299802, 0, 0.0308658, 0.0205697, 0.0215048, 0, 0.0119944, 0, 0.0409908, 0, 0.0083374, 0.0810852, 0, 0.0250647, 0, 0, 0.0400473, 0, 0, 0.0254148, 0, 0, 0.0131141, 0.0172503, 0.0432308, 0.0231627, 0, 0.0299524, 0.0166024, 0.0468721, 0, 0, 0.012991, 0.00460058, 0, 0, 0.0539517, 0.0041918, 0.0105375, 0, 0.0419468, 0, 0.00508404, 0.00906833, 0, 0.00123015, 0, 0, 0, 0, 0, 0, 0.0120725, 0.00637761, 0.00306278, 0.00116989, 0, 0.00104368, 0.0101821, 0, 0, 0, 0, 0.000840633, 0, 0, 0.00578786, 0.000361475, 0, 0.00212797, 0, 2.81101e-005, 0, 0, 0.000642682, 0, 7.75736e-005, 0, 0, 0.00150183, 0.000354716, 0, 0.00066226, 0.000382005, 0.00698852, 0, 0.000524334, 0, 0, 0, 0.00221679, 0, 0.00843141, 0.00281996, 0, 0.00582132, 0, 0.0072355, 0.00355681, 0, 0, 0, 0, 0, 0, 0.00324608, 0.00113272, 0, 0, 0, 0, 0.0133326, 0, 0, 0, 0, 0, 0.0219186, 0.000480746, 0, 0, 0.0123283, 0.011458, 0, 0, 0, 0, 0, 0.00487881, 0, 0, 0, 0, 0, 0.0167193, 0.0102274, 0.0110751, 0.00210047, 0, 0.00115638, 0.0228124, 0.00387118, 0, 0, 0};
-
-    //    double *p = new double[SIZE];
-    //    for (int i = 0; i < SIZE; ++i) {
-    //        p[i]=kernel[i];
-    //    }
 
     double *kernel;
     int size_kernel;
@@ -721,107 +623,38 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                 dpercentageMutation,
                 inumberProcessor
                 );
+
+    std::vector< double> x;
+    std::vector< double> y;
+
     ControlPoints * controlPoints = new ControlPoints();
-    controlPoints->calculateControlPoints(kernel,size_kernel);
-    std::vector< double> x = controlPoints->getX();
-    std::vector< double> y = controlPoints->getY();
+    //TODO
+    if(checkControlPointsBool)
+    {
+        controlPoints->calculateControlPoints(kernel,size_kernel);
+        x = controlPoints->getX();
+        y = controlPoints->getY();
+    }else
+        if(checkKernelBool){
+           std::vector< double> tmp(kernel,kernel+size_kernel);
+           y = tmp;
+           for(int i=0; i< size_kernel; i++){
+               x.push_back(i+1);
+           }
+        }else
+            if(checkNBool){
+                if( checkControlPointsWithNBool){
+                    controlPoints->calculateControlPoints(kernel,size_kernel);
+                    controlPoints->getSubdividePointsFromControlPoints(controlPoints->getX(),controlPoints->getY(),n,x,y);
+                }else
+                {
+                    controlPoints->calculateControlPoints(kernel,size_kernel);
+                    controlPoints->getSubdividePointsFromKernel(kernel,size_kernel,n,x,y);
+                }
+
+            }
+
     delete controlPoints;
-
-
-
-    std::cout << "setQCustomPlotRegression" << std::endl;
-
-
-    progressBar->setProperty("maximumValue",100);
-    progressBar->setProperty("minimumValue",0);
-
-    std::cout << "setQCustomPlotFitness" << std::endl;
-    //    regressionController->setQCustomPlotFitness(qCustomPlotFitness);
-    std::cout << "setQCustomPlotRegression" << std::endl;
-
-
-
-
-    //    std::vector< double> x;
-    //    std::vector< double> y;
-
-    //    double hmed= getHMed(kernel,size_kernel);
-    //    double hmax = getHMax(kernel,size_kernel);
-    //    double hmed2= hmed/2;
-    //    double hmedmax= (hmed+hmax)/2;
-
-    //    cout << "hmax = " << hmax << endl;
-    //    cout << "hmedmax = " << hmedmax << endl;
-    //    cout << "hmed = "<< hmed << endl;
-    //    cout << "hmed2 = " << hmed2 <<endl;
-
-    //    //    double alreadyConsideredHMax[size_kernel];
-    //    //    double alreadyConsideredHMedMax[size_kernel];
-    //    //    double alreadyConsideredHMed[size_kernel];
-    //    //    double alreadyConsideredHMed2[size_kernel];
-    //    //    double alreadyConsidered[size_kernel];
-    //    double *alreadyConsideredHMax = new double[size_kernel];
-    //    double *alreadyConsideredHMedMax= new double[size_kernel];
-    //    double *alreadyConsideredHMed= new double[size_kernel];
-    //    double *alreadyConsideredHMed2= new double[size_kernel];
-    //    double *alreadyConsidered= new double[size_kernel];
-    //    initAlreadyConsidered(alreadyConsidered,size_kernel);
-    //    initAlreadyConsidered(alreadyConsideredHMax,size_kernel);
-    //    initAlreadyConsidered(alreadyConsideredHMedMax,size_kernel);
-    //    initAlreadyConsidered(alreadyConsideredHMed,size_kernel);
-    //    initAlreadyConsidered(alreadyConsideredHMed2,size_kernel);
-    //    int count = getInterset(kernel,alreadyConsidered,alreadyConsideredHMax,hmax,size_kernel);
-    //    cout << "ho trovato " << count << " barre superiori a " << hmax << endl;
-    //    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMedMax,hmedmax,size_kernel);
-    //    cout << "ho trovato " << count << " barre superiori a " << hmedmax << endl;
-    //    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed,hmed,size_kernel);
-    //    cout << "ho trovato " << count << " barre superiori a " << hmed << endl;
-    //    count=getInterset(kernel,alreadyConsidered,alreadyConsideredHMed2,hmed2,size_kernel);
-    //    cout << "ho trovato " << count << " barre superiori a " << hmed2 << endl;
-    //    //stampa(alreadyConsideredHMax);
-    //    //stampa(alreadyConsideredHMedMax);
-    //    //stampa(alreadyConsideredHMed);
-    //    //stampa(alreadyConsideredHMed2);
-    //    cout << " points from hmax" << endl;
-    //    getPoints(alreadyConsideredHMax,x,y,size_kernel);
-    //    cout << " points from hmedhmax" << endl;
-    //    getPoints(alreadyConsideredHMedMax,x,y,size_kernel);
-    //    cout << " points from hmed" << endl;
-    //    getPoints(alreadyConsideredHMed,x,y,size_kernel);
-    //    cout << " points from hmed2" << endl;
-    //    getPoints(alreadyConsideredHMed2,x,y,size_kernel);
-    //    for (int i = 0; i < x.size(); i++) {
-    //        cout << x[i] <<" " << y[i] << endl;
-    //    }
-
-
-    //    int alto;
-    //    for (alto = x.size() - 1; alto > 0; alto-- )
-    //    {
-    //        for (int i=0; i<alto; i++)
-    //        {
-    //            if (x[i]>x[i+1]) /* sostituire ">" con "<" per avere un ordinamento decrescente */
-    //            {
-    //                double tmp = x[i];
-    //                x[i] = x[i+1];
-    //                x[i+1] = tmp;
-    //                double tmp2 = y[i];
-    //                y[i] = y[i+1];
-    //                y[i+1] = tmp2;
-
-    //            }
-    //        }
-    //    }
-
-    //    delete [] alreadyConsideredHMax;
-    //    delete [] alreadyConsideredHMedMax;
-    //    delete [] alreadyConsideredHMed;
-    //    delete [] alreadyConsideredHMed2;
-    //    delete [] alreadyConsidered;
-
-    //    for (int i = 0; i < x.size(); i++) {
-    //        cout << x[i] <<" " << y[i] << endl;
-    //    }
 
 
     regressionController->setQCustomPlotRegression(qCustomPlotRegression);

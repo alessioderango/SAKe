@@ -17,16 +17,6 @@ ApplicationWindow {
     height: 800
     title: qsTr("Sake software")
 
-    function createSpriteObjects() {
-        component = Qt.createComponent("Sprite.qml");
-        sprite = component.createObject(appWindow, {"x": 100, "y": 100});
-
-        if (sprite == null) {
-            // Error Handling
-            console.log("Error creating object");
-        }
-    }
-
     menuBar: MenuBar {
         Menu {
             title: qsTr("File")
@@ -262,24 +252,12 @@ ApplicationWindow {
                 itemDelegate: Rectangle {
                     property color frameColor: "white"
                     property color fillColor: "blue"
-                    //                    color: { if(styleData.selected) {
-                    //                             console.log("fillColor "+styleData.value);
-                    //                            fillColor
-                    //                            }
-                    //                            else{
-                    //                             console.log("frameColor "+styleData.value);
-                    //                            frameColor
-                    //                        }
-                    //                    }
                     height: 20
 
 
                     Text {
                         id:textItem
-                        //color: styleData.selected ? "white" : "black"
-                        //anchors.verticalCenter: parent.verticalCenter
                         text: styleData.value === undefined ? "" : styleData.value // The branches don't have a description_role so styleData.value will be undefined
-                        //anchors.left: parent ;
                         color: "black"
                     }
 
@@ -292,8 +270,6 @@ ApplicationWindow {
                                 radius: width/2
                                 color: control.hovered ? "lightsteelblue": "white"
                                 border.color: "white"
-                                //Text {text: styleData.value ; anchors.left: parent ; color: "black"}
-
                             }}
 
                         Row {
@@ -312,9 +288,6 @@ ApplicationWindow {
                         onClicked: {
                             console.log("onClicked "+styleData.value
                                         +" "+model.description_role );
-                            // parent.color =fillColor
-                            //                              var list = sakeStart.getAllElementsFromProjectName(model.description_role)
-
                             var list = sakeStart.getAllElementsFromProjectName(model.description_role)
                             var matrix= [];
                             matrix[0] = [];
@@ -324,11 +297,7 @@ ApplicationWindow {
                             console.log("tipo Progetto = "+list[list.length -1])
                             var component;
                             var window  ;
-
-
-                            console.log("End List \n");
-
-
+                            //console.log("End List \n");
 
                             if(list[list.length -1] === "CalibrationProject"){
                                 component = Qt.createComponent("parametersProjectAlreadyExist.qml")
@@ -345,8 +314,7 @@ ApplicationWindow {
 
                                 }
                                 var parameter  = matrix[0];
-                                console.log(parameter)
-                                console.log(window.f(parameter))
+                                window.f(parameter)
                             }else
                                 if(list[list.length -1] === "RegressionProject"){
                                     component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
@@ -372,25 +340,13 @@ ApplicationWindow {
                                     console.log(listLinear)
 
                                     window = component.createObject(applicationWindow1)
-                                    console.log(window.loadParameter(parameter,listGamma1,listGamma2,listLinear))
+                                    window.loadParameter(parameter,listGamma1,listGamma2,listLinear)
                                 }
                                 else
                                     if(list[list.length -1] === "ValidationProject"){
                                         component = Qt.createComponent("parametersProjectAlreadyExist.qml")
-                                        console.log("listview1.model.get(listview1.currentIndex).name")
                                     }
-
-
-
-                            //                            insert();
-
                         }
-                        //                        onDoubleClicked: {
-
-
-                        //                            console.log(styleData.selected)
-                        //                        }
-
                     }
                 }
 
@@ -398,105 +354,10 @@ ApplicationWindow {
                     role: "name_role"
                     title: "Projects"
                 }
-                //                TableViewColumn {
-                //                    role: "description_role"
-                //                    title: "Description"
-                //                }
-
-                //                function insert(){
-                //                    component = Qt.createComponent("TableColumnTreeView.qml");
-                //                        sprite = component.createObject(treeViewId, {"x": 100, "y": 100});
-                //                       treeViewId.insertColumn(0,sprite);
-                //                }
-
 
             }
 
 
-
-            //            ListModel {
-            //                objectName: "ListProjects"
-            //                id: model
-            //                function addElementList(projectName){
-
-            //                    console.log("Entrato!!!!!!!!!!!!!!!!  "+ projectName);
-
-            //                    model.clear()
-            //                    for (var i=0; i<projectName.length; i++){
-            //                        console.log("Entrato!!!!!!!!!!!!!!!!  "+ projectName[i]);
-            //                        model.append({"name": projectName[i]})
-
-            //                    }
-
-
-            //                }
-
-            //            }
-            //            Text {
-            //                id: text1
-            //                width: 180
-            //                text: qsTr("Projects")
-            //                horizontalAlignment: Text.AlignHCenter
-            //                font.pixelSize: 12
-            //            }
-
-            Component {
-                id: contactDelegate
-                Column {
-                    Item {
-
-                        width: 180; height: 20
-                        Row {
-                            Image{ source: "qrc:/img/project.png"
-                                width: 17
-                                height: 17}
-                            Text { text: ' ' + name }
-
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-
-                                listview1.currentIndex = index
-
-
-                            }
-                            onDoubleClicked: {
-
-                                var component = Qt.createComponent("parametersProjectAlreadyExist.qml")
-                                console.log(listview1.model.get(listview1.currentIndex).parent.name)
-                                var list = sakeStart.getAllElementsFromProjectName(listview1.model.get(listview1.currentIndex).name)
-                                console.log("ciao"+list.length )
-                                for(var i = 0; i < list.length ; i++){
-                                    console.log(list[i])
-                                }
-
-                                var window    = component.createObject(applicationWindow1)
-                                console.log(window.f(list))
-                            }
-
-                        }
-
-
-                    }
-                }
-            }
-            //            ScrollView {
-            //                y: 20
-            //                width: 180
-            //                height: 700
-            //                ListView {
-
-            //                    id: listview1
-            //                    anchors.fill: parent
-
-            //                    model: model
-            //                    delegate: contactDelegate
-            //                    highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
-            //                    focus: true
-            //                    onCurrentItemChanged: console.log(model.get(listview1.currentIndex).name + ' selected')
-            //                }
-            //            }
 
 
         }

@@ -158,19 +158,19 @@ public:
 
                         if(tmpBeta > 0 && tmpBeta <= 1)
                         {
-                            if(tmpAlfa > 1000)
-                                tmpAlfa = 1000;
+                            if(tmpAlfa > 500)
+                                tmpAlfa = 500;
 
-                            if(tmpAlfa <= 0)
-                                tmpAlfa = 0.0001;
+                            if(tmpAlfa <= 1)
+                                tmpAlfa = 1.0001;
                         }else
                             if(tmpBeta > 1 && tmpBeta <= 10)
                             {
-                                if(tmpAlfa > 300)
-                                    tmpAlfa = 300;
+                                if(tmpAlfa > 100)
+                                    tmpAlfa = 100;
 
-                                if(tmpAlfa <= 0)
-                                    tmpAlfa = 0.0001;
+                                if(tmpAlfa <= 1)
+                                    tmpAlfa = 1.0001;
                             }
                             else
                                 if(tmpBeta > 10 && tmpBeta <= 100)
@@ -178,16 +178,16 @@ public:
                                     if(tmpAlfa > 40)
                                         tmpAlfa = 40;
 
-                                    if(tmpAlfa <= 0)
-                                        tmpAlfa = 0.0001;
+                                    if(tmpAlfa <= 1)
+                                        tmpAlfa = 1.0001;
                                 }else
                                     if(tmpBeta > 100 && tmpBeta <= 400)
                                     {
                                         if(tmpAlfa > 8)
                                             tmpAlfa = 8;
 
-                                        if(tmpAlfa <= 0)
-                                            tmpAlfa = 0.0001;
+                                        if(tmpAlfa <= 1)
+                                            tmpAlfa = 1.0001;
                                     }
 
                         _genotype.setParameters(i,0,tmpAlfa);

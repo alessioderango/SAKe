@@ -933,7 +933,7 @@ ApplicationWindow {
                                                        order3,
                                                        order4
                                                        )
-                                    close()
+                                    applicationWindow1.destroy()
                                 }
 
                     }
@@ -945,7 +945,9 @@ ApplicationWindow {
                     objectName: "namecancel"
                     text: qsTr("Cancel")
                     checkable: false
-                    onClicked: close()
+                    onClicked: {
+                        applicationWindow1.destroy()
+                    }
 
                 }
             }
@@ -953,6 +955,9 @@ ApplicationWindow {
 
 
         }
+
+
+
 
     }
     MessageDialog {
@@ -997,5 +1002,7 @@ ApplicationWindow {
         Component.onCompleted: visible = false
         modality: "ApplicationModal"
     }
+
+
 
 }

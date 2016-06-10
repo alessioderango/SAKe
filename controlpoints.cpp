@@ -56,6 +56,9 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
     double x=0;
     int count=0;
     for (int i = 0; i < SIZE-1; i++) {
+        if(i==168){
+         cout << "CIAO" << endl;
+        }
         if(a[i]!=-1){
             if(a[i+1]==-1 && a[i-1] ==-1){
                 //write << i+1 << "; " << a[i] << "; " << endl;
@@ -63,6 +66,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
                 yVec.push_back(a[i]);
                 cout << " x = " << i+1 << " y = " << a[i] << endl;
             }else{
+
                 sum+=a[i];
                 x+=i;
                 count++;
@@ -74,6 +78,18 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
                     sum=0;
                     count=0;
                     x=0;
+                }else{
+                    if(a[i+1]!=-1 && i==SIZE-2){
+                        sum+=a[i+1];
+                        x+=i+1;
+                        count++;
+                        xVec.push_back((x/count)+1);
+                        yVec.push_back(sum/count);
+                        cout << " x = " << (x/count)+1 << " y = " << sum/count << endl;
+                        sum=0;
+                        count=0;
+                        x=0;
+                    }
                 }
             }
         }
@@ -190,4 +206,64 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
  void ControlPoints::setY(const std::vector<double> &value)
  {
      y = value;
+ }
+
+ void ControlPoints::getSubdividePointsFromKernel( double *kernel,int size_kernel,int n,std::vector<double> &x, std::vector<double> &y){
+
+     double sumx=0;
+     double sumy=0;
+     int end = ((size_kernel%n)==0) ? size_kernel : (size_kernel-n);
+     for (int i = 0; i < end; i+=n) {
+         sumx=0;
+         sumy=0;
+         for (int j = 0; j < n; j++) {
+             sumx+=j+(i+1);
+             sumy+=kernel[j+i];
+         }
+         x.push_back(sumx/n);
+         y.push_back(sumy/n);
+     }
+     if(size_kernel%n !=0){
+         sumx=0;
+         sumy=0;
+         int count=0;
+         for (int i = (size_kernel-(n-1)); i < size_kernel; i++) {
+             sumx+=(i+1);
+             sumy+=kernel[i];
+              count++;
+         }
+         x.push_back(sumx/count);
+         y.push_back(sumy/count);
+     }
+ }
+
+ void ControlPoints::getSubdividePointsFromControlPoints(std::vector< double> x, std::vector< double> y, int n, std::vector<double> &xOutput, std::vector<double> &yOutput){
+     double sumx=0;
+     double sumy=0;
+     int end = ((y.size()%n)==0) ? y.size() : (y.size()-n);
+     for (int i = 0; i < end; i+=n) {
+         sumx=0;
+         sumy=0;
+         for (int j = 0; j < n; j++) {
+             sumx+=x[j+i];
+             sumy+=y[j+i];
+         }
+         xOutput.push_back(sumx/n);
+         yOutput.push_back(sumy/n);
+     }
+
+     if(y.size()%n !=0){
+         sumx=0;
+         sumy=0;
+         int count=0;
+         for (int i = (y.size()-(n-1)); i < y.size(); i++) {
+             sumx+=x[i];
+             sumy+=y[i];
+             count++;
+         }
+         xOutput.push_back(sumx/count);
+         yOutput.push_back(sumy/count);
+     }
+
+
  }
