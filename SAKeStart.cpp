@@ -337,11 +337,12 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const QVariant &textN)
 {
     std::vector<std::vector<double> > matrixGamma1;
+    int numberElementsTable = 12;
     QList <QVariant> tmpGamma1 = matrxGamma1QML[0].toList();
     for (int i = 1; i < tmpGamma1[0].toInt()+1; ++i) {
         QList <QVariant> tmpGammat1 = matrxGamma1QML[i].toList();
         std::vector<double> tmp;
-        for (int j = 0; j < 9; ++j) {
+        for (int j = 0; j < numberElementsTable; ++j) {
             cout << tmpGammat1[j].toDouble() << " ";
             tmp.push_back(tmpGammat1[j].toDouble());
         }
@@ -354,7 +355,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 1; i < tmpGamma2[0].toInt()+1; ++i) {
         QList <QVariant> tmpGammat2 = matrixGamma2QML[i].toList();
         std::vector<double> tmp;
-        for (int j = 0; j < 9; ++j) {
+        for (int j = 0; j < numberElementsTable; ++j) {
             cout << tmpGammat2[j].toDouble() << " ";
             tmp.push_back(tmpGammat2[j].toDouble());
         }
@@ -367,7 +368,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 1; i < tmpGamma3[0].toInt()+1; ++i) {
         QList <QVariant> tmpGammat3 = matrixLinearQML[i].toList();
         std::vector<double> tmp;
-        for (int j = 0; j < 9; ++j) {
+        for (int j = 0; j < numberElementsTable; ++j) {
             cout << tmpGammat3[j].toDouble() << " ";
             tmp.push_back(tmpGammat3[j].toDouble());
         }
@@ -482,6 +483,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(idProject));
     progressBar->setProperty("maximumValue",100);
     progressBar->setProperty("minimumValue",0);
+    qCustomPlotRegression->setNumber_of_function(matrixGamma1.size()+matrixGamma2.size()+matrixLinear.size());
 
     QObject *buttonStop = rootObject->findChild<QObject*>(QString("stop%1").arg(idProject));
 
@@ -525,26 +527,31 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     percantageLinearB= new double[dimension];
     double * percantageW;
     percantageW= new double[dimension];
+    double* translation= new double[dimension];
+
     count = 0;
     for (int i = 0; i < matrixLinear.size(); ++i) {
         functionType[count]=0;
         percantageLinearA[count]=matrixLinear[i][6];
         percantageLinearB[count]=matrixLinear[i][7];
         percantageW[count]=matrixLinear[i][8];
+        translation[count] = matrixLinear[i][11];
         count++;
     }
     for (int i = 0; i < matrixGamma1.size(); ++i) {
-        functionType[count]=2;
+        functionType[count]=1;
         percantageGammaA[count]=(matrixGamma1[i][6]);
         percantageGammaB[count]=(matrixGamma1[i][7]);
         percantageW[count]=(matrixGamma1[i][8]);
+        translation[count] =matrixGamma1[i][11];
         count++;
     }
     for (int i =  0; i <  matrixGamma2.size(); ++i) {
         functionType[count]=2;
         percantageGammaA[count]=(matrixGamma2[i][6]);
         percantageGammaB[count]=(matrixGamma2[i][7]);
-        percantageW[count]=(matrixGamma2[i][8]);
+        percantageW[count]=matrixGamma2[i][8];
+        translation[count] =matrixGamma2[i][11];
         count++;
     }
 
@@ -559,6 +566,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         double tmp2=fRand(matrixLinear[i][2],matrixLinear[i][3]);
         //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
+        double tmp3=fRand(matrixLinear[i][9],matrixLinear[i][10]);
+        //std::cout <<tmp3<< std::endl;
+        tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;
     }
@@ -571,6 +581,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         double tmp2=fRand(matrixGamma1[i][2],matrixGamma1[i][3]);
         //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
+        double tmp3=fRand(matrixGamma1[i][9],matrixGamma1[i][10]);
+        //std::cout <<tmp3<< std::endl;
+        tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;
 
@@ -583,6 +596,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         double tmp2=fRand(matrixGamma2[i][2],matrixGamma2[i][3]);
         //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
+        double tmp3=fRand(matrixGamma2[i][9],matrixGamma2[i][10]);
+        //std::cout <<tmp3<< std::endl;
+        tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;
 
@@ -612,7 +628,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                 imaxGeneration,
                 dpercentageCrossover,
                 dpercentageMutation,
-                inumberProcessor
+                inumberProcessor,
+                translation
                 );
 
     std::vector< double> x;
@@ -646,6 +663,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
             }
 
     delete controlPoints;
+
+    qCustomPlotRegression->setX(x);
 
 
     regressionController->setQCustomPlotRegression(qCustomPlotRegression);

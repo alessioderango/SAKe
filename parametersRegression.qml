@@ -74,7 +74,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter
                         }
 
-                        Label {
+                        TextField {
                             id: projectName
                             text: qsTr("Name")
                             Layout.alignment: Qt.AlignHCenter
@@ -297,7 +297,7 @@ ApplicationWindow {
                                 TextField {
                                     id: textFieldMaxGeneration
                                     width: 63
-                                    text: "50000"
+                                    text: "1000000"
                                     placeholderText: "Max Number of Generation"
                                     validator: RegExpValidator {
                                         regExp: /^[1-9]\d+/
@@ -451,7 +451,10 @@ ApplicationWindow {
                                                               wmin: "0.02",
                                                               pa: "0.03",
                                                               pb: "0.03",
-                                                              pw: "0.03"})
+                                                              pw: "0.03",
+                                                              tmin: "0",
+                                                              tmax: "0",
+                                                              tp: "0"})
                                     }
                                     textFieldGammaFunctions.text="1"
                                 }
@@ -681,6 +684,57 @@ ApplicationWindow {
                                 resizable: false
                             }
 
+                            TableViewColumn {
+                                width: 90
+                                movable: false
+                                title: "Translation max"
+                                role: "tmax"
+                                delegate: TextField {
+                                    text: model.tmax
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tmax = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 90
+                                movable: false
+                                title: "Translation min"
+                                role: "tmin"
+                                delegate: TextField {
+                                    text: model.tmin
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tmin = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 100
+                                movable: false
+                                title: "Translation percentage"
+                                role: "tp"
+                                delegate: TextField {
+                                    text: model.tp
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tp = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
                             objectName: "tableView1"
                             model: tableModel
                             backgroundVisible: true
@@ -772,7 +826,10 @@ ApplicationWindow {
                                                            wmin: "0.2",
                                                            pa: "0.03",
                                                            pb: "0.03",
-                                                           pw: "0.03"})
+                                                           pw: "0.03",
+                                                           tmin: "0",
+                                                           tmax: "0",
+                                                           tp: "0"})
                                     tableModel2.append({ nFunction:2,
                                                            bmax: "80",
                                                            bmin: "20",
@@ -782,7 +839,10 @@ ApplicationWindow {
                                                            wmin: "0.2",
                                                            pa: "0.03",
                                                            pb: "0.03",
-                                                           pw: "0.03"})
+                                                           pw: "0.03",
+                                                           tmin: "0",
+                                                           tmax: "0",
+                                                           tp: "0"})
                                     tableModel2.append({ nFunction:3,
                                                            bmax: "350",
                                                            bmin: "150",
@@ -792,7 +852,10 @@ ApplicationWindow {
                                                            wmin: "0.2",
                                                            pa: "0.03",
                                                            pb: "0.03",
-                                                           pw: "0.03"})
+                                                           pw: "0.03",
+                                                           tmin: "0",
+                                                           tmax: "0",
+                                                           tp: "0"})
 
 
                                 }
@@ -1004,6 +1067,57 @@ ApplicationWindow {
                                 resizable: false
                             }
 
+                            TableViewColumn {
+                                width: 90
+                                movable: false
+                                title: "Translation max"
+                                role: "tmax"
+                                delegate: TextField {
+                                    text: model.tmax
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tmax = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 90
+                                movable: false
+                                title: "Translation min"
+                                role: "tmin"
+                                delegate: TextField {
+                                    text: model.tmin
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tmin = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 100
+                                movable: false
+                                title: "Translation percentage"
+                                role: "tp"
+                                delegate: TextField {
+                                    text: model.tp
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tp = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
                             objectName: "tableView1"
                             model: tableModel2
                             backgroundVisible: true
@@ -1047,10 +1161,10 @@ ApplicationWindow {
                                             }
                                             for(var i = tableModel3.count;i< text;i++){
                                                 tableModel3.insert(i,{ nFunction:i+1,
-                                                                       bmax: "350",
-                                                                       bmin: "150",
-                                                                       amax: "7",
-                                                                       amin: "2",
+                                                                       amax: "0.0005",
+                                                                       amin: "-0.0005",
+                                                                       bmax: "0.1",
+                                                                       bmin: "0.003",
                                                                        wmax: "2",
                                                                        wmin: "0.2",
                                                                        pa: "0.03",
@@ -1086,15 +1200,18 @@ ApplicationWindow {
                                     textFieldLinearFunction.text="1"
                                     tableModel3.clear()
                                     tableModel3.append({ nFunction:1,
-                                                           bmax: "0.5",
-                                                           bmin: "0",
-                                                           amax: "0.5",
-                                                           amin: "-0.5",
+                                                           amax: "0.0005",
+                                                           amin: "-0.0005",
+                                                           bmax: "0.1",
+                                                           bmin: "0.003",
                                                            wmax: "2",
                                                            wmin: "0.2",
                                                            pa: "0.03",
                                                            pb: "0.03",
-                                                           pw: "0.03"})
+                                                           pw: "0.03",
+                                                           tmin: "0",
+                                                           tmax: "0",
+                                                           tp: "0"})
                                 }
                                 width: 63
                                 placeholderText: "Number of gamma functions"
@@ -1254,6 +1371,57 @@ ApplicationWindow {
                                     onTextChanged: {
                                         tableModel3.get(styleData.row).pw = text
                                     }
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 90
+                                movable: false
+                                title: "Translation max"
+                                role: "tmax"
+                                delegate: TextField {
+                                    text: model.tmax
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tmax = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 90
+                                movable: false
+                                title: "Translation min"
+                                role: "tmin"
+                                delegate: TextField {
+                                    text: model.tmin
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tmin = text
+                                    }
+
+                                }
+
+                                resizable: false
+                            }
+
+                            TableViewColumn {
+                                width: 100
+                                movable: false
+                                title: "Translation percentage"
+                                role: "tp"
+                                delegate: TextField {
+                                    text: model.tp
+                                    validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                    onTextChanged: {
+                                        tableModel.get(styleData.row).tp = text
+                                    }
+
                                 }
 
                                 resizable: false
@@ -1522,6 +1690,9 @@ ApplicationWindow {
                             matrixGamma1[i+1][6]=tmp.pa
                             matrixGamma1[i+1][7]=tmp.pb
                             matrixGamma1[i+1][8]=tmp.pw
+                            matrixGamma1[i+1][9]=tmp.tmax
+                            matrixGamma1[i+1][10]=tmp.tmin
+                            matrixGamma1[i+1][11]=tmp.tp
                             //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
                             //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
@@ -1542,6 +1713,9 @@ ApplicationWindow {
                             matrixGamma2[i+1][6]=tmp.pa
                             matrixGamma2[i+1][7]=tmp.pb
                             matrixGamma2[i+1][8]=tmp.pw
+                            matrixGamma2[i+1][9]=tmp.tmax
+                            matrixGamma2[i+1][10]=tmp.tmin
+                            matrixGamma2[i+1][11]=tmp.tp
                             //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
                             //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }
@@ -1562,6 +1736,9 @@ ApplicationWindow {
                             matrixGamma3[i+1][6]=tmp.pa
                             matrixGamma3[i+1][7]=tmp.pb
                             matrixGamma3[i+1][8]=tmp.pw
+                            matrixGamma3[i+1][9]=tmp.tmax
+                            matrixGamma3[i+1][10]=tmp.tmin
+                            matrixGamma3[i+1][11]=tmp.tp
                             //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
                             //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                         }

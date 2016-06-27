@@ -85,6 +85,13 @@ public:
 
         double maxGammaWeight  = 2;
         double minGammaWeight  = 0.2;
+
+        double maxAlfaGammaMinus1 = 0.9999;
+        double minAlfaGammaMinus1 = 0.0001;
+
+        double maxBetaGammaMinus1 = 399;
+        double minBetaGammaMinus1 = 0.0001;
+
         for (int j = 0; j < rndMaxMut; j++) {
             int i =  rand() %  (_genotype.getParConst().size());
             //Linear
@@ -132,11 +139,41 @@ public:
 
             }else
                 if(_genotype.getFunctionType(i) == 1){
-                    //double tmp =_genotype.getPar(i).getParameters(0);
-                    double rndDouble= fRand(-(_genotype.getPar(i).getParameters(0)*0.0001),_genotype.getPar(i).getParameters(0)*0.0001);
-                    _genotype.setParameters(i,0,_genotype.getPar(i).getParameters(0)+ rndDouble);
+                    double tmp1 =_genotype.getPar(i).getParameters(0);
+                    double tmp2 = _genotype.getPar(i).getParameters(1);
+                    double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationGammaA(i)),tmp1*_genotype.getPercentageVariationGammaA(i));
+                    double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationGammaB(i)),tmp2*_genotype.getPercentageVariationGammaB(i));
+
+                    double tmpAlfa = tmp1+ rndDoubleAlfa;
+                    double tmpBeta = tmp2+ rndDoubleBeta;
+
+                    if(tmpBeta > maxBetaGammaMinus1)
+                        tmpBeta = maxBetaGammaMinus1;
+
+                    if(tmpBeta <= minBetaGammaMinus1)
+                        tmpBeta = minBetaGammaMinus1;
+
+
+                    if(tmpAlfa > maxAlfaGammaMinus1)
+                        tmpAlfa = maxAlfaGammaMinus1;
+
+                    if(tmpAlfa <= minAlfaGammaMinus1)
+                        tmpAlfa = minAlfaGammaMinus1;
+
+
+                    _genotype.setParameters(i,0,tmpAlfa);
+                    _genotype.setParameters(i,1,tmpBeta);
 
                     //controllo > 0
+                    double rndDoubleW= fRand(-(_genotype.getW(i)*_genotype.getPercentageVariationWeight(i)),_genotype.getW(i)*_genotype.getPercentageVariationWeight(i));
+                    double tmpGammaWeight=_genotype.getW(i)+rndDoubleW;
+                    if(tmpGammaWeight > maxGammaWeight)
+                        tmpGammaWeight = maxGammaWeight;
+
+                    if(tmpGammaWeight < minGammaWeight)
+                        tmpGammaWeight = minGammaWeight;
+
+                    _genotype.setW(i,tmpGammaWeight);
 
                 }else
                     if(_genotype.getFunctionType(i) == 2){
@@ -144,6 +181,8 @@ public:
                         double tmp2 = _genotype.getPar(i).getParameters(1);
                         double rndDoubleAlfa= fRand(-(tmp1*_genotype.getPercentageVariationGammaA(i)),tmp1*_genotype.getPercentageVariationGammaA(i));
                         double rndDoubleBeta= fRand(-(tmp2*_genotype.getPercentageVariationGammaB(i)),tmp2*_genotype.getPercentageVariationGammaB(i));
+
+
 
                         double tmpBeta = tmp2+ rndDoubleBeta;
 
@@ -158,16 +197,20 @@ public:
 
                         if(tmpBeta > 0 && tmpBeta <= 1)
                         {
-                            if(tmpAlfa > 500)
-                                tmpAlfa = 500;
+                            if(tmpAlfa > 250)
+                                tmpAlfa = 250;
+//                            if(tmpAlfa > 500)
+//                                tmpAlfa = 500;
 
                             if(tmpAlfa <= 1)
                                 tmpAlfa = 1.0001;
                         }else
                             if(tmpBeta > 1 && tmpBeta <= 10)
                             {
-                                if(tmpAlfa > 100)
-                                    tmpAlfa = 100;
+                                if(tmpAlfa > 50)
+                                    tmpAlfa = 50;
+//                                if(tmpAlfa > 100)
+//                                    tmpAlfa = 100;
 
                                 if(tmpAlfa <= 1)
                                     tmpAlfa = 1.0001;
@@ -175,16 +218,20 @@ public:
                             else
                                 if(tmpBeta > 10 && tmpBeta <= 100)
                                 {
-                                    if(tmpAlfa > 40)
-                                        tmpAlfa = 40;
+                                    if(tmpAlfa > 25)
+                                        tmpAlfa = 25;
+//                                    if(tmpAlfa > 40)
+//                                        tmpAlfa = 40;
 
                                     if(tmpAlfa <= 1)
                                         tmpAlfa = 1.0001;
                                 }else
                                     if(tmpBeta > 100 && tmpBeta <= 400)
                                     {
-                                        if(tmpAlfa > 8)
-                                            tmpAlfa = 8;
+                                        if(tmpAlfa > 4)
+                                            tmpAlfa = 4;
+//                                        if(tmpAlfa > 8)
+//                                            tmpAlfa = 8;
 
                                         if(tmpAlfa <= 1)
                                             tmpAlfa = 1.0001;
@@ -203,6 +250,21 @@ public:
                             tmpGammaWeight = minGammaWeight;
 
                         _genotype.setW(i,tmpGammaWeight);
+                    }
+
+                    if(_genotype.getTranslationConst(i) !=0)
+                    {
+                        double percentageTranslation = _genotype.getPar(i).getParameters(2);
+                        double tmpTranslation= fRand(-(percentageTranslation*_genotype.getTranslation(i)),percentageTranslation*_genotype.getTranslation(i));
+
+                        if(tmpTranslation < 0){
+                            tmpTranslation=0;
+                        }
+                        if(tmpTranslation > _genotype.getYCombinataConst().size()){
+                            tmpTranslation=_genotype.getYCombinataConst().size();
+                        }
+
+                        _genotype.setParameters(i,2,_genotype.getPar(i).getParameters(2)+tmpTranslation);
                     }
 
 

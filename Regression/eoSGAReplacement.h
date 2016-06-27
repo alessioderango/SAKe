@@ -117,6 +117,7 @@ public :
                 a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
                 a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
                 a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
+                a.setTranslation(popTmp[counter].getTranslation());
 
                 offspring[counter]=a;
                 // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
@@ -139,6 +140,7 @@ public :
                 a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
                 a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
                 a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
+                a.setTranslation(popTmp[counter].getTranslation());
 
                 offspring[counter]= a;
             }
@@ -153,6 +155,7 @@ public :
                 a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
                 a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
                 a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
+                a.setTranslation(popTmp[counter].getTranslation());
 
                 offspring[counter]= a;
             }
