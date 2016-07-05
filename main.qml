@@ -1019,6 +1019,14 @@ import QtQuick.Controls.Styles 1.4
     //            errorcsvActivation.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
     //            errorcsvActivation.open();
     //        }
+    //    MessageDialog {
+    //        id: errorcsvKernel
+    //        objectName: "errorcsvKernel"
+    //        function errorcsvFunction( filename, row, err){
+    //            errorcsvKernel.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
+    //            errorcsvKernel.open();
+    //        }
+
 
     //        title: "Input error"
     //        onAccepted: close()

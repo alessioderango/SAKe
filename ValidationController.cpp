@@ -1,16 +1,28 @@
 #include "ValidationController.h"
 
 ValidationController::ValidationController(
-                                           QString  filenameRainPath,
-                                           QString  filenameActivationPath,
-                                           QString  filenameKernelPath,
-                                           QString  folderSave
+                                           Rain *  rain,
+                                           int  rain_size,
+                                           Activation *  activations,
+                                           int  activations_size,
+                                           double * Fi,
+                                           int size,
+                                           double zCr
                                            )
 {
        //CARICO I CSV
 //       HandlerCSV::loadCSVRain(filenameRainPath,rain,rain_size);
 //       HandlerCSV::loadCSVActivation(filenameActivationPath,activations,activations_size);
 //       HandlerCSV::loadCSVKernel(filenameKernelPath,Fi,size,zCr);
+    this->rain = rain;
+    this->rain_size = rain_size;
+    this->activations_size = activations_size;
+    this->Fi = Fi;
+    this->size = size;
+    this->zCr = zCr;
+
+
+
 }
 
 void ValidationController::setPlotMobility(CustomPlotMobilityFunction *value)

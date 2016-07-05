@@ -80,7 +80,7 @@ public:
         double maxLinearWeight  = 2;
         double minLinearWeight  = 0.2;
 
-        double maxGammaBeta = 400;
+        double maxGammaBeta = 10;
         double minGammaBeta  = 0.0001;
 
         double maxGammaWeight  = 2;
@@ -89,7 +89,7 @@ public:
         double maxAlfaGammaMinus1 = 0.9999;
         double minAlfaGammaMinus1 = 0.0001;
 
-        double maxBetaGammaMinus1 = 399;
+        double maxBetaGammaMinus1 = 250;
         double minBetaGammaMinus1 = 0.0001;
 
         for (int j = 0; j < rndMaxMut; j++) {
@@ -197,8 +197,8 @@ public:
 
                         if(tmpBeta > 0 && tmpBeta <= 1)
                         {
-                            if(tmpAlfa > 250)
-                                tmpAlfa = 250;
+                            if(tmpAlfa > 10)
+                                tmpAlfa = 10;
 //                            if(tmpAlfa > 500)
 //                                tmpAlfa = 500;
 
@@ -207,8 +207,8 @@ public:
                         }else
                             if(tmpBeta > 1 && tmpBeta <= 10)
                             {
-                                if(tmpAlfa > 50)
-                                    tmpAlfa = 50;
+                                if(tmpAlfa > 10)
+                                    tmpAlfa = 10;
 //                                if(tmpAlfa > 100)
 //                                    tmpAlfa = 100;
 

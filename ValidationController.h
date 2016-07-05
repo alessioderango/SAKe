@@ -17,11 +17,14 @@ class ValidationController
 {
 public:
     ValidationController(
-                         QString  filenameRainPath,
-                         QString  filenameActivationPath,
-                         QString  filenameKernelPath,
-                         QString  folderSave
-                         );
+            Rain *  rain,
+            int  rain_size,
+            Activation *  activations,
+            int  activations_size,
+            double * Fi,
+            int size,
+            double zCr
+            );
     void setPlotMobility(CustomPlotMobilityFunction *value);
     void setKernelPlot(CustomPlotKernel *value);
     void updateKernelPlot();
