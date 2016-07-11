@@ -325,26 +325,8 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::v
     {
         m_CustomPlot->axisRect()->setRangeDrag(0);
         m_CustomPlot->axisRect()->setRangeZoom(0);
-//        for(int i = 0; i < activation_size;i++){
-//            QCPItemText textLabel = new QCPItemText(m_CustomPlot);
-//            m_CustomPlot->addItem(textLabel);
-//            textLabel->setPositionAlignment(Qt::AlignTop);
-//            textLabel->position->setType(QCPItemPosition::ptPlotCoords);
-//            //textLabel->position->setCoords(0.2, 0); // place position at center/top of axis rect
-//            //textLabel->setText("Text Item Demo");
-//            //textLabel->setFont(QFont(font().family(), 16)); // make font a bit larger
-//            //textLabel->setPen(QPen(Qt::black)); // show black border around text
-//            widgetArray.push_back(textLabel);
 
-//            QCPItemLine arrow = new QCPItemLine(m_CustomPlot);
-//            m_CustomPlot->addItem(arrow);
-//            //arrow->start->setParentAnchor(textLabel->bottom);
-//            arrow->end->setType(QCPItemPosition::ptPlotCoords);
-//            //arrow->end->setCoords(0.23, 1.6); // point to (4, 1.6) in x-y-plot coordinates
-//            arrow->setHead(QCPLineEnding::esSpikeArrow);
-//            arrowArray.push_back(arrow);
-//        }
-
+        std::sort(bests.begin(), bests.end(), [](Ym a, Ym b) { return a.getValue() > b.getValue(); });
 
 
         for(unsigned int i = 0; i < bests.size();i++){
@@ -374,8 +356,6 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::v
         QVector<double> time(rain_size), value(rain_size);
         for (int i=0; i<rain_size; i++)
         {
-            // qDebug() << mktime(&(rain[i].getTime()));
-            // boost::posix_time::time_duration diff1 =(rain0-ptime(date(1970, Jan, 1)));
             ptime raintime = ptime_from_tm(rain[i].getTime());
             boost::posix_time::time_duration diff =(raintime-ptime(date(1970, Jan, 1)));
             time[i] = diff.total_seconds();
@@ -385,9 +365,6 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::v
         }
 
         m_CustomPlot->graph(0)->setData(time, value);
-        //m_CustomPlot->yAxis->setRange( 0,max );
-
-
 
         QVector<double> timetmp(rain_size),ytime(rain_size),ytime2(rain_size);
         for (int i=0; i<rain_size; i++){
@@ -395,7 +372,6 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::v
             ytime[i]=YmMin.getValue();
             ytime2[i]=YmMin2.getValue();
         }
-        //    m_CustomPlot->graph(1)->setLineStyle((QCPGraph::LineStyle)0);
         m_CustomPlot->graph(1)->setData(time, ytime);
         m_CustomPlot->graph(2)->setData(time, ytime2);
 
@@ -406,27 +382,6 @@ void CustomPlotMobilityFunction::updateGraph(double *Y,Ym YmMin,Ym YmMin2,std::v
         xPoint[0]=(ptime_from_tm(YmMin.getTime())-ptime(date(1970, Jan, 1))).total_seconds();
         xPoint[1]=(ptime_from_tm(YmMin2.getTime())-ptime(date(1970, Jan, 1))).total_seconds();
         m_CustomPlot->graph(3)->setData(xPoint, yPoint);
-
-        //     m_CustomPlot->addGraph();
-        //       pen.setColor(QColor(qSin(1+1.2)*80+80, qSin(0.3+0)*80+80, qSin(0.3+1.5)*80+80));
-        //       m_CustomPlot->graph(1)->setPen(pen);
-        //       m_CustomPlot->graph(1)->setName(lineNames.at(QCPGraph::lsNone));
-        //       m_CustomPlot->graph(1)->setLineStyle((QCPGraph::LineStyle));
-        //       m_CustomPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
-
-        //       // generate data:
-        //       QVector<double> x(15), y(15);
-        //       for (int j=0; j<activation_size; j++)
-        //       {
-        //         x[j] = activation[j].;
-        //         y[j] = 7*qSin(x[j])/x[j] - (i-QCPGraph::lsNone)*5 + (QCPGraph::lsImpulse)*5 + 2;
-        //       }
-        //       m_CustomPlot->graph(1)->setData(x, y);
-        //       m_CustomPlot->graph(1)->rescaleAxes(true);
-
-        /* m_CustomPlot->graph(1)->setData(x, y);
-      m_CustomPlot->graph(1)->rescaleAxes(true);
-   m_CustomPlot->replot();*/
         m_CustomPlot->axisRect()->setRangeDrag(Qt::Horizontal|Qt::Vertical);
         m_CustomPlot->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
 

@@ -33,6 +33,43 @@ void ValidationController::setPlotMobility(CustomPlotMobilityFunction *value)
     plotMobility->initCustomPlotMobilityFunction();
 }
 
+static int  compareDouble (const void * a, const void * b)
+{
+    // - perche decrescente
+  if( (double)(((Ym*)a)->getValue()) > (double)(((Ym*)b)->getValue()) ){
+      return -1;
+  }
+  if( (double)(((Ym*)a)->getValue()) < (double)(((Ym*)b)->getValue()) ){
+      return 1;
+  }
+  if( (double)(((Ym*)a)->getValue()) == (double)(((Ym*)b)->getValue()) ){
+      return 0;
+  }
+}
+int getDifferenceTime(tm temp1,tm temp2){
+    ptime rain0 = ptime_from_tm(temp1);
+    ptime rainLast = ptime_from_tm(temp2);
+    boost::posix_time::time_duration diff1 =(rain0-ptime(date(1970, Jan, 1)));
+    boost::posix_time::time_duration diff2 =(rainLast-ptime(date(1970, Jan, 1)));
+    std::time_t x = diff1.total_seconds();
+    std::time_t y = diff2.total_seconds();
+    if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) )
+    {
+        //TODO [differenza in minuti] [differenza in ore] [ differenza in giorni ]
+        int difference = std::difftime(y, x) / (60*60*24);
+//	        std::cout << std::ctime(&x);
+//	        std::cout << std::ctime(&y);
+//	        std::cout << "difference = " << difference << " days" << std::endl;
+        return difference;
+    }
+    return -1;
+}
+
+void getYmDecr(Ym*&ym,int &size){
+    qsort (ym, size, sizeof(Ym),compareDouble);
+
+}
+
 void ValidationController::updatePlot(){
     //Calcolo Mobiliy Function
     double * Y = new double[rain_size];
@@ -45,7 +82,66 @@ void ValidationController::updatePlot(){
             }
         Y[t] = ym;
     }
-   plotMobility->updateGraph(Y,zCr);
+
+
+    double f=0;
+    Ym * ym= new Ym[rain_size];
+    int countYm=0;
+
+    for (int t = 1; t < rain_size-1; t++) {
+        bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
+        if(cross){
+            // trovato un picco deve essere considerato
+            ym[countYm].setValue(Y[t]);
+            ym[countYm].setTime(rain[t].getTime());
+            countYm++;
+        }
+    }
+
+    getYmDecr(ym,countYm);
+
+//        for (int i = 0; i < countYm; i++) {
+//               printf("ym[%d] %f \n",i, ym[i].getValue());
+
+//        }
+//        printf("countYm %d \n",countYm);
+
+
+    double YsMin = 999999999;
+    int iMin =-1;
+    std::vector<Ym> bests;
+    for (int s = 0; s < activations_size; s++) {
+        for (int i = 0; i < countYm; i++) {
+            //TODO inserire variabili intervallo giorni
+            int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
+            int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
+            if(result1>=-2 && result2>=-1){
+                //if(i<countYm)
+                //if(i<(activations_size)){
+                // printf("i %d \n",i);
+                // printf("f %f \n",f);
+                    f += 1 / (double)(i + 1);
+                    bests.push_back(ym[i]);
+//                        int year = ym[i].getTime().tm_year +1900;
+//                        int mon = ym[i].getTime().tm_mon +1;
+//                        int day = ym[i].getTime().tm_mday ;
+//                        std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
+//                        std::cout << "ym[i] value " << ym[i].getValue() << std::endl;
+                    //printf("+  %f \n",(1 / (double)(i + 1)));
+                    if(ym[i].getValue() < YsMin){
+                        YsMin =ym[i].getValue();
+                        iMin=i;
+                    }//if
+                    break;
+                //}
+                // calcolo valori per calcolare dYcr per risparmiare calcoli
+
+            }//if
+        }//for
+    }//for
+    Ym ymMin= ym[iMin];
+    Ym ymMin2 = ym[iMin+1];
+   plotMobility->updateGraph(Y,ymMin,ymMin2,bests);
 }
 
 Rain *ValidationController::getRain() const

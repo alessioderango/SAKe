@@ -11,7 +11,13 @@
 #include <algorithm>
 #include <iostream>
 #include "handlercsv.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/date_time/local_time_adjustor.hpp"
+#include "boost/date_time/c_local_time_adjustor.hpp"
 using namespace std;
+using boost::posix_time::ptime;
+using namespace boost::gregorian;
+using namespace boost::posix_time;
 
 class ValidationController
 {
