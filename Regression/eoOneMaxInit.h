@@ -45,7 +45,8 @@ public:
                   double* _percentualeGammaA,
                   int _percentualeGammaASize,
                   double* _percentualeGammaB,
-                  int _percentualeGammaBSize
+                  int _percentualeGammaBSize,
+                  double* translation
                   ) : vecSize(_vecSize)
       // END eventually add or modify the anyVariable argument
     {
@@ -66,7 +67,8 @@ public:
         percentualeGammaASize=_percentualeGammaASize;
         percentualeGammaB=_percentualeGammaB;
         percentualeGammaBSize=_percentualeGammaBSize;
-
+        this->translation = translation;
+        translationSize=functionTypesSize;
 
         // END   Code of Ctor of an eoOneMaxInit object
     }
@@ -125,6 +127,15 @@ public:
         for (int i = 0; i < percentualeGammaBSize; i++) {
             _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
         }
+        for (int i = 0; i < percentualeGammaBSize; i++) {
+            _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
+        }
+
+        for (int i = 0; i < translationSize; i++) {
+            std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
+            _genotype.addTranslation(this->translation[i]);
+        }
+        std::cout <<  std::endl;
 //        _genotype.setPercentageVariationWeight(percentageWeight);
 //        _genotype.setPercentageVariationLinearA(percentageLineareA);
 //        _genotype.setPercentageVariationLinearB(percentageLineareB);
@@ -154,6 +165,9 @@ private:
     int percentualeGammaASize;
     double* percentualeGammaB;
     int percentualeGammaBSize;
+    double* translation;
+    int translationSize;
+
     //  varType anyVariable;		   // for example ...
     // END   Private data of an eoOneMaxInit object
 };

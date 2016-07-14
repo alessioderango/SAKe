@@ -101,7 +101,8 @@ public:
                              int imaxGeneration,
                              double dpercentageCrossover,
                              double dpercentageMutation,
-                             int inumberProcessor );
+                             int inumberProcessor,
+                             double * percantageTranslation);
     RegressionController();
     CustomPlotItem *getQCustomPlotFitness() const;
     void setQCustomPlotFitness(CustomPlotItem *value);
@@ -183,7 +184,7 @@ private:
     int maxGeneration;
     double percentageCrossover;
     double percentageMutation;
-
+    double* translation;
     std::vector< double> x;
     std::vector< double> y;
 

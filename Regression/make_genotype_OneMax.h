@@ -73,6 +73,7 @@ eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser,
                                int _percentualeGammaASize,
                                double* _percentualeGammaB,
                                int _percentualeGammaBSize,
+                               double* percantageTranslation,
                                EOT)
 {
   // read any useful parameter here from the parser
@@ -100,7 +101,8 @@ eoInit<EOT> & do_make_genotype(eoParameterLoader& _parser,
               _percentualeGammaA,
               _percentualeGammaASize,
               _percentualeGammaB,
-              _percentualeGammaBSize);
+              _percentualeGammaBSize,
+              percantageTranslation);
   // store in state
   _state.storeFunctor(init);
   // and return a reference

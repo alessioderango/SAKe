@@ -80,7 +80,7 @@ public:
             //cout << "fitness "<< endl;
             std::vector< std::vector<double> > matrixY(_eo.getWConst().size(),std::vector<double>(x.size()));
 
-//            cout << endl;
+            //            cout << endl;
             //cout << "x.size() " << x.size() << endl;
             for (int i = 0; i < _eo.getWConst().size(); ++i) {
 
@@ -96,14 +96,10 @@ public:
                             yTmp=0;
 
                     }else
-                        if(_eo.getFunctionType(i) == 1){
-                            yTmp =_eo.getPar(i).getParameters(0)*exp(-(_eo.getPar(i).getParameters(0)*x[j]));
-                            // cout << "yTmp 1 " << yTmp << endl;
-
-                        }else
-                            if(_eo.getFunctionType(i) == 2){
+                         if(_eo.getFunctionType(i) == 2 || _eo.getFunctionType(i) == 1){
                                 double alfa=_eo.getPar(i).getParameters(0);
                                 double beta=_eo.getPar(i).getParameters(1);
+                                double translation=_eo.getPar(i).getParameters(2);
 
                                 // std::gamma_distribution<double> distribution(alfa,beta);
 
@@ -111,32 +107,38 @@ public:
                                 //yTmp =(pow(x[j],_eo.getPar(i).getParameters(0)-1)*exp(-(x[j]/_eo.getPar(i).getParameters(1)))) / (pow(_eo.getPar(i).getParameters(1),_eo.getPar(i).getParameters(0))*tgamma(_eo.getPar(i).getParameters(0)));
 
                                 //  cout << "yTmp 2 " << yTmp << endl;
+                                if(translation != 0 && x[j] < translation)
+                                    yTmp = 0;
+                                else
+                                    yTmp = gamma_pdf(alfa,beta,x[j]-translation);
+//                                    yTmp = gamma_pdf(alfa,beta,x[j]);
 
-                                yTmp = gamma_pdf(alfa,beta,x[j]);
-
-                               // cout << "alfa = " << alfa << " beta = " << beta << " W = " << _eo.getW(i) << " x = " << x[j] << " y = " << _eo.getW(i)*yTmp << endl;
+                                // cout << "alfa = " << alfa << " beta = " << beta << " W = " << _eo.getW(i) << " x = " << x[j] << " y = " << _eo.getW(i)*yTmp << endl;
 
                             }
 
-                   matrixY[i][j]=(_eo.getW(i)*yTmp);
+                      matrixY[i][j]=(_eo.getW(i)*yTmp);
+                      //matrixY[i][j]=(yTmp);
                 }
                 //cout << "*********************************************** FINE" << endl;
             }
-//            for (int i = 0; i < _eo.getWConst().size(); i++) {
-//                for (int j = 0; j < x.size(); j++) {
-//                    cout << matrixY[i][j] << " ";
-//                }
+//            cout << "Valutazione " << endl;
+//                        for (int i = 0; i < _eo.getWConst().size(); i++) {
+//                            //cout << i << "--> ";
+//                            for (int j = 0; j < x.size(); j++) {
+//                                cout << matrixY[i][j] << " ";
+//                            }
 
-//                cout << "FINE" << endl;
-//            }
-//            vector<double> yCombinata;
+//                            cout << endl;
+//                        }
+//                        vector<double> yCombinata;
 
             for (int i = 0; i < x.size(); i++) {
                 double sum=0;
                 for (int j = 0; j < _eo.getWConst().size(); j++) {
                     sum+=matrixY[j][i];
                 }
-               _eo.addYCombinata(sum);
+                _eo.addYCombinata(sum);
             }
 
             double fitness=0;
@@ -144,7 +146,7 @@ public:
                 double tmp = y[i]-_eo.getYCombinataConst(i);
                 fitness+=pow(tmp,2);
             }
-//            cout << "fitness " << fitness << endl;
+            //            cout << "fitness " << fitness << endl;
 
             double media = 0;
             for (int i = 0; i < y.size(); i++) {
@@ -152,7 +154,7 @@ public:
             }
             media = media/y.size();
 
-//            cout << "media " << media << endl;
+            //            cout << "media " << media << endl;
 
             double sommaMedia=0;
             for (int i = 0; i < y.size(); i++) {
@@ -160,41 +162,41 @@ public:
                 sommaMedia+=pow(tmp,2);
             }
 
-//            cout << "sommaMedia " << sommaMedia << endl;
+            //            cout << "sommaMedia " << sommaMedia << endl;
 
-//            cout << "fitness/sommaMedia " << fitness/sommaMedia << endl;
+            //            cout << "fitness/sommaMedia " << fitness/sommaMedia << endl;
 
             double fitFinale = (100*(1-(fitness/sommaMedia)));
-//            cout << "fitness finale " << fitFinale << endl;
+            //            cout << "fitness finale " << fitFinale << endl;
 
-//            cout << "Stampo valutazione" << endl;
-//            cout << "Pesi " << endl;
-//            for (int i = 0; i < _eo.getWConst().size(); ++i) {
-//                cout <<_eo.getW(i) << endl;
-//            }
-//            cout << endl;
-//            cout << "Parametri " << endl;
-//            for (int i = 0; i < _eo.getParConst().size(); ++i) {
-//                cout <<_eo.getFunctionType(i) << endl;
-//                if(_eo.getFunctionType(i) == 0){
-//                    cout << _eo.getPar(i).getParameters(0) << endl;
-//                    cout << _eo.getPar(i).getParameters(1) << endl;
-//                    cout << endl;
-//                }else
-//                    if(_eo.getFunctionType(i) == 1){
-//                        cout << _eo.getPar(i).getParameters(0) << endl;
-//                         cout << endl;
-//                    }else
-//                        if(_eo.getFunctionType(i) == 2){
-//                            cout << _eo.getPar(i).getParameters(0) << endl;
-//                            cout << _eo.getPar(i).getParameters(1) << endl;
-//                            cout << endl;
-//                        }
+            //            cout << "Stampo valutazione" << endl;
+            //            cout << "Pesi " << endl;
+            //            for (int i = 0; i < _eo.getWConst().size(); ++i) {
+            //                cout <<_eo.getW(i) << endl;
+            //            }
+            //            cout << endl;
+            //            cout << "Parametri " << endl;
+            //            for (int i = 0; i < _eo.getParConst().size(); ++i) {
+            //                cout <<_eo.getFunctionType(i) << endl;
+            //                if(_eo.getFunctionType(i) == 0){
+            //                    cout << _eo.getPar(i).getParameters(0) << endl;
+            //                    cout << _eo.getPar(i).getParameters(1) << endl;
+            //                    cout << endl;
+            //                }else
+            //                    if(_eo.getFunctionType(i) == 1){
+            //                        cout << _eo.getPar(i).getParameters(0) << endl;
+            //                         cout << endl;
+            //                    }else
+            //                        if(_eo.getFunctionType(i) == 2){
+            //                            cout << _eo.getPar(i).getParameters(0) << endl;
+            //                            cout << _eo.getPar(i).getParameters(1) << endl;
+            //                            cout << endl;
+            //                        }
 
 
-//            }
-//            cout << endl;
-//            cout << "Fine " << endl;
+            //            }
+            //            cout << endl;
+            //            cout << "Fine " << endl;
 
 
             _eo.fitness(fitFinale);

@@ -267,45 +267,54 @@ void SAKeStart::startValidation(
     int rain_size;
     Activation * activation;
     int activation_size;
+    double * Fi;
+    int size_Fi;
+    double zCr;
     QObject *rootObject = engine->rootObjects().first();
 
-    QObject *errorHandlerRain = rootObject->findChild<QObject*>("errorcsvRain");
-    QObject *errorHandlerActivation = rootObject->findChild<QObject*>("errorcsvActivation");
-    //    int errorRain = HandlerCSV::loadCSVRain(filenameRainPath, rain, rain_size, errorHandlerRain);
-    //    if(errorRain){
-    //        int errorActivation = HandlerCSV::loadCSVActivation(filenameActivaionPath, activation, activation_size, errorHandlerActivation);
-    //        if(errorActivation){
+    QObject *errorHandler = rootObject->findChild<QObject*>("errorcsvHandler");
 
-    ValidationController * validationController=new ValidationController(filenameRainPath.toString(),filenameActivaionPath.toString(),filenameKernelPath.toString(),folderSave.toString());
-    int idProject = threadsController.size();
-    validationController->setActivations(activation);
-    validationController->setActivations_size(activation_size);
-    validationController->setRain(rain);
-    validationController->setRain_size(rain_size);
-    QVariant returnedValue;
-    QVariant msg = "Validation - "+_projectName.toString();
-    QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
+    int errorRain = HandlerCSV::loadCSVRain(filenameRainPath.toString(), rain, rain_size, errorHandler);
+    if(errorRain){
+        int errorActivation = HandlerCSV::loadCSVActivation(filenameActivaionPath.toString(), activation, activation_size, errorHandler);
+        if(errorActivation){
+            int errorKernel = HandlerCSV::loadCSVKernel(filenameKernelPath.toString(), Fi, size_Fi,zCr);
+//            if(errorKernel){
+                ValidationController * validationController=new ValidationController(
+                            rain,
+                            rain_size,
+                            activation,
+                            activation_size,
+                            Fi,
+                            size_Fi,
+                            zCr
+                            );
+                int idProject = threadsController.size();
+                validationController->setActivations(activation);
+                validationController->setActivations_size(activation_size);
+                validationController->setRain(rain);
+                validationController->setRain_size(rain_size);
+                QVariant returnedValue;
+                QVariant msg = "Validation - "+_projectName.toString();
+                QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
 
+                QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, idProject));
+                //FINE
 
+                //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
+                //INIZIO
+                CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
+                validationController->setPlotMobility(qCustomPlotMobilityFunction);
+                validationController->updatePlot();
 
-
-
-    QMetaObject::invokeMethod(rectMain, "addTabValidation", Q_RETURN_ARG(QVariant, returnedValue), Q_ARG(QVariant, msg),Q_ARG(QVariant, idProject));
-    //FINE
-
-    //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
-    //INIZIO
-    CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
-    validationController->setPlotMobility(qCustomPlotMobilityFunction);
-    validationController->updatePlot();
-
-    CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
-    validationController->setKernelPlot(qCustomPlotKernel);
-    validationController->updateKernelPlot();
-    SAKeController* tmp =new SAKeController();
-    threadsController.push_back(tmp);
-    //        }
-    //    }
+                CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
+                validationController->setKernelPlot(qCustomPlotKernel);
+                validationController->updateKernelPlot();
+                SAKeController* tmp =new SAKeController();
+                threadsController.push_back(tmp);
+            }
+        }
+    //}
 
     
 }
@@ -337,11 +346,12 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const QVariant &textN)
 {
     std::vector<std::vector<double> > matrixGamma1;
+    int numberElementsTable = 12;
     QList <QVariant> tmpGamma1 = matrxGamma1QML[0].toList();
     for (int i = 1; i < tmpGamma1[0].toInt()+1; ++i) {
         QList <QVariant> tmpGammat1 = matrxGamma1QML[i].toList();
         std::vector<double> tmp;
-        for (int j = 0; j < 9; ++j) {
+        for (int j = 0; j < numberElementsTable; ++j) {
             cout << tmpGammat1[j].toDouble() << " ";
             tmp.push_back(tmpGammat1[j].toDouble());
         }
@@ -354,7 +364,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 1; i < tmpGamma2[0].toInt()+1; ++i) {
         QList <QVariant> tmpGammat2 = matrixGamma2QML[i].toList();
         std::vector<double> tmp;
-        for (int j = 0; j < 9; ++j) {
+        for (int j = 0; j < numberElementsTable; ++j) {
             cout << tmpGammat2[j].toDouble() << " ";
             tmp.push_back(tmpGammat2[j].toDouble());
         }
@@ -367,7 +377,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     for (int i = 1; i < tmpGamma3[0].toInt()+1; ++i) {
         QList <QVariant> tmpGammat3 = matrixLinearQML[i].toList();
         std::vector<double> tmp;
-        for (int j = 0; j < 9; ++j) {
+        for (int j = 0; j < numberElementsTable; ++j) {
             cout << tmpGammat3[j].toDouble() << " ";
             tmp.push_back(tmpGammat3[j].toDouble());
         }
@@ -389,10 +399,10 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     QString typeExecution="0";
     if(checkKernel.toBool()){
         typeExecution="1";
-        }else
-            if(checkN.toBool()){
-               typeExecution="2";
-            }
+    }else
+        if(checkN.toBool()){
+            typeExecution="2";
+        }
     if(tipo.toInt()==1 )
     {
         xmlManager->SaveXMLFileAlreadyExistRegressionProject(_projectaname.toString(),
@@ -446,21 +456,21 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     bool checkControlPointsWithNBool = checkControlPointsWithN.toBool();
     int n = textN.toInt();
 
-//    qDebug() << "sselction : " << sselction ;
-//    qDebug() << "iselectionElitist : " << iselectionElitist   ;
-//    qDebug() << "ipopulationSize : " << ipopulationSize   ;
-//    qDebug() << "dpercentageCrossover : " << dpercentageCrossover   ;
-//    qDebug() << "dpercentageMutation : " << dpercentageMutation   ;
-//    qDebug() << "sselctiodpercentageWeightn : " << dpercentageWeight   ;
-//    qDebug() << "inumberProcessor : " << inumberProcessor   ;
-//    qDebug() << "inumberGamma : " << inumberGamma   ;
-//    qDebug() << "dpercentageGammaA : " << dpercentageGammaA   ;
-//    qDebug() << "dpercentageGammaB : " << dpercentageGammaB   ;
-//    qDebug() << "inumberLinear : " << inumberLinear   ;
-//    qDebug() << "dpercentageLinearA : " << dpercentageLinearA   ;
-//    qDebug() << "dpercentageLinearB : " << dpercentageLinearB   ;
-//    qDebug() << "imaxGeneration : " << imaxGeneration     ;
-//    qDebug() << "sfileurl : " << sfileurl     ;
+    //    qDebug() << "sselction : " << sselction ;
+    //    qDebug() << "iselectionElitist : " << iselectionElitist   ;
+    //    qDebug() << "ipopulationSize : " << ipopulationSize   ;
+    //    qDebug() << "dpercentageCrossover : " << dpercentageCrossover   ;
+    //    qDebug() << "dpercentageMutation : " << dpercentageMutation   ;
+    //    qDebug() << "sselctiodpercentageWeightn : " << dpercentageWeight   ;
+    //    qDebug() << "inumberProcessor : " << inumberProcessor   ;
+    //    qDebug() << "inumberGamma : " << inumberGamma   ;
+    //    qDebug() << "dpercentageGammaA : " << dpercentageGammaA   ;
+    //    qDebug() << "dpercentageGammaB : " << dpercentageGammaB   ;
+    //    qDebug() << "inumberLinear : " << inumberLinear   ;
+    //    qDebug() << "dpercentageLinearA : " << dpercentageLinearA   ;
+    //    qDebug() << "dpercentageLinearB : " << dpercentageLinearB   ;
+    //    qDebug() << "imaxGeneration : " << imaxGeneration     ;
+    //    qDebug() << "sfileurl : " << sfileurl     ;
     int idProject = threadsController.size();
     QObject *rootObject = engine->rootObjects().first();
     QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
@@ -482,6 +492,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     QObject *progressBar = rootObject->findChild<QObject*>(QString("progressBar%1").arg(idProject));
     progressBar->setProperty("maximumValue",100);
     progressBar->setProperty("minimumValue",0);
+    qCustomPlotRegression->setNumber_of_function(matrixGamma1.size()+matrixGamma2.size()+matrixLinear.size());
 
     QObject *buttonStop = rootObject->findChild<QObject*>(QString("stop%1").arg(idProject));
 
@@ -525,26 +536,31 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     percantageLinearB= new double[dimension];
     double * percantageW;
     percantageW= new double[dimension];
+    double* translation= new double[dimension];
+
     count = 0;
     for (int i = 0; i < matrixLinear.size(); ++i) {
         functionType[count]=0;
         percantageLinearA[count]=matrixLinear[i][6];
         percantageLinearB[count]=matrixLinear[i][7];
         percantageW[count]=matrixLinear[i][8];
+        translation[count] = matrixLinear[i][11];
         count++;
     }
     for (int i = 0; i < matrixGamma1.size(); ++i) {
-        functionType[count]=2;
+        functionType[count]=1;
         percantageGammaA[count]=(matrixGamma1[i][6]);
         percantageGammaB[count]=(matrixGamma1[i][7]);
         percantageW[count]=(matrixGamma1[i][8]);
+        translation[count] =matrixGamma1[i][11];
         count++;
     }
     for (int i =  0; i <  matrixGamma2.size(); ++i) {
         functionType[count]=2;
         percantageGammaA[count]=(matrixGamma2[i][6]);
         percantageGammaB[count]=(matrixGamma2[i][7]);
-        percantageW[count]=(matrixGamma2[i][8]);
+        percantageW[count]=matrixGamma2[i][8];
+        translation[count] =matrixGamma2[i][11];
         count++;
     }
 
@@ -559,6 +575,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         double tmp2=fRand(matrixLinear[i][2],matrixLinear[i][3]);
         //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
+        double tmp3=fRand(matrixLinear[i][9],matrixLinear[i][10]);
+        //std::cout <<tmp3<< std::endl;
+        tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;
     }
@@ -571,6 +590,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         double tmp2=fRand(matrixGamma1[i][2],matrixGamma1[i][3]);
         //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
+        double tmp3=fRand(matrixGamma1[i][9],matrixGamma1[i][10]);
+        //std::cout <<tmp3<< std::endl;
+        tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;
 
@@ -583,6 +605,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         double tmp2=fRand(matrixGamma2[i][2],matrixGamma2[i][3]);
         //std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
+        double tmp3=fRand(matrixGamma2[i][9],matrixGamma2[i][10]);
+        //std::cout <<tmp3<< std::endl;
+        tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;
 
@@ -591,7 +616,9 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     double *kernel;
     int size_kernel;
     double Delta_cr;
-    HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr);
+    QObject *errorHandler = rootObject->findChild<QObject*>("errorcsvHandler");
+    int errorRain = HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr, errorHandler);
+    //HandlerCSV::loadCSVKernel(sfileurl,kernel,size_kernel,Delta_cr,errorRain);
     RegressionController * regressionController= new RegressionController(
                 _projectaname.toString(),
                 percantageW,
@@ -612,7 +639,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                 imaxGeneration,
                 dpercentageCrossover,
                 dpercentageMutation,
-                inumberProcessor
+                inumberProcessor,
+                translation
                 );
 
     std::vector< double> x;
@@ -627,11 +655,11 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         y = controlPoints->getY();
     }else
         if(checkKernelBool){
-           std::vector< double> tmp(kernel,kernel+size_kernel);
-           y = tmp;
-           for(int i=0; i< size_kernel; i++){
-               x.push_back(i+1);
-           }
+            std::vector< double> tmp(kernel,kernel+size_kernel);
+            y = tmp;
+            for(int i=0; i< size_kernel; i++){
+                x.push_back(i+1);
+            }
         }else
             if(checkNBool){
                 if( checkControlPointsWithNBool){
@@ -646,6 +674,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
             }
 
     delete controlPoints;
+
+    qCustomPlotRegression->setX(x);
 
 
     regressionController->setQCustomPlotRegression(qCustomPlotRegression);

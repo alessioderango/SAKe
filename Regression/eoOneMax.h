@@ -48,6 +48,7 @@ public:
     percentageVariationLinearB.resize(0);
     percentageVariationGammaA.resize(0);
     percentageVariationGammaB.resize(0);
+    translation.resize(0);
     // END   Code of default Ctor of an eoOneMax object
   }
 
@@ -119,7 +120,7 @@ public:
 
   // FUNCTION FUNCTIONTYPE
 
-  std::vector<double>  getFunctionTypeConst() const{
+  std::vector<int>  getFunctionTypeConst() const{
       return functionType;
   }
 
@@ -218,31 +219,22 @@ public:
 
 
    void setPercentageVariationWeight(std::vector<double> a){
-       for (int i = 0; i < a.size(); ++i) {
-           percentageVariationWeight.push_back(a[i]);
-       }
-
+       percentageVariationWeight = a;
    }
    void setPercentageVariationLinearA(std::vector<double> a){
-       for (int i = 0; i < a.size(); ++i) {
-           percentageVariationLinearA.push_back(a[i]);
-       }
+       percentageVariationLinearA = a;
    }
    void setPercentageVariationLinearB(std::vector<double> a){
-       for (int i = 0; i < a.size(); ++i) {
-           percentageVariationLinearB.push_back(a[i]);
-       }
+       percentageVariationLinearB = a;
    }
    void setPercentageVariationGammaA(std::vector<double> a){
-       for (int i = 0; i < a.size(); ++i) {
-           percentageVariationGammaA.push_back(a[i]);
-       }
-
+       percentageVariationGammaA = a;
    }
    void setPercentageVariationGammaB(std::vector<double> a){
-       for (int i = 0; i < a.size(); ++i) {
-           percentageVariationGammaB.push_back(a[i]);
-       }
+       percentageVariationGammaB = a;
+   }
+   void setTranslation(std::vector<double> a){
+       translation = a;
    }
 
    double getPercentageVariationWeight(int i){
@@ -276,6 +268,11 @@ public:
    void setPercentageVariationGammaB(int i,double a){
        percentageVariationGammaB[i] = a;
    }
+   void setTranslation(int i,double a){
+       translation[i] = a;
+   }
+
+
 
    void addPercentageVariationWeight(double a){
        percentageVariationWeight.push_back(a);
@@ -291,6 +288,10 @@ public:
    }
    void addPercentageVariationGammaB(double a){
        percentageVariationGammaB.push_back(a);
+   }
+
+   void addTranslation(double a){
+       translation.push_back(a);
    }
 
    void newVariationWeight(double a){
@@ -310,6 +311,22 @@ public:
    }
 
 
+   std::vector<double>  getTranslationConst() const{
+       return translation;
+   }
+
+   std::vector<double>  getTranslation() {
+       return translation;
+   }
+
+   int  getTranslation(int i){
+       return translation[i];
+   }
+
+   int  getTranslationConst(int i) const{
+       return translation[i];
+   }
+
 private:			   // put all data here
     // START Private data of an eoOneMax object
     std::vector<double> w;
@@ -320,6 +337,7 @@ private:			   // put all data here
     std::vector<double> percentageVariationLinearB;
     std::vector<double> percentageVariationGammaA;
     std::vector<double> percentageVariationGammaB;
+    std::vector<double> translation;
     QVector<double> yCombinata;
     // END   Private data of an eoOneMax object
 };

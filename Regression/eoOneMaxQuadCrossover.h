@@ -124,6 +124,11 @@ public:
             _genotype1.setPercentageVariationGammaB(i,tmpGammaB2);
             _genotype2.setPercentageVariationGammaB(i,tmpGammaB1);
 
+            double tmpTranslation1 = _genotype1.getTranslation(i);
+            double tmpTranslation2 = _genotype2.getTranslation(i);
+            _genotype1.setTranslation(i,tmpTranslation2);
+            _genotype2.setTranslation(i,tmpTranslation1);
+
 
 
 

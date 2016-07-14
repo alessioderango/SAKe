@@ -24,7 +24,8 @@ RegressionController::RegressionController(QString projectName,
                                            int imaxGeneration,
                                            double dpercentageCrossover,
                                            double dpercentageMutation,
-                                           int inumberProcessor ){
+                                           int inumberProcessor,
+                                           double *translation){
 
     this->percentualePesoSize = weightsSize;
     percentualePeso=_percentualePeso;
@@ -58,6 +59,7 @@ RegressionController::RegressionController(QString projectName,
     this->maxGeneration = imaxGeneration;
     this->percentageCrossover = dpercentageCrossover;
     this->percentageMutation = dpercentageMutation;
+    this->translation = translation;
 
     QString tmp2 = QDir::currentPath()+"/workspace/regression/"+projectName;
     QDir dir3(tmp2);
@@ -133,6 +135,7 @@ void RegressionController::startAlgorithm(){
                                                     percentualeGammaASize,
                                                     percentualeGammaB,
                                                     percentualeGammaBSize,
+                                                    translation,
                                                     Individual());
 
         // Build the variation operator (any seq/prop construct)

@@ -25,8 +25,6 @@ class SAKeStart : public QObject
 public:
     explicit SAKeStart(QQmlApplicationEngine* engine,QApplication * a,XMLManager * xmlManager,QObject *parent = 0);
 
-
-
     string getSelection() const;
     void setSelection(const string &value);
 

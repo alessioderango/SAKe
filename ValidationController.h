@@ -11,17 +11,26 @@
 #include <algorithm>
 #include <iostream>
 #include "handlercsv.h"
+#include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/date_time/local_time_adjustor.hpp"
+#include "boost/date_time/c_local_time_adjustor.hpp"
 using namespace std;
+using boost::posix_time::ptime;
+using namespace boost::gregorian;
+using namespace boost::posix_time;
 
 class ValidationController
 {
 public:
     ValidationController(
-                         QString  filenameRainPath,
-                         QString  filenameActivationPath,
-                         QString  filenameKernelPath,
-                         QString  folderSave
-                         );
+            Rain *  rain,
+            int  rain_size,
+            Activation *  activations,
+            int  activations_size,
+            double * Fi,
+            int size,
+            double zCr
+            );
     void setPlotMobility(CustomPlotMobilityFunction *value);
     void setKernelPlot(CustomPlotKernel *value);
     void updateKernelPlot();

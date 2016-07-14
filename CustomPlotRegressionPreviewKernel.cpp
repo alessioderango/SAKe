@@ -266,6 +266,7 @@ void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromControl
     double *kernel;
     int size_kernel;
     double Delta_cr;
+    //QObject * errorHandler = qvariant_cast<QObject *>(errorHandlerVariant);
     //    customPlot->yAxis->setRange( 0, maxy);
     HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
     m_CustomPlot->xAxis->setRange( 0, size_kernel );

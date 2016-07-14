@@ -37,9 +37,9 @@ public:
                        Update* _update,
                        std::vector< double> _xRegression,
                        std::string _description = "Best ")
-                       : eoStat<EOT, Fitness>(Fitness(), _description)
+        : eoStat<EOT, Fitness>(Fitness(), _description)
     {
-//        qCustomPlot=_qCustomPlot;
+        //        qCustomPlot=_qCustomPlot;
         qCustomPlotRegression=_qCustomPlotRegression;
         xRegression = _xRegression;
         progressBar = _progressBar;
@@ -74,65 +74,78 @@ private :
     template<class T>
     void doit(const eoPop<EOT>& _pop, T)
     { // find the largest elements
-      //value() = _pop.best_element().fitness();
+        //value() = _pop.best_element().fitness();
 
-       count++;
-       double fitness =_pop.best_element().fitness();
+        count++;
+        double fitness =_pop.best_element().fitness();
 
-       yBest.push_back( _pop.best_element().fitness());
-       x.push_back(count);
+        yBest.push_back( _pop.best_element().fitness());
+        x.push_back(count);
 
-         Fitness v = std::accumulate(_pop.begin(), _pop.end(), Fitness(0.0), eoGraphFitnessStat::sumFitness);
+        Fitness v = std::accumulate(_pop.begin(), _pop.end(), Fitness(0.0), eoGraphFitnessStat::sumFitness);
 
-         yAverage.push_back( v / _pop.size());
-//       qCustomPlot->updateGraph0(x,yBest);
-//       qCustomPlot->updateGraph1(x,yAverage);
-       QVector<double> xRegretmp(xRegression.size());
-       QVector<double> yRegretmp(xRegression.size());
+        yAverage.push_back( v / _pop.size());
+        //       qCustomPlot->updateGraph0(x,yBest);
+        //       qCustomPlot->updateGraph1(x,yAverage);
+        QVector<double> xRegretmp(xRegression.size());
+        QVector<double> yRegretmp(xRegression.size());
+        QVector<Parameters> parameter(_pop.best_element().getFunctionTypeConst().size());
+        QVector<int> functiontype(_pop.best_element().getFunctionTypeConst().size());
 
-       for (int i = 0; i < xRegression.size(); i++) {
-           xRegretmp[i]=xRegression[i];
-           yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
-       }
+        for (int i = 0; i < xRegression.size(); i++) {
+            xRegretmp[i]=xRegression[i];
+            yRegretmp[i]= _pop.best_element().getYCombinataConst()[i];
 
-       if(_pop.size() < 200 && steps%30 ==0)
-       qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
-       else
-           if(_pop.size() >200)
-                 qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+        }
 
-//       std::cout << "WEIGHT" << std::endl;
-//       for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
-//           std::cout << _pop.best_element().getWConst()[i] << std::endl;
-//       }
+        for (int i = 0; i < functiontype.size(); ++i) {
+            parameter[i]= _pop.best_element().getParConst(i);
+            functiontype[i]= _pop.best_element().getFunctionTypeConst(i);
+        }
 
-//       std::cout << "PARAMETER" << std::endl;
-//       for (int i = 0; i < _pop.best_element().getParConst().size(); ++i) {
-//           std::cout << _pop.best_element().getParConst()[i].getParameters(0) << std::endl;
-//           std::cout << _pop.best_element().getParConst()[i].getParameters(1) << std::endl;
-//       }
+        if(_pop.size() < 200 && steps%30 ==0){
+            qCustomPlotRegression->drawGammaFunctions(xRegretmp,functiontype,parameter);
+            qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+        }
+        else
+            if(_pop.size() >200){
+                qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+            }
 
-       QString genString= QString("Gen:    %1").arg(steps);
-       Q_EMIT update->valueGenRegression(genString);
-       QString currentMaxiumFitness= QString("Current Maximum Fitness:    %1").arg(fitness );
-       Q_EMIT update->valueCurrentMaximumFitnessRegression(currentMaxiumFitness);
-       QString currentAvarageFitness= QString("Current Average Fitness:    %1").arg( v / _pop.size() );
-       Q_EMIT update->valueCurrentAvarageFitnessRegression(currentAvarageFitness);
-       if(AbsoluteAvarageFitness < ( v / _pop.size())){
-           QString tmpAvarage= QString("Absolute Average Fitness:       %1").arg( v / _pop.size() );
-           Q_EMIT update->valueAbsoluteAvarageFitnessRegression(tmpAvarage);
-           AbsoluteAvarageFitness=( v / _pop.size());
-       }
 
-       if(AbsoluteMaximumFitness < fitness){
-           QString tmpAvarage= QString("Absolute Maximum Fitness:    %1").arg(fitness );
-           Q_EMIT update->valueAbsoluteMaximumFitnessRegression(tmpAvarage);
-           AbsoluteMaximumFitness=fitness;
-       }
 
-       steps++;
-//       cout << (steps*100)/maxGen << endl;
-       progressBar->setProperty("value",((steps*100)/maxGen));
+        //       std::cout << "WEIGHT" << std::endl;
+        //       for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
+        //           std::cout << _pop.best_element().getWConst()[i] << std::endl;
+        //       }
+
+        //       std::cout << "PARAMETER" << std::endl;
+        //       for (int i = 0; i < _pop.best_element().getParConst().size(); ++i) {
+        //           std::cout << _pop.best_element().getParConst()[i].getParameters(0) << std::endl;
+        //           std::cout << _pop.best_element().getParConst()[i].getParameters(1) << std::endl;
+        //       }
+
+        QString genString= QString("Gen:    %1").arg(steps);
+        Q_EMIT update->valueGenRegression(genString);
+        QString currentMaxiumFitness= QString("Current Maximum Fitness:    %1").arg(fitness );
+        Q_EMIT update->valueCurrentMaximumFitnessRegression(currentMaxiumFitness);
+        QString currentAvarageFitness= QString("Current Average Fitness:    %1").arg( v / _pop.size() );
+        Q_EMIT update->valueCurrentAvarageFitnessRegression(currentAvarageFitness);
+        if(AbsoluteAvarageFitness < ( v / _pop.size())){
+            QString tmpAvarage= QString("Absolute Average Fitness:       %1").arg( v / _pop.size() );
+            Q_EMIT update->valueAbsoluteAvarageFitnessRegression(tmpAvarage);
+            AbsoluteAvarageFitness=( v / _pop.size());
+        }
+
+        if(AbsoluteMaximumFitness < fitness){
+            QString tmpAvarage= QString("Absolute Maximum Fitness:    %1").arg(fitness );
+            Q_EMIT update->valueAbsoluteMaximumFitnessRegression(tmpAvarage);
+            AbsoluteMaximumFitness=fitness;
+        }
+
+        steps++;
+        //       cout << (steps*100)/maxGen << endl;
+        progressBar->setProperty("value",((steps*100)/maxGen));
 
     }
     int count;

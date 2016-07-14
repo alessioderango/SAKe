@@ -145,7 +145,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
 
 }
 
-int HandlerCSV::loadCSVKernel(QString fileurl,double *& Fi,int & size, double & zCr){
+int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double & zCr){
     fileurl.remove(0,8);
     std::ifstream in(fileurl.toStdString());
 
@@ -165,9 +165,55 @@ int HandlerCSV::loadCSVKernel(QString fileurl,double *& Fi,int & size, double & 
 
     for(int i =0; i < x.size();i++){
         double tmp = std::stod(x[i]);
-        cout << " tmp " << tmp <<  endl;
-
+        //cout << " tmp " << tmp <<  endl;
         Fi[i]= tmp;
+
+    }
+
+//    for (int i = 0; i < x.size(); ++i) {
+//        cout << Fi[i] <<  endl;
+//    }
+//    cout << "zCr = " << zCr << endl;
+//    cout << "size = " << size << endl;
+//    cout << "x.size() = " << x.size() << endl;
+
+    return 0;
+}
+
+int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double & zCr, QObject* errorHandler){
+    fileurl.remove(0,8);
+    std::ifstream in(fileurl.toStdString());
+
+    std::string line;
+
+    std::getline(in, line);
+    std::vector<string> x;
+    x = split(line, ';');
+    zCr = std::stod(x[3]);
+    x.erase(x.begin(),x.begin()+6);
+//    cout << line << endl;
+
+    //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
+    //           qDebug() << activation_size;
+    Fi = new double[x.size()];
+    size=x.size();
+
+    for(int i =0; i < x.size();i++){
+        double tmp = std::stod(x[i]);
+        //cout << " tmp " << tmp <<  endl;
+    try{
+        Fi[i]= tmp;
+    }catch(std::exception& e){
+        std::cout << "  Exception: " <<  e.what() << std::endl;
+
+        QVariant returnedValue;
+        QMetaObject::invokeMethod(errorHandler, "errorcsvFunction",
+                   Q_RETURN_ARG(QVariant, returnedValue),
+                   Q_ARG(QVariant,fileurl),
+                   Q_ARG(QVariant, i+1),
+                   Q_ARG(QVariant, e.what()));
+        return 0;
+    }
     }
 
 //    for (int i = 0; i < x.size(); ++i) {
