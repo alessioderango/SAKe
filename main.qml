@@ -999,40 +999,41 @@ import QtQuick.Controls.Styles 1.4
 
 
     }
-    //    MessageDialog {
-    //        id: errorcsvRain
-    //        objectName: "errorcsvRain"
-    //        function errorcsvFunction( filename, row, err){
-    //            errorcsvRain.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
-    //            errorcsvRain.open();
-    //        }
+        MessageDialog {
+            id: errorcsvRain
+            objectName: "errorcsvRain"
+            function errorcsvFunction( filename, row, err){
+                errorcsvRain.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
+                errorcsvRain.open();
+            }
 
-    //        title: "Input error"
-    //        onAccepted: close()
-    //        Component.onCompleted: visible = false
-    //        modality: "ApplicationModal"
-    //    }
-    //    MessageDialog {
-    //        id: errorcsvActivation
-    //        objectName: "errorcsvActivation"
-    //        function errorcsvFunction( filename, row, err){
-    //            errorcsvActivation.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
-    //            errorcsvActivation.open();
-    //        }
-    //    MessageDialog {
-    //        id: errorcsvKernel
-    //        objectName: "errorcsvKernel"
-    //        function errorcsvFunction( filename, row, err){
-    //            errorcsvKernel.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
-    //            errorcsvKernel.open();
-    //        }
+            title: "Input error"
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
+        MessageDialog {
+            id: errorcsvActivation
+            objectName: "errorcsvActivation"
+            function errorcsvFunction( filename, row, err){
+                errorcsvActivation.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
+                errorcsvActivation.open();
+            }
+        }
+        MessageDialog {
+            id: errorcsvKernel
+            objectName: "errorcsvKernel"
+            function errorcsvFunction( filename, row, err){
+                errorcsvKernel.text=" the file "+ filename +" at row "+row+"\n Error : "+ err+"\n";
+                errorcsvKernel.open();
+            }
 
 
-    //        title: "Input error"
-    //        onAccepted: close()
-    //        Component.onCompleted: visible = false
-    //        modality: "ApplicationModal"
-    //    }
+            title: "Input error"
+            onAccepted: close()
+            Component.onCompleted: visible = false
+            modality: "ApplicationModal"
+        }
 
 
 
