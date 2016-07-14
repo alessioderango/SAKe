@@ -43,3 +43,8 @@ possible occurrence of rainfall induced landslides.
 Terranova OG, Gariano SL, Iaquinta P, Iovine GGR. 2015. GA-SAKe: forecasting landslide
 activations by a genetic-algorithms-based hydrological model. Geoscientific Model
 Development 8(7), 1955–1978. [DOI: 10.5194/gmd-8-1955-2015](http://www.geosci-model-dev.net/8/1955/2015/).
+
+### Contact Person
+
+* Alessio De Rango - a.derango@mat.unical.it 
+* Stefano Luigi Gariano - stefano.gariano@irpi.cnr.it
