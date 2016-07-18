@@ -61,7 +61,7 @@ RegressionController::RegressionController(QString projectName,
     this->percentageMutation = dpercentageMutation;
     this->translation = translation;
 
-    QString tmp2 = QDir::currentPath()+"/workspace/regression/"+projectName;
+    QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DataLocation)+"/workspace/regression/"+projectName;
     QDir dir3(tmp2);
     if (!dir3.exists()){
         dir3.mkdir(".");

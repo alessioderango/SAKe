@@ -114,12 +114,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     absoluteAverageFitness=_absoluteAverageFitness;
     update = _update;
 
-    QString tmp1 = QDir::currentPath()+"/workspace/calibration";
-    QDir dir2(tmp1);
-    if (!dir2.exists()){
-        dir2.mkdir(".");
-    }
-    QString tmp2 = QDir::currentPath()+"/workspace/calibration/"+projectName;
+    QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DataLocation)+"/workspace/calibration/"+projectName;
     QDir dir3(tmp2);
     if (!dir3.exists()){
         dir3.mkdir(".");

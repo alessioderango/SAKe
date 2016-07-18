@@ -95,6 +95,7 @@ public:
 
     int findProjectName(QString nameProject);
     QString xmlFilePath;
+    QString folderPath;
     QVariantList getAllElementsFromProjectName(QString nameProject);
 
 

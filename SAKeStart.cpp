@@ -41,11 +41,6 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 
     // **** converto e verifico che siano arrrivati dal QML tutti i parametri
 
-    QDir dir(QDir::currentPath()+"/workspace");
-    if (!dir.exists()){
-        dir.mkdir(".");
-    }
-
     if(tipo.toInt()==1 )
     {
         xmlManager->SaveXMLFileAlreadyExistCalibrationProject(_projectName.toString(),
@@ -258,11 +253,6 @@ void SAKeStart::startValidation(
         const QVariant &folderSave
         )
 {
-    QDir dir(QDir::currentPath()+"/workspace");
-    if (!dir.exists()){
-        dir.mkdir(".");
-    }
-
     Rain * rain;
     int rain_size;
     Activation * activation;
@@ -383,17 +373,6 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         }
         matrixLinear.push_back(tmp);
         cout << endl;
-    }
-
-
-    QDir dir1(QDir::currentPath()+"/workspace");
-    if (!dir1.exists()){
-        dir1.mkdir(".");
-    }
-
-    QDir dir(QDir::currentPath()+"/workspace/regression");
-    if (!dir.exists()){
-        dir.mkdir(".");
     }
 
     QString typeExecution="0";

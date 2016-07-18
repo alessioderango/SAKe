@@ -1,7 +1,7 @@
 #include "CustomPlotItem.h"
 #include <QtWidgets/QApplication>
 #include <QtQuick>
-#include <QDeclarativeView>
+#include <QQuickView>
 #include "xmlmanager.h"
 #include "SAKeStart.h"
 #include "Qt"
@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication a(argc, argv);
 
     srand (time(NULL));

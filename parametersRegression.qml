@@ -16,10 +16,10 @@ ApplicationWindow {
     color:"#f2f2f2"
     Layout.minimumHeight: height
     Layout.minimumWidth: width
-    Component.onCompleted: {
-        setX(Screen.width / 2 - width / 2);
-        setY(Screen.height / 2 - height / 2);
-    }
+//    Component.onCompleted: {
+//        setX(Screen.width / 2 - width / 2);
+//        setY(Screen.height / 2 - height / 2);
+//    }
 
     ScrollView {
         width: parent.width

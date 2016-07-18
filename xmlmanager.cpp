@@ -4,12 +4,36 @@ XMLManager::XMLManager(QObject *_listProjects)
 {
 
 #ifdef __arm__ //on the target
+
     xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
     qDebug() << xmlFilePath << endl;
 #else
 #ifdef __WIN32 //for those developing on windows
-    xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
+    folderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    QDir dirSAKe(folderPath);
+    if (!dirSAKe.exists()){
+        dirSAKe.mkdir(".");
+    }
+
+    QDir dir(folderPath+"/workspace");
+    if (!dir.exists()){
+        dir.mkdir(".");
+    }
+    QDir dirRegression(folderPath+"/workspace/regression");
+    if (!dirRegression.exists()){
+        dirRegression.mkdir(".");
+    }
+
+    QDir dirCalibration(folderPath+"/workspace/calibration");
+    if (!dirCalibration.exists()){
+        dirCalibration.mkdir(".");
+    }
+
+    xmlFilePath = QString(folderPath+"/workspace/main.xml");
     qDebug() << xmlFilePath << endl;
+
+
 #else //for those developing on linux
     xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
     qDebug() << xmlFilePath << endl;

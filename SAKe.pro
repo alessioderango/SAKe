@@ -1,6 +1,9 @@
 TEMPLATE = app
-QT += qml xml quick widgets
-greaterThan(QT_MAJOR_VERSION, 4) :QT+= widgets printsupport declarative
+QT += xml widgets
+QT += qml quick
+QT += printsupport
+
+#greaterThan(QT_MAJOR_VERSION, 4) :QT+= widgets printsupport declarative
 
 
 CONFIG += console
@@ -30,7 +33,7 @@ SOURCES += main.cpp \
 RESOURCES += qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+#QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
@@ -108,6 +111,8 @@ QMAKE_CXXFLAGS+= -static-libstdc++
 QMAKE_LFLAGS +=  -fopenmp
 #CONFIG += static
 #LIBS += -fopenm
+
+
 
 #QMAKE_CXXFLAGS+= -D__NO_INLINE__
 
