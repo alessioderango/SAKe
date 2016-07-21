@@ -9,7 +9,7 @@ XMLManager::XMLManager(QObject *_listProjects)
     qDebug() << xmlFilePath << endl;
 #else
 #ifdef __WIN32 //for those developing on windows
-    folderPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    folderPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 
     QDir dirSAKe(folderPath);
     if (!dirSAKe.exists()){

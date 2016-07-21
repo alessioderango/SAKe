@@ -1,4 +1,4 @@
-import QtQuick 2.3
+import QtQuick 2.5
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
@@ -147,11 +147,11 @@ ApplicationWindow {
                                                 //                                        comboSelectinParameterSequential.visible=false;
                                                 //                                    }
 
-                                                if(currentIndex ===0 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
-                                                    selectionParameterTournamentWithoutReplacement.visible=true;
-                                                }else{
-                                                    selectionParameterTournamentWithoutReplacement.visible=false;
-                                                }
+//                                                if(currentIndex ===0 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
+//                                                    selectionParameterTournamentWithoutReplacement.visible=true;
+//                                                }else{
+//                                                    selectionParameterTournamentWithoutReplacement.visible=false;
+//                                                }
                                                 //                                    if(currentIndex ===6 || currentIndex ===8){
                                                 //                                        gridLayout5.visible=true;
                                                 //                                    }else{
@@ -528,14 +528,10 @@ ApplicationWindow {
                                         text: model.amax
                                         validator:  RegExpValidator { regExp:  /0[.]\d{1,3}|1/}
                                         onTextChanged: {
-                                            console.log("amax")
-                                            console.log(tableModel.get(styleData.row).amin)
-                                            console.log(tableModel.get(styleData.row).amax)
-                                            tableModel.get(styleData.row).amax = text
-                                            console.log("End")
-                                            if(parseFloat(tableModel.get(styleData.row).amin) > parseFloat(tableModel.get(styleData.row).amax)){
-                                                tableModel.get(styleData.row).amin=0;
-                                            }
+//                                            tableModel.get(styleData.row).amax = text
+//                                            if(parseFloat(tableModel.get(styleData.row).amin) > parseFloat(tableModel.get(styleData.row).amax)){
+//                                                tableModel.get(styleData.row).amin=0;
+//                                            }
                                         }
                                     }
                                 }
@@ -550,14 +546,10 @@ ApplicationWindow {
                                         text: model.amin
                                         validator:  RegExpValidator { regExp:  /0[.]\d{1,3}|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).amin = text
-                                            console.log("amin")
-                                            console.log(tableModel.get(styleData.row).amin)
-                                            console.log(tableModel.get(styleData.row).amax)
-                                            console.log("End")
-                                            if(parseFloat(tableModel.get(styleData.row).amax) < parseFloat(tableModel.get(styleData.row).amin)){
-                                                tableModel.get(styleData.row).amax=1;
-                                            }
+//                                            tableModel.get(styleData.row).amin = text
+//                                            if(parseFloat(tableModel.get(styleData.row).amax) < parseFloat(tableModel.get(styleData.row).amin)){
+//                                                tableModel.get(styleData.row).amax=1;
+//                                            }
                                         }
                                     }
                                     resizable: false
@@ -574,15 +566,11 @@ ApplicationWindow {
 
                                         validator:  RegExpValidator { regExp:  /^([0123][0-9][0-9]|400)$/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).bmax = text
-                                            console.log("bmax")
-                                            console.log(tableModel.get(styleData.row).bmin)
-                                            console.log(tableModel.get(styleData.row).bmax)
-                                            console.log("End")
-                                            if( parseFloat(tableModel.get(styleData.row).bmin) > parseFloat(tableModel.get(styleData.row).bmax)){
+//                                            tableModel.get(styleData.row).bmax = text
+//                                            if( parseFloat(tableModel.get(styleData.row).bmin) > parseFloat(tableModel.get(styleData.row).bmax)){
 
-                                                tableModel.get(styleData.row).bmin=0;
-                                            }
+//                                                tableModel.get(styleData.row).bmin=0;
+//                                            }
                                         }
                                     }
                                 }
@@ -596,14 +584,10 @@ ApplicationWindow {
                                         text: model.bmin
                                         validator:  RegExpValidator { regExp:  /^([0123][0-9][0-9]|400)$/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).bmin = text
-                                            console.log("bmin")
-                                            console.log(tableModel.get(styleData.row).bmin)
-                                            console.log(tableModel.get(styleData.row).bmax)
-                                            console.log("End")
-                                            if(parseFloat(tableModel.get(styleData.row).bmax) < parseFloat(tableModel.get(styleData.row).bmin)){
-                                                tableModel.get(styleData.row).bmax=400;
-                                            }
+//                                            tableModel.get(styleData.row).bmin = text
+//                                            if(parseFloat(tableModel.get(styleData.row).bmax) < parseFloat(tableModel.get(styleData.row).bmin)){
+//                                                tableModel.get(styleData.row).bmax=400;
+//                                            }
                                         }
                                     }
                                     resizable: false
@@ -617,10 +601,10 @@ ApplicationWindow {
                                         text: model.wmax
                                         validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).wmax = text
-                                            if(parseFloat(tableModel.get(styleData.row).wmin) > parseFloat(tableModel.get(styleData.row).wmax)){
-                                                tableModel.get(styleData.row).wmin=0;
-                                            }
+//                                            tableModel.get(styleData.row).wmax = text
+//                                            if(parseFloat(tableModel.get(styleData.row).wmin) > parseFloat(tableModel.get(styleData.row).wmax)){
+//                                                tableModel.get(styleData.row).wmin=0;
+//                                            }
                                         }
                                     }
                                 }
@@ -634,10 +618,7 @@ ApplicationWindow {
                                         text: model.wmin
                                         validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).wmin = text
-                                            if(parseFloat(tableModel.get(styleData.row).wmax) < parseFloat(tableModel.get(styleData.row).wmin)){
-                                                tableModel.get(styleData.row).wmax=1000;
-                                            }
+//                                            tableModel.get(styleData.row).wmin = text
                                         }
                                     }
                                     resizable: false
@@ -652,7 +633,7 @@ ApplicationWindow {
                                         text: model.pa
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).pa = text
+//                                            tableModel.get(styleData.row).pa = text
                                         }
 
                                     }
@@ -667,7 +648,7 @@ ApplicationWindow {
                                         text: model.pb
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).pb = text
+//                                            tableModel.get(styleData.row).pb = text
                                         }
                                     }
                                     resizable: false
@@ -681,7 +662,7 @@ ApplicationWindow {
                                         text: model.pw
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).pw = text
+//                                            tableModel.get(styleData.row).pw = text
                                         }
 
                                     }
@@ -695,10 +676,10 @@ ApplicationWindow {
                                     title: "Translation max"
                                     role: "tmax"
                                     delegate: TextField {
-                                        text: model.tmax
+//                                        text: model.tmax
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmax = text
+//                                            tableModel.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -712,10 +693,10 @@ ApplicationWindow {
                                     title: "Translation min"
                                     role: "tmin"
                                     delegate: TextField {
-                                        text: model.tmin
+//                                        text: model.tmin
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmin = text
+//                                            tableModel.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -729,10 +710,10 @@ ApplicationWindow {
                                     title: "Translation percentage"
                                     role: "tp"
                                     delegate: TextField {
-                                        text: model.tp
+//                                        text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tp = text
+//                                            tableModel.get(styleData.row).tp = text
                                         }
 
                                     }
@@ -923,15 +904,11 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmax
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).bmax = text
-                                            console.log("bmax")
-                                            console.log(tableModel2.get(styleData.row).bmin)
-                                            console.log(tableModel2.get(styleData.row).bmax)
-                                            console.log("End")
-                                            if( parseFloat(tableModel2.get(styleData.row).bmin) > parseFloat(tableModel2.get(styleData.row).bmax)){
+//                                            tableModel2.get(styleData.row).bmax = text
+//                                            if( parseFloat(tableModel2.get(styleData.row).bmin) > parseFloat(tableModel2.get(styleData.row).bmax)){
 
-                                                tableModel2.get(styleData.row).bmin=0;
-                                            }
+//                                                tableModel2.get(styleData.row).bmin=0;
+//                                            }
                                         }
                                     }
                                 }
@@ -944,14 +921,10 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmin
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).bmin = text
-                                            console.log("bmin")
-                                            console.log(tableModel2.get(styleData.row).bmin)
-                                            console.log(tableModel2.get(styleData.row).bmax)
-                                            console.log("End")
-                                            if(parseFloat(tableModel2.get(styleData.row).bmax) < parseFloat(tableModel2.get(styleData.row).bmin)){
-                                                tableModel2.get(styleData.row).bmax=400;
-                                            }
+//                                            tableModel2.get(styleData.row).bmin = text
+//                                            if(parseFloat(tableModel2.get(styleData.row).bmax) < parseFloat(tableModel2.get(styleData.row).bmin)){
+//                                                tableModel2.get(styleData.row).bmax=400;
+//                                            }
                                         }
                                     }
                                     resizable: false
@@ -973,7 +946,7 @@ ApplicationWindow {
                                         //RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
 
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).amax = text;
+//                                            tableModel2.get(styleData.row).amax = text;
 
 
                                         }
@@ -991,7 +964,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.amin
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).amin = text
+//                                            tableModel2.get(styleData.row).amin = text
                                         }
                                     }
                                     resizable: false
@@ -1005,7 +978,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.wmax
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).wmax = text
+//                                            tableModel2.get(styleData.row).wmax = text
                                         }
                                     }
                                 }
@@ -1018,7 +991,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.wmin
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).wmin = text
+//                                            tableModel2.get(styleData.row).wmin = text
                                         }
                                     }
                                     resizable: false
@@ -1033,7 +1006,7 @@ ApplicationWindow {
                                         text: model.pa
                                         //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).pa = text
+//                                            tableModel2.get(styleData.row).pa = text
                                         }
 
 
@@ -1049,7 +1022,7 @@ ApplicationWindow {
                                         text: model.pb
                                         //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).pb = text
+//                                            tableModel2.get(styleData.row).pb = text
                                         }
                                     }
 
@@ -1064,7 +1037,7 @@ ApplicationWindow {
                                         text: model.pw
                                         // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel2.get(styleData.row).pw = text
+//                                            tableModel2.get(styleData.row).pw = text
                                         }
 
                                     }
@@ -1081,7 +1054,7 @@ ApplicationWindow {
                                         text: model.tmax
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmax = text
+//                                            tableModel2.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -1098,7 +1071,7 @@ ApplicationWindow {
                                         text: model.tmin
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmin = text
+//                                            tableModel2.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -1115,7 +1088,7 @@ ApplicationWindow {
                                         text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tp = text
+//                                            tableModel2.get(styleData.row).tp = text
                                         }
 
                                     }
@@ -1262,7 +1235,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.amax
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).amax = text
+//                                            tableModel3.get(styleData.row).amax = text
                                         }
                                     }
                                 }
@@ -1275,7 +1248,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.amin
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).amin = text
+//                                            tableModel3.get(styleData.row).amin = text
                                         }
                                     }
                                     resizable: false
@@ -1290,7 +1263,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmax
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).bmax = text
+//                                            tableModel3.get(styleData.row).bmax = text
                                         }
                                     }
                                 }
@@ -1303,7 +1276,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmin
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).bmin = text
+//                                            tableModel3.get(styleData.row).bmin = text
                                         }
                                     }
                                     resizable: false
@@ -1316,7 +1289,7 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.wmax
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).wmax = text
+//                                            tableModel3.get(styleData.row).wmax = text
                                         }
                                     }
                                 }
@@ -1330,7 +1303,7 @@ ApplicationWindow {
                                         text: model.wmin
 
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).wmin = text
+//                                            tableModel3.get(styleData.row).wmin = text
                                         }
 
                                     }
@@ -1346,7 +1319,7 @@ ApplicationWindow {
                                         text: model.pa
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).pa = text
+//                                            tableModel3.get(styleData.row).pa = text
                                         }
                                     }
                                     resizable: false
@@ -1360,7 +1333,7 @@ ApplicationWindow {
                                         text: model.pb
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).pb = text
+//                                            tableModel3.get(styleData.row).pb = text
                                         }
                                     }
                                     resizable: false
@@ -1374,7 +1347,7 @@ ApplicationWindow {
                                         text: model.pw
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel3.get(styleData.row).pw = text
+//                                            tableModel3.get(styleData.row).pw = text
                                         }
                                     }
 
@@ -1390,7 +1363,7 @@ ApplicationWindow {
                                         text: model.tmax
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmax = text
+//                                            tableModel3.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -1407,7 +1380,7 @@ ApplicationWindow {
                                         text: model.tmin
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmin = text
+//                                            tableModel3.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -1424,7 +1397,7 @@ ApplicationWindow {
                                         text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tp = text
+//                                            tableModel3.get(styleData.row).tp = text
                                         }
 
                                     }
@@ -1465,8 +1438,6 @@ ApplicationWindow {
                                     pathrain=fileDialogRain.fileUrl
                                     tmp = fileDialogRain.fileUrl
                                     split = tmp.split("/")
-                                    console.log("You chose: " + split[0])
-                                    console.log("You chose: " + split.length)
                                     textfileRain.text = "../"+split[split.length-1]
                                     customPlotKernelRegression1.initCustomPlotRegressionPreviewKernel(fileDialogRain.fileUrl)
                                     //                                customPlotKernelRegression1.initCustomPlotKernelComtrolPoints(fileDialogRain.fileUrl)

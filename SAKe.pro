@@ -1,11 +1,10 @@
 TEMPLATE = app
-QT += xml widgets
+QT += xml
 QT += qml quick
-QT += printsupport
 
-#greaterThan(QT_MAJOR_VERSION, 4) :QT+= widgets printsupport declarative
+greaterThan(QT_MAJOR_VERSION, 4) :QT+= widgets printsupport #declarative
 
-
+DEFINES += QT_NO_DEBUG
 CONFIG += console
 
 SOURCES += main.cpp \
@@ -116,32 +115,32 @@ QMAKE_LFLAGS +=  -fopenmp
 
 #QMAKE_CXXFLAGS+= -D__NO_INLINE__
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leo
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leo
-else:unix: LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leo
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/ -leo
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/ -leo
+else:unix: LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/ -leo
 
 INCLUDEPATH += $$PWD/../paradiseo-master/paradiseo-master/eo/src
 DEPENDPATH += $$PWD/../paradiseo-master/paradiseo-master/eo/src
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeo.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeo.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/eo.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/eod.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeo.a
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/libeo.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/libeo.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/eo.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/eod.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/libeo.a
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leoutils
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leoutils
-else:unix: LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib/ -leoutils
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/ -leoutils
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/ -leoutils
+else:unix: LIBS += -L$$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/ -leoutils
 
 INCLUDEPATH += $$PWD/../paradiseo-master/paradiseo-master/eo/src
 DEPENDPATH += $$PWD/../paradiseo-master/paradiseo-master/eo/src
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeoutils.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeoutils.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/eoutils.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/eoutilsd.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib/libeoutils.a
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/libeoutils.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/libeoutils.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/eoutils.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/eoutilsd.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../paradiseo-master/paradiseo-master/build/lib4.9/libeoutils.a
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../boost_1_60_0/boost_1_60_0/stage/lib/ -lboost_date_time-mgw48-mt-1_60

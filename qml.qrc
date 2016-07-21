@@ -24,5 +24,6 @@
         <file>ToolBarSeparator.qml</file>
         <file>img/SAKe.png</file>
         <file>TableColumnTreeView.qml</file>
+        <file>settings.qml</file>
     </qresource>
 </RCC>

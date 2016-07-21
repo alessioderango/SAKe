@@ -1,4 +1,4 @@
-import QtQuick 2.3
+import QtQuick 2.5
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
@@ -17,10 +17,10 @@ ApplicationWindow {
     color:"#f2f2f2"
     Layout.minimumHeight: height
     Layout.minimumWidth: width
-    Component.onCompleted: {
-        setX(Screen.width / 2 - width / 2);
-        setY(Screen.height / 2 - height / 2);
-    }
+//    Component.onCompleted: {
+//        setX(Screen.width / 2 - width / 2);
+//        setY(Screen.height / 2 - height / 2);
+//    }
 
     function loadParameter(parameter,listGamma1,listGamma2,listLinear){
         projectName.text=parameter[0]
@@ -1141,7 +1141,7 @@ ApplicationWindow {
                                         text: model.tmax
                                         // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmax = text
+                                            tableModel2.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -1158,7 +1158,7 @@ ApplicationWindow {
                                         text: model.tmin
                                         // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tmin = text
+                                            tableModel2.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -1175,7 +1175,7 @@ ApplicationWindow {
                                         text: model.tp
                                         // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-                                            tableModel.get(styleData.row).tp = text
+                                            tableModel2.get(styleData.row).tp = text
                                         }
 
                                     }

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Window 2.0
 import CustomPlot 1.0
 import CustomPlotMobilityFunction 1.0
@@ -72,6 +72,22 @@ ApplicationWindow {
 
                 }
 
+            }
+
+
+        }
+
+        Menu {
+            title: qsTr("Tools")
+
+
+            MenuItem {
+                text: qsTr("&Options");
+                onTriggered:{
+                    console.log("Open action triggered Calibration Project");
+                    var component = Qt.createComponent("settings.qml")
+                    var window    = component.createObject(applicationWindow1)
+                }
             }
 
 
