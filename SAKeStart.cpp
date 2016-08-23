@@ -682,6 +682,12 @@ QVariantList SAKeStart::getAllElementsFromProjectName(const QVariant &_projectNa
     return xmlManager->getAllElementsFromProjectName(_projectName.toString());
 }
 
+bool SAKeStart::deleteProject(const QVariant & idProject){
+    bool tmp = xmlManager->deleteProject(idProject.toInt());
+     xmlManager->ReadCalibrationProjectXML();
+     return tmp;
+}
+
 string SAKeStart::getPattern() const
 {
     return pattern;
@@ -835,6 +841,11 @@ void SAKeStart::setSelection(const string &value)
 void SAKeStart::update(){
 
     qApp->processEvents();
+}
+
+void SAKeStart::openFile(const QVariant &filePath)
+{
+    QDesktopServices::openUrl(QUrl(filePath.toString(), QUrl::TolerantMode));
 }
 
 void SAKeStart::stopSAKeController(int count){

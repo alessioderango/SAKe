@@ -1206,3 +1206,49 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
     return 1;
 }
 
+bool XMLManager::deleteProject(int idProject)
+{
+
+
+    QFile inFile( xmlFilePath );
+
+    if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        qDebug( "Failed to open file for reading." );
+        return false;
+    }
+
+    QDomDocument document;
+    if( !document.setContent( &inFile ) )
+    {
+        qDebug( "Failed to parse the file into a DOM tree." );
+        inFile.close();
+        return false;
+    }
+
+     inFile.close();
+
+    QDomElement documentElement = document.documentElement();
+    QDomNodeList a = documentElement.elementsByTagName("ID");
+    for (int i = 0; i < a.length(); i++) {
+        if(QString::compare(a.at(i).firstChild().nodeValue(), QString::number(idProject), Qt::CaseInsensitive)==0){
+            QDomNode parent = a.at(i).parentNode();
+            QDomNode first = parent.parentNode();
+            QDomNode returnNode = first.removeChild(parent);
+            if(returnNode.isNull())
+                return false;
+        }
+    }
+
+    if (!inFile.open(QIODevice::Truncate | QIODevice::WriteOnly)) {
+        qDebug("Basically, now we lost content of a file");
+        return false;
+    }
+    QByteArray xml = document.toByteArray();
+    inFile.write(xml);
+    inFile.close();
+
+
+    return true;
+}
+

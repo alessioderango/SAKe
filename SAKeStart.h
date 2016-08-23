@@ -74,6 +74,7 @@ public:
 signals:
 
 public slots:
+    void openFile(const QVariant &filePath);
     void stopSAKeController(int count);
     void stopValidationController(int count);
     void stopRegressionController(int count);
@@ -134,6 +135,7 @@ public slots:
 
     int existProjectName(const QVariant &_projectName);
     QVariantList getAllElementsFromProjectName(const QVariant &_projectName);
+    bool deleteProject(const QVariant &  idProject);
     //    void updateCurrentMaximumFitness(QString);
     //    void updateAbosulteMaximumFitness(QString s);
     //    void updateCurrentAvarageFitness(QString s);

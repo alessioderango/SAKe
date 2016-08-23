@@ -97,6 +97,7 @@ public:
     QString xmlFilePath;
     QString folderPath;
     QVariantList getAllElementsFromProjectName(QString nameProject);
+    bool deleteProject(int idProject);
 
 
     TreeModel *getTreeview();

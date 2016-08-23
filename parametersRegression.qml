@@ -14,14 +14,15 @@ ApplicationWindow {
     width: 1420
     height: 920
     color:"#f2f2f2"
-    Layout.minimumHeight: height
-    Layout.minimumWidth: width
+//    Layout.minimumHeight: height
+//    Layout.minimumWidth: width
 //    Component.onCompleted: {
 //        setX(Screen.width / 2 - width / 2);
 //        setY(Screen.height / 2 - height / 2);
 //    }
 
     ScrollView {
+        id: scrollView1
         width: parent.width
         height: parent.height
 
@@ -30,6 +31,10 @@ ApplicationWindow {
             x: 0
             y: 0
             color:"#f2f2f2"
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 0
             width: 1400
             height: 920
 
@@ -407,7 +412,10 @@ ApplicationWindow {
                                                                        wmin: tableModel.get(i).wmin,
                                                                        pa: tableModel.get(i).pa,
                                                                        pb: tableModel.get(i).pb,
-                                                                       pw: tableModel.get(i).pw})
+                                                                       pw: tableModel.get(i).pw,
+                                                                       tmin: tableModel.get(i).tmin,
+                                                                       tmax: tableModel.get(i).tmax,
+                                                                       tp: tableModel.get(i).tp})
                                                 }
                                                 for(var i = tableModel.count;i< text;i++){
                                                     tableModel.set(i,{nFunction:i+1,
@@ -419,7 +427,10 @@ ApplicationWindow {
                                                                        wmin: "0.02",
                                                                        pa: "0.03",
                                                                        pb: "0.03",
-                                                                       pw: "0.03"})
+                                                                       pw: "0.03",
+                                                                       tmin: "2",
+                                                                       tmax: "0",
+                                                                       tp: "0.01"})
                                                 }
                                             }
                                             else
@@ -434,7 +445,10 @@ ApplicationWindow {
                                                                            wmin: tableModel.get(i).wmin,
                                                                            pa: tableModel.get(i).pa,
                                                                            pb: tableModel.get(i).pb,
-                                                                           pw: tableModel.get(i).pw})
+                                                                           pw: tableModel.get(i).pw,
+                                                                           tmin: tableModel.get(i).tmin,
+                                                                           tmax: tableModel.get(i).tmax,
+                                                                           tp: tableModel.get(i).tp})
                                                     }
                                                     for(var i = text;i< tableModel.count;i++){
                                                         tableModel.remove(i);
@@ -499,6 +513,7 @@ ApplicationWindow {
                                 //                    }
                             }
 
+
                             TableView {
                                 id: tableView1
                                 width: 672
@@ -520,6 +535,7 @@ ApplicationWindow {
                                 }
 
                                 TableViewColumn {
+
                                     width: 50
                                     movable: false
                                     title: "α max"
@@ -528,10 +544,11 @@ ApplicationWindow {
                                         text: model.amax
                                         validator:  RegExpValidator { regExp:  /0[.]\d{1,3}|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).amax = text
-//                                            if(parseFloat(tableModel.get(styleData.row).amin) > parseFloat(tableModel.get(styleData.row).amax)){
-//                                                tableModel.get(styleData.row).amin=0;
-//                                            }
+                                            if (tableModel.get(styleData.row).amax !== text)
+                                            tableModel.get(styleData.row).amax = text
+                                            if(parseFloat(tableModel.get(styleData.row).amin) > parseFloat(tableModel.get(styleData.row).amax)){
+                                                tableModel.get(styleData.row).amin=0;
+                                            }
                                         }
                                     }
                                 }
@@ -546,10 +563,11 @@ ApplicationWindow {
                                         text: model.amin
                                         validator:  RegExpValidator { regExp:  /0[.]\d{1,3}|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).amin = text
-//                                            if(parseFloat(tableModel.get(styleData.row).amax) < parseFloat(tableModel.get(styleData.row).amin)){
-//                                                tableModel.get(styleData.row).amax=1;
-//                                            }
+                                             if (tableModel.get(styleData.row).amin !== text)
+                                            tableModel.get(styleData.row).amin = text
+                                            if(parseFloat(tableModel.get(styleData.row).amax) < parseFloat(tableModel.get(styleData.row).amin)){
+                                                tableModel.get(styleData.row).amax=1;
+                                            }
                                         }
                                     }
                                     resizable: false
@@ -566,11 +584,12 @@ ApplicationWindow {
 
                                         validator:  RegExpValidator { regExp:  /^([0123][0-9][0-9]|400)$/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).bmax = text
-//                                            if( parseFloat(tableModel.get(styleData.row).bmin) > parseFloat(tableModel.get(styleData.row).bmax)){
+                                             if (tableModel.get(styleData.row).bmax !== text)
+                                            tableModel.get(styleData.row).bmax = text
+                                            if( parseFloat(tableModel.get(styleData.row).bmin) > parseFloat(tableModel.get(styleData.row).bmax)){
 
-//                                                tableModel.get(styleData.row).bmin=0;
-//                                            }
+                                                tableModel.get(styleData.row).bmin=0;
+                                            }
                                         }
                                     }
                                 }
@@ -584,10 +603,11 @@ ApplicationWindow {
                                         text: model.bmin
                                         validator:  RegExpValidator { regExp:  /^([0123][0-9][0-9]|400)$/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).bmin = text
-//                                            if(parseFloat(tableModel.get(styleData.row).bmax) < parseFloat(tableModel.get(styleData.row).bmin)){
-//                                                tableModel.get(styleData.row).bmax=400;
-//                                            }
+                                             if (tableModel.get(styleData.row).bmin !== text)
+                                            tableModel.get(styleData.row).bmin = text
+                                            if(parseFloat(tableModel.get(styleData.row).bmax) < parseFloat(tableModel.get(styleData.row).bmin)){
+                                                tableModel.get(styleData.row).bmax=400;
+                                            }
                                         }
                                     }
                                     resizable: false
@@ -601,10 +621,11 @@ ApplicationWindow {
                                         text: model.wmax
                                         validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).wmax = text
-//                                            if(parseFloat(tableModel.get(styleData.row).wmin) > parseFloat(tableModel.get(styleData.row).wmax)){
-//                                                tableModel.get(styleData.row).wmin=0;
-//                                            }
+                                             if (tableModel.get(styleData.row).wmax !== text)
+                                            tableModel.get(styleData.row).wmax = text
+                                            if(parseFloat(tableModel.get(styleData.row).wmin) > parseFloat(tableModel.get(styleData.row).wmax)){
+                                                tableModel.get(styleData.row).wmin=0;
+                                            }
                                         }
                                     }
                                 }
@@ -618,7 +639,8 @@ ApplicationWindow {
                                         text: model.wmin
                                         validator:  RegExpValidator { regExp:  /^([0-9][0-9][0-9][0-9])$/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).wmin = text
+                                             if (tableModel.get(styleData.row).wmin !== text)
+                                                tableModel.get(styleData.row).wmin = text
                                         }
                                     }
                                     resizable: false
@@ -633,7 +655,8 @@ ApplicationWindow {
                                         text: model.pa
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).pa = text
+                                             if (tableModel.get(styleData.row).pa !== text)
+                                           tableModel.get(styleData.row).pa = text
                                         }
 
                                     }
@@ -648,7 +671,8 @@ ApplicationWindow {
                                         text: model.pb
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).pb = text
+                                             if (tableModel.get(styleData.row).pb !== text)
+                                                   tableModel.get(styleData.row).pb = text
                                         }
                                     }
                                     resizable: false
@@ -662,7 +686,8 @@ ApplicationWindow {
                                         text: model.pw
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).pw = text
+                                             if (tableModel.get(styleData.row).pw !== text)
+                                                   tableModel.get(styleData.row).pw = text
                                         }
 
                                     }
@@ -676,10 +701,11 @@ ApplicationWindow {
                                     title: "Translation max"
                                     role: "tmax"
                                     delegate: TextField {
-//                                        text: model.tmax
+                                        text: model.tmax
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).tmax = text
+                                             if (tableModel.get(styleData.row).tmax !== text)
+                                               tableModel.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -693,10 +719,11 @@ ApplicationWindow {
                                     title: "Translation min"
                                     role: "tmin"
                                     delegate: TextField {
-//                                        text: model.tmin
+                                        text: model.tmin
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).tmin = text
+                                             if (tableModel.get(styleData.row).tmin !== text)
+                                            tableModel.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -710,10 +737,11 @@ ApplicationWindow {
                                     title: "Translation percentage"
                                     role: "tp"
                                     delegate: TextField {
-//                                        text: model.tp
+                                       text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel.get(styleData.row).tp = text
+                                             if (tableModel.get(styleData.row).tp !== text)
+                                            tableModel.get(styleData.row).tp = text
                                         }
 
                                     }
@@ -762,7 +790,10 @@ ApplicationWindow {
                                                                         wmin: tableModel2.get(i).wmin,
                                                                         pa: tableModel2.get(i).pa,
                                                                         pb: tableModel2.get(i).pb,
-                                                                        pw: tableModel2.get(i).pw})
+                                                                        pw: tableModel2.get(i).pw,
+                                                                        tmin: tableModel2.get(i).tmin,
+                                                                        tmax: tableModel2.get(i).tmax,
+                                                                        tp: tableModel2.get(i).tp})
                                                 }
                                                 for(var i = tableModel2.count;i< text;i++){
                                                     tableModel2.set(i,{nFunction:i+1,
@@ -774,7 +805,10 @@ ApplicationWindow {
                                                                         wmin: "0.02",
                                                                         pa: "0.03",
                                                                         pb: "0.03",
-                                                                        pw: "0.03"
+                                                                        pw: "0.03",
+                                                                        tmin: "2",
+                                                                        tmax: "0",
+                                                                        tp: "0.01"
                                                                     })
                                                 }
                                             }
@@ -790,7 +824,10 @@ ApplicationWindow {
                                                                             wmin: tableModel2.get(i).wmin,
                                                                             pa: tableModel2.get(i).pa,
                                                                             pb: tableModel2.get(i).pb,
-                                                                            pw: tableModel2.get(i).pw})
+                                                                            pw: tableModel2.get(i).pw,
+                                                                            tmin: tableModel2.get(i).tmin,
+                                                                            tmax: tableModel2.get(i).tmax,
+                                                                            tp: tableModel2.get(i).tp})
                                                     }
                                                     for(var i = text;i< tableModel2.count;i++){
                                                         tableModel2.remove(i);
@@ -904,11 +941,12 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmax
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).bmax = text
-//                                            if( parseFloat(tableModel2.get(styleData.row).bmin) > parseFloat(tableModel2.get(styleData.row).bmax)){
+                                            if (tableModel2.get(styleData.row).bmax !== text)
+                                            tableModel2.get(styleData.row).bmax = text
+                                            if( parseFloat(tableModel2.get(styleData.row).bmin) > parseFloat(tableModel2.get(styleData.row).bmax)){
 
-//                                                tableModel2.get(styleData.row).bmin=0;
-//                                            }
+                                                tableModel2.get(styleData.row).bmin=0;
+                                            }
                                         }
                                     }
                                 }
@@ -921,10 +959,11 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmin
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).bmin = text
-//                                            if(parseFloat(tableModel2.get(styleData.row).bmax) < parseFloat(tableModel2.get(styleData.row).bmin)){
-//                                                tableModel2.get(styleData.row).bmax=400;
-//                                            }
+                                if (tableModel2.get(styleData.row).bmin !== text)
+                                            tableModel2.get(styleData.row).bmin = text
+                                            if(parseFloat(tableModel2.get(styleData.row).bmax) < parseFloat(tableModel2.get(styleData.row).bmin)){
+                                                tableModel2.get(styleData.row).bmax=400;
+                                            }
                                         }
                                     }
                                     resizable: false
@@ -941,12 +980,16 @@ ApplicationWindow {
                                         text: model.amax
 
 
-                                        //                                        if( 0 < (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin) &&
-                                        //                                        1 > (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin))
-                                        //RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
+//                                        if( 0 < (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin) &&
+//                                        1 > (tableModel2.get(styleData.row).bmax + tableModel2.get(styleData.row).bmin))
+                                        RegExpValidator {regExp:  /(^0[.]\d{1,3})|1/}
 
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).amax = text;
+                                            if (tableModel2.get(styleData.row).amax !== text)
+                                                tableModel2.get(styleData.row).amax = text;
+                                        }
+
+//
 
 
                                         }
@@ -954,7 +997,7 @@ ApplicationWindow {
 
 
 
-                                }
+//                                }
 
                                 TableViewColumn {
                                     width: 50
@@ -964,7 +1007,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.amin
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).amin = text
+                                             if (tableModel2.get(styleData.row).amin !== text)
+                                            tableModel2.get(styleData.row).amin = text
                                         }
                                     }
                                     resizable: false
@@ -978,7 +1022,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.wmax
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).wmax = text
+                                            if (tableModel2.get(styleData.row).wmax !== text)
+                                            tableModel2.get(styleData.row).wmax = text
                                         }
                                     }
                                 }
@@ -991,7 +1036,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.wmin
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).wmin = text
+                                             if (tableModel2.get(styleData.row).wmin !== text)
+                                            tableModel2.get(styleData.row).wmin = text
                                         }
                                     }
                                     resizable: false
@@ -1006,7 +1052,8 @@ ApplicationWindow {
                                         text: model.pa
                                         //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).pa = text
+                                             if (tableModel2.get(styleData.row).pa !== text)
+                                            tableModel2.get(styleData.row).pa = text
                                         }
 
 
@@ -1022,7 +1069,8 @@ ApplicationWindow {
                                         text: model.pb
                                         //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).pb = text
+                                             if (tableModel2.get(styleData.row).pb !== text)
+                                            tableModel2.get(styleData.row).pb = text
                                         }
                                     }
 
@@ -1037,7 +1085,8 @@ ApplicationWindow {
                                         text: model.pw
                                         // validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).pw = text
+                                             if (tableModel2.get(styleData.row).pw !== text)
+                                            tableModel2.get(styleData.row).pw = text
                                         }
 
                                     }
@@ -1054,7 +1103,8 @@ ApplicationWindow {
                                         text: model.tmax
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).tmax = text
+                                             if (tableModel2.get(styleData.row).tmax !== text)
+                                            tableModel2.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -1071,7 +1121,8 @@ ApplicationWindow {
                                         text: model.tmin
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).tmin = text
+                                             if (tableModel2.get(styleData.row).tmin !== text)
+                                            tableModel2.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -1088,7 +1139,8 @@ ApplicationWindow {
                                         text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel2.get(styleData.row).tp = text
+                                             if (tableModel2.get(styleData.row).tp !== text)
+                                            tableModel2.get(styleData.row).tp = text
                                         }
 
                                     }
@@ -1135,7 +1187,10 @@ ApplicationWindow {
                                                                         wmin: tableModel3.get(i).wmin,
                                                                         pa: tableModel3.get(i).pa,
                                                                         pb: tableModel3.get(i).pb,
-                                                                        pw: tableModel3.get(i).pw})
+                                                                        pw: tableModel3.get(i).pw,
+                                                                        tmax: tableModel3.get(i).tmax,
+                                                                        tmin: tableModel3.get(i).tmin,
+                                                                        tp: tableModel3.get(i).tp})
                                                 }
                                                 for(var i = tableModel3.count;i< text;i++){
                                                     tableModel3.insert(i,{ nFunction:i+1,
@@ -1147,7 +1202,10 @@ ApplicationWindow {
                                                                            wmin: "0.2",
                                                                            pa: "0.03",
                                                                            pb: "0.03",
-                                                                           pw: "0.03"})
+                                                                           pw: "0.03",
+                                                                           tmax: "2",
+                                                                           tmin: "0",
+                                                                           tp: "0.01"})
                                                 }
                                             }
                                             else
@@ -1162,7 +1220,10 @@ ApplicationWindow {
                                                                             wmin: tableModel3.get(i).wmin,
                                                                             pa: tableModel3.get(i).pa,
                                                                             pb: tableModel3.get(i).pb,
-                                                                            pw: tableModel3.get(i).pw})
+                                                                            pw: tableModel3.get(i).pw,
+                                                                            tmax: tableModel3.get(i).tmax,
+                                                                            tmin: tableModel3.get(i).tmin,
+                                                                            tp: tableModel3.get(i).tp})
                                                     }
                                                     for(var i = text;i< tableModel3.count;i++){
                                                         tableModel3.remove(i);
@@ -1187,8 +1248,8 @@ ApplicationWindow {
                                                                pa: "0.03",
                                                                pb: "0.03",
                                                                pw: "0.03",
-                                                               tmin: "0",
                                                                tmax: "0",
+                                                               tmin: "0",
                                                                tp: "0"})
                                     }
                                     width: 63
@@ -1214,6 +1275,10 @@ ApplicationWindow {
                                 id: tableView3
                                 width: 672
                                 height: 50
+                                Layout.columnSpan: 2
+                                Layout.rowSpan: 0
+                                visible: true
+                                Layout.fillWidth: false
                                 Layout.minimumWidth:  width
                                 Layout.fillHeight: false
 
@@ -1235,7 +1300,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.amax
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).amax = text
+                                             if (tableModel3.get(styleData.row).amax !== text)
+                                            tableModel3.get(styleData.row).amax = text
                                         }
                                     }
                                 }
@@ -1248,7 +1314,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.amin
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).amin = text
+                                         if (tableModel3.get(styleData.row).amin !== text)
+                                            tableModel3.get(styleData.row).amin = text
                                         }
                                     }
                                     resizable: false
@@ -1263,7 +1330,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmax
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).bmax = text
+                                            if (tableModel3.get(styleData.row).bmax !== text)
+                                            tableModel3.get(styleData.row).bmax = text
                                         }
                                     }
                                 }
@@ -1276,7 +1344,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.bmin
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).bmin = text
+                                             if (tableModel3.get(styleData.row).bmin !== text)
+                                            tableModel3.get(styleData.row).bmin = text
                                         }
                                     }
                                     resizable: false
@@ -1289,7 +1358,8 @@ ApplicationWindow {
                                     delegate: TextField {
                                         text: model.wmax
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).wmax = text
+                                             if (tableModel3.get(styleData.row).wmax !== text)
+                                            tableModel3.get(styleData.row).wmax = text
                                         }
                                     }
                                 }
@@ -1303,7 +1373,8 @@ ApplicationWindow {
                                         text: model.wmin
 
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).wmin = text
+                                             if (tableModel3.get(styleData.row).wmin !== text)
+                                            tableModel3.get(styleData.row).wmin = text
                                         }
 
                                     }
@@ -1319,7 +1390,8 @@ ApplicationWindow {
                                         text: model.pa
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).pa = text
+                                           if (tableModel3.get(styleData.row).pa !== text)
+                                            tableModel3.get(styleData.row).pa = text
                                         }
                                     }
                                     resizable: false
@@ -1333,7 +1405,8 @@ ApplicationWindow {
                                         text: model.pb
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).pb = text
+                                           if (tableModel3.get(styleData.row).pb !== text)
+                                            tableModel3.get(styleData.row).pb = text
                                         }
                                     }
                                     resizable: false
@@ -1347,7 +1420,8 @@ ApplicationWindow {
                                         text: model.pw
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).pw = text
+                                           if (tableModel3.get(styleData.row).pw !== text)
+                                            tableModel3.get(styleData.row).pw = text
                                         }
                                     }
 
@@ -1363,7 +1437,8 @@ ApplicationWindow {
                                         text: model.tmax
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).tmax = text
+                                             if (tableModel3.get(styleData.row).tmax !== text)
+                                              tableModel3.get(styleData.row).tmax = text
                                         }
 
                                     }
@@ -1380,7 +1455,8 @@ ApplicationWindow {
                                         text: model.tmin
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).tmin = text
+                                           if (tableModel3.get(styleData.row).tmin !== text)
+                                            tableModel3.get(styleData.row).tmin = text
                                         }
 
                                     }
@@ -1397,7 +1473,8 @@ ApplicationWindow {
                                         text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
-//                                            tableModel3.get(styleData.row).tp = text
+                                          if (tableModel3.get(styleData.row).tp !== text)
+                                            tableModel3.get(styleData.row).tp = text
                                         }
 
                                     }
@@ -1819,49 +1896,49 @@ ApplicationWindow {
         }
     }
 
-    MessageDialog {
-        id: messageDialogRain
-        title: "Input error"
-        text: "Please enter rain csv path."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogRain
+//        title: "Input error"
+//        text: "Please enter rain csv path."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
-    MessageDialog {
-        id: messageDialogActivation
-        title: "Input error"
-        text: "Please enter Activation csv path."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogActivation
+//        title: "Input error"
+//        text: "Please enter Activation csv path."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
 
-    MessageDialog {
-        id: messageDialogProjectName
-        title: "Input error"
-        text: "The project name already exists."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
-    MessageDialog {
-        id: messageDialogFileKernel
-        title: "Input error"
-        text: "Please enter Kernel csv path."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogProjectName
+//        title: "Input error"
+//        text: "The project name already exists."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
+//    MessageDialog {
+//        id: messageDialogFileKernel
+//        title: "Input error"
+//        text: "Please enter Kernel csv path."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
-    MessageDialog {
-        id: messageDialogProjectNameEmpty
-        title: "Input error"
-        text: "The project name is empty."
-        onAccepted: close()
-        Component.onCompleted: visible = false
-        modality: "ApplicationModal"
-    }
+//    MessageDialog {
+//        id: messageDialogProjectNameEmpty
+//        title: "Input error"
+//        text: "The project name is empty."
+//        onAccepted: close()
+//        Component.onCompleted: visible = false
+//        modality: "ApplicationModal"
+//    }
 
 }

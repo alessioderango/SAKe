@@ -6,6 +6,7 @@ TreeModel::TreeModel(QObject *parent) :
 
     m_roleNameMapping[TreeModel_Role_Name] = "name_role";
     m_roleNameMapping[TreeModel_Role_Description] = "description_role";
+    m_roleNameMapping[TreeModel_Role_Type] = "type";
 }
 
 void TreeModel::addEntry( const QString name,const QString& type, QString description,TreeModel * treeview )
@@ -13,6 +14,16 @@ void TreeModel::addEntry( const QString name,const QString& type, QString descri
 
     auto childEntry = new QStandardItem( name );
     childEntry->setData( description, TreeModel_Role_Description );
+    if(type == "Regression"){
+        QString tmp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/regression/"+name+"/kernel.csv";
+        std::cout << tmp.toStdString() << std::endl;
+    childEntry->setData( tmp, TreeModel_Role_Type );
+    }
+    else{
+        QString tmp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+name+"/kernels.csv";
+        std::cout << tmp.toStdString() << std::endl;
+        childEntry->setData( tmp, TreeModel_Role_Type );
+}
     //childEntry->parent();
     QStandardItem* entry = getBranch( type,treeview );
     entry->appendRow( childEntry );

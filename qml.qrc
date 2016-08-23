@@ -25,5 +25,6 @@
         <file>img/SAKe.png</file>
         <file>TableColumnTreeView.qml</file>
         <file>settings.qml</file>
+        <file>DialogDelete.qml</file>
     </qresource>
 </RCC>
