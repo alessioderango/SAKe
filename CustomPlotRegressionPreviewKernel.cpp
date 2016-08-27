@@ -136,9 +136,9 @@ customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 1
     customPlot->graph( 1 )->setData( x1, y1 );
 customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
     // give the axes some labels:
-    customPlot->xAxis->setLabel( "Generation" );
-    customPlot->yAxis->setLabel( "Fitness" );
-    // set axes ranges, so we see all data:
+//    customPlot->xAxis->setLabel( "Generation" );
+//    customPlot->yAxis->setLabel( "Fitness" );
+//    // set axes ranges, so we see all data:
     customPlot->xAxis->setRange( 0, 180 );
     customPlot->yAxis->setRange(  -0.01,0.25 );
 
@@ -261,14 +261,8 @@ void getSubdividePointsFromControlPoints(std::vector< double> x,std::vector< dou
 
 
 }
-void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromControlPoints(const QVariant& filename,const QVariant& n)
+void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromControlPoints(const QVariant& n)
 {
-    double *kernel;
-    int size_kernel;
-    double Delta_cr;
-    //QObject * errorHandler = qvariant_cast<QObject *>(errorHandlerVariant);
-    //    customPlot->yAxis->setRange( 0, maxy);
-    HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
     m_CustomPlot->xAxis->setRange( 0, size_kernel );
     ControlPoints * controlPoints = new ControlPoints();
     controlPoints->calculateControlPoints(kernel,size_kernel);
@@ -279,13 +273,9 @@ void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromControl
     getSubdividePointsFromControlPoints(x,y,n.toInt(),xOutput,yOutput);
     updateGraph0(xOutput,yOutput);
 }
-void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromKernel(const QVariant& filename,const QVariant& n)
+void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromKernel(const QVariant& n)
 {
-    double *kernel;
-    int size_kernel;
-    double Delta_cr;
     //    customPlot->yAxis->setRange( 0, maxy);
-    HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
     m_CustomPlot->xAxis->setRange( 0, size_kernel );
 
     QVector<double> xOutput;
@@ -294,12 +284,9 @@ void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromKernel(
     updateGraph0(xOutput,yOutput);
 }
 
-void CustomPlotRegressionPreviewKernel::initCustomPlotRegressionPreviewKernel(const QVariant& filename)
+void CustomPlotRegressionPreviewKernel::initCustomPlotRegressionPreviewKernel(const QVariant &filenamePar)
 {
-    double *kernel;
-    int size_kernel;
-    double Delta_cr;
-    //    customPlot->yAxis->setRange( 0, maxy);
+    filename = filenamePar;
     HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
     m_CustomPlot->xAxis->setRange( 0, size_kernel );
 
@@ -318,13 +305,8 @@ void CustomPlotRegressionPreviewKernel::initCustomPlotRegressionPreviewKernel(co
     m_CustomPlot->replot();
 }
 
-void CustomPlotRegressionPreviewKernel::initCustomPlotKernelComtrolPoints(const QVariant& filename)
+void CustomPlotRegressionPreviewKernel::initCustomPlotKernelComtrolPoints()
 {
-    double *kernel;
-    int size_kernel;
-    double Delta_cr;
-    HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
-
     ControlPoints * controlPoints = new ControlPoints();
     controlPoints->calculateControlPoints(kernel,size_kernel);
     std::vector< double> x = controlPoints->getX();

@@ -23,9 +23,10 @@ public:
 
     Q_INVOKABLE void initCustomPlotRegressionPreviewKernel();
     Q_INVOKABLE void initCustomPlotRegressionPreviewKernel(const QVariant& filename);
-    Q_INVOKABLE void initCustomPlotKernelComtrolPoints(const QVariant& filename);
-    Q_INVOKABLE void customPlotRegressionSubdivideFromControlPoints(const QVariant& filename,const QVariant& n);
-    Q_INVOKABLE void customPlotRegressionSubdivideFromKernel(const QVariant& filename,const QVariant& n);
+    Q_INVOKABLE void initCustomPlotKernelComtrolPoints();
+    Q_INVOKABLE void customPlotRegressionSubdivideFromControlPoints(const QVariant& n);
+    Q_INVOKABLE void customPlotRegressionSubdivideFromKernel(const QVariant& n);
+
 
 
 
@@ -46,6 +47,10 @@ protected:
 private:
   QCustomPlot*  m_CustomPlot;
   QCPBars *myBars;
+  double *kernel;
+  int size_kernel;
+  double Delta_cr;
+  QVariant filename;
 private slots:
     void graphClicked( QCPAbstractPlottable* plottable );
     void onCustomReplot();

@@ -3,7 +3,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
 import QtQuick.Window 2.0
-import CustomPlotRegressionPreviewKernel 1.0
+import CustomPlotRegressionPreviewKernel  1.0
 
 ApplicationWindow {
     id: applicationWindow1
@@ -121,7 +121,7 @@ ApplicationWindow {
             count++;
 
         }
-
+        customPlotKernelRegression1.init(pathrain)
 
     }
     ScrollView {
@@ -425,13 +425,14 @@ ApplicationWindow {
                                         //inputMethodHints: Qt.ImhDigitsOnly
                                         validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                                         placeholderText: "Population Size"
+
                                         onTextChanged: {
-                                            if(text >0 && pathrain != ""){
+                                            if(text >0){
                                                 if(checkUseControlPointsWithN.checked){
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(textPercentageN.text)
                                                 }
                                                 else{
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(textPercentageN.text)
                                                 }
                                             }
                                         }
@@ -441,12 +442,12 @@ ApplicationWindow {
                                         id:checkUseControlPointsWithN;
                                         text: qsTr("Use Control Points")
                                         onCheckedChanged: {
-                                            if(textPercentageN.text >0 && pathrain != ""){
+                                            if(textPercentageN.text >0){
                                                 if(checkUseControlPointsWithN.checked){
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(textPercentageN.text)
                                                 }
                                                 else{
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(textPercentageN.text)
                                                 }
                                             }
                                         }
@@ -1530,6 +1531,7 @@ ApplicationWindow {
                                     console.log("You chose: " + split.length)
                                     textfileRain.text = "../"+split[split.length-1]
                                     customPlotKernelRegression1.initCustomPlotRegressionPreviewKernel(fileDialogRain.fileUrl)
+                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(textPercentageN.text)
                                     //                                customPlotKernelRegression1.initCustomPlotKernelComtrolPoints(fileDialogRain.fileUrl)
                                     //handlerCSV.loadCSV(fileDialogRain.fileUrl)
                                     //Qt.quit()
@@ -1652,7 +1654,18 @@ ApplicationWindow {
                             Layout.maximumHeight: 1000000
                             //objectName:  'customPlotKernelRegression'
                             //anchors.top: customPlot1.bottom
-                            Component.onCompleted: initCustomPlotRegressionPreviewKernel()
+                            function init(path){
+                                console.log("ALESSIO  "+path)
+                                initCustomPlotRegressionPreviewKernel(path)
+                            }
+
+                            Component.onCompleted: {
+
+                                initCustomPlotRegressionPreviewKernel()
+                                //console.log("ALESSIO  "+path)
+                                //initCustomPlotRegressionPreviewKernel(pathrain)
+                            }
+
 
                         }
                         //                    CustomPlotRegressionPreviewKernel {
@@ -1898,39 +1911,39 @@ ApplicationWindow {
         }
     }
 
-    //        MessageDialog {
-    //            id: messageDialogRain
-    //            title: "Input error"
-    //            text: "Please enter rain csv path."
-    //            onAccepted: close()
-    //            Component.onCompleted: visible = false
-    //            modality: "ApplicationModal"
-    //        }
+            MessageDialog {
+                id: messageDialogRain
+                title: "Input error"
+                text: "Please enter rain csv path."
+                onAccepted: close()
+                Component.onCompleted: visible = false
+                modality: "ApplicationModal"
+            }
 
-    //        MessageDialog {
-    //            id: messageDialogActivation
-    //            title: "Input error"
-    //            text: "Please enter Activation csv path."
-    //            onAccepted: close()
-    //            Component.onCompleted: visible = false
-    //            modality: "ApplicationModal"
-    //        }
+            MessageDialog {
+                id: messageDialogActivation
+                title: "Input error"
+                text: "Please enter Activation csv path."
+                onAccepted: close()
+                Component.onCompleted: visible = false
+                modality: "ApplicationModal"
+            }
 
-    //        MessageDialog {
-    //            id: messageDialogProjectName
-    //            title: "Input error"
-    //            text: "The project name already exists."
-    //            onAccepted: close()
-    //            Component.onCompleted: visible = false
-    //            modality: "ApplicationModal"
-    //        }
-    //        MessageDialog {
-    //            id: messageDialogProjectNameEmpty
-    //            title: "Input error"
-    //            text: "The project name is empty."
-    //            onAccepted: close()
-    //            Component.onCompleted: visible = false
-    //            modality: "ApplicationModal"
-    //        }
+            MessageDialog {
+                id: messageDialogProjectName
+                title: "Input error"
+                text: "The project name already exists."
+                onAccepted: close()
+                Component.onCompleted: visible = false
+                modality: "ApplicationModal"
+            }
+            MessageDialog {
+                id: messageDialogProjectNameEmpty
+                title: "Input error"
+                text: "The project name is empty."
+                onAccepted: close()
+                Component.onCompleted: visible = false
+                modality: "ApplicationModal"
+            }
 
 }
