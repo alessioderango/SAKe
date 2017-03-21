@@ -97,6 +97,9 @@ public:
     int getCsvHandlerstatusRain() const;
     void setCsvHandlerstatusRain(int value);
 
+    float getPropSelection() const;
+    void setPropSelection(float value);
+
 protected:
 
 public slots:
@@ -138,6 +141,7 @@ private:
     int      dHpMin;
     float    relRateCrossover;
     float    relRateMutation;
+    float    propSelection;
     float    propCrossover;
     float    propMutation;
     float    pme;

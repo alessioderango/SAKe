@@ -12,6 +12,7 @@ double Parameters::getParameters(int i){
     return parameters[i];
 }
 
+
 void Parameters::setParameters(int i,double value){
     parameters[i]=value;
 }

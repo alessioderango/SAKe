@@ -43,6 +43,7 @@ public :
           select(_select,_selectRate),
           eval(_eval) {
       maxNumberToConsider =_maxNumberToConsider;
+      selectionProb = _selectRate;
   }
 
   double roundMy(double x, int prec)
@@ -84,6 +85,12 @@ public :
     }
   }
 
+  double fRand(double fMin, double fMax)
+  {
+      double f = (double)rand() / (double)RAND_MAX;
+      return fMin + f * (fMax - fMin);
+  }
+
 
   void operator()(eoPop<EOT>& _pop)
   {
@@ -121,31 +128,52 @@ public :
                 // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
                  continue;
             }
-            int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
-            int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
+            int gen1=rand()%_pop.size();
+            int gen2=rand()%_pop.size();
 
-            double tmpFitnessGen1 = popTmp[gen1].fitness();
-            double tmpFitnessGen2 = popTmp[gen2].fitness();
-            if(tmpFitnessGen1 > tmpFitnessGen2 ){
-                EOT a;
+            double randomProb = fRand(0,1);
+            EOT best;
+            EOT worst;
+            if(popTmp[gen1].fitness() > popTmp[gen2].fitness() ){
                 double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[gen1]. getSize());
+                best.setFi(r);
+                best.setSize(popTmp[gen1]. getSize());
                 for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-                    a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
+                    best.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
                 }
-                offspring[counter]=a;
             }
             else{
-                    EOT a;
-                    double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-                    a.setFi(r);
-                    a.setSize(popTmp[gen2]. getSize());
-                    for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                        a. setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
-                    }
-                    offspring[counter]=a;
+                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
+                best.setFi(r);
+                best.setSize(popTmp[gen2]. getSize());
+                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
+                    best.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
                 }
+            }
+
+            if(popTmp[gen1].fitness() < popTmp[gen2].fitness() ){
+                double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
+                worst.setFi(r);
+                worst.setSize(popTmp[gen1]. getSize());
+                for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
+                    worst.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
+                }
+            }
+            else{
+                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
+                worst.setFi(r);
+                worst.setSize(popTmp[gen2]. getSize());
+                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
+                    worst.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
+                }
+            }
+
+            if(randomProb <= selectionProb){
+                offspring[counter]=best;
+            }else
+            {
+                offspring[counter]=worst;
+            }
 
         }
         // END SELECTION
@@ -205,6 +233,7 @@ private :
       int countDeltaCritico;
       int countMomento;
       int countTb;
+      float selectionProb;
 
 };
 

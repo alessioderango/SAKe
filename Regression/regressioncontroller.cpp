@@ -25,8 +25,15 @@ RegressionController::RegressionController(QString projectName,
                                            double dpercentageCrossover,
                                            double dpercentageMutation,
                                            int inumberProcessor,
-                                           double *translation){
+                                           double *translation,
+                                           int propSelection,
+                                           int para1,
+                                           int para2,
+                                           int itypeAlgorithm,
+                                           QString  sselection){
 
+    typeAlgorithm =itypeAlgorithm;
+    selection        = sselection;
     this->percentualePesoSize = weightsSize;
     percentualePeso=_percentualePeso;
 
@@ -54,7 +61,7 @@ RegressionController::RegressionController(QString projectName,
     this->numberProcessor=inumberProcessor;
 
 
-    this->selectionElitist = iselectionElitist;
+    this->selectionElitist = para1;
     this->populationSize = ipopulationSize;
     this->maxGeneration = imaxGeneration;
     this->percentageCrossover = dpercentageCrossover;
@@ -68,6 +75,34 @@ RegressionController::RegressionController(QString projectName,
     }
 
     savePath = tmp2;
+
+    if(QString::compare(selection, "StochTour(t)", Qt::CaseInsensitive)==0)
+    {
+        parameter1=para1;
+        parameter2=para2;
+        selection = QString("StochTour(%1)").arg(parameter1);
+    }else
+        if( QString::compare(selection, "DetTour(T)", Qt::CaseInsensitive)==0){
+            parameter1=para1;
+            parameter2=para2;
+            selection = QString("DetTour(%1)").arg(parameter1);
+        }else
+            if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
+                parameter1=para1;
+                parameter2=para2;
+                selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+            }else
+                if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
+                    parameter1=para1;
+                    parameter2=para2;
+                    selection = QString("Roulette");
+                }else
+                    if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
+                        parameter1=para1;
+                        parameter2=para2;
+                        selection = QString("Sequential(%1)").arg(para1);
+                        //std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
+                    }
 
 }
 
@@ -176,7 +211,7 @@ void RegressionController::startAlgorithm(){
                                                                       x);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);
-        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,selectionElitist);
+        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,selectionElitist,typeAlgorithm,propSelection);
 
         ///// End of construction of the algorithm
 

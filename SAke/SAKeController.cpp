@@ -141,12 +141,13 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                 if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
                     parameter1=para1;
                     parameter2=para2;
-                    //selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+                    selection = QString("Roulette");
                 }else
                     if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
-
+                        parameter1=para1;
                         parameter2=para2;
-                        selection = QString("Sequential("+ spara1 +")").arg(parameter1,parameter2);
+                        selection = QString("Sequential(%1)").arg(spara1);
+                        //std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
                     }
 
 
@@ -179,6 +180,8 @@ void SAKeController::startAlgorithm()
             int numGen;
             HandlerCSV::loadCSVPopFromFile(savePath+"/currentGeneration.csv",popFromFile,numGen);
         }
+
+        std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
 
         if(typeAlgorithm==4)
             parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
@@ -241,12 +244,31 @@ void SAKeController::startAlgorithm()
         // stopping criteria
         eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
         // output
-        eoCheckPoint<Indi> & checkpoint = do_make_checkpoint_my(parser, state, eval, term,qCustomPlot,plotMobility,rain,rain_size,plotkernel,progressBar,this->maxGen,   currentMaximumFitness,
+        eoCheckPoint<Indi> & checkpoint = do_make_checkpoint_my(parser, state, eval, term,
+                                                              qCustomPlot,
+                                                                 plotMobility,
+                                                                rain,rain_size,
+                                                                 plotkernel,progressBar,
+                                                                this->maxGen,
+                                                                currentMaximumFitness,
                                                                 absoluteMaximumFitness,
                                                                 currentAverageFitness,
-                                                                absoluteAverageFitness, a,update);
+                                                                absoluteAverageFitness,
+                                                                a,
+                                                                update);
         // algorithm (need the operator!)
-        eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,propCrossover,*mut,propMutation,maxNumberToConsider,typeAlgorithm,selectionStrategy);
+        eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser,
+                                                  state,
+                                                  eval,
+                                                  checkpoint,
+                                                  *cross,
+                                                  propCrossover,
+                                                  *mut,
+                                                  propMutation,
+                                                  maxNumberToConsider,
+                                                  typeAlgorithm,
+                                                  selectionStrategy,
+                                                  propSelection);
 
         ///// End of construction of the algorithm
 
@@ -286,6 +308,16 @@ void SAKeController::startAlgorithm()
     {
         //            cout << e.what() << endl;
     }
+}
+
+float SAKeController::getPropSelection() const
+{
+    return propSelection;
+}
+
+void SAKeController::setPropSelection(float value)
+{
+    propSelection = value;
 }
 
 int SAKeController::getCsvHandlerstatusRain() const

@@ -71,6 +71,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      int maxNumberToConsider,
                                      unsigned int typeAlgorithm,
                                      SelectionStrategy<EOT> ** selectionStrategy,
+                                     float _propSelection,
                                      eoDistance<EOT> * _dist = NULL
                                      )
 {
@@ -324,24 +325,26 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
   eoAlgo<EOT> *algo;
   if(typeAlgorithm==0)
   {
-      algo = new eoSGASteadyState<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+      algo = new eoSGASteadyState<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
   }else
       if(typeAlgorithm==1)
       {
-          algo = new eoSGASteadyStateMultiObjects<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
+          algo = new eoSGASteadyStateMultiObjects<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
       }
       else
           if(typeAlgorithm==2)
           {
-              algo = new eoSGAGenerational<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+              algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
           }else
               if(typeAlgorithm==3)
               {
-                  algo = new eoSGAGenerationalMultiObjects<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
+                  algo = new eoSGAGenerationalMultiObjects<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
               }else
                   if(typeAlgorithm==4)
                   {
                       algo = new eoMySGA<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
+
+//                      algo = new eoSGA<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue);
                   }
   _state.storeFunctor(algo);
   // that's it!

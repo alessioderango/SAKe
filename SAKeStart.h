@@ -85,6 +85,7 @@ public slots:
                   const QVariant &tbMin,
                   const QVariant &dHpMax,
                   const QVariant &dHpMin,
+                  const QVariant &propSelection,
                   const QVariant &propCrossover,
                   const QVariant &propMutation,
                   const QVariant &pme,
@@ -128,7 +129,11 @@ public slots:
                          const QVariant &checkKernel,
                          const QVariant &checkN,
                          const QVariant &checkControlPointsWithN,
-                         const QVariant &textN);
+                         const QVariant &textN,
+                         const QVariant &para1,
+                         const QVariant &para2,
+                         const QVariant &propSelection,
+                         const QVariant &typeAlgorithm);
 
 
 

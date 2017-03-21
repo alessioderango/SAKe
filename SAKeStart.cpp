@@ -19,6 +19,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &tbMin,
                          const QVariant &dHpMax,
                          const QVariant &dHpMin,
+                         const QVariant &propSelection,
                          const QVariant &propCrossover,
                          const QVariant &propMutation,
                          const QVariant &pme,
@@ -54,6 +55,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                               tbMin.toString(),
                                                               dHpMax.toString(),
                                                               dHpMin.toString(),
+                                                              propSelection.toString(),
                                                               propCrossover.toString(),
                                                               propMutation.toString(),
                                                               pme.toString(),
@@ -73,6 +75,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                   tbMin.toString(),
                                                   dHpMax.toString(),
                                                   dHpMin.toString(),
+                                                  propSelection.toString(),
                                                   propCrossover.toString(),
                                                   propMutation.toString(),
                                                   pme.toString(),
@@ -228,6 +231,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                              sprojectname,
                                                              orders,
                                                              itypeAlgorithm);
+            controller->setPropSelection(propSelection.toFloat());
             controller->setPlotMobility(qCustomPlotMobilityFunction);
             controller->setPlotkernel(qCustomPlotKernel);
             controller->setApplication(a);
@@ -280,10 +284,10 @@ void SAKeStart::startValidation(
                             zCr
                             );
                 int idProject = threadsController.size();
-                validationController->setActivations(activation);
-                validationController->setActivations_size(activation_size);
-                validationController->setRain(rain);
-                validationController->setRain_size(rain_size);
+//                validationController->setActivations(activation);
+//                validationController->setActivations_size(activation_size);
+//                validationController->setRain(rain);
+//                validationController->setRain_size(rain_size);
                 QVariant returnedValue;
                 QVariant msg = "Validation - "+_projectName.toString();
                 QObject *rectMain = rootObject->findChild<QObject*>("Rectanglemain");
@@ -294,14 +298,29 @@ void SAKeStart::startValidation(
                 //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
                 //INIZIO
                 CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
+                QObject *fitness = rootObject->findChild<QObject*>(QString("fitness%1").arg(idProject));
+                QObject *tb = rootObject->findChild<QObject*>(QString("tb%1").arg(idProject));
+                QObject *deltaCritico = rootObject->findChild<QObject*>(QString("deltaCritico%1").arg(idProject));
+                QObject *momentoDelPrimoOrdine = rootObject->findChild<QObject*>(QString("momentoDelPrimoOrdine%1").arg(idProject));
+                validationController->setDeltaCritico(deltaCritico);
+                validationController->setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
+                validationController->setTb(tb);
                 validationController->setPlotMobility(qCustomPlotMobilityFunction);
+                validationController->setFitness(fitness);
                 validationController->updatePlot();
 
                 CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
+
+
                 validationController->setKernelPlot(qCustomPlotKernel);
                 validationController->updateKernelPlot();
                 SAKeController* tmp =new SAKeController();
+
+
                 threadsController.push_back(tmp);
+
+
+
             }
         }
     //}
@@ -333,7 +352,12 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const QVariant &checkKernel,
                                    const QVariant &checkN,
                                    const QVariant &checkControlPointsWithN,
-                                   const QVariant &textN)
+                                   const QVariant &textN,
+                                   const QVariant &para1,
+                                   const QVariant &para2,
+                                   const QVariant &itypeAlgorithm,
+                                   const QVariant &propSelection
+                                   )
 {
     std::vector<std::vector<double> > matrixGamma1;
     int numberElementsTable = 12;
@@ -619,7 +643,12 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                 dpercentageCrossover,
                 dpercentageMutation,
                 inumberProcessor,
-                translation
+                translation,
+                propSelection.toInt(),
+                para1.toInt(),
+                para2.toInt(),
+                itypeAlgorithm.toInt(),
+                selection.toString()
                 );
 
     std::vector< double> x;

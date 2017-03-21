@@ -103,7 +103,7 @@ private :
             functiontype[i]= _pop.best_element().getFunctionTypeConst(i);
         }
 
-        if(_pop.size() < 200 && steps%30 ==0){
+        if(_pop.size() < 200 && steps%200 ==0){
             qCustomPlotRegression->drawGammaFunctions(xRegretmp,functiontype,parameter);
             qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
         }

@@ -94,7 +94,9 @@ public:
 
         }else
         {
+            cout << tbMax << " "<< tbMin << endl;
             int tb =( rand()%(tbMax-tbMin))+tbMin;
+             cout << tb  << endl;
             _genotype.setSize(tb);
             double* fi = GetFunzioneFiltro(tb, pattern);
             _genotype.setFi(fi);

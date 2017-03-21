@@ -1,5 +1,5 @@
-#ifndef EOSGAREPLACEMENT
-#define EOSGAREPLACEMENT
+#ifndef EOSGASTEADYSTATE
+#define EOSGASTEADYSTATE
 
 #include <eoInvalidateOps.h>
 #include <eoContinue.h>
@@ -21,13 +21,13 @@
  * @ingroup Algorithms
  */
 template <class EOT>
-class eoSGAReplacement : public eoAlgo<EOT>
+class eoSGASteadyState : public eoAlgo<EOT>
 {
 public :
 
   // added this second ctor as I didn't like the ordering of the parameters
   // in the one above. Any objection :-) MS
-  eoSGAReplacement(
+  eoSGASteadyState(
         eoSelectOne<EOT>& _select,
         float _selectRate,
         eoQuadOp<EOT>& _cross, float _crate,
@@ -71,41 +71,17 @@ public :
         int counter=-1;
 
         popTmp= new EOT[_pop.size()];
-        //std::cout << "TORNEO!!!!!!! " << " " << _pop.size() << std::endl;
-
-        //popTmp.resize(_pop.size());
         for (int i=0; i<_pop.size(); i++){
-//            EOT a;
-//            popTmp[i] = a;
-//            popTmp[i].setWFromNew(_pop[i].getW());
-//             std::cout << "TORNEO!!!!!!! " << " " << i <<std::endl;
-//             popTmp[i].setParFromNew(_pop[i].getPar());
-//              popTmp[i].setFunctionTypeFromNew(_pop[i].getFunctionType());
-//               popTmp[i].setYcombinataFromNew(_pop[i].getYCombinata());
-//              std::cout << "TORNEO!!!!!!! " << " " << i <<std::endl;
               popTmp[i]=_pop[i];
-
-            //  std::cout << &popTmp[i] << " -> " << &_pop[i] << endl;
         }
-        //std::cout << "FINE!! " << " " << std::endl;
         qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
-//        for (int i=0; i<_pop.size(); i++){
 
-
-//            std::cout << popTmp[i].fitness() << " -  " << _pop[i].fitness() << endl;
-
-//        }
-//        std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-        //_pop.sort(result);
         //SELECTION
         offspring.clear();
         offspring.resize(_pop.size());
 
-       // std::cout << "TORNEO!!!!!!! " << " " << _pop.size() <<std::endl;
         for (int i=0; i<_pop.size(); i++){
-       // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
             if(counter < maxNumberToConsider){
-               // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
                 counter++;
                 EOT a;
                 a.setWFromNew(popTmp[counter].getW());
@@ -120,10 +96,8 @@ public :
                 a.setTranslation(popTmp[counter].getTranslation());
 
                 offspring[counter]=a;
-                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
                  continue;
             }
-           // counter=-1;
             counter++;
            // = min + rand()%(max - min);
             int gen1=maxNumberToConsider+(rand()%(_pop.size()-maxNumberToConsider));//-maxNumberToConsider) + maxNumberToConsider;
@@ -162,28 +136,11 @@ public :
 
 
         }
-        //  std::cout << "TORNEO!!!!!!! " << " " << std::endl;
         // END SELECTION
 
-        //delete []popTmp;
 
         unsigned i;
-
-// std::cout << "BEFORE CROSSOVER AND MUTATION  " << std::endl;
-
-// for (int tmp = 0; tmp < offspring.size(); tmp++) {
-//      if(!offspring[tmp].invalid())
-//     std::cout << offspring[tmp].fitness() << " -> " ;
-//  for (int j = 0; j < offspring[tmp].getSizeConst() ;j++){
-//      std::cout << offspring[tmp].getFiConst()[j] << " ";
-//      std::cout.flush();
-//    }
-//   std::cout <<  std::endl;
-
-// }
-
-        //for (i=0; i<_pop.size()/2; i++)
-        for (i=1; i<_pop.size()/2; i++)
+        for (i=maxNumberToConsider; i<_pop.size()/2; i++)
           {
             if ( rng.flip(crossoverRate) )
             {
@@ -195,20 +152,8 @@ public :
                        }
             }
           }
-// std::cout << "DOPO CROSSOVER  " << std::endl;
 
-//        for (int tmp = 0; tmp < offspring.size(); tmp++) {
-//            if(!offspring[tmp].invalid())
-//              std::cout << offspring[tmp].fitness() << " -> ";
-//         for (int j = 0; j < offspring[tmp].getSizeConst() ;j++){
-//             std::cout << offspring[tmp].getFiConst()[j] << " ";
-//             std::cout.flush();
-//           }
-//  std::cout <<  std::endl;
-//        }
-
-
-        for (i=1; i < offspring.size(); i++)
+        for (i=maxNumberToConsider; i < offspring.size(); i++)
           {
             if (rng.flip(mutationRate) )
             {
@@ -218,30 +163,11 @@ public :
 
           }
 
-//       std::cout << "DOPO MUTATION  " << std::endl;
-
-
-//        for (int tmp = 0; tmp < offspring.size(); tmp++) {
-//            if(!offspring[tmp].invalid())
-//              std::cout << offspring[tmp].fitness() << " -> ";
-//         for (int j = 0; j < offspring[tmp].getSizeConst() ;j++){
-//             std::cout << offspring[tmp].getFiConst()[j] << " ";
-//             std::cout.flush();
-//           }
-//  std::cout <<  std::endl;
-//        }
-
-
         offspring.invalidate();
         _pop.clear();
         _pop.swap(offspring);
         delete[] popTmp;
-//        for (i=0; i < offspring.size(); i++)
-//        {
-//            _pop[i]=offspring[i];
-//        }
         apply<EOT>(eval, _pop);
-//          std::cout << "FINE!!!!!!! " << " " << std::endl;
       } while (cont(_pop));
   }
 
@@ -261,5 +187,5 @@ private :
 
 
 
-#endif // EOSGAREPLACEMENT
+#endif // EOSGASTEADYSTATE
 

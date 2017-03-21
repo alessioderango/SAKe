@@ -26,5 +26,8 @@
         <file>TableColumnTreeView.qml</file>
         <file>settings.qml</file>
         <file>DialogDelete.qml</file>
+        <file>DialogInfo.qml</file>
+        <file>img/info.jpg</file>
+        <file>Popups.qml</file>
     </qresource>
 </RCC>

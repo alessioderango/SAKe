@@ -78,9 +78,9 @@ public:
 //		 * in EO we systematically write the sizes of things before the things
 //		 * so readFrom is easier to code (see below)
 //		 */
-//		_os << size << ' ';
-//		for (unsigned i = 0; i < size; i++)
-//			_os << Fi[i] << ' ';
+        _os << size << ' ';
+        for (unsigned i = 0; i < size; i++)
+            _os << Fi[i] << ' ';
 		// END   Code of default output
 	}
 

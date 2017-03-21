@@ -36,6 +36,7 @@ public:
         savePathKernels=savePath+"/kernels.csv";
         savePath+="/currentGeneration.csv";
         numberOfKernels=1000;
+        stepToSave = 100;
     }
 
     double roundMy(double x, int prec)
@@ -99,135 +100,147 @@ public:
          * reached */
     virtual bool operator() ( const eoPop<EOT>& _vEO ) {
 
-        //SALVATAGGIO ULTIMA GENERAZIONE
-        ofstream myfile;
-        myfile.open (savePath.toStdString(),ios::out);
 
-        ofstream kernelStream;
-        kernelStream.open (savePathKernels.toStdString(),ios::out);
-
-        bool numElementsEqualFitness=allElementsEqualFitness(kernels);
-
-        for (unsigned int  t = 0; t < _vEO.size(); t++) {
-            double tmp = _vEO[t].fitness();
-
-            int stop =  _vEO[t].getSizeConst();
-            myfile << thisGeneration << " ;";
-            myfile << tmp << " ;";
-            double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
-            myfile << delta << " ;";
-            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
-            myfile << stop << " ;";
-            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
-            //myfile << " ;";
-            //  myfile << "fitness ; "<<tmp <<" ; ";
-            for (int i = 0; i < stop; i++) {
-                myfile << _vEO[t].getFiConst()[i] << ";";
-            }
-            myfile << "\n";
+            //SALVATAGGIO ULTIMA GENERAZIONE
+            ofstream myfile;
+            myfile.open (savePath.toStdString(),ios::out);
 
 
 
+            for (unsigned int  t = 0; t < _vEO.size(); t++) {
+                double tmp = _vEO[t].fitness();
 
-
-            if(!presents(kernels,_vEO[t],tmp,delta,stop,_vEO[t].getMomentoDelPrimoOrdineConst())){
-                if(kernels.size() < numberOfKernels )
-                {
-                    //                    //myfile << " ;";
-                    //                    //  myfile << "fitness ; "<<tmp <<" ; ";
-                    std::vector<double> tmpKernel;
-                    tmpKernel.push_back(tmp);
-                    tmpKernel.push_back(delta);
-                    tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
-                    tmpKernel.push_back(stop);
-                    tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
-                    for (int i = 0; i < stop; i++) {
-                        //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                        tmpKernel.push_back(_vEO[t].getFiConst()[i]);
-                    }
-                    //kernelStream << "\n";
-                    kernels.push_back(tmpKernel);
-                }else
-                {
-                    if(!numElementsEqualFitness)
-                    {
-                        std::sort(kernels.begin(), kernels.end(),[](const std::vector<double>& a, const std::vector<double>& b) {
-                            return a[0] > b[0];
-                        });
-
-                        for (unsigned int g = 0; g < kernels.size(); g++) {
-                            if(kernels[g][0] < tmp){
-                                std::vector<double> tmpKernel;
-                                tmpKernel.push_back(tmp);
-                                tmpKernel.push_back(delta);
-                                tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
-                                tmpKernel.push_back(stop);
-                                tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
-                                for (int i = 0; i < stop; i++) {
-                                    //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                                    tmpKernel.push_back(_vEO[t].getFiConst()[i]);
-                                }
-                                //kernelStream << "\n";
-                                kernels.insert(kernels.begin()+g,tmpKernel);
-                                kernels.erase(kernels.begin()+numberOfKernels);
-                                break;
-                            }
-                        }
-
-
-
-                    }else
-                    {
-                        std::sort(kernels.begin(), kernels.end(),[](const std::vector<double>& a, const std::vector<double>& b) {
-                            return a[1] > b[1];
-                        });
-
-                        for (unsigned int g = 0; g < kernels.size(); g++) {
-                            if(kernels[g][1] < delta){
-                                std::vector<double> tmpKernel;
-                                tmpKernel.push_back(tmp);
-                                tmpKernel.push_back(delta);
-                                tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
-                                tmpKernel.push_back(stop);
-                                tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
-                                for (int i = 0; i < stop; i++) {
-                                    //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                                    tmpKernel.push_back(_vEO[t].getFiConst()[i]);
-                                }
-                                //kernelStream << "\n";
-                                kernels.insert(kernels.begin()+g,tmpKernel);
-                                kernels.erase(kernels.begin()+numberOfKernels);
-                                break;
-                            }
-                        }
-
-                    }
+                int stop =  _vEO[t].getSizeConst();
+                myfile << thisGeneration << " ;";
+                myfile << tmp << " ;";
+                double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
+                myfile << delta << " ;";
+                myfile << _vEO[t].getYmMinConst().getValue() << " ;";
+                myfile << stop << " ;";
+                myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+                //myfile << " ;";
+                //  myfile << "fitness ; "<<tmp <<" ; ";
+                for (int i = 0; i < stop; i++) {
+                    myfile << _vEO[t].getFiConst()[i] << ";";
                 }
-            }
+                myfile << "\n";
+
+
+
+// delta_z -- tb -- mu       <<<default>>>
+
+//        if(eoCountContinue<EOT>::thisGeneration%stepToSave ==0){
+//            ofstream kernelStream;
+//            kernelStream.open (savePathKernels.toStdString(),ios::out);
+
+//            bool numElementsEqualFitness=allElementsEqualFitness(kernels);
+
+//                if(!presents(kernels,_vEO[t],tmp,delta,stop,_vEO[t].getMomentoDelPrimoOrdineConst())){
+//                    if(kernels.size() < numberOfKernels )
+//                    {
+//                        //                    //myfile << " ;";
+//                        //                    //  myfile << "fitness ; "<<tmp <<" ; ";
+//                        std::vector<double> tmpKernel;
+//                        tmpKernel.push_back(tmp);
+//                        tmpKernel.push_back(delta);
+//                        tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
+//                        tmpKernel.push_back(stop);
+//                        tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
+//                        for (int i = 0; i < stop; i++) {
+//                            //kernelStream << _vEO[t].getFiConst()[i] << ";";
+//                            tmpKernel.push_back(_vEO[t].getFiConst()[i]);
+//                        }
+//                        //kernelStream << "\n";
+//                        kernels.push_back(tmpKernel);
+//                    }else
+//                    {
+//                        if(!numElementsEqualFitness)
+//                        {
+//                            std::sort(kernels.begin(), kernels.end(),[](const std::vector<double>& a, const std::vector<double>& b) {
+//                                return a[0] > b[0];
+//                            });
+
+//                            for (unsigned int g = 0; g < kernels.size(); g++) {
+//                                if(kernels[g][0] < tmp){
+//                                    std::vector<double> tmpKernel;
+//                                    tmpKernel.push_back(tmp);
+//                                    tmpKernel.push_back(delta);
+//                                    tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
+//                                    tmpKernel.push_back(stop);
+//                                    tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
+//                                    for (int i = 0; i < stop; i++) {
+//                                        //kernelStream << _vEO[t].getFiConst()[i] << ";";
+//                                        tmpKernel.push_back(_vEO[t].getFiConst()[i]);
+//                                    }
+//                                    //kernelStream << "\n";
+//                                    kernels.insert(kernels.begin()+g,tmpKernel);
+//                                    kernels.erase(kernels.begin()+numberOfKernels);
+//                                    break;
+//                                }
+//                            }
+
+
+
+//                        }else
+//                        {
+//                            std::sort(kernels.begin(), kernels.end(),[](const std::vector<double>& a, const std::vector<double>& b) {
+//                                return a[1] > b[1];
+//                            });
+
+//                            for (unsigned int g = 0; g < kernels.size(); g++) {
+//                                if(kernels[g][1] < delta){
+//                                    std::vector<double> tmpKernel;
+//                                    tmpKernel.push_back(tmp);
+//                                    tmpKernel.push_back(delta);
+//                                    tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
+//                                    tmpKernel.push_back(stop);
+//                                    tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
+//                                    for (int i = 0; i < stop; i++) {
+//                                        //kernelStream << _vEO[t].getFiConst()[i] << ";";
+//                                        tmpKernel.push_back(_vEO[t].getFiConst()[i]);
+//                                    }
+//                                    //kernelStream << "\n";
+//                                    kernels.insert(kernels.begin()+g,tmpKernel);
+//                                    kernels.erase(kernels.begin()+numberOfKernels);
+//                                    break;
+//                                }
+//                            }
+
+//                        }
+//                    }
+//                }
+
+//                for (unsigned int i = 0; i < kernels.size(); i++) {
+//                    for (int j = 0; j < kernels[i][3]; j++) {
+//                        kernelStream <<kernels[i][j] << ";";
+
+//                    }
+//                    kernelStream << "\n";
+//                }
+
+
+
+
+
+//            }
+
+
+//             kernelStream.close();
+
+
+
+
 
         }
-        myfile.close();
-
-        for (unsigned int i = 0; i < kernels.size(); i++) {
-            for (int j = 0; j < kernels[i][3]; j++) {
-                kernelStream <<kernels[i][j] << ";";
-
-            }
-            kernelStream << "\n";
-        }
 
 
-        kernelStream.close();
-
-
+            myfile.close();
 
         thisGeneration++;
         if(stop){
             eo::log << eo::logging << "STOP in eoGenContinue: stop execution \n";
             return false;
         }
-
-
 
         return true;
     }
@@ -259,6 +272,7 @@ private:
     QObject *gen;
     std::vector<std::vector<double>> kernels;
     int numberOfKernels;
+    int stepToSave;
 };
 
 

@@ -319,11 +319,11 @@ public:
        return translation;
    }
 
-   int  getTranslation(int i){
+   double  getTranslation(int i){
        return translation[i];
    }
 
-   int  getTranslationConst(int i) const{
+   double  getTranslationConst(int i) const{
        return translation[i];
    }
 

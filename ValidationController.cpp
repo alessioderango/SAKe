@@ -16,6 +16,7 @@ ValidationController::ValidationController(
 //       HandlerCSV::loadCSVKernel(filenameKernelPath,Fi,size,zCr);
     this->rain = rain;
     this->rain_size = rain_size;
+    this->activations = activations;
     this->activations_size = activations_size;
     this->Fi = Fi;
     this->size = size;
@@ -110,6 +111,7 @@ void ValidationController::updatePlot(){
     double YsMin = 999999999;
     int iMin =-1;
     std::vector<Ym> bests;
+    printf("activations_size %d \n",activations_size);
     for (int s = 0; s < activations_size; s++) {
         for (int i = 0; i < countYm; i++) {
             //TODO inserire variabili intervallo giorni
@@ -118,9 +120,11 @@ void ValidationController::updatePlot(){
             if(result1>=-2 && result2>=-1){
                 //if(i<countYm)
                 //if(i<(activations_size)){
-                // printf("i %d \n",i);
-                // printf("f %f \n",f);
+                    printf("i %d \n",i);
+
                     f += 1 / (double)(i + 1);
+                    printf("f %f \n",f);
+                    fflush( stdout );
                     bests.push_back(ym[i]);
 //                        int year = ym[i].getTime().tm_year +1900;
 //                        int mon = ym[i].getTime().tm_mon +1;
@@ -141,7 +145,34 @@ void ValidationController::updatePlot(){
     }//for
     Ym ymMin= ym[iMin];
     Ym ymMin2 = ym[iMin+1];
-   plotMobility->updateGraph(Y,ymMin,ymMin2,bests);
+    double dYcr = (ymMin.getValue()-ymMin2.getValue())/ymMin2.getValue();
+    // tb = this->size
+    double momentoDelPrimoOrdine = 0;
+    for (int i = 0; i < size; i++) {
+        momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
+    }
+
+    double fMax=0;
+   // printf("activations_size %d \n",activations_size);
+    for (int i = 1; i <= activations_size; i++) {
+        fMax +=(double)(1/(double)i);
+    }
+
+    QString fitnessString= QString("Fitness :    %1").arg((double) (f/fMax));
+    this->fitness->setProperty("text",fitnessString);
+
+
+    QString momentoDelPrimoOrdineString= QString("Momento del primo ordine:    %1").arg(momentoDelPrimoOrdine);
+    this->momentoDelPrimoOrdine->setProperty("text",momentoDelPrimoOrdineString);
+
+    QString deltaCriticoString= QString("Δcritico:    %1").arg(dYcr);
+    this->deltaCritico->setProperty("text",deltaCriticoString);
+
+    QString tbString= QString("tb:    %1").arg(this->size );
+    this->tb->setProperty("text",tbString);
+
+
+    plotMobility->updateGraph(Y,ymMin,ymMin2,bests);
 }
 
 Rain *ValidationController::getRain() const
@@ -182,6 +213,46 @@ int ValidationController::getActivations_size() const
 void ValidationController::setActivations_size(int value)
 {
     activations_size = value;
+}
+
+QObject *ValidationController::getTb() const
+{
+    return tb;
+}
+
+void ValidationController::setTb(QObject *value)
+{
+    tb = value;
+}
+
+QObject *ValidationController::getDeltaCritico() const
+{
+    return deltaCritico;
+}
+
+void ValidationController::setDeltaCritico(QObject *value)
+{
+    deltaCritico = value;
+}
+
+QObject *ValidationController::getMomentoDelPrimoOrdine() const
+{
+    return momentoDelPrimoOrdine;
+}
+
+void ValidationController::setMomentoDelPrimoOrdine(QObject *value)
+{
+    momentoDelPrimoOrdine = value;
+}
+
+QObject *ValidationController::getFitness() const
+{
+    return fitness;
+}
+
+void ValidationController::setFitness(QObject *value)
+{
+    fitness = value;
 }
 
 void ValidationController::setKernelPlot(CustomPlotKernel *value){

@@ -59,6 +59,8 @@ public:
     bool operator()(GenotypeT & _genotype)
     {
         bool isModified(true);
+//        std::cout <<" ************************** " << std::endl;
+//        std::cout << "MUTATION " << std::endl;
         // START code for mutation of the _genotype object
 
         /** Requirement
@@ -252,10 +254,15 @@ public:
                         _genotype.setW(i,tmpGammaWeight);
                     }
 
-                    if(_genotype.getTranslationConst(i) !=0)
+//                    std::cout <<" ************************** " << std::endl;
+//                    std::cout << _genotype.getTranslationConst(i) << std::endl;
+                    if(_genotype.getTranslationConst(i) != 0)
                     {
                         double percentageTranslation = _genotype.getPar(i).getParameters(2);
                         double tmpTranslation= fRand(-(percentageTranslation*_genotype.getTranslation(i)),percentageTranslation*_genotype.getTranslation(i));
+
+//                        std::cout <<" ************************** " << std::endl;
+//                        std::cout << _genotype.getTranslation(i) << std::endl;
 
                         if(tmpTranslation < 0){
                             tmpTranslation=0;
@@ -263,6 +270,8 @@ public:
                         if(tmpTranslation > _genotype.getYCombinataConst().size()){
                             tmpTranslation=_genotype.getYCombinataConst().size();
                         }
+//                        std::cout << (_genotype.getTranslation(i)+tmpTranslation) << std::endl;
+//                        std::cout << std::endl;
 
                         _genotype.setParameters(i,2,_genotype.getPar(i).getParameters(2)+tmpTranslation);
                     }

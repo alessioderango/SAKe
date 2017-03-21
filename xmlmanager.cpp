@@ -263,7 +263,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                             }else
 
                             list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
-                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+                            qDebug() << "parametri j == "<<j <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
                         }
                     }
 
@@ -315,6 +315,7 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                           QString tbMin,
                                                           QString dHpMax,
                                                           QString dHpMin,
+                                                          QString probabilityOfSelection,
                                                           QString probabilityOfCrossover,
                                                           QString probabilityOfMutation,
                                                           QString pme,
@@ -362,13 +363,14 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
             a.at(i).childNodes().at(6).firstChild().setNodeValue(tbMin);
             a.at(i).childNodes().at(7).firstChild().setNodeValue(dHpMax);
             a.at(i).childNodes().at(8).firstChild().setNodeValue(dHpMin);
-            a.at(i).childNodes().at(9).firstChild().setNodeValue(probabilityOfCrossover);
-            a.at(i).childNodes().at(10).firstChild().setNodeValue(probabilityOfMutation);
-            a.at(i).childNodes().at(11).firstChild().setNodeValue(pme);
-            a.at(i).childNodes().at(12).firstChild().setNodeValue(pmb);
-            a.at(i).childNodes().at(13).firstChild().setNodeValue(pattern);
-            a.at(i).childNodes().at(14).firstChild().setNodeValue(pathRains);
-            a.at(i).childNodes().at(15).firstChild().setNodeValue(pathActivations);
+            a.at(i).childNodes().at(9).firstChild().setNodeValue(probabilityOfSelection);
+            a.at(i).childNodes().at(10).firstChild().setNodeValue(probabilityOfCrossover);
+            a.at(i).childNodes().at(11).firstChild().setNodeValue(probabilityOfMutation);
+            a.at(i).childNodes().at(12).firstChild().setNodeValue(pme);
+            a.at(i).childNodes().at(13).firstChild().setNodeValue(pmb);
+            a.at(i).childNodes().at(14).firstChild().setNodeValue(pattern);
+            a.at(i).childNodes().at(15).firstChild().setNodeValue(pathRains);
+            a.at(i).childNodes().at(16).firstChild().setNodeValue(pathActivations);
         }
 
     }
@@ -397,6 +399,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
                                               QString tbMin,
                                               QString dHpMax,
                                               QString dHpMin,
+                                              QString probabilityOfSelection,
                                               QString probabilityOfCrossover,
                                               QString probabilityOfMutation,
                                               QString pme,
@@ -457,6 +460,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomElement tbMinElement = document.createElement( "tbMin" );
     QDomElement dHpMaxElement = document.createElement( "dHpMax" );
     QDomElement dHpMinElement = document.createElement( "dHpMin" );
+    QDomElement probabilityOfSelectionElement = document.createElement( "ProbabilityOfSelection" );
     QDomElement probabilityOfCrossoverElement = document.createElement( "ProbabilityOfCrossover" );
     QDomElement probabilityOfMutationElement = document.createElement( "ProbabilityOfMutation" );
     QDomElement pmeElement = document.createElement( "Pme" );
@@ -482,6 +486,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomText tbMinText = document.createTextNode( tbMin );
     QDomText dHpMaxText = document.createTextNode( dHpMax );
     QDomText dHpMinText = document.createTextNode( dHpMin );
+    QDomText probabilityOfSelectionText = document.createTextNode( probabilityOfSelection );
     QDomText probabilityOfCrossoverText = document.createTextNode( probabilityOfCrossover );
     QDomText probabilityOfMutationText = document.createTextNode( probabilityOfMutation );
     QDomText pmeText = document.createTextNode( pme );
@@ -524,6 +529,9 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
 
     dHpMinElement.appendChild(dHpMinText);
     project.appendChild(dHpMinElement);
+
+    probabilityOfSelectionElement.appendChild(probabilityOfSelectionText);
+    project.appendChild(probabilityOfSelectionElement);
 
     probabilityOfCrossoverElement.appendChild(probabilityOfCrossoverText);
     project.appendChild(probabilityOfCrossoverElement);

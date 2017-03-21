@@ -1,9 +1,11 @@
 import QtQuick 2.5
+import QtQuick.Controls 2.1
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
+import QtQuick.Window 2.2
 
-ApplicationWindow {
+Window {
     id: applicationWindow1
     visible: true
     width: 700
@@ -13,45 +15,140 @@ ApplicationWindow {
     minimumWidth: 700
     maximumHeight: minimumHeight
     maximumWidth: minimumWidth
-
     property  string pathrain;
     property  string pathactivation;
 
+    property  string infoSelection :  "
+<html>
+<head>
+<style>
+
+table, th, td {
+    border: 2px solid black;
+   padding-left:10px;
+}
+</style>
+</head>
+
+<body>
+<table border='1'>
+<thead>
+<tr>
+<td><b>Selection Type</b></td>
+<td><b>Specification </b></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td >DetTour(t)</td>
+<td>selecting an individual from a population of individuals with rate t between 0.55 - 1 </td>
+</tr>
+
+  <tr>
+<td>StochTour(t)</td>
+<td>a selection method that selects ONE individual by binary stochastic tournament with rate t between 0.55 - 1</td>
+</tr>
+
+  <tr>
+<td>Ranking(p,e)</td>
+<td>select an individual by roulette wheel on its rank.
+        <table>
+<tr>
+<td>p </td>
+<td>the selective pressure, should be in [1,2] (2 is the default)</td>
+</tr>
+
+<tr>
+<td>e </td>
+<td>exponent (1 == linear) positive integer</td>
+</tr>
+        </table>
+</tr>
+
+  <tr>
+<td>Roulette</td>
+<td>select an individual proportional to her stored fitness value. </td>
+</tr>
+  <tr>
+<td>Sequential(ordered/unordered)</td>
+<td>Looping back to the beginning when exhausted, can be from best to worse, or in random order.</td>
+</tr>
+
+  <tr>
+<td>Generational</td>
+<td> </td>
+</tr>
+
+  <tr>
+<td>Steady-State</td>
+<td> </td>
+</tr>
+
+
+
+</tbody>
+</table>
+</body>
+</html>
+";
+
+    property string infoPopulation : "population of candidate solutions";
+    property string infoMaxGen : "Number of GA iterations";
+    property string infotbMax : "Max base time";
+    property string infotbMin : "Min base time";
+    property string infodHpMax : " Percentage of the maximum height of the kernel, used to define the range in which dh is randomly obtained";
+    property string infodHpMin: " Percentage of the minimum height of the kernel, used to define the range in which dh is randomly obtained";
+    property string infoPropSelection : "Probability of selection";
+    property string infoPropCrossover : "Probability of crossover";
+    property string infoPropMutation : "Probability of mutation";
+    property string infoPme : "Number of mutated elements of the kernel, expressed as a percentage of tb";
+    property string infoPmb : "Factor defining the range in which dtb is selected";
+    property string infoPattern : "The initial kernel pattern";
+    property string infoNumberProcessor : "The number of processor to use for the computation";
+
+
+
     function f(list){
-        console.log("Ok funzia")
+
+        console.log( " CIAOOOO " )
+        for(var i = 0; i< list.length ; i++){
+            console.log(i + "  " +list[i])
+        }
+        console.log( " CIAOOOO " )
+
         labelProjectNameFromFile.text=list[0]
-        if(list[1]=="Genarational"){
+        if(list[1]==="Genarational"){
             comboSelection.currentIndex=5
             selectionParameterTournamentWithoutReplacement.text=list[2]
         }else
-            if(list[1]=="Steady-State"){
+            if(list[1]==="Steady-State"){
                 comboSelection.currentIndex=7
                 selectionParameterTournamentWithoutReplacement.text=list[2]
             }else
-                if(list[1]=="MultiObject Steady-State"){
+                if(list[1]==="MultiObject Steady-State"){
                     comboSelection.currentIndex=8
                     selectionParameterTournamentWithoutReplacement.text=list[2]
                 }else
-                    if(list[1]=="MultiObject Genarational"){
+                    if(list[1]==="MultiObject Genarational"){
                         comboSelection.currentIndex=6
                         selectionParameterTournamentWithoutReplacement.text=list[2]
                     }else
-                        if(list[1]=="StochTour(t)"){
+                        if(list[1]==="StochTour(t)"){
                             comboSelection.currentIndex=0
                             selectionParameter.text=list[2]
                         }else
-                            if(list[1]=="DetTour(T)"){
+                            if(list[1]==="DetTour(T)"){
                                 comboSelection.currentIndex=1
                                 selectionParameter.text=list[2]
                             }else
-                                if(list[1]=="Ranking(p,e)"){
+                                if(list[1]==="Ranking(p,e)"){
                                     comboSelection.currentIndex=2
                                     selectParameterRanking1.text=list[2]
                                     selectParameterRanking2.text=list[3]
                                 }else
-                                    if(list[1]=="Sequential(ordered/unordered)"){
+                                    if(list[1]==="Sequential(ordered/unordered)"){
                                         comboSelection.currentIndex=4
-                                        if(list[2]=="ordered")
+                                        if(list[2]==="ordered")
                                         {
                                             comboSelectinParameterSequential.currentIndex=0;
                                         }else
@@ -59,7 +156,7 @@ ApplicationWindow {
 
                                         //comboSelectinParameterSequentialList.text=list[2]
                                     }else
-                                        if(list[1]=="Roulette"){
+                                        if(list[1]==="Roulette"){
                                             comboSelection.currentIndex=3
                                         }
 
@@ -71,28 +168,27 @@ ApplicationWindow {
         textFieldtbMin.text=list[8]
         textFielddHpMax.text=list[9]
         textFielddHpMin.text=list[10]
-        textFieldPropCrossover.text=list[11]
-        textFieldPropMutation.text=list[12]
-        textFieldPme.text=list[13]
-        textFieldPmb.text=list[14]
-        if(list[15]=="Rettangolare")
+        textFieldPropSelection.text=list[11]
+        textFieldPropCrossover.text=list[12]
+        textFieldPropMutation.text=list[13]
+        textFieldPme.text=list[14]
+        textFieldPmb.text=list[15]
+        if(list[16]==="Rettangolare")
             comboPattern.currentIndex=2
         else
-            if(list[15]=="Triangolare Disc")
+            if(list[16]==="Triangolare Disc")
                 comboPattern.currentIndex=0
             else
-                if(list[15]=="Triangolare Asc")
+                if(list[16]==="Triangolare Asc")
                     comboPattern.currentIndex=1
 
-        var split = list[16].split("/")
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAA ../"+split[split.length-1]);
+        var split = list[17].split("/")
         textfileRain.text = "../"+split[split.length-1]
-        pathrain=list[16]
+        pathrain=list[17]
 
-        var split2 = list[17].split("/")
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAA ../"+split2[split2.length-1]);
+        var split2 = list[18].split("/")
         textfileActivation.text = "../"+split2[split2.length-1]
-        pathactivation=list[17]
+        pathactivation=list[18]
 
     }
 
@@ -148,7 +244,7 @@ ApplicationWindow {
                     id: gridLayout4
 
                     rows: 1
-                    columns: 4
+                    columns: 6
                     columnSpacing: 20
                     Label {
                         id: labelSelection
@@ -210,6 +306,46 @@ ApplicationWindow {
                             ListElement { text: "MultiObjects Steady-State"; }
                         }
                         onCurrentIndexChanged: show(currentIndex)
+                    }
+
+                    Image {
+                        source: "qrc:/img/info.jpg"
+
+                        width: 20
+                        height: 20
+                        Layout.preferredWidth: 20
+                        Layout.preferredHeight: 20
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                console.log("You chose: ")
+                                popup.open()
+                            }
+                            Popup {
+                                    id: popup
+                                    width: 450
+                                    height: 370
+                                    modal: true
+                                    focus: true
+                                    topPadding: 0.1
+                                    leftPadding: 0.1
+                                    rightPadding: 0.1
+                                    bottomPadding: 0.1
+
+                                    TextArea{
+                                        readOnly: true
+                                        width: parent.width
+                                        height: parent.height
+                                        textFormat: Text.RichText
+                                        text: infoSelection
+                                        font.family: "Helvetica"
+                                        font.pointSize: 9
+                                    }
+
+                                    closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                           }
+                        }
+
                     }
 
                     TextField {
@@ -457,7 +593,7 @@ ApplicationWindow {
 
                     GridLayout{
                         rows: 4
-                        columns: 2
+                        columns: 3
                         rowSpacing: 2
                         columnSpacing: 2
                         Layout.preferredWidth: 309
@@ -481,6 +617,46 @@ ApplicationWindow {
                             placeholderText: "population Size"
                         }
 
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPopulation
+                                        width: 200
+                                        height: 50
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPopulation
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+
+                                    popupPopulation.open()
+                                }
+                            }
+
+                        }
+
 
 
                         Label {
@@ -494,6 +670,44 @@ ApplicationWindow {
                             text: "5000"
                             validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
+                        }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupMaxGen
+                                        width: 200
+                                        height: 50
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoMaxGen
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupMaxGen.open()
+                                }
+                            }
+
                         }
 
 
@@ -510,6 +724,44 @@ ApplicationWindow {
                             validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popuptbMax
+                                        width: 200
+                                        height: 50
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infotbMax
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popuptbMax.open()
+                                }
+                            }
+
+                        }
 
                         Label {
                             id: label6
@@ -522,6 +774,44 @@ ApplicationWindow {
                             text: "30"
                             validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                             placeholderText: qsTr("")
+                        }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popuptbMin
+                                        width: 200
+                                        height: 50
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infotbMin
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popuptbMin.open()
+                                }
+                            }
+
                         }
 
                         Label {
@@ -539,6 +829,44 @@ ApplicationWindow {
                         }
 
 
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupddHpMax
+                                        width: 200
+                                        height: 100
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infodHpMax
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupddHpMax.open()
+                                }
+                            }
+
+                        }
 
                         Label {
                             id: label10
@@ -553,6 +881,46 @@ ApplicationWindow {
                             placeholderText: qsTr("")
                         }
 
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupddHpMin
+                                        width: 200
+                                        height: 100
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infodHpMin
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupddHpMin.open()
+                                }
+                            }
+
+                        }
+
+
                         CheckBox {id:lastGeneration; text: qsTr("Start From Last Generation")   }
                     }
                     GridLayout {
@@ -562,12 +930,62 @@ ApplicationWindow {
                         width: 309
                         height: 426
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        columns: 2
+                        columns: 3
                         rows: 4
 
                         Layout.preferredWidth: 309
                         Layout.preferredHeight: 426
 
+
+                        Label {
+                            id: labelSelectionProb
+                            text: qsTr("Probability of Selection")
+                        }
+                        TextField {
+                            id: textFieldPropSelection
+                            width: 63
+                            text: "0.75"
+                            placeholderText: qsTr("0.75")
+                        }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPropSelection
+                                        width: 200
+                                        height: 50
+                                        x: -180
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPropSelection
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupPropSelection.open()
+                                }
+                            }
+
+                        }
 
                         Label {
                             id: label3
@@ -580,7 +998,45 @@ ApplicationWindow {
                             text: "0.75"
                             placeholderText: qsTr("")
                         }
+                        Image {
+                            source: "qrc:/img/info.jpg"
 
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPropCrossover
+                                        width: 200
+                                        height: 50
+                                        modal: true
+                                        focus: true
+                                        x: -180
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPropCrossover
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupPropCrossover.open()
+                                }
+                            }
+
+                        }
                         Label {
                             id: label4
 
@@ -598,6 +1054,46 @@ ApplicationWindow {
                             placeholderText: qsTr("")
                         }
 
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPropMutation
+                                        width: 200
+                                        height: 50
+                                        x: -180
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPropMutation
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupPropMutation.open()
+                                }
+                            }
+
+                        }
+
 
 
 
@@ -613,6 +1109,45 @@ ApplicationWindow {
                             validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                             placeholderText: qsTr("")
                         }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPme
+                                        width: 200
+                                        height: 100
+                                        x: -180
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPme
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupPme.open()
+                                }
+                            }
+
+                        }
 
 
                         Label {
@@ -626,6 +1161,45 @@ ApplicationWindow {
                             text: "0.5"
                             validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
                             placeholderText: qsTr("")
+                        }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPmb
+                                        width: 200
+                                        height: 100
+                                        x: -180
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPmb
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupPmb.open()
+                                }
+                            }
+
                         }
 
                         Label {
@@ -644,6 +1218,45 @@ ApplicationWindow {
                                 ListElement { text: "Rettangolare";  }
                             }
                         }
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupPattern
+                                        width: 200
+                                        height: 50
+                                        x: -180
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoPattern
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupPattern.open()
+                                }
+                            }
+
+                        }
 
                         Label {
                             id: labelNumberProcessor
@@ -660,20 +1273,60 @@ ApplicationWindow {
                             placeholderText: "Number of Processor"
                         }
 
-                        Label {
-                            id: labelSeed
-                            width: 120
-                            text: qsTr("Seed")
+                        Image {
+                            source: "qrc:/img/info.jpg"
+
+                            width: 20
+                            height: 20
+                            Layout.preferredWidth: 20
+                            Layout.preferredHeight: 20
+                            MouseArea {
+                                anchors.fill: parent
+                                Popup {
+                                        id: popupNumberProcessor
+                                        width: 200
+                                        height: 50
+                                        x: -180
+                                        modal: true
+                                        focus: true
+                                        topPadding: 0.1
+                                        leftPadding: 0.1
+                                        rightPadding: 0.1
+                                        bottomPadding: 0.1
+
+                                        TextArea{
+                                            readOnly: true
+                                            width: parent.width
+                                            height: parent.height
+                                            text: infoNumberProcessor
+                                            font.family: "Helvetica"
+                                            font.pointSize: 9
+                                        }
+
+                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                               }
+                                onClicked: {
+                                    console.log("You chose: ")
+                                    popupNumberProcessor.open()
+                                }
+                            }
+
                         }
 
-                        TextField {
-                            id: textSeed
-                            width: 63
-                            visible: true
-                            text: ""
-                            validator:  RegExpValidator { regExp: /\d+/ }
-                            placeholderText: "Seed"
-                        }
+//                        Label {
+//                            id: labelSeed
+//                            width: 120
+//                            text: qsTr("Seed")
+//                        }
+
+//                        TextField {
+//                            id: textSeed
+//                            width: 63
+//                            visible: true
+//                            text: ""
+//                            validator:  RegExpValidator { regExp: /\d+/ }
+//                            placeholderText: "Seed"
+//                        }
 
 
                     }
@@ -914,6 +1567,7 @@ ApplicationWindow {
                                                        textFieldtbMin.text,
                                                        textFielddHpMax.text,
                                                        textFielddHpMin.text,
+                                                       textFieldPropSelection.text,
                                                        textFieldPropCrossover.text,
                                                        textFieldPropMutation.text,
                                                        textFieldPme.text,

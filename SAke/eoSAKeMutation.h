@@ -67,8 +67,8 @@ public:
 	 */
 	bool operator()(GenotypeT & _genotype) {
 
-		// Pmb probabilit� di mutazione tb
-		// Pme probabilit� di mutazione dh
+        // Pmb probabilit� di mutazione tb
+        // Pme probabilit� di mutazione dh
 		bool isModified=true;
         bool debug=false;
 		int tb = (rand() % (tbMax-tbMin)) + tbMin;
@@ -101,7 +101,7 @@ public:
 		double * FiTemp = (double*) malloc(sizeof(double)*tb);
 
 		for (int i = 0; i < tb1; i++)
-			FiTemp[i] = _genotype.getFi()[i];
+            FiTemp[i] = _genotype.getFi()[i];
 //		memcpy( FiTemp,_genotype.getFi(), tb1 * sizeof(double) );
 
 		for (int i = tb1 ; i < tb; i++)
@@ -130,28 +130,28 @@ public:
 		}
 //        cout << "Pmb " << Pmb << " Pme  "<< Pme << " v "<< v <<endl;
 
-		double Pme1 = (v / Pmb) * Pme;
+        double Pme1 = (v / Pmb) * Pme;
 //        cout <<"Pme1 " << Pme1 << endl;
         for (int t = 1; t <= tb; t++) {
 			int tj = rand() % tb;
 
-			double dHp = (rand() % ((int)(dHpMax -dHpMin)))+dHpMin;
+           double dHp = (rand() % ((int)(dHpMax -dHpMin)))+dHpMin;
            double result=  ((double)t / tb)*100;
 //           cout << "t " << t << " tb " << tb << endl;
 //            cout << "Pme1 " << Pme1 << " t / tb * 100 " << result << endl;
             if (result <= Pme1) {
  //               if (tb > tb0)
-					tj = (rand() % (tb-tb0)) + tb0;
+                    tj = (rand() % (tb-tb0)) + tb0;
 //                    cout << "tb " << tb << " tb0 " << tb0 << " tj " << tj << endl;
 //                else
 //                    if(tb <= tb0)
 //                        tj = rand() % tb;
 
                 dHp = rand() % ((int) dHpMax+1);
-			}
+            }
             if (result <= Pme) {
   //              cout << " ENTRATO PME MUTO GENE " << endl;
-				double dH = (dHp / 100) * hMax;
+                double dH = (dHp / 100) * hMax;
 //				cout << " tj  "<< tj << " tb size = " << tb << endl;
 //				cout << "Pme =" << Pme <<  "  hMax="<<hMax <<"  dH="<< dH<< endl;
 				_genotype.setFiIndex(tj, _genotype.getFi()[tj] + dH);

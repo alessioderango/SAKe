@@ -156,7 +156,7 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
     x = split(line, ';');
     zCr = std::stod(x[3]);
     x.erase(x.begin(),x.begin()+6);
-//    cout << line << endl;
+    cout << line << endl;
 
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
     //           qDebug() << activation_size;

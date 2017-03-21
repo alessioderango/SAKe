@@ -44,13 +44,13 @@ Dialog {
         textFieldPropMutation.text=list[12]
         textFieldPme.text=list[13]
         textFieldPmb.text=list[14]
-        if(list[15]=="Rettangolare")
+        if(list[15]==="Rettangolare")
             comboPattern.currentIndex=2
         else
-            if(list[15]=="Triangolare Disc")
+            if(list[15]==="Triangolare Disc")
                 comboPattern.currentIndex=0
             else
-                if(list[15]=="Triangolare Asc")
+                if(list[15]==="Triangolare Asc")
                     comboPattern.currentIndex=1
 
         var split = list[16].split("/")
@@ -556,6 +556,8 @@ Dialog {
             anchors.horizontalCenter: parent.horizontalCenter
             placeholderText: qsTr("")
         }
+
+
 
         Label {
             id: label10

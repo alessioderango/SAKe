@@ -17,14 +17,11 @@
 #include <eoStochTournamentSelect.h>
 #include <eoSharingSelect.h>
 #include <utils/eoDistance.h>
-//#include "eoMySelection.h"
 
 // Breeders
 #include <eoGeneralBreeder.h>
 
 // Replacement
-// #include <eoReplacement.h>
-//#include "eoElitistReplacement.h"
 #include <eoMergeReduce.h>
 #include <eoReduceMerge.h>
 #include <eoSurviveAndDie.h>
@@ -33,13 +30,13 @@
 #include <utils/eoDistance.h>
 
 // Algorithm (only this one needed)
-//#include "eoMySGA.h"
-#include "eoSGAReplacement.h"
+#include "eoSGAGenerational.h"
+#include "eoSGASteadyState.h"
 
   // also need the parser and param includes
 #include <utils/eoParser.h>
 #include <utils/eoState.h>
-//#include <eoSGA.h>
+#include <Regression/eoMySGA.h>
 
 
 /*
@@ -66,6 +63,8 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      eoMonOp<EOT>& _mutate,
                                      float _mrate,
                                      int maxNumberToConsider,
+                                     unsigned int typeAlgorithm,
+                                     float _propSelection,
                                      eoDistance<EOT> * _dist = NULL
                                      )
 {
@@ -77,7 +76,6 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
         comment = "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e), Sharing(sigma_share) or Sequential(ordered/unordered)";
 
   eoValueParam<eoParamParamType>& selectionParam = _parser.createParam(eoParamParamType("DetTour(2)"), "selection", comment, 'S', "Evolution Engine");
-
   eoParamParamType & ppSelect = selectionParam.value(); // std::pair<std::string,std::vector<std::string> >
 
   eoSelectOne<EOT>* select ;
@@ -291,14 +289,23 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
       _state.storeFunctor(replace);
     }
 
-//  // the general breeder
-//  eoGeneralBreeder<EOT> *breed =
-//    new eoGeneralBreeder<EOT>(*select, _op, offspringRateParam.value());
-//  _state.storeFunctor(breed);
 
-  // now the eoEasyEA
-//  eoAlgo<EOT> *algo = new eoEasyEA<EOT>(_continue, _eval, *breed, *replace);
-  eoAlgo<EOT> *algo = new eoSGAReplacement<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+
+  eoAlgo<EOT> *algo;
+  if(typeAlgorithm==0)
+  {
+      algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+  }else
+      if(typeAlgorithm==1)
+      {
+         algo = new eoSGASteadyState<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+      }
+      else
+        algo = new eoMySGA<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
+
+
+
+
   _state.storeFunctor(algo);
   // that's it!
   return *algo;

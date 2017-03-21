@@ -1,4 +1,5 @@
 import QtQuick 2.5
+import QtQuick.Controls 2.1
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
@@ -14,6 +15,89 @@ ApplicationWindow {
     width: 1420
     height: 920
     color:"#f2f2f2"
+
+    property  string infoSelection : "
+<html>
+<head>
+<style>
+
+table, th, td {
+    border: 2px solid black;
+   padding-left:10px;
+}
+</style>
+</head>
+
+<body>
+<table border='1'>
+<thead>
+<tr>
+<td><b>Selection Type</b></td>
+<td><b>Specification </b></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td >DetTour(t)</td>
+<td>selecting an individual from a population of individuals with rate t between 0.55 - 1 </td>
+</tr>
+
+  <tr>
+<td>StochTour(t)</td>
+<td>a selection method that selects ONE individual by binary stochastic tournament with rate t between 0.55 - 1</td>
+</tr>
+
+  <tr>
+<td>Ranking(p,e)</td>
+<td>select an individual by roulette wheel on its rank.
+        <table>
+<tr>
+<td>p </td>
+<td>the selective pressure, should be in [1,2] (2 is the default)</td>
+</tr>
+
+<tr>
+<td>e </td>
+<td>exponent (1 == linear) positive integer</td>
+</tr>
+        </table>
+</tr>
+
+  <tr>
+<td>Roulette</td>
+<td>select an individual proportional to her stored fitness value. </td>
+</tr>
+  <tr>
+<td>Sequential(ordered/unordered)</td>
+<td>Looping back to the beginning when exhausted, can be from best to worse, or in random order.</td>
+</tr>
+
+  <tr>
+<td>Generational</td>
+<td> </td>
+</tr>
+
+  <tr>
+<td>Steady-State</td>
+<td> </td>
+</tr>
+
+
+
+</tbody>
+</table>
+</body>
+</html>
+";
+
+    property string infoPropSelection;
+    property string infoPropCrossover;
+    property string infoPropMutation;
+    property string infoMaxGen;
+    property string infoNumberProcessor;
+    property string infoN;
+    property string infoCheckN;
+
 //    Layout.minimumHeight: height
 //    Layout.minimumWidth: width
 //    Component.onCompleted: {
@@ -131,45 +215,86 @@ ApplicationWindow {
                                             id: comboSelection
                                             currentIndex: 0
                                             function show( currentIndex){
-                                                //                                    if(currentIndex === 0 ||
-                                                //                                       currentIndex === 1  ){
-                                                //                                        selectionParameter.visible=true;
-                                                //                                    }else
-                                                //                                        selectionParameter.visible=false;
+                                                                                    if(currentIndex === 0 ||
+                                                                                       currentIndex === 1  ){
+                                                                                        selectionParameter.visible=true;
+                                                                                    }else
+                                                                                        selectionParameter.visible=false;
 
-                                                //                                    if(currentIndex ===2){
-                                                //                                        selectParameterRanking1.visible=true;
-                                                //                                        selectParameterRanking2.visible=true;
-                                                //                                    }else
-                                                //                                    {
-                                                //                                        selectParameterRanking1.visible=false;
-                                                //                                        selectParameterRanking2.visible=false;
+                                                                                    if(currentIndex ===2){
+                                                                                        selectParameterRanking1.visible=true;
+                                                                                        selectParameterRanking2.visible=true;
+                                                                                    }else
+                                                                                    {
+                                                                                        selectParameterRanking1.visible=false;
+                                                                                        selectParameterRanking2.visible=false;
 
-                                                //                                    }
-                                                //                                    if(currentIndex ===4){
-                                                //                                        comboSelectinParameterSequential.visible=true;
-                                                //                                    }else{
-                                                //                                        comboSelectinParameterSequential.visible=false;
-                                                //                                    }
+                                                                                    }
+                                                                                    if(currentIndex ===4){
+                                                                                        comboSelectinParameterSequential.visible=true;
+                                                                                    }else{
+                                                                                        comboSelectinParameterSequential.visible=false;
+                                                                                    }
 
-//                                                if(currentIndex ===0 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
-//                                                    selectionParameterTournamentWithoutReplacement.visible=true;
-//                                                }else{
-//                                                    selectionParameterTournamentWithoutReplacement.visible=false;
-//                                                }
-                                                //                                    if(currentIndex ===6 || currentIndex ===8){
-                                                //                                        gridLayout5.visible=true;
-                                                //                                    }else{
-                                                //                                        gridLayout5.visible=false;
-                                                //                                    }
+                                                if(currentIndex ===5 || currentIndex ===6){
+                                                    selectionParameterTournamentWithoutReplacement.visible=true;
+                                                }else{
+                                                    selectionParameterTournamentWithoutReplacement.visible=false;
+                                                }
                                             }
                                             model: ListModel {
                                                 id: selections
-                                                ListElement {
-                                                    text: "Generational"
-                                                }
+                                                ListElement { text: "StochTour(t)";  }
+                                                ListElement { text: "DetTour(T)";  }
+                                                ListElement { text: "Ranking(p,e)";  }
+                                                ListElement { text: "Roulette"; }
+                                                ListElement { text: "Sequential(ordered/unordered)";  }
+                                                ListElement { text: "Generational"; }
+                                                ListElement { text: "Steady-State"; }
+
                                             }
                                             onCurrentIndexChanged: show(currentIndex)
+                                        }
+
+                                        Image {
+                                            source: "qrc:/img/info.jpg"
+
+                                            width: 20
+                                            height: 20
+                                            Layout.preferredWidth: 20
+                                            Layout.preferredHeight: 20
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                Popup {
+                                                        id: popupSelection
+                                                        width: 500
+                                                        height: 400
+                                                        modal: true
+                                                        focus: true
+                                                        topPadding: 0.1
+                                                        leftPadding: 0.1
+                                                        rightPadding: 0.1
+                                                        bottomPadding: 0.1
+
+                                                        TextArea{
+                                                            readOnly: true
+                                                            width: parent.width
+                                                            height: parent.height
+                                                            textFormat: Text.RichText
+                                                            text: infoSelection
+                                                            font.family: "Helvetica"
+                                                            font.pointSize: 9
+                                                        }
+
+                                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                                               }
+                                                onClicked: {
+                                                    console.log("You chose: ")
+
+                                                    popupSelection.open()
+                                                }
+                                            }
+
                                         }
 
                                         TextField {
@@ -228,9 +353,9 @@ ApplicationWindow {
 
                                 GridLayout{
                                     rows: 4
-                                    columns: 2
-                                    rowSpacing: 8
-                                    columnSpacing: 3
+                                    columns: 3
+                                    rowSpacing: 1
+                                    columnSpacing: 1
                                     Layout.preferredWidth: 309
                                     Layout.preferredHeight: 50
                                     width: 630
@@ -256,6 +381,22 @@ ApplicationWindow {
                                             regExp: /^[1-9]\d+/
                                         }
                                     }
+
+
+
+                                    Label {
+                                        id: labelProbabiltySelection
+                                        text: qsTr("Probabilty Selection")
+                                    }
+
+                                    TextField {
+                                        id: textFieldProbabiltySelection
+                                        width: 63
+                                        text: "0.35"
+                                        placeholderText: qsTr("Probabilty Selection")
+                                        validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
+                                    }
+
 
                                     Label {
                                         id: labelProbabiltyCrossOver
@@ -283,9 +424,6 @@ ApplicationWindow {
                                         validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
                                     }
 
-
-
-
                                     Label {
                                         id: labelNumberProcessor
                                         text: qsTr("Number of processor")
@@ -297,6 +435,7 @@ ApplicationWindow {
                                         validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                                         placeholderText: qsTr("")
                                     }
+
 
                                     Label {
                                         id: labelMaxGeneration
@@ -326,18 +465,57 @@ ApplicationWindow {
                                         //text: "30"
                                         //inputMethodHints: Qt.ImhDigitsOnly
                                         validator:  RegExpValidator { regExp: /0[.]\d{1,3}|^[1-9]\d+/ }
-                                        placeholderText: "Population Size"
+                                        placeholderText: "N"
                                         onTextChanged: {
                                             if(text >0 && pathrain != ""){
                                                 if(checkUseControlPointsWithN.checked){
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(textPercentageN.text)
                                                 }
                                                 else{
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(textPercentageN.text)
                                                 }
                                             }
                                         }
                                     }
+//                                    Image {
+//                                        source: "qrc:/img/info.jpg"
+
+//                                        width: 20
+//                                        height: 20
+//                                        Layout.preferredWidth: 20
+//                                        Layout.preferredHeight: 20
+//                                        MouseArea {
+//                                            anchors.fill: parent
+//                                            Popup {
+//                                                    id: popupN
+//                                                    width: 200
+//                                                    height: 300
+//                                                    modal: true
+//                                                    focus: true
+//                                                    topPadding: 0.1
+//                                                    leftPadding: 0.1
+//                                                    rightPadding: 0.1
+//                                                    bottomPadding: 0.1
+
+//                                                    TextArea{
+//                                                        readOnly: true
+//                                                        width: parent.width
+//                                                        height: parent.height
+//                                                        text: infoN
+//                                                        font.family: "Helvetica"
+//                                                        font.pointSize: 9
+//                                                    }
+
+//                                                    closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+//                                           }
+//                                            onClicked: {
+//                                                console.log("You chose: ")
+
+//                                                popupN.open()
+//                                            }
+//                                        }
+
+//                                    }
 
                                     CheckBox {
                                         id:checkUseControlPointsWithN;
@@ -345,13 +523,52 @@ ApplicationWindow {
                                         onCheckedChanged: {
                                             if(textPercentageN.text >0 && pathrain != ""){
                                                 if(checkUseControlPointsWithN.checked){
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromControlPoints(textPercentageN.text)
                                                 }
                                                 else{
-                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(pathrain,textPercentageN.text)
+                                                    customPlotKernelRegression1.customPlotRegressionSubdivideFromKernel(textPercentageN.text)
                                                 }
                                             }
                                         }
+                                    }
+                                    Image {
+                                        source: "qrc:/img/info.jpg"
+
+                                        width: 20
+                                        height: 20
+                                        Layout.preferredWidth: 20
+                                        Layout.preferredHeight: 20
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            Popup {
+                                                    id: popupCheckN
+                                                    width: 200
+                                                    height: 300
+                                                    modal: true
+                                                    focus: true
+                                                    topPadding: 0.1
+                                                    leftPadding: 0.1
+                                                    rightPadding: 0.1
+                                                    bottomPadding: 0.1
+
+                                                    TextArea{
+                                                        readOnly: true
+                                                        width: parent.width
+                                                        height: parent.height
+                                                        text: infoCheckN
+                                                        font.family: "Helvetica"
+                                                        font.pointSize: 9
+                                                    }
+
+                                                    closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                                           }
+                                            onClicked: {
+                                                console.log("You chose: ")
+
+                                                popupCheckN.open()
+                                            }
+                                        }
+
                                     }
 
 
@@ -402,7 +619,9 @@ ApplicationWindow {
 
                                         if(text >= 0 && text !== ""){
                                             if(text > tableModel.count){
+                                                console.log("text > tableModel.count  " + text + " > " + tableModel.count);
                                                 for(var i = 0;i< tableModel.count;i++){
+                                                    console.log("elimino = " + i);
                                                     tableModel.set(i,{ nFunction:i+1,
                                                                        amax: tableModel.get(i).amax,
                                                                        amin: tableModel.get(i).amin,
@@ -418,6 +637,7 @@ ApplicationWindow {
                                                                        tp: tableModel.get(i).tp})
                                                 }
                                                 for(var i = tableModel.count;i< text;i++){
+                                                    console.log("elimino2 = " + i);
                                                     tableModel.set(i,{nFunction:i+1,
                                                                        amax: "0.8",
                                                                        amin: "0.2",
@@ -435,7 +655,7 @@ ApplicationWindow {
                                             }
                                             else
                                                 if(text < tableModel.count){
-                                                    for(var i = 0;i< text;i++){
+                                                    for(var i = 0;i < text;i++){
                                                         tableModel.set(i,{ nFunction:i+1,
                                                                            amax: tableModel.get(i).amax,
                                                                            amin: tableModel.get(i).amin,
@@ -450,8 +670,9 @@ ApplicationWindow {
                                                                            tmax: tableModel.get(i).tmax,
                                                                            tp: tableModel.get(i).tp})
                                                     }
-                                                    for(var i = text;i< tableModel.count;i++){
-                                                        tableModel.remove(i);
+                                                    var tmp = tableModel.count;
+                                                    for(var i = text;i < tmp;i++){
+                                                        tableModel.remove(text);
                                                     }
 
 
@@ -829,9 +1050,11 @@ ApplicationWindow {
                                                                             tmax: tableModel2.get(i).tmax,
                                                                             tp: tableModel2.get(i).tp})
                                                     }
-                                                    for(var i = text;i< tableModel2.count;i++){
-                                                        tableModel2.remove(i);
+                                                    var tmp = tableModel2.count;
+                                                    for(var i = text;i < tmp;i++){
+                                                        tableModel2.remove(text);
                                                     }
+
                                                 }
                                         }
                                     }
@@ -1225,10 +1448,10 @@ ApplicationWindow {
                                                                             tmin: tableModel3.get(i).tmin,
                                                                             tp: tableModel3.get(i).tp})
                                                     }
-                                                    for(var i = text;i< tableModel3.count;i++){
-                                                        tableModel3.remove(i);
+                                                    var tmp = tableModel3.count;
+                                                    for(var i = text;i < tmp;i++){
+                                                        tableModel3.remove(text);
                                                     }
-
 
                                                 }
                                         }
@@ -1517,7 +1740,7 @@ ApplicationWindow {
                                     split = tmp.split("/")
                                     textfileRain.text = "../"+split[split.length-1]
                                     customPlotKernelRegression1.initCustomPlotRegressionPreviewKernel(fileDialogRain.fileUrl)
-                                    //                                customPlotKernelRegression1.initCustomPlotKernelComtrolPoints(fileDialogRain.fileUrl)
+                                    customPlotKernelRegression1.initCustomPlotKernelComtrolPoints(textPercentageN.text)
                                     //handlerCSV.loadCSV(fileDialogRain.fileUrl)
                                     //Qt.quit()
 
@@ -1700,6 +1923,8 @@ ApplicationWindow {
                         property  string fileUrl;
 
                         property  int typeAlgorithm;
+                        property  string para1;
+                        property  string para2;
 
                         onClicked: {
                             populationSize = textFieldPopulationSize.text;
@@ -1713,6 +1938,34 @@ ApplicationWindow {
                             selectionElitist =  selectionParameterTournamentWithoutReplacement.text;
                             typeAlgorithm = 4;
                             fileUrl = pathrain;
+                            if(comboSelection.currentText == "StochTour(t)"
+                                    || comboSelection.currentText == "DetTour(T)"){
+                                para1=selectionParameter.text;
+                                para2=-1;
+                            }else
+                                if(comboSelection.currentText == "Ranking(p,e)"){
+                                    para1=selectParameterRanking1.text;
+                                    para2=selectParameterRanking2.text;
+                                }else
+                                    if(comboSelection.currentText == "Roulette"){
+                                        para1=-1;
+                                        para2=-1;
+                                    }else
+                                        if(comboSelection.currentText == "Sequential(ordered/unordered)")
+                                        {
+                                            para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
+                                            para2=-1;
+                                        }else
+                                            if(comboSelection.currentText == "Generational"){
+                                                para1=selectionParameterTournamentWithoutReplacement.text;
+                                                para2=-1;
+                                                typeAlgorithm=0;
+                                            }else
+                                                    if(comboSelection.currentText == "Steady-State"){
+                                                        para1=selectionParameterTournamentWithoutReplacement.text;
+                                                        para2=-1;
+                                                        typeAlgorithm=1;
+                                                    }
 
                             //                        console.log("populationSize : "+populationSize +
                             //                                    "\n percentageCrossover : "+percentageCrossover+
@@ -1822,7 +2075,11 @@ ApplicationWindow {
                                         checkKernel.checked,
                                         checkN.checked,
                                         checkUseControlPointsWithN.checked,
-                                        textPercentageN.text
+                                        textPercentageN.text,
+                                        para1,
+                                        para2,
+                                        textFieldProbabiltySelection.text,
+                                        typeAlgorithm
                                         )
                             applicationWindow1.destroy()
                             }

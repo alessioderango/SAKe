@@ -1,4 +1,5 @@
 import QtQuick 2.5
+import QtQuick.Controls 2.1
 import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.2
@@ -12,6 +13,93 @@ ApplicationWindow {
 
     property  string pathrain;
     property  string pathactivation;
+    property  string infoSelection : "
+<html>
+<head>
+<style>
+
+table, th, td {
+    border: 2px solid black;
+   padding-left:10px;
+}
+</style>
+</head>
+
+<body>
+<table border='1'>
+<thead>
+<tr>
+<td><b>Selection Type</b></td>
+<td><b>Specification </b></td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td >DetTour(t)</td>
+<td>selecting an individual from a population of individuals with rate t between 0.55 - 1 </td>
+</tr>
+
+  <tr>
+<td>StochTour(t)</td>
+<td>a selection method that selects ONE individual by binary stochastic tournament with rate t between 0.55 - 1</td>
+</tr>
+
+  <tr>
+<td>Ranking(p,e)</td>
+<td>select an individual by roulette wheel on its rank.
+        <table>
+<tr>
+<td>p </td>
+<td>the selective pressure, should be in [1,2] (2 is the default)</td>
+</tr>
+
+<tr>
+<td>e </td>
+<td>exponent (1 == linear) positive integer</td>
+</tr>
+        </table>
+</tr>
+
+  <tr>
+<td>Roulette</td>
+<td>select an individual proportional to her stored fitness value. </td>
+</tr>
+  <tr>
+<td>Sequential(ordered/unordered)</td>
+<td>Looping back to the beginning when exhausted, can be from best to worse, or in random order.</td>
+</tr>
+
+  <tr>
+<td>Generational</td>
+<td> </td>
+</tr>
+
+  <tr>
+<td>Steady-State</td>
+<td> </td>
+</tr>
+
+
+
+</tbody>
+</table>
+</body>
+</html>
+";
+
+    property string infoPropSelection;
+    property string infoPropCrossover;
+    property string infoPropMutation;
+    property string infoMaxGen;
+    property string infoNumberProcessor;
+    property string infoN;
+    property string infoCheckN;
+
+
+//    property  var parameterLocal;
+//    property  var listGamma1Local;
+//    property  var listGamma2Local;
+//    property  var listLinear3Local;
     width: 1420
     height: 920
     color:"#f2f2f2"
@@ -19,6 +107,8 @@ ApplicationWindow {
 //        setX(Screen.width / 2 - width / 2);
 //        setY(Screen.height / 2 - height / 2);
 //    }
+
+
 
     function loadParameter(parameter,listGamma1,listGamma2,listLinear){
         projectName.text=parameter[0]
@@ -36,6 +126,7 @@ ApplicationWindow {
         var split = parameter[9].split("/")
         textfileRain.text = "../"+split[split.length-1]
         pathrain=parameter[9]
+        customPlotKernelRegression1.init(pathrain)
         var checkNTmp=parameter[10]
         if(checkNTmp){
             checkUseControlPointsWithN.checked= true;
@@ -121,7 +212,8 @@ ApplicationWindow {
             count++;
 
         }
-        customPlotKernelRegression1.init(pathrain)
+
+
 
     }
     ScrollView {
@@ -229,45 +321,85 @@ ApplicationWindow {
                                             id: comboSelection
                                             currentIndex: 0
                                             function show( currentIndex){
-                                                //                                    if(currentIndex === 0 ||
-                                                //                                       currentIndex === 1  ){
-                                                //                                        selectionParameter.visible=true;
-                                                //                                    }else
-                                                //                                        selectionParameter.visible=false;
 
-                                                //                                    if(currentIndex ===2){
-                                                //                                        selectParameterRanking1.visible=true;
-                                                //                                        selectParameterRanking2.visible=true;
-                                                //                                    }else
-                                                //                                    {
-                                                //                                        selectParameterRanking1.visible=false;
-                                                //                                        selectParameterRanking2.visible=false;
+                                                if(currentIndex === 0 ||
+                                                   currentIndex === 1  ){
+                                                    selectionParameter.visible=true;
+                                                }else
+                                                    selectionParameter.visible=false;
 
-                                                //                                    }
-                                                //                                    if(currentIndex ===4){
-                                                //                                        comboSelectinParameterSequential.visible=true;
-                                                //                                    }else{
-                                                //                                        comboSelectinParameterSequential.visible=false;
-                                                //                                    }
+                                                if(currentIndex ===2){
+                                                    selectParameterRanking1.visible=true;
+                                                    selectParameterRanking2.visible=true;
+                                                }else
+                                                {
+                                                    selectParameterRanking1.visible=false;
+                                                    selectParameterRanking2.visible=false;
 
-                                                if(currentIndex ===0 || currentIndex ===7 || currentIndex ===6 || currentIndex ===8){
+                                                }
+                                                if(currentIndex ===4){
+                                                    comboSelectinParameterSequential.visible=true;
+                                                }else{
+                                                    comboSelectinParameterSequential.visible=false;
+                                                }
+                                                if(currentIndex ===5 || currentIndex ===6){
                                                     selectionParameterTournamentWithoutReplacement.visible=true;
                                                 }else{
                                                     selectionParameterTournamentWithoutReplacement.visible=false;
                                                 }
-                                                //                                    if(currentIndex ===6 || currentIndex ===8){
-                                                //                                        gridLayout5.visible=true;
-                                                //                                    }else{
-                                                //                                        gridLayout5.visible=false;
-                                                //                                    }
                                             }
                                             model: ListModel {
                                                 id: selections
-                                                ListElement {
-                                                    text: "Generational"
-                                                }
+                                                ListElement { text: "StochTour(t)";  }
+                                                ListElement { text: "DetTour(T)";  }
+                                                ListElement { text: "Ranking(p,e)";  }
+                                                ListElement { text: "Roulette"; }
+                                                ListElement { text: "Sequential(ordered/unordered)";  }
+                                                ListElement { text: "Generational"; }
+                                                ListElement { text: "Steady-State"; }
                                             }
                                             onCurrentIndexChanged: show(currentIndex)
+                                        }
+
+                                        Image {
+                                            source: "qrc:/img/info.jpg"
+
+                                            width: 20
+                                            height: 20
+                                            Layout.preferredWidth: 20
+                                            Layout.preferredHeight: 20
+                                            MouseArea {
+                                                anchors.fill: parent
+                                                Popup {
+                                                        id: popupSelection
+                                                        width: 400
+                                                        height: 400
+                                                        modal: true
+                                                        focus: true
+                                                        topPadding: 0.1
+                                                        leftPadding: 0.1
+                                                        rightPadding: 0.1
+                                                        bottomPadding: 0.1
+
+                                                        TextArea{
+                                                            readOnly: true
+                                                            width: parent.width
+                                                            height: parent.height
+                                                            textFormat: Text.RichText
+                                                            text: infoSelection
+                                                            font.family: "Helvetica"
+                                                            font.pointSize: 9
+                                                        }
+
+                                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                                               }
+                                                onClicked: {
+                                                    console.log("You chose: ")
+
+                                                    popupSelection.open()
+                                                }
+                                            }
+
                                         }
 
                                         TextField {
@@ -327,8 +459,8 @@ ApplicationWindow {
                                 GridLayout{
                                     rows: 4
                                     columns: 2
-                                    rowSpacing: 8
-                                    columnSpacing: 3
+                                    rowSpacing: 1
+                                    columnSpacing: 1
                                     Layout.preferredWidth: 309
                                     Layout.preferredHeight: 50
                                     width: 630
@@ -354,7 +486,18 @@ ApplicationWindow {
                                             regExp: /^[1-9]\d+/
                                         }
                                     }
+                                    Label {
+                                        id: labelProbabiltySelection
+                                        text: qsTr("Probabilty Selection")
+                                    }
 
+                                    TextField {
+                                        id: textFieldProbabiltySelection
+                                        width: 63
+                                        text: "0.35"
+                                        placeholderText: qsTr("Probabilty Selection")
+                                        validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
+                                    }
                                     Label {
                                         id: labelProbabiltyCrossOver
                                         text: qsTr("Probabilty CrossOver")
@@ -552,8 +695,9 @@ ApplicationWindow {
                                                                            tp:  tableModel.get(i).tp
                                                                        })
                                                     }
-                                                    for(var i = text;i< tableModel.count;i++){
-                                                        tableModel.remove(i);
+                                                    var tmp = tableModel.count;
+                                                    for(var i = text;i < tmp;i++){
+                                                        tableModel.remove(text);
                                                     }
 
 
@@ -784,7 +928,7 @@ ApplicationWindow {
                                     role: "tmax"
                                     delegate: TextField {
                                         text: model.tmax
-                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                        //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel.get(styleData.row).tmax !== text)
                                                tableModel.get(styleData.row).tmax = text
@@ -802,7 +946,7 @@ ApplicationWindow {
                                     role: "tmin"
                                     delegate: TextField {
                                         text: model.tmin
-                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+                                        //validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel.get(styleData.row).tmin !== text)
                                             tableModel.get(styleData.row).tmin = text
@@ -911,8 +1055,9 @@ ApplicationWindow {
                                                                             tmin:  tableModel2.get(i).tmin,
                                                                             tp:  tableModel2.get(i).tp})
                                                     }
-                                                    for(var i = text;i< tableModel2.count;i++){
-                                                        tableModel2.remove(i);
+                                                    var tmp = tableModel2.count;
+                                                    for(var i = text;i < tmp;i++){
+                                                        tableModel2.remove(text);
                                                     }
                                                 }
                                         }
@@ -1136,7 +1281,7 @@ ApplicationWindow {
                                     role: "tmax"
                                     delegate: TextField {
                                         text: model.tmax
-                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+//                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel2.get(styleData.row).tmax !== text)
                                             tableModel2.get(styleData.row).tmax = text
@@ -1154,7 +1299,7 @@ ApplicationWindow {
                                     role: "tmin"
                                     delegate: TextField {
                                         text: model.tmin
-                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+//                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel2.get(styleData.row).tmin !== text)
                                             tableModel2.get(styleData.row).tmin = text
@@ -1172,7 +1317,7 @@ ApplicationWindow {
                                     role: "tp"
                                     delegate: TextField {
                                         text: model.tp
-                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
+//                                        validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel2.get(styleData.row).tp !== text)
                                             tableModel2.get(styleData.row).tp = text
@@ -1222,9 +1367,9 @@ ApplicationWindow {
                                                                         pa: tableModel3.get(i).pa,
                                                                         pb: tableModel3.get(i).pb,
                                                                         pw: tableModel3.get(i).pw,
-                                                                        tmax:  tableModel2.get(i).tmax,
-                                                                        tmin:  tableModel2.get(i).tmin,
-                                                                        tp:  tableModel2.get(i).tp})
+                                                                        tmax:  tableModel3.get(i).tmax,
+                                                                        tmin:  tableModel3.get(i).tmin,
+                                                                        tp:  tableModel3.get(i).tp})
                                                 }
                                                 for(var i = tableModel3.count;i< text;i++){
                                                     tableModel3.insert(i,{ nFunction:i+1,
@@ -1255,12 +1400,13 @@ ApplicationWindow {
                                                                             pa: tableModel3.get(i).pa,
                                                                             pb: tableModel3.get(i).pb,
                                                                             pw: tableModel3.get(i).pw,
-                                                                            tmax:  tableModel2.get(i).tmax,
-                                                                            tmin:  tableModel2.get(i).tmin,
-                                                                            tp:  tableModel2.get(i).tp})
+                                                                            tmax:  tableModel3.get(i).tmax,
+                                                                            tmin:  tableModel3.get(i).tmin,
+                                                                            tp:  tableModel3.get(i).tp})
                                                     }
-                                                    for(var i = text;i< tableModel3.count;i++){
-                                                        tableModel3.remove(i);
+                                                    var tmp = tableModel3.count;
+                                                    for(var i = text;i < tmp;i++){
+                                                        tableModel3.remove(text);
                                                     }
 
 
@@ -1548,6 +1694,7 @@ ApplicationWindow {
                                     console.log("Canceled")
                                     //Qt.quit()
                                 }
+
                                 nameFilters: [ "files (*.csv)" ]
                                 Component.onCompleted: visible = false
                             }
@@ -1725,6 +1872,8 @@ ApplicationWindow {
                         property  string fileUrl;
 
                         property  int typeAlgorithm;
+                        property  string para1;
+                        property  string para2;
 
                         onClicked: {
                             populationSize = textFieldPopulationSize.text;
@@ -1838,7 +1987,11 @@ ApplicationWindow {
                                         checkKernel.checked,
                                         checkN.checked,
                                         checkUseControlPointsWithN.checked,
-                                        textPercentageN.text
+                                        textPercentageN.text,
+                                        para1,
+                                        para2,
+                                        textFieldProbabiltySelection.text,
+                                        typeAlgorithm
                                         )
                             applicationWindow1.destroy()
                             //                        if(comboSelection.currentText == "StochTour(t)"
@@ -1910,6 +2063,15 @@ ApplicationWindow {
 
         }
     }
+
+    onClosing: {
+          applicationWindow1.destroy()
+    }
+
+//    Component.onCompleted: {
+//        customPlotKernelRegression1.init(pathrain)
+//        }
+
 
             MessageDialog {
                 id: messageDialogRain

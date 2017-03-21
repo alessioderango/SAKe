@@ -286,7 +286,11 @@ void CustomPlotRegression::drawGammaFunctions(QVector<double> x, QVector<int> fu
                 if(functionType[i] == 0){
                     y[j]=(parameter[i].getParameters(0)*x[j]+parameter[i].getParameters(1));
                 }else{
-                    y[j]=(gamma_pdf(parameter[i].getParameters(0),parameter[i].getParameters(1),x[j]));
+//                    if(j < parameter[i].getParameters(2))
+//                        y[j]=0;
+//                    else
+//                        y[j]=(gamma_pdf(parameter[i].getParameters(0),parameter[i].getParameters(1),x[j-(parameter[i].getParameters(2)-1)]));
+                    y[j]=gamma_pdf(parameter[i].getParameters(0),parameter[i].getParameters(1),x[j]);
                 }
             }
 

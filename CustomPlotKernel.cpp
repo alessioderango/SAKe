@@ -202,6 +202,7 @@ void CustomPlotKernel::updateGraph(double* Fi,int tb) const{
             valueData.push_back(Fi[i]);
         }
         myBars->setData(keyData, valueData);
+        m_CustomPlot->xAxis->setRange( 0,tb );
         //m_CustomPlot->rescaleAxes();
         m_CustomPlot->replot();
     }

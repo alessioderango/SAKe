@@ -47,9 +47,26 @@ public:
     int getActivations_size() const;
     void setActivations_size(int value);
 
+    QObject *getTb() const;
+    void setTb(QObject *value);
+
+    QObject *getDeltaCritico() const;
+    void setDeltaCritico(QObject *value);
+
+
+    QObject *getMomentoDelPrimoOrdine() const;
+    void setMomentoDelPrimoOrdine(QObject *value);
+
+    QObject *getFitness() const;
+    void setFitness(QObject *value);
+
 private:
     CustomPlotMobilityFunction * plotMobility;
     CustomPlotKernel * plotkernel;
+    QObject *tb;
+    QObject *deltaCritico;
+    QObject *momentoDelPrimoOrdine;
+    QObject *fitness;
 
     double* Fi;
     int size;

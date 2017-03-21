@@ -26,183 +26,215 @@ class eoSGASteadyState : public eoAlgo<EOT>
 {
 public :
 
-  // added this second ctor as I didn't like the ordering of the parameters
-  // in the one above. Any objection :-) MS
-  eoSGASteadyState(
-        eoSelectOne<EOT>& _select,
-        float _selectRate,
-        eoQuadOp<EOT>& _cross, float _crate,
-        eoMonOp<EOT>& _mutate, float _mrate,
-        eoEvalFunc<EOT>& _eval,
-        eoContinue<EOT>& _cont,
-        int _maxNumberToConsider)
-    : cont(_cont),
+    // added this second ctor as I didn't like the ordering of the parameters
+    // in the one above. Any objection :-) MS
+    eoSGASteadyState(
+            eoSelectOne<EOT>& _select,
+            float _selectRate,
+            eoQuadOp<EOT>& _cross, float _crate,
+            eoMonOp<EOT>& _mutate, float _mrate,
+            eoEvalFunc<EOT>& _eval,
+            eoContinue<EOT>& _cont,
+            int _maxNumberToConsider)
+        : cont(_cont),
           mutate(_mutate),
           mutationRate(_mrate),
           cross(_cross),
           crossoverRate(_crate),
           select(_select,_selectRate),
-          eval(_eval) {
-      maxNumberToConsider =_maxNumberToConsider;
-  }
-
-  double roundMy(double x, int prec)
-  {
-      double power = 1.0;
-      int i;
-
-      if (prec > 0)
-          for (i = 0; i < prec; i++)
-              power *= 10.0;
-      else if (prec < 0)
-          for (i = 0; i < prec; i++)
-              power /= 10.0;
-
-      if (x > 0)
-          x = floor(x * power + 0.5) / power;
-      else if (x < 0)
-          x = ceil(x * power - 0.5) / power;
-
-      if (x == -0)
-          x = 0;
-
-      return x;
-  }
-
-
-
-  static int  compareEOT (const void * a, const void * b)
-  {
-      // - perche decrescente
-    if( (double)(((EOT*)a)->fitness()) > (double)(((EOT*)b)->fitness()) ){
-        return -  1;
-    }else
-    if( (double)(((EOT*)a)->fitness()) < (double)(((EOT*)b)->fitness()) ){
-        return 1;
-    }else
-    if( (double)(((EOT*)a)->fitness()) == (double)(((EOT*)b)->fitness()) ){
-        return 0;
+          eval(_eval)
+    {
+            maxNumberToConsider =_maxNumberToConsider;
+            selectionRate = _selectRate;
     }
-  }
+
+    double roundMy(double x, int prec)
+    {
+        double power = 1.0;
+        int i;
+
+        if (prec > 0)
+            for (i = 0; i < prec; i++)
+                power *= 10.0;
+        else if (prec < 0)
+            for (i = 0; i < prec; i++)
+                power /= 10.0;
+
+        if (x > 0)
+            x = floor(x * power + 0.5) / power;
+        else if (x < 0)
+            x = ceil(x * power - 0.5) / power;
+
+        if (x == -0)
+            x = 0;
+
+        return x;
+    }
 
 
-  void operator()(eoPop<EOT>& _pop)
-  {
-    eoPop<EOT> offspring;
 
-    do
-      {
+    static int  compareEOT (const void * a, const void * b)
+    {
+        // - perche decrescente
+        if( (double)(((EOT*)a)->fitness()) > (double)(((EOT*)b)->fitness()) ){
+            return -  1;
+        }else
+            if( (double)(((EOT*)a)->fitness()) < (double)(((EOT*)b)->fitness()) ){
+                return 1;
+            }else
+                if( (double)(((EOT*)a)->fitness()) == (double)(((EOT*)b)->fitness()) ){
+                    return 0;
+                }
+    }
 
-        int counter=-1;
-        EOT* popTmp= new EOT[_pop.size()];
+    double fRand(double fMin, double fMax)
+    {
+        double f = (double)rand() / (double)RAND_MAX;
+        return fMin + f * (fMax - fMin);
+    }
 
-        for (unsigned int i=0; i<_pop.size(); i++){
-            popTmp[i] = _pop[i];
-        }
-        qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
-        //SELECTION
-        offspring.clear();
-        offspring.resize(_pop.size());
+    void operator()(eoPop<EOT>& _pop)
+    {
+        eoPop<EOT> offspring;
 
-        for (unsigned int i=0; i<_pop.size(); i++){
+        do
+        {
 
-            if(counter < maxNumberToConsider){
-               //  std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+            int counter=-1;
+            EOT* popTmp= new EOT[_pop.size()];
+
+            for (unsigned int i=0; i<_pop.size(); i++){
+                popTmp[i] = _pop[i];
+            }
+            qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
+            //SELECTION
+            offspring.clear();
+            offspring.resize(_pop.size());
+
+            for (unsigned int i=0; i<_pop.size(); i++){
                 counter++;
-                EOT a;
-                double * r = (double*) malloc(sizeof(double)*popTmp[counter]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[counter]. getSize());
-                for (int tmp = 0; tmp < popTmp[counter].getSize(); tmp++) {
-                    a.setFiIndex(tmp, popTmp[counter]. getFiIndex(tmp));
-                }
-                offspring[counter]=a;
-//                std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-                 continue;
-            }
-           // counter=-1;
-            counter++;
-            int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
-            int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
+                if(counter < maxNumberToConsider){
+                    //  std::cout << "TORNEO!!!!!!! " << " " << std::endl;
 
-//            if(roundMy(tmpFitnessGen1,3) > roundMy(tmpFitnessGen2,3) ){
-              if(popTmp[gen1].fitness() > popTmp[gen2].fitness() ){
-                EOT a;
-
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[gen1]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-                    a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-                }
-                offspring[counter]=a;
-            }
-            else{
                     EOT a;
-                    double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
+                    double * r = (double*) malloc(sizeof(double)*popTmp[counter]. getSize());
                     a.setFi(r);
-                    a.setSize(popTmp[gen2]. getSize());
-                    for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                        a. setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
+                    a.setSize(popTmp[counter]. getSize());
+                    for (int tmp = 0; tmp < popTmp[counter].getSize(); tmp++) {
+                        a.setFiIndex(tmp, popTmp[counter]. getFiIndex(tmp));
                     }
                     offspring[counter]=a;
+                    //                std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+                    continue;
+                }
+                // counter=-1;
+                int gen1=rand()%_pop.size();
+                int gen2=rand()%_pop.size();
+
+                double randomProb = fRand(0,1);
+                EOT best;
+                EOT worst;
+                if(popTmp[gen1].fitness() > popTmp[gen2].fitness() ){
+                    double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
+                    best.setFi(r);
+                    best.setSize(popTmp[gen1]. getSize());
+                    for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
+                        best.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
+                    }
+                }
+                else{
+                    double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
+                    best.setFi(r);
+                    best.setSize(popTmp[gen2]. getSize());
+                    for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
+                        best.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
+                    }
                 }
 
-        }
-        // END SELECTION
+                if(popTmp[gen1].fitness() < popTmp[gen2].fitness() ){
+                    double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
+                    worst.setFi(r);
+                    worst.setSize(popTmp[gen1]. getSize());
+                    for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
+                        worst.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
+                    }
+                }
+                else{
+                    double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
+                    worst.setFi(r);
+                    worst.setSize(popTmp[gen2]. getSize());
+                    for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
+                        worst.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
+                    }
+                }
+
+                if(randomProb <= selectionRate){
+                    offspring[counter]=best;
+                }else
+                {
+                    offspring[counter]=worst;
+                }
+
+            }
 
 
-        unsigned i;
 
 
-        //for (i=0; i<_pop.size()/2; i++)
-        for (i=0; i<_pop.size()/2; i++)
-          {
-            if ( rng.flip(crossoverRate) )
+            // END SELECTION
+
+
+            unsigned i;
+
+
+            //for (i=0; i<_pop.size()/2; i++)
+            for (i=0; i<_pop.size()/2; i++)
             {
+                if ( rng.flip(crossoverRate) )
+                {
                     // this crossover generates 2 offspring from two parents
                     if (cross(offspring[2*i], offspring[2*i+1]))
-                       {
-                             offspring[2*i].invalidate();
-                             offspring[2*i+1].invalidate();
-                       }
+                    {
+                        offspring[2*i].invalidate();
+                        offspring[2*i+1].invalidate();
+                    }
+                }
             }
-          }
 
 
-        for (i=0; i < offspring.size(); i++)
-          {
-            if (rng.flip(mutationRate) )
+            for (i=0; i < offspring.size(); i++)
             {
-                     if (mutate(offspring[i]))
-                         offspring[i].invalidate();
+                if (rng.flip(mutationRate) )
+                {
+                    if (mutate(offspring[i]))
+                        offspring[i].invalidate();
+                }
+
             }
 
-          }
 
 
+            offspring.invalidate();
+            _pop.clear();
+            _pop.swap(offspring);
+            delete[] popTmp;
+            apply<EOT>(eval, _pop);
 
-        offspring.invalidate();
-        _pop.clear();
-        _pop.swap(offspring);
-        delete[] popTmp;
-        apply<EOT>(eval, _pop);
-
-      } while (cont(_pop));
-  }
+        } while (cont(_pop));
+    }
 
 private :
 
-      eoContinue<EOT>& cont;
-      /// eoInvalidateMonOp invalidates the embedded operator
-      eoInvalidateMonOp<EOT> mutate;
-      float mutationRate;
-      // eoInvalidateQuadOp invalidates the embedded operator
-      eoInvalidateQuadOp<EOT> cross;
-      float crossoverRate;
-      eoSelectPerc<EOT> select;
-      eoEvalFunc<EOT>& eval;
-      int maxNumberToConsider;
+    eoContinue<EOT>& cont;
+    /// eoInvalidateMonOp invalidates the embedded operator
+    eoInvalidateMonOp<EOT> mutate;
+    float mutationRate;
+    // eoInvalidateQuadOp invalidates the embedded operator
+    eoInvalidateQuadOp<EOT> cross;
+    float crossoverRate;
+    float selectionRate;
+    eoSelectPerc<EOT> select;
+    eoEvalFunc<EOT>& eval;
+    int maxNumberToConsider;
 
 };
 

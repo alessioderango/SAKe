@@ -82,7 +82,7 @@ class RegressionController: public QThread
 {
     Q_OBJECT
 public:
-    RegressionController(    QString projectName,
+    RegressionController(QString projectName,
                              double* percentualePeso,
                              double* percentualeLineareA,
                              double* percentualeLineareB,
@@ -102,7 +102,12 @@ public:
                              double dpercentageCrossover,
                              double dpercentageMutation,
                              int inumberProcessor,
-                             double * percantageTranslation);
+                             double * percantageTranslation,
+                             int propSelection,
+                             int para1,
+                             int para2,
+                             int itypeAlgorithm,
+                             QString sselection);
     RegressionController();
     CustomPlotItem *getQCustomPlotFitness() const;
     void setQCustomPlotFitness(CustomPlotItem *value);
@@ -187,6 +192,12 @@ private:
     double* translation;
     std::vector< double> x;
     std::vector< double> y;
+
+    unsigned int typeAlgorithm;
+    double parameter1;
+    double parameter2;
+    float  propSelection;
+    QString  selection;
 
     QString savePath;
 

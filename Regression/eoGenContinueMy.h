@@ -48,17 +48,32 @@ public:
             myfile <<  _vEO.best_element().getYCombinataConst(t) << " ;";
         }
 
+        myfile << "\n";
         myfile << "Equation : \n";
+        myfile << "Nash–Sutcliffe efficiency : " << _vEO.best_element().fitness() << " \n";
 
+        myfile << "Type ; Weight ; alfa ; beta; translation;  \n";
         for (int t = 0; t < _vEO.best_element().getWConst().size(); t++) {
-            myfile <<  _vEO.best_element().getWConst(t) << " ;";
             if(_vEO.best_element().getFunctionTypeConst(t) == 0 )
-                myfile <<  "lineare" << " ;";
+                continue;
             else
-                 myfile <<  "gamma" << " ;";
+                myfile <<  "gamma" << " ; ";
+            myfile <<  _vEO.best_element().getWConst(t) << " ;";
             myfile <<  _vEO.best_element().getParConst(t).getParameters(0) << " ;";
             myfile <<  _vEO.best_element().getParConst(t).getParameters(1) << " ;";
-            myfile <<  "NSE : " <<_vEO.best_element().fitness();
+            myfile << "\n";
+
+        }
+
+        myfile << "Type ; Weight ; alfa ; beta; translation;  \n";
+        for (int t = 0; t < _vEO.best_element().getWConst().size(); t++) {
+            if(_vEO.best_element().getFunctionTypeConst(t) == 0 )
+                myfile <<  "linear" << ";";
+            else
+                continue;
+            myfile <<  _vEO.best_element().getWConst(t) << " ;";
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(0) << " ;";
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(1) << " ;";
             myfile << "\n";
 
         }

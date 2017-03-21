@@ -75,7 +75,7 @@ public :
 
 
             //for (i=0; i<_pop.size()/2; i++)
-            for (i=0; i<_pop.size()/2; i++)
+            for (i=1; i<_pop.size()/2; i++)
             {
                 if ( rng.flip(crossoverRate) )
                 {
@@ -88,7 +88,7 @@ public :
                 }
             }
 
-            for (i=0; i < offspring.size(); i++)
+            for (i=1; i < offspring.size(); i++)
             {
                 if (rng.flip(mutationRate) )
                 {
@@ -97,22 +97,6 @@ public :
                 }
 
             }
-
-            eoPop<EOT> popTmp;
-            popTmp.resize(_pop.size());
-            int counter=0;
-            for (unsigned int i=0; i<_pop.size(); i++){
-                EOT a;
-                double * r = (double*) malloc(sizeof(double)*offspring[counter].getSize());
-                a.setFi(r);
-                a.setSize(offspring[counter]. getSize());
-                for (int tmp = 0; tmp < offspring[counter].getSize(); tmp++) {
-                    a.setFiIndex(tmp, offspring[counter]. getFiIndex(tmp));
-                }
-                popTmp[counter]=a;
-                counter++;
-            }
-
 
             _pop.clear();
             _pop.swap(offspring);

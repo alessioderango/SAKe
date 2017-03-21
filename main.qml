@@ -111,11 +111,12 @@
             var component;
             var window  ;
             //console.log("End List \n");
-
+            var countRows = 0;
+            var parameter;
             if(list[list.length -1] === "CalibrationProject"){
                 component = Qt.createComponent("parametersProjectAlreadyExist.qml")
                 window= component.createObject(applicationWindow1)
-                var countRows = 0;
+
                 for (var i = 0; i < list.length; i++) {
                     if(list[i] !== "-"){
                         console.log(list[i]+ "\n");
@@ -126,15 +127,15 @@
                     }
 
                 }
-                var parameter  = matrix[0];
+                parameter  = matrix[0];
                 window.f(parameter)
             }else
                 if(list[list.length -1] === "RegressionProject"){
                     component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
-                    var countRows = 0;
+                    countRows = 0;
                     for (var i = 0; i < list.length; i++) {
                         if(list[i] !== "-"){
-                            console.log(list[i]+ "\n");
+                            //console.log(list[i]+ "\n");
                             matrix[countRows].push(list[i]);
                         }else
                         {
@@ -143,17 +144,25 @@
                         }
 
                     }
-                    var parameter  = matrix[0];
-                    console.log(parameter)
+                    parameter  = matrix[0];
+                    //console.log(parameter)
                     var listGamma1 = matrix[1];
-                    console.log(listGamma1)
+                    //console.log(listGamma1)
                     var listGamma2 = matrix[2];
-                    console.log(listGamma2)
+                    //console.log(listGamma2)
                     var listLinear = matrix[3];
-                    console.log(listLinear)
+                    //console.log(listLinear)
 
                     window = component.createObject(applicationWindow1)
-                    window.loadParameter(parameter,listGamma1,listGamma2,listLinear)
+                    if (component.status === Component.Ready){
+                            console.log("READY")
+                            window.loadParameter(parameter,listGamma1,listGamma2,listLinear);
+                    }
+                        else{
+                        console.log("WAIT")
+                            component.statusChanged.connect(window.loadParameter(parameter,listGamma1,listGamma2,listLinear));
+                    }
+
                 }
                 else
                     if(list[list.length -1] === "ValidationProject"){
@@ -842,13 +851,15 @@
                                     }
 
                                     RowLayout {
-                                        Layout.fillWidth: true
-                                        spacing: 150
+                                        //Layout.fillWidth: true
+                                        //spacing: 150
                                         Label {
                                             objectName:  'currentAverageFitness"+count+"'
                                             text: 'Current Average Fitness:       0'
                                             font.pixelSize: 16
                                             color: '#000000'
+                                            visible :false
+
                                         }
 
                                         Label {
@@ -856,6 +867,7 @@
                                             text: 'Absolute Average Fitness:       0'
                                             font.pixelSize: 16
                                             color: '#000000'
+                                            visible :false
                                         }
 
 
@@ -976,6 +988,48 @@
                                 // Component.onCompleted: initCustomPlotMobilityFunction()
 
                             }
+
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 150
+                                        Label {
+                                            objectName:  'fitness"+count+"'
+                                            text: 'Current Average Fitness:       0'
+                                            font.pixelSize: 16
+                                            color: '#000000'
+                                        }
+
+
+                                    }
+
+
+
+                                    RowLayout {
+                                        Layout.fillWidth: true
+                                        spacing: 150
+                                        Label {
+                                            objectName:  'tb"+count+"'
+                                            text: 'tb:       0'
+                                            font.pixelSize: 16
+                                            color: '#000000'
+                                        }
+
+                                        Label {
+                                            objectName:  'deltaCritico"+count+"'
+                                            text: 'Δcritico:       0'
+                                            font.pixelSize: 16
+                                            color: '#000000'
+                                        }
+
+                                        Label {
+                                            objectName:  'momentoDelPrimoOrdine"+count+"'
+                                            text: 'Momento del primo ordine:       0'
+                                            font.pixelSize: 16
+                                            color: '#000000'
+                                        }
+
+
+                                    }
                           }
                         }";
 
