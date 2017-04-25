@@ -27,7 +27,9 @@ public:
                                       QString pmb,
                                       QString pattern,
                                       QString pathRains,
-                                      QString pathActivation
+                                      QString pathActivation,
+                                      QString typeReplacement,
+                                      QString numberElitist
                                       );
     int SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                   QString selection,
@@ -47,7 +49,9 @@ public:
                                                   QString pmb,
                                                   QString pattern,
                                                   QString pathRains,
-                                                  QString pathActivation
+                                                  QString pathActivation,
+                                                  QString typeReplacement,
+                                                  QString numberElitist
                                                   );
     int SaveXMLFileValidationProject(const QString &_projectName,
                                      const QString &filenameRainPath,

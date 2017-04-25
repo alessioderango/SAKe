@@ -41,7 +41,7 @@ public :
           crossoverRate(_crate),
           select(_select,_selectRate),
           eval(_eval) {
-        maxNumberToConsider=_maxNumberToConsider;
+        numberElitist=_maxNumberToConsider;
     }
 
 
@@ -63,27 +63,51 @@ public :
 
     void operator()(eoPop<EOT>& _pop)
     {
-        _pop.printOn(std::cout);
+        //_pop.printOn(std::cout);
+        numberElitist=8;
 
-        eoPop<EOT> offspring;
 
         do
         {
-            select(_pop, offspring);
+            eoPop<EOT> offspring;
+            eoPop<EOT> matingPool;
+            offspring.resize(_pop.size());
+
+            select(_pop, matingPool);
+
+            _pop.sort();
+            for (unsigned int i=0; i< numberElitist; i++){
+
+//                std::cout << "ELITISTI!!!!!!! " << " " << std::endl;
+//                typename eoPop<EOT>::iterator replace = _pop.begin() + i;
+                typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
+//                EOT oldChamp = *replace;
+//                (*itPoorGuy) = oldChamp;
+                EOT a;
+                double * r = (double*) malloc(sizeof(double)*_pop[i]. getSize());
+                a.setFi(r);
+                a.setSize(_pop[i]. getSize());
+                for (int tmp = 0; tmp < _pop[i].getSize(); tmp++) {
+                    a.setFiIndex(tmp, _pop[i]. getFiIndex(tmp));
+                }
+                (*itPoorGuy) = a;
+//                offspring[i] =_pop[i].clone();
+//                offspring[i].invalidate();
+                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+
+            }
 
             unsigned i;
 
-
-            //for (i=0; i<_pop.size()/2; i++)
-            for (i=0; i<_pop.size()/2; i++)
+            for (i=0; i<matingPool.size()/2; i++)
             {
                 if ( rng.flip(crossoverRate) )
                 {
                     // this crossover generates 2 offspring from two parents
-                    if (cross(offspring[2*i], offspring[2*i+1]))
+                    if (cross(matingPool[2*i], matingPool[2*i+1]))
                     {
-                        offspring[2*i].invalidate();
-                        offspring[2*i+1].invalidate();
+                        matingPool[2*i].invalidate();
+                        matingPool[2*i+1].invalidate();
                     }
                 }
             }
@@ -92,31 +116,56 @@ public :
             {
                 if (rng.flip(mutationRate) )
                 {
-                    if (mutate(offspring[i]))
-                        offspring[i].invalidate();
+                    if (mutate(matingPool[i]))
+                        matingPool[i].invalidate();
                 }
 
             }
+            //qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
 
-            eoPop<EOT> popTmp;
-            popTmp.resize(_pop.size());
-            int counter=0;
-            for (unsigned int i=0; i<_pop.size(); i++){
+//            std::cout << "STAMPO POPOLAZIONE!!!!!!! " << " " << std::endl;
+//            for (unsigned int i=0; i< _pop.size(); i++){
+//                std::cout << i << " " << _pop[i].fitness() << std::endl;
+//            }
+            //            std::cout << "STAMPO OFFSPRING!!!!!!! " << " " << std::endl;
+            //            for (unsigned int i=0; i< offspring.size(); i++){
+            //                std::cout << i << " " << offspring[i].fitness() << std::endl;
+            //            }
+
+
+            for (unsigned int i=numberElitist; i< matingPool.size(); i++){
+
+//                std::cout << "ELITISTI!!!!!!! " << " " << std::endl;
+//                typename eoPop<EOT>::iterator replace = _pop.begin() + i;
+                typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
+//                EOT oldChamp = *replace;
+//                (*itPoorGuy) = oldChamp;
                 EOT a;
-                double * r = (double*) malloc(sizeof(double)*offspring[counter].getSize());
+                double * r = (double*) malloc(sizeof(double)*matingPool[i]. getSize());
                 a.setFi(r);
-                a.setSize(offspring[counter]. getSize());
-                for (int tmp = 0; tmp < offspring[counter].getSize(); tmp++) {
-                    a.setFiIndex(tmp, offspring[counter]. getFiIndex(tmp));
+                a.setSize(matingPool[i]. getSize());
+                for (int tmp = 0; tmp < matingPool[i].getSize(); tmp++) {
+                    a.setFiIndex(tmp, matingPool[i]. getFiIndex(tmp));
                 }
-                popTmp[counter]=a;
-                counter++;
+                (*itPoorGuy) = a;
+//                offspring[i] =_pop[i].clone();
+//                offspring[i].invalidate();
+                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
+
             }
+
+
+
 
 
             _pop.clear();
             _pop.swap(offspring);
             apply<EOT>(eval, _pop);
+//            _pop.sort();
+//            std::cout << "STAMPO OFFSPRING DOPO REPLACEMENT!!!!!!! " << " " << std::endl;
+//            for (unsigned int i=0; i< _pop.size(); i++){
+//                std::cout << i << " " << _pop[i].fitness() << std::endl;
+//            }
 
         } while (cont(_pop));
     }
@@ -131,7 +180,7 @@ private :
     float crossoverRate;
     eoSelectPerc<EOT> select;
     eoEvalFunc<EOT>& eval;
-    int maxNumberToConsider;
+    int numberElitist;
 };
 
 

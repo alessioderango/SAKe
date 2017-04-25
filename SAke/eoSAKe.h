@@ -51,8 +51,8 @@ public:
 //        YsMin=0;
 //        YsMin2=0;
 //        iMin=0;
-        min();
-        min2();
+//        min();
+//        min2();
         momentoDelPrimoOrdine=0;
 		// END   Code of default Ctor of an eoSAKe object
 	}

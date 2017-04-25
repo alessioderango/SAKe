@@ -322,8 +322,9 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                           QString pmb,
                                                           QString pattern,
                                                           QString pathRains,
-                                                          QString pathActivations
-                                                          )
+                                                          QString pathActivations,
+                                                          QString typeReplacement,
+                                                          QString numberElitist)
 {
 
     QFile inFile( xmlFilePath );
@@ -346,6 +347,7 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
     QDomElement documentElement = document.documentElement();
     QDomNodeList a = documentElement.elementsByTagName("CalibrationProject");
     qDebug() << a.length();
+    qDebug() << "SALVO PROGETTO GIà ESISTENTE";
     for (int i = 0; i < a.length(); i++) {
         qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
         qDebug() << name;
@@ -371,9 +373,16 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
             a.at(i).childNodes().at(14).firstChild().setNodeValue(pattern);
             a.at(i).childNodes().at(15).firstChild().setNodeValue(pathRains);
             a.at(i).childNodes().at(16).firstChild().setNodeValue(pathActivations);
+            a.at(i).childNodes().at(17).firstChild().setNodeValue(typeReplacement);
+            a.at(i).childNodes().at(18).firstChild().setNodeValue(numberElitist);
         }
 
     }
+
+    qDebug() << "\n";
+    qDebug() << "\n";
+    qDebug() << "\n";
+    qDebug() << "AAAAAAAAAAAAAAAAAAAAAAaa\n";
 
     // Save content back to the file
     if (!inFile.open(QIODevice::Truncate | QIODevice::WriteOnly)) {
@@ -406,8 +415,9 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
                                               QString pmb,
                                               QString pattern,
                                               QString pathRains,
-                                              QString pathActivations
-                                              )
+                                              QString pathActivations,
+                                              QString typeReplacement,
+                                              QString numberElitist)
 {
 
     //Controllare se esiste un altro progetto con lo stesso nome
@@ -474,6 +484,8 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomElement typeElement = document.createElement( "Type" );
     QDomElement value1Element = document.createElement( "value1" );
     QDomElement value2Element = document.createElement( "value2" );
+    QDomElement typeReplacementDom = document.createElement( "typeReplacement" );
+    QDomElement numberElitistDom = document.createElement( "numberElitist" );
 
     //create TextElement
     QDomText typeText = document.createTextNode( selection );
@@ -497,6 +509,11 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     numProjectInt++;
     QDomText idText = document.createTextNode( QString("%1").arg(numProjectInt));
     document.childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(QString("%1").arg(numProjectInt));
+
+    QDomText typeReplacementText = document.createTextNode( typeReplacement );
+    QDomText numberElitistText = document.createTextNode( numberElitist );
+    typeReplacementDom.appendChild(typeReplacementText);
+    numberElitistDom.appendChild(numberElitistText);
 
     typeElement.appendChild(typeText);
     value1Element.appendChild(value1Text);
@@ -553,6 +570,9 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
 
     pathActivationsElement.appendChild(pathActivationsText);
     project.appendChild(pathActivationsElement);
+
+    project.appendChild(typeReplacementDom);
+    project.appendChild(numberElitistDom);
 
     id.appendChild(idText);
     project.appendChild(id);

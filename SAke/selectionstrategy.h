@@ -2,11 +2,13 @@
 #define SELECTIONSTARTEGY_H
 #include <eoPop.h>
 
+enum SELECTIONID { BESTGEN1 = 0 ,BESTGEN2  , NOONEBEST };
+
 template <class EOT>
 class SelectionStrategy
 {
 public:
-    SelectionStartegy();
+    SelectionStrategy(){}
     double roundMy(double x, int prec)
     {
         double power = 1.0;
@@ -29,8 +31,9 @@ public:
 
         return x;
     }
-    virtual bool selection(int a, int b,EOT* &popTmp, eoPop<EOT> &offspring, int counter) = 0;
-    virtual void selectionLast(int a, int b,EOT* &popTmp, eoPop<EOT> &offspring, int counter) = 0;
+    virtual bool selectionDet(EOT best, EOT competitor) = 0;
+    virtual SELECTIONID selectionStoch(EOT best, EOT competitor) = 0;
+//    virtual void selectionLast(int a, int b,EOT* &popTmp, eoPop<EOT> &offspring, int counter) = 0;
 };
 
 #endif // SELECTIONSTARTEGY_H

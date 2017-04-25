@@ -10,7 +10,7 @@ Window {
     visible: true
     width: 700
     height: 800
-    title: qsTr("Sake software")
+    title: qsTr("Sake")
     minimumHeight: 800
     minimumWidth: 700
     maximumHeight: minimumHeight
@@ -286,7 +286,7 @@ table, th, td {
                             }else{
                                 selectionParameterTournamentWithoutReplacement.visible=false;
                             }
-                            if(currentIndex ===6 || currentIndex ===8){
+                            if(currentIndex ===0 || currentIndex ===1 || currentIndex ===6 || currentIndex ===8){
                                 gridLayout5.visible=true;
                             }else{
                                 gridLayout5.visible=false;
@@ -1499,10 +1499,6 @@ table, th, td {
                                                 para1=selectionParameterTournamentWithoutReplacement.text;
                                                 para2=-1;
                                                 typeAlgorithm=3;
-                                                order1=selectionsOrder.get(selectionsOrder.currentIndex).text
-                                                order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
-                                                order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
-                                                order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
                                             }else
                                                 if(comboSelection.currentText == "Steady-State"){
                                                     para1=selectionParameterTournamentWithoutReplacement.text;
@@ -1513,11 +1509,11 @@ table, th, td {
                                                         para1=selectionParameterTournamentWithoutReplacement.text;
                                                         para2=-1;
                                                         typeAlgorithm=1;
-                                                        order1=selectionsOrder.get(selectionsOrder.currentIndex).text
-                                                        order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
-                                                        order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
-                                                        order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
                                                     }
+                        order1=selectionsOrder.get(selectionsOrder.currentIndex).text
+                        order2=selectionsOrder1.get(selectionsOrder1.currentIndex).text
+                        order3=selectionsOrder2.get(selectionsOrder2.currentIndex).text
+                        order4=selectionsOrder3.get(selectionsOrder3.currentIndex).text
                         // if(textfileRain.text != "empty")
 
                         if(textfileRain.text == "Empty"){

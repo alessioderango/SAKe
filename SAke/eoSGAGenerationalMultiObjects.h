@@ -135,8 +135,8 @@ public :
             }
            // counter=-1;
             counter++;
-            int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
-            int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
+//            int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
+//            int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
 
 //            std::cout << "TORNEO!!!!!!! " << " " << std::endl;
 //            std::cout << popTmp[gen1].fitness() << " ";
@@ -145,16 +145,16 @@ public :
 //            std::cout << " FINE TORNEO!!!!!!! " << " " << std::endl;
 
 
-            bool tmpSelection=0;
-            for (int i = 0; i < 3; i++) {
-                tmpSelection = selectionStrategy[i]->selection(gen1,gen2,popTmp,offspring,counter);
-                if(tmpSelection)
-                    break;
-            }
+//            bool tmpSelection=0;
+//            for (int i = 0; i < 3; i++) {
+//                tmpSelection = selectionStrategy[i]->selection(gen1,gen2);
+//                if(tmpSelection)
+//                    break;
+//            }
            // std::cout <<"tmpSelection = "<< tmpSelection<<"\n" << " ";
-            if(tmpSelection==0){
-                selectionStrategy[3]->selectionLast(gen1,gen2,popTmp,offspring,counter);
-            }
+//            if(tmpSelection==0){
+//                selectionStrategy[3]->selectionLast(gen1,gen2,popTmp,offspring,counter);
+//            }
             // printf(" countFitenss = %d; countDelta = %d; countMomento = %d; countTb = %d \n", countFitness, countDeltaCritico, countMomento, countTb);
 
         }

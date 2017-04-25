@@ -37,7 +37,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &selectionOrder1,
                          const QVariant &selectionOrder2,
                          const QVariant &selectionOrder3,
-                         const QVariant &selectionOrder4
+                         const QVariant &selectionOrder4,
+                         const QVariant &numberElitist
                          ){
 
     // **** converto e verifico che siano arrrivati dal QML tutti i parametri
@@ -62,7 +63,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                               pmb.toString(),
                                                               pattern.toString(),
                                                               filename.toString(),
-                                                              _filenameActivation.toString());
+                                                              _filenameActivation.toString(),
+                                                              typeAlgorithm.toString(),
+                                                              numberElitist.toString());
     }else{
         xmlManager->SaveXMLFileCalibrationProject(_projectName.toString(),
                                                   selection.toString(),
@@ -82,7 +85,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                   pmb.toString(),
                                                   pattern.toString(),
                                                   filename.toString(),
-                                                  _filenameActivation.toString());
+                                                  _filenameActivation.toString(),
+                                                  typeAlgorithm.toString(),
+                                                  numberElitist.toString());
     }
     // INIZIO
     QString  sselection          = selection.toString();
@@ -114,28 +119,30 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     float    fpmb                = pmb.toFloat();
     bool     bLastGeneration     = _lastGeneration.toBool();
 
-    //       qDebug() << "selection arrivato " << selection << "\n";
-    //       qDebug() << "pattern arrivato " << pattern << "\n";
-    //       qDebug() << "ipop arrivato " <<   pop << "\n";
-    //       qDebug() << "imaxGen arrivato " << maxGen << "\n";
-    //       qDebug() << "itbMax arrivato " <<   tbMax << "\n";
-    //       qDebug() << "itbMin arrivato " <<   tbMin << "\n";
-    //       qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
-    //       qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
-    //       qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
-    //       qDebug() << "fpropMutation arrivato " << propMutation << "\n";
-    //       qDebug() << "fpme arrivato " << pme << "\n";
-    //       qDebug() << "fpmb arrivato " << pmb << "\n";
-    //       qDebug() << "filename arrivato " << sfilenameRain << "\n";
-    //       qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
-    //       qDebug() << "_projectName  arrivato " << sprojectname << "\n";
-    //       qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
-    //       qDebug() << "ipara1 arrivato " << ipara1 << "\n";
-    //       qDebug() << "ipara2 arrivato " << ipara2 << "\n";
+           qDebug() << "selection arrivato " << selection << "\n";
+           qDebug() << "pattern arrivato " << pattern << "\n";
+           qDebug() << "ipop arrivato " <<   pop << "\n";
+           qDebug() << "imaxGen arrivato " << maxGen << "\n";
+           qDebug() << "itbMax arrivato " <<   tbMax << "\n";
+           qDebug() << "itbMin arrivato " <<   tbMin << "\n";
+           qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
+           qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
+           qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
+           qDebug() << "fpropMutation arrivato " << propMutation << "\n";
+           qDebug() << "fpme arrivato " << pme << "\n";
+           qDebug() << "fpmb arrivato " << pmb << "\n";
+           qDebug() << "filename arrivato " << sfilenameRain << "\n";
+           qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
+           qDebug() << "_projectName  arrivato " << sprojectname << "\n";
+           qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
+           qDebug() << "ipara1 arrivato " << ipara1 << "\n";
+           qDebug() << "ipara2 arrivato " << ipara2 << "\n";
     qDebug() << "selectionOrder1 arrivato " << selectionOrder1 << "\n";
     qDebug() << "selectionOrder2 arrivato " << selectionOrder2 << "\n";
     qDebug() << "selectionOrder3 arrivato " << selectionOrder3 << "\n";
     qDebug() << "selectionOrder4 arrivato " << selectionOrder4 << "\n";
+    qDebug() << "numberElitist arrivato " << numberElitist << "\n";
+    qDebug() << "tipo arrivato " << tipo << "\n";
 
     vector<QString> orders;
     orders.push_back(selectionOrder1.toString());

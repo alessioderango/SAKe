@@ -18,7 +18,8 @@
 #include <eoSharingSelect.h>
 #include <utils/eoDistance.h>
 #include "eoMySelection.h"
-
+#include <SAke/eosakedettournamentselect.h>
+#include <SAke/eosakestochtournamentselect.h>
 // Breeders
 #include <eoGeneralBreeder.h>
 
@@ -100,7 +101,8 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
       }
     else          // parameter passed by user as DetTour(T)
       detSize = atoi(ppSelect.second[0].c_str());
-    select = new eoDetTournamentSelect<EOT>(detSize);
+    select = new eoSAKeDetTournamentSelect<EOT>(selectionStrategy, detSize);
+//     select = new eoDetTournamentSelect<EOT>(detSize);
   }
   else if (ppSelect.first == std::string("Sharing"))
   {
@@ -132,7 +134,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
       else        // parameter passed by user as DetTour(T)
         p = atof(ppSelect.second[0].c_str());
 
-      select = new eoStochTournamentSelect<EOT>(p);
+      select = new eoSAKeStochTournamentSelect<EOT>(selectionStrategy,p);
     }
   else if (ppSelect.first == std::string("Ranking"))
     {
@@ -325,27 +327,27 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
   eoAlgo<EOT> *algo;
   if(typeAlgorithm==0)
   {
-      algo = new eoSGASteadyState<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+      algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
   }else
       if(typeAlgorithm==1)
       {
-          algo = new eoSGASteadyStateMultiObjects<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
+          algo = new eoMySGA<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
       }
-      else
-          if(typeAlgorithm==2)
-          {
-              algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
-          }else
-              if(typeAlgorithm==3)
-              {
-                  algo = new eoSGAGenerationalMultiObjects<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
-              }else
-                  if(typeAlgorithm==4)
-                  {
-                      algo = new eoMySGA<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
+//      else
+//          if(typeAlgorithm==2)
+//          {
+//              algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+//          }else
+//              if(typeAlgorithm==3)
+//              {
+//                  algo = new eoSGAGenerationalMultiObjects<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider,selectionStrategy);
+//              }else
+//                  if(typeAlgorithm==4)
+//                  {
+//                      algo = new eoMySGA<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
 
-//                      algo = new eoSGA<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue);
-                  }
+////                      algo = new eoSGA<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue);
+//                  }
   _state.storeFunctor(algo);
   // that's it!
   return *algo;

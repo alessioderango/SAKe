@@ -13,33 +13,12 @@ public:
 private:
 
     int roundedDigits;
-    /* virtual */bool selection(int gen1, int gen2, EOT* &popTmp, eoPop<EOT> &offspring, int counter)
+    /* virtual */bool selectionDet(EOT gen1, EOT gen2)
     {
-        double tmpFitnessGen1 = popTmp[gen1].fitness();
-        double tmpFitnessGen2 = popTmp[gen2].fitness();
-        if(this->roundMy(tmpFitnessGen1,roundedDigits) > this->roundMy(tmpFitnessGen2,roundedDigits) ){
-//            printf("fitness Gen 1 %f > fitness Gen 2 %f\n ",tmpFitnessGen1,tmpFitnessGen2);
-            EOT a;
-            double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-            a.setFi(r);
-            a.setSize(popTmp[gen1]. getSize());
-            for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-                a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-            }
-            offspring[counter]=a;
-            return true;
-        }
-        else
+        double tmpFitnessGen1 = gen1.fitness();
+        double tmpFitnessGen2 = gen2.fitness();
+
             if(this->roundMy(tmpFitnessGen1,roundedDigits) < this->roundMy(tmpFitnessGen2,roundedDigits) ){
-//                printf("fitness Gen 1 %f < fitness Gen 2 %f\n ",tmpFitnessGen1,tmpFitnessGen2);
-                EOT a;
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[gen2]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                    a. setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
-                }
-                offspring[counter]=a;
                 return true;
             }else
             {
@@ -48,23 +27,20 @@ private:
 
     }
 
-    /* virtual */void selectionLast(int gen1, int gen2, EOT* &popTmp, eoPop<EOT> &offspring, int counter)
-    {
-        double tmpFitnessGen1 = popTmp[gen1].fitness();
-        double tmpFitnessGen2 = popTmp[gen2].fitness();
+    SELECTIONID selectionStoch(EOT gen1, EOT gen2){
+        double tmpFitnessGen1 = gen1.fitness();
+        double tmpFitnessGen2 = gen2.fitness();
 
-//        printf("fitness Gen 1 %f > fitness Gen 2 %f\n ",tmpFitnessGen1,tmpFitnessGen2);
-        EOT a;
-        double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-        a.setFi(r);
-        a.setSize(popTmp[gen1]. getSize());
-        for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-            a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-        }
-        offspring[counter]=a;
-
-
+        if(this->roundMy(tmpFitnessGen1,roundedDigits) < this->roundMy(tmpFitnessGen2,roundedDigits) ){
+            return BESTGEN1;
+        }else
+            if(this->roundMy(tmpFitnessGen1,roundedDigits) > this->roundMy(tmpFitnessGen2,roundedDigits) )
+            {
+                return BESTGEN2;
+            }else
+                return NOONEBEST;
     }
+
 
 
 };

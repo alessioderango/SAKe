@@ -104,7 +104,7 @@ public slots:
                   const QVariant &selectionOrder2,
                   const QVariant &selectionOrder3,
                   const QVariant &selectionOrder4
-                  );
+                  , const QVariant &numberElitist);
     void startValidation(
             const QVariant &_projectName,
             const QVariant &filenameRainPath,

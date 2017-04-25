@@ -29,5 +29,6 @@
         <file>DialogInfo.qml</file>
         <file>img/info.jpg</file>
         <file>Popups.qml</file>
+        <file>CalibrationMask.qml</file>
     </qresource>
 </RCC>

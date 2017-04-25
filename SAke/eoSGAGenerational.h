@@ -40,7 +40,7 @@ public :
           mutationRate(_mrate),
           cross(_cross),
           crossoverRate(_crate),
-          select(_select,_selectRate),
+          select(_select),
           eval(_eval) {
       maxNumberToConsider =_maxNumberToConsider;
       selectionProb = _selectRate;
@@ -94,128 +94,41 @@ public :
 
   void operator()(eoPop<EOT>& _pop)
   {
-    eoPop<EOT> offspring;
+      eoPop<EOT> offspring;
 
-    do
-      {
+      do
+        {
+          select(_pop, offspring);
 
-        int counter=-1;
-        EOT* popTmp= new EOT[_pop.size()];//(EOT*) malloc(sizeof(EOT)*_pop.size());
+          unsigned i;
 
-        for (unsigned i=0; i<_pop.size(); i++){
-            //std::cout << "Arrivo " << std::endl;
-            popTmp[i] = _pop[i];
-        }
-
-        qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
-        //SELECTION
-        offspring.clear();
-        offspring.resize(_pop.size());
-        for (unsigned int i=0; i<_pop.size(); i++){
-            counter++;
-//            std::cout << "Arrivo " << std::endl;
-            if(counter < maxNumberToConsider){
-               //  std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-
-                EOT a;
-                double * r = (double*) malloc(sizeof(double)*popTmp[counter]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[counter]. getSize());
-                for (int tmp = 0; tmp < popTmp[counter].getSize(); tmp++) {
-                    a.setFiIndex(tmp, popTmp[counter]. getFiIndex(tmp));
-                }
-                offspring[counter]=a;
-                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-                 continue;
-            }
-            int gen1=rand()%_pop.size();
-            int gen2=rand()%_pop.size();
-
-            double randomProb = fRand(0,1);
-            EOT best;
-            EOT worst;
-            if(popTmp[gen1].fitness() > popTmp[gen2].fitness() ){
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-                best.setFi(r);
-                best.setSize(popTmp[gen1]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-                    best.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-                }
-            }
-            else{
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-                best.setFi(r);
-                best.setSize(popTmp[gen2]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                    best.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
-                }
-            }
-
-            if(popTmp[gen1].fitness() < popTmp[gen2].fitness() ){
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-                worst.setFi(r);
-                worst.setSize(popTmp[gen1]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-                    worst.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-                }
-            }
-            else{
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-                worst.setFi(r);
-                worst.setSize(popTmp[gen2]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                    worst.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
-                }
-            }
-
-            if(randomProb <= selectionProb){
-                offspring[counter]=best;
-            }else
+          for (i=0; i<_pop.size()/2; i++)
             {
-                offspring[counter]=worst;
+              if ( rng.flip(crossoverRate) )
+              {
+                      // this crossover generates 2 offspring from two parents
+                      if (cross(offspring[2*i], offspring[2*i+1]))
+                         {
+                               offspring[2*i].invalidate();
+                               offspring[2*i+1].invalidate();
+                         }
+              }
             }
 
-        }
-        // END SELECTION
-
-
-        unsigned i;
-
-
-        //for (i=0; i<_pop.size()/2; i++)
-        for (i=maxNumberToConsider; i<_pop.size()/2; i++)
-          {
-            if ( rng.flip(crossoverRate) )
+          for (i=0; i < offspring.size(); i++)
             {
-                    // this crossover generates 2 offspring from two parents
-                    if (cross(offspring[2*i], offspring[2*i+1]))
-                       {
-                             offspring[2*i].invalidate();
-                             offspring[2*i+1].invalidate();
-                       }
-            }
-          }
+              if (rng.flip(mutationRate) )
+              {
+                       if (mutate(offspring[i]))
+                           offspring[i].invalidate();
+              }
 
-
-        for (i=maxNumberToConsider; i < offspring.size(); i++)
-          {
-            if (rng.flip(mutationRate) )
-            {
-                     if (mutate(offspring[i]))
-                         offspring[i].invalidate();
             }
 
-          }
+          _pop.swap(offspring);
+          apply<EOT>(eval, _pop);
 
-
-
-        offspring.invalidate();
-        _pop.clear();
-        _pop.swap(offspring);
-        delete[] popTmp;
-        apply<EOT>(eval, _pop);
-
-      } while (cont(_pop));
+        } while (cont(_pop));
   }
 private :
 

@@ -101,7 +101,9 @@ HEADERS += \
     Regression/funtciontype.h \
     Regression/eoSGAGenerational.h \
     Regression/eoMySGA.h \
-    Regression/eoSGASteadyState.h
+    Regression/eoSGASteadyState.h \
+    SAke/eosakedettournamentselect.h \
+    SAke/eosakestochtournamentselect.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686

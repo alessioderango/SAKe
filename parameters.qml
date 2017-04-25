@@ -14,7 +14,7 @@ Window {
     visible: true
     width: 700
     height: 800
-    title: qsTr("Sake software")
+    title: qsTr("Sake")
     Layout.maximumHeight: height
     Layout.maximumWidth: width
     color:"white"
@@ -113,6 +113,7 @@ table, th, td {
     ScrollView {
         width: parent.width
         height: parent.height
+
 
         Rectangle{
             id: parameter
@@ -213,7 +214,7 @@ table, th, td {
                                     selectionParameterTournamentWithoutReplacement.visible=false;
                                     labelselectionParameterTournamentWithoutReplacement.visible=false;
                                 }
-                                if(currentIndex ===6 || currentIndex ===8){
+                                if(currentIndex ===0 || currentIndex ===1 || currentIndex ===6 || currentIndex ===8){
                                     gridLayout5.visible=true;
                                 }else{
                                     gridLayout5.visible=false;

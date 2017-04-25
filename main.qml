@@ -15,7 +15,7 @@
         visible: true
         width: 800
         height: 800
-        title: qsTr("Sake software")
+        title: qsTr("Sake")
 
         property var description_role
         property var path_output
@@ -88,9 +88,11 @@
                     text: qsTr("&Options");
                     onTriggered:{
                         console.log("Open action triggered Calibration Project");
-                        var component = Qt.createComponent("settings.qml")
-                        var window    = component.createObject(applicationWindow1)
-                    }
+//                        var component = Qt.createComponent("settings.qml")
+//                        var window    = component.createObject(applicationWindow1)
+
+                        var component = Qt.createComponent("CalibrationMask.qml")
+                        var window    = component.createObject(applicationWindow1)}
                 }
 
 
@@ -114,7 +116,8 @@
             var countRows = 0;
             var parameter;
             if(list[list.length -1] === "CalibrationProject"){
-                component = Qt.createComponent("parametersProjectAlreadyExist.qml")
+                //component = Qt.createComponent("parametersProjectAlreadyExist.qml")
+                component = Qt.createComponent("CalibrationMask.qml")
                 window= component.createObject(applicationWindow1)
 
                 for (var i = 0; i < list.length; i++) {

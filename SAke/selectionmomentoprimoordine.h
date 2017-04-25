@@ -12,57 +12,30 @@ public:
     }
 private:
     int roundedDigits;
-    /* virtual */bool selection(int gen1, int gen2, EOT* &popTmp,eoPop<EOT> &offspring, int counter)
+    /* virtual */bool selectionDet(EOT best, EOT competitor)
     {
-        double momentoPrimoOrdineGen1 = popTmp[gen1].getMomentoDelPrimoOrdineConst();
-        double momentoPrimoOrdineGen2 = popTmp[gen2].getMomentoDelPrimoOrdineConst();
+        double momentoPrimoOrdineGen1 = best.getMomentoDelPrimoOrdineConst();
+        double momentoPrimoOrdineGen2 = competitor.getMomentoDelPrimoOrdineConst();
 
-        if(this->roundMy(momentoPrimoOrdineGen1,roundedDigits) > this->roundMy(momentoPrimoOrdineGen2,roundedDigits)){
-            printf("momentoPrimoOrdine Gen 1 %f > momentoPrimoOrdine Gen 2 %f\n ",momentoPrimoOrdineGen1,momentoPrimoOrdineGen2 );
-            EOT a;
-            double * r = (double*) malloc(sizeof(double)*popTmp[gen1]. getSize());
-            a.setFi(r);
-            a.setSize(popTmp[gen1]. getSize());
-            for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-                a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-            }
-            offspring[counter]=a;
+        if(this->roundMy(momentoPrimoOrdineGen1,roundedDigits) > this->roundMy(momentoPrimoOrdineGen2,roundedDigits))
             return true;
-        }else
-            if(this->roundMy(momentoPrimoOrdineGen1,roundedDigits) < this->roundMy(momentoPrimoOrdineGen2,roundedDigits)){
-                printf("momentoPrimoOrdine Gen 1 %f < momentoPrimoOrdine Gen 2 %f\n ",momentoPrimoOrdineGen1,momentoPrimoOrdineGen2 );
-                EOT a;
-                double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-                a.setFi(r);
-                a.setSize(popTmp[gen2]. getSize());
-                for (int tmp = 0; tmp < popTmp[gen2].getSize(); tmp++) {
-                    a.setFiIndex(tmp, popTmp[gen2]. getFiIndex(tmp));
-                }
-                offspring[counter]=a;
-                return true;
-            }else{
-                return false;
-            }
-
+        else
+            return false;
     }
 
-    /* virtual */void selectionLast(int gen1, int gen2, EOT* &popTmp,eoPop<EOT> &offspring, int counter)
-    {
-        double momentoPrimoOrdineGen1 = popTmp[gen1].getMomentoDelPrimoOrdineConst();
-        double momentoPrimoOrdineGen2 = popTmp[gen2].getMomentoDelPrimoOrdineConst();
 
-//        printf("momentoPrimoOrdine Gen 1 %f > momentoPrimoOrdine Gen 2 %f\n ",momentoPrimoOrdineGen1,momentoPrimoOrdineGen2 );
+    SELECTIONID selectionStoch(EOT best, EOT competitor){
+        double momentoPrimoOrdineGen1 = best.getMomentoDelPrimoOrdineConst();
+        double momentoPrimoOrdineGen2 = competitor.getMomentoDelPrimoOrdineConst();
 
-        EOT a;
-        double * r = (double*) malloc(sizeof(double)*popTmp[gen2]. getSize());
-        a.setFi(r);
-        a.setSize(popTmp[gen1]. getSize());
-        for (int tmp = 0; tmp < popTmp[gen1].getSize(); tmp++) {
-            a.setFiIndex(tmp, popTmp[gen1]. getFiIndex(tmp));
-        }
-        offspring[counter]=a;
-
-
+        if(this->roundMy(momentoPrimoOrdineGen1,roundedDigits) < this->roundMy(momentoPrimoOrdineGen2,roundedDigits)){
+            return BESTGEN1;
+        }else
+            if(this->roundMy(momentoPrimoOrdineGen1,roundedDigits) > this->roundMy(momentoPrimoOrdineGen2,roundedDigits))
+            {
+                return BESTGEN2;
+            }else
+                return NOONEBEST;
     }
 };
 
