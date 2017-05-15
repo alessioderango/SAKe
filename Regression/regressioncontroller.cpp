@@ -19,7 +19,7 @@ RegressionController::RegressionController(QString projectName,
                                            int parametersSize,
                                            int _sizeKernel,
                                            double *_kernel,
-                                           int iselectionElitist,
+                                           int ielitist,
                                            int ipopulationSize,
                                            int imaxGeneration,
                                            double dpercentageCrossover,
@@ -32,7 +32,7 @@ RegressionController::RegressionController(QString projectName,
                                            int itypeAlgorithm,
                                            QString  sselection){
 
-    typeAlgorithm =itypeAlgorithm;
+    typeReplacement =itypeAlgorithm;
     selection        = sselection;
     this->percentualePesoSize = weightsSize;
     percentualePeso=_percentualePeso;
@@ -61,7 +61,7 @@ RegressionController::RegressionController(QString projectName,
     this->numberProcessor=inumberProcessor;
 
 
-    this->selectionElitist = para1;
+    this->elitist = ielitist;
     this->populationSize = ipopulationSize;
     this->maxGeneration = imaxGeneration;
     this->percentageCrossover = dpercentageCrossover;
@@ -133,6 +133,7 @@ void RegressionController::startAlgorithm(){
         omp_set_num_threads( numberProcessor );
 #endif // !_OPENMP
         eoParser parser(argc,input);  // for user-parameter readi ng
+        parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
         // parser.setORcreateParam(eoParamParamType("Sequential(ordered)"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
         //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
         parser.setORcreateParam(unsigned(populationSize), "popSize", "Population Size", 'P', "Evolution Engine");
@@ -211,7 +212,7 @@ void RegressionController::startAlgorithm(){
                                                                       x);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);
-        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,selectionElitist,typeAlgorithm,propSelection);
+        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,elitist,typeReplacement,propSelection);
 
         ///// End of construction of the algorithm
 
@@ -224,23 +225,23 @@ void RegressionController::startAlgorithm(){
         // evaluate intial population AFTER help and status in case it takes time
         apply<Individual>(eval, pop);
         // if you want to print it out
-        cout << "Initial Population\n";
+        //cout << "Initial Population\n";
         pop.sortedPrintOn(cout);
-        cout << endl;
+        //cout << endl;
 
         do_run(ga, pop); // run the ga
 
-        cout << "Final Population\n";
+        //cout << "Final Population\n";
         pop.sortedPrintOn(cout);
-        cout << endl;
-        cout << "The Best" <<endl;
+        //cout << endl;
+        //cout << "The Best" <<endl;
         pop.best_element().printOn(cout);
 
-        cout <<  endl;
+        //cout <<  endl;
 
-        for (int i = 0; i < x.size(); ++i) {
-            cout << pop.best_element().getYCombinataConst(i) << endl;
-        }
+//        for (int i = 0; i < x.size(); ++i) {
+//            cout << pop.best_element().getYCombinataConst(i) << endl;
+//        }
 
 
     }
@@ -373,7 +374,7 @@ void RegressionController::startThread(){
 }
 
 void RegressionController::stopThread(){
-    qDebug() << "close " << "\n";
+//    qDebug() << "close " << "\n";
     //this->moveToThread(QApplication::instance()->thread());
     //  this->exit(0);
     //    this->requestInterruption();
@@ -381,7 +382,7 @@ void RegressionController::stopThread(){
     //        this->stop();
     //    this->sleep(10000);
     if(stop){
-        qDebug() << "close2 " << "\n";
+//        qDebug() << "close2 " << "\n";
         stop->setStop(true);
     }
 

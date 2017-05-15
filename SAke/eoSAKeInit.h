@@ -50,18 +50,18 @@ public:
     double * GetFunzioneFiltro(int tb,string Inputpattern) {
         double* fi = (double*) malloc(sizeof(double)*tb);
         int i;
-        if (Inputpattern.compare("Rettangolare") == 0) {
+        if (Inputpattern.compare("Rectangular") == 0) {
             for (i = 0; i < tb; i++) {
                 double e = (1 /(double)tb);
                 fi[i] = e;
             }
         } else
-            if (Inputpattern.compare("Triangolare Disc") == 0) {
+            if (Inputpattern.compare("Decreasing triangular") == 0) {
                 for (i = 0; i < tb; i++) {
                     double hMax = (double)(2 /(double) tb);
                     fi[i] = ((double)(tb - i) /(double)( tb * hMax));
                 }
-            } else if (Inputpattern.compare( "Triangolare Asc") == 0) {
+            } else if (Inputpattern.compare( "Increasing triangular") == 0) {
                 for (i = 0; i < tb; i++) {
                     double hMax = (double)(2 /(double)tb);
                     fi[i] = ((double)(i / (double)(tb * hMax)));
@@ -94,9 +94,9 @@ public:
 
         }else
         {
-            cout << tbMax << " "<< tbMin << endl;
+//            cout << tbMax << " "<< tbMin << endl;
             int tb =( rand()%(tbMax-tbMin))+tbMin;
-             cout << tb  << endl;
+//             cout << tb  << endl;
             _genotype.setSize(tb);
             double* fi = GetFunzioneFiltro(tb, pattern);
             _genotype.setFi(fi);

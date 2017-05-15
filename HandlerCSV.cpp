@@ -129,7 +129,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
         activation_size++;
 
     }catch(std::exception& e){
-        std::cout << "  Exception: " <<  e.what() << std::endl;
+        //std::cout << "  Exception: " <<  e.what() << std::endl;
 
         QVariant returnedValue;
         QMetaObject::invokeMethod(errorHandler, "errorcsvFunction",
@@ -154,9 +154,10 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
     std::getline(in, line);
     std::vector<string> x;
     x = split(line, ';');
-    zCr = std::stod(x[3]);
-    x.erase(x.begin(),x.begin()+6);
-    cout << line << endl;
+    zCr = std::stod(x[2]);
+    //cout << line << endl;
+    x.erase(x.begin(),x.begin()+5);
+    //cout << line << endl;
 
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
     //           qDebug() << activation_size;

@@ -28,7 +28,7 @@ typedef eoSAKe<MyFitT> Indi;      // ***MUST*** derive from EO
 
 #include "SAke/make_genotype_SAKe.h"
 #include "SAke/make_op_SAKe.h"
-#include <do/make_pop.h>
+#include "make_pop_my.h"
 #include "SAke/make_continue_my.h"
 //#include <do/make_checkpoint.h>
 #include "make_algo_scalar_my.h"
@@ -83,7 +83,10 @@ public:
                    Update* update,
                    const QString& projectName,
                    vector<QString> orders,
-                   int itypeAlgorithm);
+                   int itypeAlgorithm,
+                   int numberElitist,
+                   int seed,
+                   int saveKernels);
 
     SAKeController();
 
@@ -158,6 +161,9 @@ private:
     double parameter2;
     SelectionStrategy<Indi> ** selectionStrategy;
     int csvHandlerstatusRain;
+
+    int seed;
+    int saveKernels;
 };
 
 #endif // SAKCONTROLLER_H

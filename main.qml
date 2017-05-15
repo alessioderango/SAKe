@@ -15,7 +15,7 @@
         visible: true
         width: 800
         height: 800
-        title: qsTr("Sake")
+        title: qsTr("SAKe")
 
         property var description_role
         property var path_output
@@ -29,13 +29,13 @@
                     MenuItem {
                         text: qsTr("&New Calibration Project");
                         onTriggered:{
-                            console.log("Open action triggered Calibration Project");
+//                            console.log("Open action triggered Calibration Project");
                         }
                     }
                     MenuItem {
                         text: qsTr("&New Validation Project");
                         onTriggered:{
-                            console.log("Open action triggered Validation Project");
+//                            console.log("Open action triggered Validation Project");
 
                         }
 
@@ -109,7 +109,7 @@
 
 
 
-            console.log("tipo Progetto = "+list[list.length -1])
+//            console.log("tipo Progetto = "+list[list.length -1])
             var component;
             var window  ;
             //console.log("End List \n");
@@ -122,7 +122,7 @@
 
                 for (var i = 0; i < list.length; i++) {
                     if(list[i] !== "-"){
-                        console.log(list[i]+ "\n");
+//                        console.log(list[i]+ "\n");
                         matrix[countRows].push(list[i]);
                     }else
                     {
@@ -134,7 +134,7 @@
                 window.f(parameter)
             }else
                 if(list[list.length -1] === "RegressionProject"){
-                    component = Qt.createComponent("parametersRegressionProjectAlreadyExist.qml")
+                    component = Qt.createComponent("parametersRegression.qml")
                     countRows = 0;
                     for (var i = 0; i < list.length; i++) {
                         if(list[i] !== "-"){
@@ -158,11 +158,11 @@
 
                     window = component.createObject(applicationWindow1)
                     if (component.status === Component.Ready){
-                            console.log("READY")
+//                            console.log("READY")
                             window.loadParameter(parameter,listGamma1,listGamma2,listLinear);
                     }
                         else{
-                        console.log("WAIT")
+//                        console.log("WAIT")
                             component.statusChanged.connect(window.loadParameter(parameter,listGamma1,listGamma2,listLinear));
                     }
 
@@ -207,7 +207,7 @@
                     width: parent.height
                     onClicked: {
                         console.log("Action Validation Project");
-                        var component = Qt.createComponent("parameters.qml")
+                        var component = Qt.createComponent("CalibrationMask.qml")
 
                         var window    = component.createObject(applicationWindow1)
 
@@ -273,6 +273,7 @@
                         var component = Qt.createComponent("parametersRegression.qml")
 
                         var window    = component.createObject(applicationWindow1)
+                        window.initNewPar();
 
                     }
 
@@ -481,10 +482,10 @@
 
 
                 function addTab(msg,count){
-                    console.log("Entrato in Add Tab");
-                    console.log("Entrato in Add Tab"+ count);
+//                    console.log("Entrato in Add Tab");
+//                    console.log("Entrato in Add Tab"+ count);
                     var tmp = "customPlotFitness"+count;
-                    console.log(tmp);
+//                    console.log(tmp);
                     var qml = "
     import QtQuick 2.0
     import QtQuick.Window 2.0
@@ -499,7 +500,7 @@
                             active: true
                             property int threadId: "+count+"
                             function stopExecution(){
-                                      console.log('clicco STOPPPPP');
+                                      //console.log('clicco STOPPPPP');
                                       sakeStart.stopSAKeController(threadId);
                             }
 
@@ -726,12 +727,12 @@
                 }
 
                 function addTabRegression(msg,count){
-                    console.log("Entrato in Add Tab");
-                    console.log("Entrato in Add Tab"+ count);
+//                    console.log("Entrato in Add Tab");
+//                    console.log("Entrato in Add Tab"+ count);
                     var tmp = "customPlotFitness"+count;
                     var tmp2 = "customPlotRegression"+count;
-                    console.log(tmp);
-                    console.log(tmp2);
+//                    console.log(tmp);
+//                    console.log(tmp2);
                     var qml = "
     import QtQuick 2.0
     import QtQuick.Window 2.0
@@ -861,7 +862,7 @@
                                             text: 'Current Average Fitness:       0'
                                             font.pixelSize: 16
                                             color: '#000000'
-                                            visible :false
+                                            visible :true
 
                                         }
 
@@ -870,7 +871,7 @@
                                             text: 'Absolute Average Fitness:       0'
                                             font.pixelSize: 16
                                             color: '#000000'
-                                            visible :false
+                                            visible :true
                                         }
 
 
@@ -930,10 +931,10 @@
                 }
 
                 function addTabValidation(msg,count){
-                    console.log("Entrato in Add Tab");
-                    console.log("Entrato in Add Tab"+ count);
+//                    console.log("Entrato in Add Tab");
+//                    console.log("Entrato in Add Tab"+ count);
                     var tmp = "customPlotFitness"+count;
-                    console.log(tmp);
+//                    console.log(tmp);
                     var qml = "
     import QtQuick 2.0
     import QtQuick.Window 2.0
@@ -1110,10 +1111,10 @@
                                     //tabmain.stopExecution();
                                     var patt = new RegExp("Calibration ");
                                     var patt2 = new RegExp("Regression ");
-                                    console.log(patt.test(tabmain.getTab(styleData.index).title));
-                                    console.log(tabmain.getTab(styleData.index).title);
+//                                    console.log(patt.test(tabmain.getTab(styleData.index).title));
+//                                    console.log(tabmain.getTab(styleData.index).title);
                                     if(patt.test(tabmain.getTab(styleData.index).title) || patt2.test(tabmain.getTab(styleData.index).title)){
-                                        console.log("STOPPO ALGO")
+//                                        console.log("STOPPO ALGO")
 
                                         tabmain.getTab(styleData.index).stopExecution();
                                     }

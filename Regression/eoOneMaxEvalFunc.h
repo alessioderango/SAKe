@@ -147,7 +147,7 @@ public:
 ////                                if(translation != 0 && x[j] < translation)
 ////                                    yTmp = 0;
 ////                                else{
-//                                    yTmp = gamma_pdf(alfa,beta,x[j]);
+//                                    yTmp = gamma_pdf(alfa,beta,x[j] + translation);
 ////                                }
 ////                                    if(j < translation)
 ////                                        cout << x[j] << ";" << 0 << " ; " << gamma_pdf(alfa,beta,x[j])<< endl;

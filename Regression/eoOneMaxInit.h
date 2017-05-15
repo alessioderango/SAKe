@@ -132,10 +132,10 @@ public:
         }
 
         for (int i = 0; i < translationSize; i++) {
-            std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
+           // std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
             _genotype.addTranslation(this->translation[i]);
         }
-        std::cout <<  std::endl;
+        //std::cout <<  std::endl;
 //        _genotype.setPercentageVariationWeight(percentageWeight);
 //        _genotype.setPercentageVariationLinearA(percentageLineareA);
 //        _genotype.setPercentageVariationLinearB(percentageLineareB);

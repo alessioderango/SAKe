@@ -6,7 +6,7 @@ XMLManager::XMLManager(QObject *_listProjects)
 #ifdef __arm__ //on the target
 
     xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
-    qDebug() << xmlFilePath << endl;
+//    qDebug() << xmlFilePath << endl;
 #else
 #ifdef __WIN32 //for those developing on windows
     folderPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
@@ -31,12 +31,12 @@ XMLManager::XMLManager(QObject *_listProjects)
     }
 
     xmlFilePath = QString(folderPath+"/workspace/main.xml");
-    qDebug() << xmlFilePath << endl;
+//    qDebug() << xmlFilePath << endl;
 
 
 #else //for those developing on linux
     xmlFilePath = QString(QDir::currentPath()+"/workspace/main.xml");
-    qDebug() << xmlFilePath << endl;
+//    qDebug() << xmlFilePath << endl;
 #endif
 #endif
 
@@ -79,9 +79,9 @@ int findAllElementsByProject(QString xmlFilePath,QString nameProject){
 
     QDomElement documentElement = document.documentElement();
     QDomNodeList a = documentElement.elementsByTagName("Projects");
-    qDebug() << a.length();
+//    qDebug() << a.length();
     for (int i = 0; i < a.length(); i++) {
-        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+//        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
         if(QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0)
             return 1;
     }
@@ -128,17 +128,17 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
     QDomElement documentElement = document.documentElement();
     QDomNodeList a = documentElement.elementsByTagName("ID");
     QString typeProject;
-    qDebug() << a.length();
+//    qDebug() << a.length();
     for (int i = 0; i < a.length(); i++) {
-        qDebug() << a.at(i).firstChild().nodeValue();
-        qDebug() << a.at(i).parentNode().nodeName();
+//        qDebug() << a.at(i).firstChild().nodeValue();
+//        qDebug() << a.at(i).parentNode().nodeName();
         if(QString::compare(a.at(i).firstChild().nodeValue(), idProject, Qt::CaseInsensitive)==0){
             typeProject = a.at(i).parentNode().nodeName();
             for (int j = 0; j <a.at(i).parentNode().childNodes().length()-1; j++) {
                 if(QString::compare(a.at(i).parentNode().nodeName(), "ValidationProject", Qt::CaseInsensitive)==0)
                 {
                     list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
-                    qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+//                    qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
                 }else
                     if(QString::compare(a.at(i).parentNode().nodeName(), "RegressionProject", Qt::CaseInsensitive)==0)
                     {
@@ -154,7 +154,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                         //9 file kernel
 
                         //10 file kernel
-                        qDebug() << "Name " << a.at(i).parentNode().childNodes().at(j).nodeName() << endl;
+//                        qDebug() << "Name " << a.at(i).parentNode().childNodes().at(j).nodeName() << endl;
 
                         if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "Selection", Qt::CaseInsensitive)==0)
                         {
@@ -162,9 +162,9 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                             list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
                             list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue());
                             list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue());
-                            qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
-                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
-                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
+//                            qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
+//                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
+//                            qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
                         }else
                             if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "GammaFunction1", Qt::CaseInsensitive)==0){//j==8){
                                 //Gamma1
@@ -245,7 +245,7 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                     }else{
 
                                         list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
-                                        qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+//                                        qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
                                     }
                     }else
                     {
@@ -257,13 +257,13 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                 list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue());
                                 list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue());
                                 list.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue());
-                                qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
-                                qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
-                                qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
+//                                qDebug() << "parametri" << a.at(i).parentNode().childNodes().at(j).childNodes().at(0).firstChild().nodeValue();
+//                                qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(1).firstChild().nodeValue();
+//                                qDebug() << "parametri" <<a.at(i).parentNode().childNodes().at(j).childNodes().at(2).firstChild().nodeValue();
                             }else
 
                             list.append(a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue());
-                            qDebug() << "parametri j == "<<j <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
+//                            qDebug() << "parametri j == "<<j <<a.at(i).parentNode().childNodes().at(j).firstChild().nodeValue();
                         }
                     }
 
@@ -300,7 +300,7 @@ void XMLManager::setTreeview(TreeModel *value)
 
 int XMLManager::findProjectName(QString nameProject){
     int result = findAllElementsByProject(xmlFilePath,nameProject);
-    qDebug() << result << endl;
+//    qDebug() << result << endl;
     return result;
 }
 
@@ -324,7 +324,9 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                           QString pathRains,
                                                           QString pathActivations,
                                                           QString typeReplacement,
-                                                          QString numberElitist)
+                                                          QString numberElitist,
+                                                          QString seed,
+                                                          QString saveKernels)
 {
 
     QFile inFile( xmlFilePath );
@@ -346,12 +348,12 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
 
     QDomElement documentElement = document.documentElement();
     QDomNodeList a = documentElement.elementsByTagName("CalibrationProject");
-    qDebug() << a.length();
-    qDebug() << "SALVO PROGETTO GIà ESISTENTE";
+//    qDebug() << a.length();
+//    qDebug() << "SALVO PROGETTO GIà ESISTENTE";
     for (int i = 0; i < a.length(); i++) {
-        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
-        qDebug() << name;
-        qDebug() << QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+//        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+//        qDebug() << name;
+//        qDebug() << QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         int result = QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         if(result==0){
             a.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
@@ -375,14 +377,16 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
             a.at(i).childNodes().at(16).firstChild().setNodeValue(pathActivations);
             a.at(i).childNodes().at(17).firstChild().setNodeValue(typeReplacement);
             a.at(i).childNodes().at(18).firstChild().setNodeValue(numberElitist);
+            a.at(i).childNodes().at(19).firstChild().setNodeValue(seed);
+            a.at(i).childNodes().at(20).firstChild().setNodeValue(saveKernels);
         }
 
     }
 
-    qDebug() << "\n";
-    qDebug() << "\n";
-    qDebug() << "\n";
-    qDebug() << "AAAAAAAAAAAAAAAAAAAAAAaa\n";
+//    qDebug() << "\n";
+//    qDebug() << "\n";
+//    qDebug() << "\n";
+//    qDebug() << "AAAAAAAAAAAAAAAAAAAAAAaa\n";
 
     // Save content back to the file
     if (!inFile.open(QIODevice::Truncate | QIODevice::WriteOnly)) {
@@ -417,7 +421,9 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
                                               QString pathRains,
                                               QString pathActivations,
                                               QString typeReplacement,
-                                              QString numberElitist)
+                                              QString numberElitist,
+                                              QString seed,
+                                              QString saveKernels)
 {
 
     //Controllare se esiste un altro progetto con lo stesso nome
@@ -454,7 +460,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     }
 
     inFile.close();
-    qDebug() << "NumProjects = "<<document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
+//    qDebug() << "NumProjects = "<<document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
     QString numProject = document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
     int numProjectInt= numProject.toInt();
     QDomElement documentElement = document.documentElement();
@@ -486,6 +492,8 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomElement value2Element = document.createElement( "value2" );
     QDomElement typeReplacementDom = document.createElement( "typeReplacement" );
     QDomElement numberElitistDom = document.createElement( "numberElitist" );
+    QDomElement seedDom = document.createElement( "seed" );
+    QDomElement saveKernelsDom = document.createElement( "saveKernels" );
 
     //create TextElement
     QDomText typeText = document.createTextNode( selection );
@@ -514,6 +522,11 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomText numberElitistText = document.createTextNode( numberElitist );
     typeReplacementDom.appendChild(typeReplacementText);
     numberElitistDom.appendChild(numberElitistText);
+
+    QDomText seedText = document.createTextNode( seed );
+    QDomText saveKernelsText = document.createTextNode( saveKernels );
+    seedDom.appendChild(seedText);
+    saveKernelsDom.appendChild(saveKernelsText);
 
     typeElement.appendChild(typeText);
     value1Element.appendChild(value1Text);
@@ -574,6 +587,9 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     project.appendChild(typeReplacementDom);
     project.appendChild(numberElitistDom);
 
+    project.appendChild(seedDom);
+    project.appendChild(saveKernelsDom);
+
     id.appendChild(idText);
     project.appendChild(id);
 
@@ -606,12 +622,12 @@ void parseProject(QXmlStreamReader& xml,QVariantList &a,TreeModel* treeview){
     //input "CalibrationProject"
 
 
-    qDebug() << "Name projects " << xml.name()<< endl;
+//    qDebug() << "Name projects " << xml.name()<< endl;
     while(!(xml.tokenType() == QXmlStreamReader::EndElement
             && xml.name() == "CalibrationProject")){
         //at the start of an element, otherwise ignore and
         //keep reading.
-        qDebug() << "Name projects " << xml.name()<< endl;
+//        qDebug() << "Name projects " << xml.name()<< endl;
         if(xml.tokenType() == QXmlStreamReader::StartElement){
             //If the element is a text element, save it
             if(xml.name() == "Name"){
@@ -625,11 +641,11 @@ void parseProject(QXmlStreamReader& xml,QVariantList &a,TreeModel* treeview){
                         id =  xml.text().toString();
                         break;
                     }
-                    qDebug() << "ID " << xml.name()<< endl;
+//                    qDebug() << "ID " << xml.name()<< endl;
                     xml.readNext();
                 }
-                qDebug() << "Name projects " << name<< endl;
-                qDebug() << "id projects " << id<< endl;
+//                qDebug() << "Name projects " << name<< endl;
+//                qDebug() << "id projects " << id<< endl;
                 //a.append(QVariant(xml.text().toString()));
                 treeview->addEntry(name,"Calibration",id,treeview);
             }
@@ -652,7 +668,7 @@ void XMLManager::ReadCalibrationProjectXML()
     treeview->clear();
     QVariant returnedValue;
     QVariantList a;
-    qDebug() << "ReadMainXML ";
+//    qDebug() << "ReadMainXML ";
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
         filetmp->open(QIODevice::ReadWrite);
@@ -740,7 +756,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     }
 
     inFile.close();
-    qDebug() << "NumProjects = "<<document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
+//    qDebug() << "NumProjects = "<<document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
     QString numProject = document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
     int numProjectInt= numProject.toInt();
     QDomElement documentElement = document.documentElement();
@@ -820,11 +836,11 @@ int XMLManager::SaveXMLFileAlreadyExistValidationProject(const QString &name,
     return 0;
     QDomElement documentElement = document.documentElement();
     QDomNodeList a = documentElement.elementsByTagName("ValidationProject");
-    qDebug() << a.length();
+//    qDebug() << a.length();
     for (int i = 0; i < a.length(); i++) {
-        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
-        qDebug() << name;
-        qDebug() << QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
+//        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
+//        qDebug() << name;
+//        qDebug() << QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         int result = QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         if(result==0){
             a.at(i).childNodes().at(1).firstChild().setNodeValue(filenameRainPath);
@@ -997,7 +1013,7 @@ QDomElement XMLManager::getLinearElementXML(std::vector<std::vector<double> > ma
     return linearFunction;
 }
 
-int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
+int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
                                               const QString &selection,
                                               const QString &value1,
                                               const QString &value2,
@@ -1013,7 +1029,7 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
                                               const QVariant &checkControlPointsWithN,
                                               const QVariant &textN,
                                               const QString typeExecution
-                                              ){
+                                              , QString typeReplacement, QString numberElitist){
     QString filename = QString(xmlFilePath);
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
@@ -1042,7 +1058,7 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
         return 0;
     }
 
-    qDebug() << "NumProjects = "<<document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
+//    qDebug() << "NumProjects = "<<document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
     QString numProject = document.childNodes().at(1).childNodes().at(0).firstChild().nodeValue();
     int numProjectInt= numProject.toInt();
     inFile.close();
@@ -1068,7 +1084,8 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     textNElement.appendChild(document.createTextNode(textN.toString()));
     QDomElement typeExcecution = document.createElement( "typeExcecution" );
     typeExcecution.appendChild(document.createTextNode(typeExecution));
-
+    QDomElement typeReplacementDom = document.createElement( "typeReplacement" );
+    QDomElement numberElitistDom = document.createElement( "numberElitist" );
 
     //create TextElement
     QDomText nameText = document.createTextNode(_projectName);
@@ -1118,6 +1135,12 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     project.appendChild(checkControlPointsWithNElement);
     project.appendChild(textNElement);
     project.appendChild(typeExcecution);
+    QDomText typeReplacementText = document.createTextNode( typeReplacement );
+    QDomText numberElitistText = document.createTextNode( numberElitist );
+    typeReplacementDom.appendChild(typeReplacementText);
+    numberElitistDom.appendChild(numberElitistText);
+    project.appendChild(typeReplacementDom);
+    project.appendChild(numberElitistDom);
 
     QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
 
@@ -1129,8 +1152,13 @@ int XMLManager::SaveXMLFileRegressionProject( const QString &_projectName,
     QDomElement linearFunction = getLinearElementXML(matrixLinear, document);
     project.appendChild(linearFunction);
 
+
+
+
     id.appendChild(idText);
     project.appendChild(id);
+
+
 
     documentElement.appendChild(project);
 
@@ -1163,7 +1191,9 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
                                                          std::vector<std::vector<double> > matrixLinear,
                                                          const QVariant &checkControlPointsWithN,
                                                          const QVariant &textN,
-                                                         const QString &typeExecution){
+                                                         const QString &typeExecution,
+                                                         QString typeReplacement,
+                                                         QString numberElitist){
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -1187,6 +1217,7 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
         //TODO Find the project with the save name (next future find with id)
         int result = QString::compare(project.at(i).childNodes().at(0).firstChild().nodeValue(), name, Qt::CaseInsensitive);
         if(result==0){
+            //std::cout << "trovato" << std::endl;
             project.at(i).childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(selection);
             project.at(i).childNodes().at(1).childNodes().at(1).firstChild().setNodeValue(value1);
             project.at(i).childNodes().at(1).childNodes().at(2).firstChild().setNodeValue(value2);
@@ -1199,12 +1230,14 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
             project.at(i).childNodes().at(8).firstChild().setNodeValue(checkControlPointsWithN.toString());
             project.at(i).childNodes().at(9).firstChild().setNodeValue(textN.toString());
             project.at(i).childNodes().at(10).firstChild().setNodeValue(typeExecution);
+            project.at(i).childNodes().at(11).firstChild().setNodeValue(typeReplacement);
+            project.at(i).childNodes().at(12).firstChild().setNodeValue(numberElitist);
 
-            int tmpID = project.at(i).childNodes().at(14).firstChild().nodeValue().toInt();
+            int tmpID = project.at(i).childNodes().at(16).firstChild().nodeValue().toInt();
+            project.at(i).removeChild(project.at(i).childNodes().at(16));
+            project.at(i).removeChild(project.at(i).childNodes().at(15));
             project.at(i).removeChild(project.at(i).childNodes().at(14));
             project.at(i).removeChild(project.at(i).childNodes().at(13));
-            project.at(i).removeChild(project.at(i).childNodes().at(12));
-            project.at(i).removeChild(project.at(i).childNodes().at(11));
 
             QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
             project.at(i).appendChild(gammaFunction1);

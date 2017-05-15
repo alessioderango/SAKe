@@ -90,6 +90,145 @@ table, th, td {
 </html>
 ";
 
+    property  int typeProject : 0;
+    property  string projectName : "";
+    function initNewPar(){
+
+        textFieldGammaFunctions.showLabelFirstTime();
+        textFieldGammaFunctionsGreaterthan1.showLabelFirstTime();
+        textFieldLinearFunction.showLabelFirstTime();
+
+    }
+
+    function loadParameter(parameter,listGamma1,listGamma2,listLinear){
+        typeProject=1;
+//        console.log( "AAAAAAAAAAA typeProject " +typeProject)
+
+
+        projectName=parameter[0]
+        textProjectName.visible = false;
+        applicationWindow1.title = "Project name               "  + parameter[0]
+        if(parameter[1]==="StochTour(t)"){
+                    comboSelection.currentIndex=0
+                    parameter1.text=parameter[2]
+                }else
+                    if(parameter[1]==="DetTour(T)"){
+                        comboSelection.currentIndex=1
+                        parameter1.text=parameter[2]
+                    }else
+                        if(parameter[1]==="Ranking(p,e)"){
+                            comboSelection.currentIndex=2
+                            parameter1.text=parameter[2]
+                            parameter2.text=parameter[3]
+                        }else
+                            if(parameter[1]==="Roulette"){
+                                    comboSelection.currentIndex=3
+                                }
+
+
+        textFieldPopulationSize.text=parameter[4]
+        textFieldNumberProcessor.text=parameter[5]
+        textFieldProbabiltyCrossOver.text=parameter[6]
+        textFieldProbabiltyMutation.text=parameter[7]
+        textFieldMaxGeneration.text=parameter[8]
+
+        var split = parameter[9].split("/")
+        textfileRain.text = "../"+split[split.length-1]
+        pathrain=parameter[9]
+        customPlotKernelRegression1.initCustomPlotRegressionPreviewKernel(pathrain)
+        var checkNTmp=parameter[10]
+        if(checkNTmp){
+            checkUseControlPointsWithN.checked= true;
+        }
+
+        var textN=parameter[11]
+        textPercentageN.text = textN;
+
+
+
+        var typrExecution=parameter[12]
+//        console.log(" typrExecution = "+typrExecution)
+        if(typrExecution==="0")
+            checkControlPoints.checked = true;
+        else
+            if(typrExecution==="1")
+                checkKernel.checked = true;
+            else
+                if(typrExecution ==="2")
+                    checkN.checked = true;
+        comboReplacament.currentIndex = parameter[13]
+        replacementParameter.text = parameter[14]
+        var count=1;
+        var i=0;
+        textFieldGammaFunctions.text=listGamma1.length/9;
+        textFieldGammaFunctionsGreaterthan1.text=listGamma2.length/9;
+        textFieldLinearFunction.text=listLinear.length/9;
+        tableModel.clear()
+        for(i=0; i < listGamma1.length; i+=9)
+        {
+            tableModel.append({ nFunction:count,
+                                  amax: listGamma1[i],
+                                  amin: listGamma1[i+1],
+                                  bmax: listGamma1[i+2],
+                                  bmin: listGamma1[i+3],
+                                  wmax: listGamma1[i+4],
+                                  wmin: listGamma1[i+5],
+                                  pa: listGamma1[i+6],
+                                  pb: listGamma1[i+7],
+                                  pw: listGamma1[i+8],
+                                  tmin: "2",
+                                  tmax: "0",
+                                  tp: "0.01"})
+            count++;
+
+        }
+        tableView1.model = tableModel;
+        count=1;
+
+        tableModel2.clear()
+        for(i=0; i < listGamma2.length; i+=9)
+        {
+            tableModel2.append({ nFunction:count,
+                                   amax: listGamma2[i],
+                                   amin: listGamma2[i+1],
+                                   bmax: listGamma2[i+2],
+                                   bmin: listGamma2[i+3],
+                                   wmax: listGamma2[i+4],
+                                   wmin: listGamma2[i+5],
+                                   pa: listGamma2[i+6],
+                                   pb: listGamma2[i+7],
+                                   pw: listGamma2[i+8],
+                                   tmin: "2",
+                                   tmax: "0",
+                                   tp: "0.01"})
+            count++;
+
+        }
+        count=1;
+        tableModel3.clear()
+        for(i=0; i < listLinear.length; i+=9)
+        {
+            tableModel3.append({ nFunction:count,
+                                   amax: listLinear[i],
+                                   amin: listLinear[i+1],
+                                   bmax: listLinear[i+2],
+                                   bmin: listLinear[i+3],
+                                   wmax: listLinear[i+4],
+                                   wmin: listLinear[i+5],
+                                   pa: listLinear[i+6],
+                                   pb: listLinear[i+7],
+                                   pw: listLinear[i+8],
+                                   tmin: "2",
+                                   tmax: "0",
+                                   tp: "0.01"})
+            count++;
+
+        }
+
+
+
+    }
+
     property string infoPropSelection;
     property string infoPropCrossover;
     property string infoPropMutation;
@@ -152,214 +291,434 @@ table, th, td {
                     rows: 1
                     columns: 2
 
-                    ColumnLayout {
+                    Rectangle {
                         id: columnLayout2
                         width: 676
-                        spacing: 2
+                        //spacing: 0
 
                         RowLayout {
                             id: rowLayout
+                            x: 0
+                            y: -421
                             spacing: 20
                             anchors.bottomMargin: 10
 
                             Label {
-                                id: projectName1
+                                id: textFieldProjectName
                                 text: qsTr("Project Name")
                                 Layout.alignment: Qt.AlignHCenter
                             }
 
                             TextField {
-                                id: projectName
+                                id: textProjectName
                                 text: qsTr("")
                                 Layout.alignment: Qt.AlignHCenter
                             }
                         }
 
 
-                        RowLayout {
-                            id: rowLayout1
-                            width: 630
-                            height: 300
-                            spacing: 1
 
-                            GridLayout {
-                                id: gridLayout1
-                                width: 63
-                                height: 350
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                rowSpacing: 19
-                                columnSpacing: 2
-                                scale: 1
-                                transformOrigin: Item.Center
-                                rows: 2
-                                columns: 1
 
-                                Layout.preferredWidth: -1
-                                Layout.preferredHeight: -1
+//                            GridLayout {
+//                                id: gridLayout1
+//                                y: 10
+//                                width: 63
+//                                height: 350
+//                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+//                                rowSpacing: 19
+//                                columnSpacing: 22
+//                                scale: 1
+//                                transformOrigin: Item.Center
+//                                rows: 4
+//                                columns: 1
 
-                                ColumnLayout {
-                                    id: columnLayout4
-                                    width: 100
-                                    height: 100
+//                                Layout.preferredWidth: -1
+//                                Layout.preferredHeight: -1
 
-                                    GridLayout {
-                                        id: gridLayout5
-                                        Label {
-                                            id: labelSelection
-                                            text: qsTr("Selection")
-                                            scale: 1
-                                            transformOrigin: Item.Center
-                                        }
+//                                ColumnLayout {
+//                                    id: columnLayout4
+//                                    width: 100
+//                                    height: 100
 
-                                        ComboBox {
-                                            id: comboSelection
-                                            currentIndex: 0
-                                            function show( currentIndex){
-                                                                                    if(currentIndex === 0 ||
-                                                                                       currentIndex === 1  ){
-                                                                                        selectionParameter.visible=true;
-                                                                                    }else
-                                                                                        selectionParameter.visible=false;
+//                                    GridLayout {
+//                                        id: gridLayout5
+//                                        Label {
+//                                            id: labelSelection
+//                                            text: qsTr("Selection")
+//                                            scale: 1
+//                                            transformOrigin: Item.Center
+//                                        }
 
-                                                                                    if(currentIndex ===2){
-                                                                                        selectParameterRanking1.visible=true;
-                                                                                        selectParameterRanking2.visible=true;
-                                                                                    }else
-                                                                                    {
-                                                                                        selectParameterRanking1.visible=false;
-                                                                                        selectParameterRanking2.visible=false;
+//                                        ComboBox {
+//                                            id: comboSelection
+//                                            currentIndex: 0
+//                                            function show( currentIndex){
+//                                                                                    if(currentIndex === 0 ||
+//                                                                                       currentIndex === 1  ){
+//                                                                                        selectionParameter.visible=true;
+//                                                                                    }else
+//                                                                                        selectionParameter.visible=false;
 
-                                                                                    }
-                                                                                    if(currentIndex ===4){
-                                                                                        comboSelectinParameterSequential.visible=true;
-                                                                                    }else{
-                                                                                        comboSelectinParameterSequential.visible=false;
-                                                                                    }
+//                                                                                    if(currentIndex ===2){
+//                                                                                        selectParameterRanking1.visible=true;
+//                                                                                        selectParameterRanking2.visible=true;
+//                                                                                    }else
+//                                                                                    {
+//                                                                                        selectParameterRanking1.visible=false;
+//                                                                                        selectParameterRanking2.visible=false;
 
-                                                if(currentIndex ===5 || currentIndex ===6){
-                                                    selectionParameterTournamentWithoutReplacement.visible=true;
-                                                }else{
-                                                    selectionParameterTournamentWithoutReplacement.visible=false;
-                                                }
-                                            }
-                                            model: ListModel {
-                                                id: selections
-                                                ListElement { text: "StochTour(t)";  }
-                                                ListElement { text: "DetTour(T)";  }
-                                                ListElement { text: "Ranking(p,e)";  }
-                                                ListElement { text: "Roulette"; }
-                                                ListElement { text: "Sequential(ordered/unordered)";  }
-                                                ListElement { text: "Generational"; }
-                                                ListElement { text: "Steady-State"; }
+//                                                                                    }
+//                                                                                    if(currentIndex ===4){
+//                                                                                        comboSelectinParameterSequential.visible=true;
+//                                                                                    }else{
+//                                                                                        comboSelectinParameterSequential.visible=false;
+//                                                                                    }
 
-                                            }
-                                            onCurrentIndexChanged: show(currentIndex)
-                                        }
+//                                                if(currentIndex ===5 || currentIndex ===6){
+//                                                    selectionParameterTournamentWithoutReplacement.visible=true;
+//                                                }else{
+//                                                    selectionParameterTournamentWithoutReplacement.visible=false;
+//                                                }
+//                                            }
+//                                            model: ListModel {
+//                                                id: selections
+//                                                ListElement { text: "StochTour(t)";  }
+//                                                ListElement { text: "DetTour(T)";  }
+//                                                ListElement { text: "Ranking(p,e)";  }
+//                                                ListElement { text: "Roulette"; }
+//                                                ListElement { text: "Sequential(ordered/unordered)";  }
+//                                                ListElement { text: "Generational"; }
+//                                                ListElement { text: "Steady-State"; }
 
-                                        Image {
-                                            source: "qrc:/img/info.jpg"
+//                                            }
+//                                            onCurrentIndexChanged: show(currentIndex)
+//                                        }
 
-                                            width: 20
-                                            height: 20
-                                            Layout.preferredWidth: 20
-                                            Layout.preferredHeight: 20
-                                            MouseArea {
-                                                anchors.fill: parent
-                                                Popup {
-                                                        id: popupSelection
-                                                        width: 500
-                                                        height: 400
-                                                        modal: true
-                                                        focus: true
-                                                        topPadding: 0.1
-                                                        leftPadding: 0.1
-                                                        rightPadding: 0.1
-                                                        bottomPadding: 0.1
+//                                        Image {
+//                                            source: "qrc:/img/info.jpg"
 
-                                                        TextArea{
-                                                            readOnly: true
-                                                            width: parent.width
-                                                            height: parent.height
-                                                            textFormat: Text.RichText
-                                                            text: infoSelection
-                                                            font.family: "Helvetica"
-                                                            font.pointSize: 9
-                                                        }
+//                                            width: 20
+//                                            height: 20
+//                                            Layout.preferredWidth: 20
+//                                            Layout.preferredHeight: 20
+//                                            MouseArea {
+//                                                anchors.fill: parent
+//                                                Popup {
+//                                                        id: popupSelection
+//                                                        width: 500
+//                                                        height: 400
+//                                                        modal: true
+//                                                        focus: true
+//                                                        topPadding: 0.1
+//                                                        leftPadding: 0.1
+//                                                        rightPadding: 0.1
+//                                                        bottomPadding: 0.1
 
-                                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                                               }
-                                                onClicked: {
-                                                    console.log("You chose: ")
+//                                                        TextArea{
+//                                                            readOnly: true
+//                                                            width: parent.width
+//                                                            height: parent.height
+//                                                            textFormat: Text.RichText
+//                                                            text: infoSelection
+//                                                            font.family: "Helvetica"
+//                                                            font.pointSize: 9
+//                                                        }
 
-                                                    popupSelection.open()
-                                                }
-                                            }
+//                                                        closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+//                                               }
+//                                                onClicked: {
+//                                                    console.log("You chose: ")
 
-                                        }
+//                                                    popupSelection.open()
+//                                                }
+//                                            }
 
-                                        TextField {
-                                            id: selectionParameterTournamentWithoutReplacement
-                                            text: "8"
-                                            validator: RegExpValidator {
-                                                regExp: /^[1-9]\d+/
-                                            }
-                                            visible: true
-                                        }
+//                                        }
 
-                                        TextField {
-                                            id: selectionParameter
-                                            width: 39
-                                            height: 31
-                                            text: "0"
-                                            visible: false
-                                        }
+//                                        TextField {
+//                                            id: selectionParameterTournamentWithoutReplacement
+//                                            text: "8"
+//                                            validator: RegExpValidator {
+//                                                regExp: /^[1-9]\d+/
+//                                            }
+//                                            visible: true
+//                                        }
 
-                                        TextField {
-                                            id: selectParameterRanking2
-                                            width: 45
-                                            height: 31
-                                            text: "0"
-                                            visible: false
-                                        }
+//                                        TextField {
+//                                            id: selectionParameter
+//                                            width: 39
+//                                            height: 31
+//                                            text: "0"
+//                                            visible: false
+//                                        }
 
-                                        TextField {
-                                            id: selectParameterRanking1
-                                            width: 45
-                                            height: 31
-                                            text: "0"
-                                            visible: false
-                                        }
+//                                        TextField {
+//                                            id: selectParameterRanking2
+//                                            width: 45
+//                                            height: 31
+//                                            text: "0"
+//                                            visible: false
+//                                        }
 
-                                        ComboBox {
-                                            id: comboSelectinParameterSequential
-                                            model: ListModel {
-                                                id: comboSelectinParameterSequentialList
-                                                ListElement {
-                                                    text: "ordered"
-                                                }
+//                                        TextField {
+//                                            id: selectParameterRanking1
+//                                            width: 45
+//                                            height: 31
+//                                            text: "0"
+//                                            visible: false
+//                                        }
 
-                                                ListElement {
-                                                    text: "unorder"
-                                                }
-                                            }
-                                            visible: false
-                                            currentIndex: 1
-                                        }
-                                        columns: 4
-                                        rows: 1
-                                        columnSpacing: 20
+//                                        ComboBox {
+//                                            id: comboSelectinParameterSequential
+//                                            model: ListModel {
+//                                                id: comboSelectinParameterSequentialList
+//                                                ListElement {
+//                                                    text: "ordered"
+//                                                }
+
+//                                                ListElement {
+//                                                    text: "unorder"
+//                                                }
+//                                            }
+//                                            visible: false
+//                                            currentIndex: 1
+//                                        }
+//                                        columns: 5
+//                                        rows: 1
+//                                        columnSpacing: 20
+//                                    }
+//                                }
+
+                                Rectangle {
+                                    id: rectangle8
+                                    x: 0
+                                    y: -399
+                                    width: 455
+                                    height: 37
+                                    //color: "#ffffff"
+                                    color:"#f2f2f2"
+                                    //border.width: 1
+
+                                    Label {
+                                        id: labelSelection
+                                        x: 0
+                                        y: 15
+                                        text: qsTr("Selection")
+                                        scale: 1
+                                        transformOrigin: Item.Center
                                     }
+
+
+
+                                    ComboBox {
+                                        id: comboSelection
+                                        x: 68
+                                        y: 12
+                                        currentIndex: 3
+                                        function show( currentIndex){
+
+                                            if(currentIndex === 0  ){
+                                                labelstochpar1.visible = true;
+                                                parameter1.text = "0.55"
+                                            }else
+                                            {
+                                                labelstochpar1.visible = false;
+                                            }
+
+                                            if(currentIndex === 1  ){
+                                                labeldetpar1.visible = true;
+                                                parameter1.text = "3"
+                                            }else
+                                            {
+                                                labeldetpar1.visible = false;
+                                            }
+
+
+                                            if(currentIndex ===2){
+                                                labelrankpar1.visible = true;
+                                                labelrankpar2.visible = true;
+                                                parameter1.text = "1.1"
+                                                parameter2.text = "1.0"
+                                            }else
+                                            {
+                                                labelrankpar1.visible = false;
+                                                labelrankpar2.visible = false;
+                                            }
+
+                                            if(currentIndex === 0  || currentIndex === 1){
+                                                parameter1.visible = true;
+                                                parameter2.visible = false;
+                                            }else{
+                                                if(currentIndex === 2){
+                                                    parameter1.visible = true;
+                                                    parameter2.visible = true;
+                                                }else
+                                                    if(currentIndex === 3)
+                                                    {
+                                                        parameter1.visible = false;
+                                                        parameter2.visible = false;
+                                                    }
+                                            }
+
+
+                                        }
+
+                                        model: ListModel {
+                                            id: selections
+                                            ListElement { text: "StochTour(t)";  }
+                                            ListElement { text: "DetTour(T)";  }
+                                            ListElement { text: "Ranking(p,e)";  }
+                                            ListElement { text: "Roulette"; }
+                                        }
+                                        onCurrentIndexChanged: show(currentIndex)
+                                    }
+
+
+                                    Label {
+                                        id: labelrankpar1
+                                        x: 214
+                                        y: 15
+                                        visible: false
+                                        text: "p (selective pressure 1 < p <= 2)"
+                                    }
+                                    Label {
+                                        id: labelrankpar2
+                                        x: 465
+                                        y: 15
+                                        visible: false
+                                        text: "e (exponent 1=linear)"
+                                    }
+
+                                    Label {
+                                        id: labelstochpar1
+                                        x: 215
+                                        y: 15
+                                        visible: false
+                                        text: "Tr (tournament rate 0.55 <= Tr <= 1)"
+                                    }
+
+                                    Label {
+                                        id: labeldetpar1
+                                        x: 215
+                                        y: 15
+                                        visible: false
+                                        text: "Ts (tournament size 2 <= Ts <=N)"
+                                    }
+
+                                    TextField {
+                                        id: parameter1
+                                        x: 411
+                                        y: 14
+                                        width: 31
+                                        height: 16
+                                        visible: false
+                                        text: "0"
+                                    }
+                                    TextField {
+                                        id: parameter2
+                                        x: 586
+                                        y: 14
+                                        width: 38
+                                        height: 15
+                                        visible: false
+                                        text: "0"
+                                    }
+                                    //                TextField {
+                                    //                    id: selectParameterRanking2
+                                    //                    width: 31
+                                    //                    height: 31
+                                    //                    text: "0"
+                                    //                    visible: false
+                                    //                }
+
+                                    //                TextField {
+                                    //                    id: selectParameterRanking1
+                                    //                    width: 31
+                                    //                    height: 31
+                                    //                    text: "0"
+                                    //                    visible: false
+                                    //                }
+
+
+
+                                    //border.color: "#110000"
                                 }
 
-                                GridLayout{
-                                    rows: 4
-                                    columns: 3
-                                    rowSpacing: 1
-                                    columnSpacing: 1
+                                RowLayout {
+                                    x: 0
+                                    y: -356
+
+                                    Label {
+                                        id: label12
+                                        x: 15
+                                        y: 72
+                                        text: qsTr("Replacement")
+                                    }
+
+                                    ComboBox {
+                                        id: comboReplacament
+
+                                        x: 130
+                                        y: 68
+                                        width: 138
+                                        height: 18
+                                        activeFocusOnPress: true
+
+                                        function show( currentIndex){
+
+                                            if(currentIndex === 1 ){
+                                                replacementParameter.visible=true;
+                                                labelselectionParameterTournamentWithoutReplacement.visible=true;
+                                            }else{
+                                                replacementParameter.visible=false;
+                                                labelselectionParameterTournamentWithoutReplacement.visible=false;
+                                            }
+
+                                        }
+
+                                        model: ListModel {
+                                            id: patterns1
+                                            ListElement {
+                                                text: "generational"
+                                            }
+
+                                            ListElement {
+                                                text: "elitist/steady state"
+                                            }
+                                        }
+                                        currentIndex: 0
+                                        onCurrentIndexChanged:show(currentIndex)
+                                    }
+
+
+
+                                    Label {
+                                        id: labelselectionParameterTournamentWithoutReplacement
+
+                                        visible: false
+                                        text: "number of elitists"
+                                    }
+                                    TextField {
+                                        id: replacementParameter
+
+                                        width: 39
+                                        height: 16
+                                        visible: false
+                                        text: "2"
+                                    }
+
+
+                                }
+
+
+                                Rectangle {
+                                    x: 0
+                                    y: -331
+
                                     Layout.preferredWidth: 309
                                     Layout.preferredHeight: 50
-                                    width: 630
-                                    height: 150
+                                    width: 650
+                                    height: 157
 
 
 
@@ -369,12 +728,17 @@ table, th, td {
 
                                     Label {
                                         id: labelPopulationSize
+                                        x: 6
+                                        y: 0
                                         text: qsTr("Population Size")
                                     }
 
                                     TextField {
                                         id: textFieldPopulationSize
+                                        x: 153
+                                        y: 0
                                         width: 63
+                                        height: 17
                                         text: "20"
                                         placeholderText: qsTr("Population Size")
                                         validator: RegExpValidator {
@@ -384,28 +748,33 @@ table, th, td {
 
 
 
-                                    Label {
-                                        id: labelProbabiltySelection
-                                        text: qsTr("Probabilty Selection")
-                                    }
+//                                    Label {
+//                                        id: labelProbabiltySelection
+//                                        text: qsTr("Probabilty Selection")
+//                                    }
 
-                                    TextField {
-                                        id: textFieldProbabiltySelection
-                                        width: 63
-                                        text: "0.35"
-                                        placeholderText: qsTr("Probabilty Selection")
-                                        validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
-                                    }
+//                                    TextField {
+//                                        id: textFieldProbabiltySelection
+//                                        width: 63
+//                                        text: "0.35"
+//                                        placeholderText: qsTr("Probabilty Selection")
+//                                        validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
+//                                    }
 
 
                                     Label {
                                         id: labelProbabiltyCrossOver
+                                        x: 6
+                                        y: 74
                                         text: qsTr("Probabilty CrossOver")
                                     }
 
                                     TextField {
                                         id: textFieldProbabiltyCrossOver
+                                        x: 153
+                                        y: 70
                                         width: 63
+                                        height: 17
                                         text: "0.65"
                                         placeholderText: qsTr("Probabilty CrossOver")
                                         validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
@@ -413,12 +782,17 @@ table, th, td {
 
                                     Label {
                                         id: labelProbabiltyMutation
+                                        x: 6
+                                        y: 49
                                         text: qsTr("Probabilty Mutation")
                                     }
 
                                     TextField {
                                         id: textFieldProbabiltyMutation
+                                        x: 153
+                                        y: 47
                                         width: 63
+                                        height: 17
                                         text: "0.35"
                                         placeholderText: qsTr("Probabilty Mutation")
                                         validator:  RegExpValidator { regExp: /0[.]\d{1,3}/ }
@@ -426,11 +800,16 @@ table, th, td {
 
                                     Label {
                                         id: labelNumberProcessor
+                                        x: 6
+                                        y: 25
                                         text: qsTr("Number of processor")
                                     }
                                     TextField {
                                         id: textFieldNumberProcessor
+                                        x: 153
+                                        y: 23
                                         width: 63
+                                        height: 17
                                         text: "4"
                                         validator: RegExpValidator { regExp: /^[1-9]\d+/ }
                                         placeholderText: qsTr("")
@@ -439,13 +818,18 @@ table, th, td {
 
                                     Label {
                                         id: labelMaxGeneration
+                                        x: 6
+                                        y: 97
                                         text: qsTr("Max Number of Generation")
                                         transformOrigin: Item.Center
                                     }
 
                                     TextField {
                                         id: textFieldMaxGeneration
+                                        x: 153
+                                        y: 95
                                         width: 63
+                                        height: 17
                                         text: "1000000"
                                         placeholderText: "Max Number of Generation"
                                         validator: RegExpValidator {
@@ -455,12 +839,19 @@ table, th, td {
 
                                     Label {
                                         id: labelPercentageWeight
+                                        x: 6
+                                        y: 121
+                                        width: 20
+                                        height: 14
                                         text: qsTr("N")
                                         transformOrigin: Item.Center
                                     }
                                     TextField {
                                         id: textPercentageN
+                                        x: 153
+                                        y: 119
                                         width: 63
+                                        height: 17
                                         text: "0"
                                         //text: "30"
                                         //inputMethodHints: Qt.ImhDigitsOnly
@@ -519,6 +910,8 @@ table, th, td {
 
                                     CheckBox {
                                         id:checkUseControlPointsWithN;
+                                        x: 6
+                                        y: 139
                                         text: qsTr("Use Control Points")
                                         onCheckedChanged: {
                                             if(textPercentageN.text >0 && pathrain != ""){
@@ -531,45 +924,6 @@ table, th, td {
                                             }
                                         }
                                     }
-                                    Image {
-                                        source: "qrc:/img/info.jpg"
-
-                                        width: 20
-                                        height: 20
-                                        Layout.preferredWidth: 20
-                                        Layout.preferredHeight: 20
-                                        MouseArea {
-                                            anchors.fill: parent
-                                            Popup {
-                                                    id: popupCheckN
-                                                    width: 200
-                                                    height: 300
-                                                    modal: true
-                                                    focus: true
-                                                    topPadding: 0.1
-                                                    leftPadding: 0.1
-                                                    rightPadding: 0.1
-                                                    bottomPadding: 0.1
-
-                                                    TextArea{
-                                                        readOnly: true
-                                                        width: parent.width
-                                                        height: parent.height
-                                                        text: infoCheckN
-                                                        font.family: "Helvetica"
-                                                        font.pointSize: 9
-                                                    }
-
-                                                    closePolicy:Popup.CloseOnReleaseOutside| Popup.CloseOnReleaseOutsideParent |Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-                                           }
-                                            onClicked: {
-                                                console.log("You chose: ")
-
-                                                popupCheckN.open()
-                                            }
-                                        }
-
-                                    }
 
 
 
@@ -577,13 +931,15 @@ table, th, td {
                                 }
 
 
-                            }
 
 
 
-                        }
+
+
                         ColumnLayout {
                             id: columnLayout3
+                            x: 0
+                            y: -168
                             width: 500
                             height: 100
                             Layout.fillWidth: false
@@ -619,9 +975,9 @@ table, th, td {
 
                                         if(text >= 0 && text !== ""){
                                             if(text > tableModel.count){
-                                                console.log("text > tableModel.count  " + text + " > " + tableModel.count);
+//                                                console.log("text > tableModel.count  " + text + " > " + tableModel.count);
                                                 for(var i = 0;i< tableModel.count;i++){
-                                                    console.log("elimino = " + i);
+//                                                    console.log("elimino = " + i);
                                                     tableModel.set(i,{ nFunction:i+1,
                                                                        amax: tableModel.get(i).amax,
                                                                        amin: tableModel.get(i).amin,
@@ -637,7 +993,7 @@ table, th, td {
                                                                        tp: tableModel.get(i).tp})
                                                 }
                                                 for(var i = tableModel.count;i< text;i++){
-                                                    console.log("elimino2 = " + i);
+//                                                    console.log("elimino2 = " + i);
                                                     tableModel.set(i,{nFunction:i+1,
                                                                        amax: "0.8",
                                                                        amin: "0.2",
@@ -681,6 +1037,8 @@ table, th, td {
 
                                     }
                                     function showLabelFirstTime(text){
+//                                        console.log( "AAAAAAAAAAA typeProject " +typeProject)
+                                        if(typeProject === 0){
                                         for(var i = 0;i< text;i++){
                                             tableModel.append({ nFunction:i+1,
                                                                   amax: "0.8",
@@ -697,11 +1055,12 @@ table, th, td {
                                                                   tp: "0"})
                                         }
                                         textFieldGammaFunctions.text="1"
+                                        }
                                     }
 
 
                                     width: 63
-                                    text: showLabelFirstTime()
+                                    //text: showLabelFirstTime()
                                     //                                text: showLabelFirstTime(1)
                                     placeholderText: "Number of gamma functions"
                                     validator: RegExpValidator {
@@ -709,7 +1068,6 @@ table, th, td {
                                     }
                                     //                                editingFinished: console.log("CIAO")
                                     onTextChanged: showLabel(text)
-
 
 
 
@@ -922,7 +1280,7 @@ table, th, td {
                                     title: "Translation max"
                                     role: "tmax"
                                     delegate: TextField {
-                                        text: model.tmax
+                                        text: model ? model.tmax : "0"
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel.get(styleData.row).tmax !== text)
@@ -958,7 +1316,7 @@ table, th, td {
                                     title: "Translation percentage"
                                     role: "tp"
                                     delegate: TextField {
-                                       text: model.tp
+                                       text: model ? model.tp : "0"
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
                                              if (tableModel.get(styleData.row).tp !== text)
@@ -1060,6 +1418,7 @@ table, th, td {
                                     }
 
                                     function showLabelFirstTime(){
+                                        if(typeProject === 0){
                                         textFieldGammaFunctionsGreaterthan1.text="3"
                                         tableModel2.clear()
 
@@ -1102,6 +1461,7 @@ table, th, td {
                                                                tmin: "0",
                                                                tmax: "0",
                                                                tp: "0"})
+                                        }
 
 
                                     }
@@ -1111,7 +1471,7 @@ table, th, td {
                                     validator: RegExpValidator {
                                         regExp: /^[0-9]\d+/
                                     }
-                                    text: showLabelFirstTime()
+                                     //text: showLabelFirstTime()
                                     onTextChanged: showLabel(text)
 
 
@@ -1359,6 +1719,7 @@ table, th, td {
                                     title: "Translation percentage"
                                     role: "tp"
                                     delegate: TextField {
+
                                         text: model.tp
                                         validator:  RegExpValidator { regExp:  /(^0[.]\d{1,3})|1/}
                                         onTextChanged: {
@@ -1459,6 +1820,7 @@ table, th, td {
                                     }
 
                                     function showLabelFirstTime(){
+                                        if(typeProject === 0){
                                         textFieldLinearFunction.text="1"
                                         tableModel3.clear()
                                         tableModel3.append({ nFunction:1,
@@ -1474,13 +1836,14 @@ table, th, td {
                                                                tmax: "0",
                                                                tmin: "0",
                                                                tp: "0"})
+                                        }
                                     }
                                     width: 63
                                     placeholderText: "Number of gamma functions"
                                     validator: RegExpValidator {
                                         regExp: /^[0-9]\d+/
                                     }
-                                    text: showLabelFirstTime()
+                                    //text: showLabelFirstTime()
                                     onTextChanged: showLabel(text)
 
 
@@ -1716,8 +2079,10 @@ table, th, td {
 
                         GridLayout {
                             id: gridLayout3
+                            x: 0
+                            y: 356
                             width: 309
-                            height: 50
+                            height: 35
                             columnSpacing: 2
                             rowSpacing: 1
                             columns: 2
@@ -1780,6 +2145,8 @@ table, th, td {
                         }
 
                         GridLayout{
+                            x: 0
+                            y: 396
                             columnSpacing: 100
                             columns: 3
                             rows: 1
@@ -1907,7 +2274,7 @@ table, th, td {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         checkable: false
                         property  string selection;
-                        property  string selectionElitist;
+                        property  string elitist;
                         property  string populationSize;
                         property  string percentageCrossover;
                         property  string percentageMutation;
@@ -1922,11 +2289,18 @@ table, th, td {
                         property  string maxGeneration;
                         property  string fileUrl;
 
-                        property  int typeAlgorithm;
+                        property  int typeReplacement;
                         property  string para1;
                         property  string para2;
 
                         onClicked: {
+
+                            if(typeProject===0)
+                            {
+                                projectName = textProjectName.text;
+                            }
+                            console.log("projectName = "+projectName)
+                            console.log("projectName = "+projectName)
                             populationSize = textFieldPopulationSize.text;
                             percentageCrossover = textFieldProbabiltyCrossOver.text;
                             percentageMutation = textFieldProbabiltyMutation.text;
@@ -1934,39 +2308,33 @@ table, th, td {
                             numberGamma = textFieldGammaFunctions.text;
                             numberLinear = textFieldLinearFunction.text;
                             maxGeneration = textFieldMaxGeneration.text;
-                            selection =  selections.get(selections.currentIndex).text;
-                            selectionElitist =  selectionParameterTournamentWithoutReplacement.text;
-                            typeAlgorithm = 4;
+                            selection =  comboSelection.currentText;
+                            console.log("selection = "+selection)
+                            elitist =  replacementParameter.text;
+                            typeReplacement = 4;
                             fileUrl = pathrain;
+
                             if(comboSelection.currentText == "StochTour(t)"
                                     || comboSelection.currentText == "DetTour(T)"){
-                                para1=selectionParameter.text;
+                                para1=parameter1.text;
                                 para2=-1;
                             }else
                                 if(comboSelection.currentText == "Ranking(p,e)"){
-                                    para1=selectParameterRanking1.text;
-                                    para2=selectParameterRanking2.text;
+                                    para1=parameter1.text;
+                                    para2=parameter2.text;
                                 }else
                                     if(comboSelection.currentText == "Roulette"){
                                         para1=-1;
                                         para2=-1;
-                                    }else
-                                        if(comboSelection.currentText == "Sequential(ordered/unordered)")
-                                        {
-                                            para1=comboSelectinParameterSequentialList.get(comboSelectinParameterSequential.currentIndex).text;
-                                            para2=-1;
-                                        }else
-                                            if(comboSelection.currentText == "Generational"){
-                                                para1=selectionParameterTournamentWithoutReplacement.text;
-                                                para2=-1;
-                                                typeAlgorithm=0;
-                                            }else
-                                                    if(comboSelection.currentText == "Steady-State"){
-                                                        para1=selectionParameterTournamentWithoutReplacement.text;
-                                                        para2=-1;
-                                                        typeAlgorithm=1;
-                                                    }
+                                    }
 
+                            if(comboReplacament.currentText == "generational"){
+                                typeReplacement=0;
+
+                            }else
+                                if(comboReplacament.currentText == "elitist/steady state"){
+                                    typeReplacement=1;
+                                }
                             //                        console.log("populationSize : "+populationSize +
                             //                                    "\n percentageCrossover : "+percentageCrossover+
                             //                                    "\n percentageMutation : "+percentageMutation+
@@ -1975,7 +2343,7 @@ table, th, td {
                             //                                    "\n numberLinear : "+numberLinear+
                             //                                    "\n maxGeneration : "+maxGeneration+
                             //                                    "\n selection : "+selection+
-                            //                                    "\n selectionElitist : "+selectionElitist+
+                            //                                    "\n elitist : "+selectionElitist+
                             //                                    "\n fileUrl : "+fileUrl
                             //                                    )
 
@@ -2048,7 +2416,7 @@ table, th, td {
                                 //                            console.log(tmp.amax +" "+ tmp.amin +" "+ tmp.bmax+ " "+ tmp.bmin+" "+tmp.wmax+
                                 //                                        " "+ tmp.wmin + " " + tmp.pa + " "+ tmp.pb+ " "+ tmp.pw);
                             }
-                            if(projectName.length ===0){
+                            if(textProjectName.length ===0 && typeProject===0){
                                 messageDialogProjectNameEmpty.open()
                             }else
                                 if(textfileRain.text === "Empty"){
@@ -2058,16 +2426,16 @@ table, th, td {
                                 else
                                      {
                             sakeStart.startRegression(
-                                        projectName.text,
+                                        projectName,
                                         selection  ,
-                                        selectionElitist  ,
+                                        elitist  ,
                                         populationSize  ,
                                         percentageCrossover  ,
                                         percentageMutation  ,
                                         numberProcessor  ,
                                         maxGeneration,
                                         fileUrl,
-                                        0,
+                                        typeProject,
                                         matrixGamma1,
                                         matrixGamma2,
                                         matrixGamma3,
@@ -2078,8 +2446,8 @@ table, th, td {
                                         textPercentageN.text,
                                         para1,
                                         para2,
-                                        textFieldProbabiltySelection.text,
-                                        typeAlgorithm
+                                        typeReplacement,
+                                        typeProject
                                         )
                             applicationWindow1.destroy()
                             }

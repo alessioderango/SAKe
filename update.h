@@ -16,6 +16,7 @@ signals:
     void valueTb(QString);
     void valueDeltaCritico(QString);
     void valueMomentoDelPrimoOrdine(QString);
+    void valueProgressBar(QString);
 
     void valueCurrentMaximumFitnessRegression(QString);
     void valueAbsoluteMaximumFitnessRegression(QString);

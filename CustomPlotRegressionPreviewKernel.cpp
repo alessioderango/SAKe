@@ -263,7 +263,7 @@ void getSubdividePointsFromControlPoints(std::vector< double> x,std::vector< dou
 }
 void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromControlPoints(const QVariant& n)
 {
-    std::cout << "Nome file :  "<<filename.toString().toStdString() <<std::endl;
+    //std::cout << "Nome file :  "<<filename.toString().toStdString() <<std::endl;
     m_CustomPlot->xAxis->setRange( 0, size_kernel );
     ControlPoints * controlPoints = new ControlPoints();
     controlPoints->calculateControlPoints(kernel,size_kernel);
@@ -279,7 +279,7 @@ void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromKernel(
     //    customPlot->yAxis->setRange( 0, maxy);
     //m_CustomPlot->xAxis->setRange( 0, size_kernel );
 
-    std::cout << "Nome file :  "<<filename.toString().toStdString() <<std::endl;
+    //std::cout << "Nome file :  "<<filename.toString().toStdString() <<std::endl;
     QVector<double> xOutput;
     QVector<double> yOutput;
     getSubdividePointsFromKernel(kernel,size_kernel,n.toInt(),xOutput,yOutput);
@@ -289,7 +289,7 @@ void CustomPlotRegressionPreviewKernel::customPlotRegressionSubdivideFromKernel(
 void CustomPlotRegressionPreviewKernel::initCustomPlotRegressionPreviewKernel(const QVariant &filenamePar)
 {
     filename = filenamePar;
-    std::cout << "Inizializzooooooooooooooooooo CustomPlotRegressionPreviewKernel" << std::endl;
+    //std::cout << "Inizializzooooooooooooooooooo CustomPlotRegressionPreviewKernel" << std::endl;
     HandlerCSV::loadCSVKernel(filename.toString(),kernel,size_kernel,Delta_cr);
     //m_CustomPlot->xAxis->setRange( 0, size_kernel );
 

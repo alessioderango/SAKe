@@ -34,15 +34,15 @@ public :
         eoMonOp<EOT>& _mutate, float _mrate,
         eoEvalFunc<EOT>& _eval,
         eoContinue<EOT>& _cont,
-        int _maxNumberToConsider)
+        int _numberElitist)
     : cont(_cont),
           mutate(_mutate),
           mutationRate(_mrate),
           cross(_cross),
           crossoverRate(_crate),
-          select(_select,_selectRate),
+          select(_select),
           eval(_eval) {
-      maxNumberToConsider =_maxNumberToConsider;
+      numberElitist =_numberElitist;
   }
 
 
@@ -64,110 +64,85 @@ public :
 
   void operator()(eoPop<EOT>& _pop)
   {
-    eoPop<EOT> offspring;
-    EOT* popTmp;
     do
       {
-        int counter=-1;
 
-        popTmp= new EOT[_pop.size()];
-        for (int i=0; i<_pop.size(); i++){
-              popTmp[i]=_pop[i];
-        }
-        qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
-
-        //SELECTION
-        offspring.clear();
+        eoPop<EOT> offspring;
+        eoPop<EOT> matingPool;
         offspring.resize(_pop.size());
 
-        for (int i=0; i<_pop.size(); i++){
-            if(counter < maxNumberToConsider){
-                counter++;
+        select(_pop, matingPool);
+
+         _pop.sort();
+
+
+        //SELECTION
+
+        for (int i=0; i < numberElitist; i++){
+
+            typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
                 EOT a;
-                a.setWFromNew(popTmp[counter].getW());
-                a.setParFromNew(popTmp[counter].getPar());
-                a.setFunctionTypeFromNew(popTmp[counter].getFunctionType());
-                a.setYcombinataFromNew(popTmp[counter].getYCombinata());
-                a.setPercentageVariationWeight(popTmp[counter].getPercentageVariationWeight());
-                a.setPercentageVariationLinearA(popTmp[counter].getPercentageVariationLinearA());
-                a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
-                a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
-                a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
-                a.setTranslation(popTmp[counter].getTranslation());
+                a.setWFromNew(_pop[i].getW());
+                a.setParFromNew(_pop[i].getPar());
+                a.setFunctionTypeFromNew(_pop[i].getFunctionType());
+                a.setYcombinataFromNew(_pop[i].getYCombinata());
+                a.setPercentageVariationWeight(_pop[i].getPercentageVariationWeight());
+                a.setPercentageVariationLinearA(_pop[i].getPercentageVariationLinearA());
+                a.setPercentageVariationLinearB(_pop[i].getPercentageVariationLinearB());
+                a.setPercentageVariationGammaA(_pop[i].getPercentageVariationGammaA());
+                a.setPercentageVariationGammaB(_pop[i].getPercentageVariationGammaB());
+                a.setTranslation(_pop[i].getTranslation());
 
-                offspring[counter]=a;
-                 continue;
-            }
-            counter++;
-           // = min + rand()%(max - min);
-            int gen1=maxNumberToConsider+(rand()%(_pop.size()-maxNumberToConsider));//-maxNumberToConsider) + maxNumberToConsider;
-            int gen2=maxNumberToConsider+(rand()%(_pop.size()-maxNumberToConsider));//-maxNumberToConsider) + maxNumberToConsider;
-
-            if(popTmp[gen1].fitness() < popTmp[gen2].fitness() ){
-                EOT a;
-                a.setWFromNew(popTmp[counter].getW());
-                a.setParFromNew(popTmp[counter].getPar());
-                a.setFunctionTypeFromNew(popTmp[counter].getFunctionType());
-                a.setYcombinataFromNew(popTmp[counter].getYCombinata());
-                a.setPercentageVariationWeight(popTmp[counter].getPercentageVariationWeight());
-                a.setPercentageVariationLinearA(popTmp[counter].getPercentageVariationLinearA());
-                a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
-                a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
-                a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
-                a.setTranslation(popTmp[counter].getTranslation());
-
-                offspring[counter]= a;
-            }
-            else{
-                EOT a;
-                a.setWFromNew(popTmp[counter].getW());
-                a.setParFromNew(popTmp[counter].getPar());
-                a.setFunctionTypeFromNew(popTmp[counter].getFunctionType());
-                a.setYcombinataFromNew(popTmp[counter].getYCombinata());
-                a.setPercentageVariationWeight(popTmp[counter].getPercentageVariationWeight());
-                a.setPercentageVariationLinearA(popTmp[counter].getPercentageVariationLinearA());
-                a.setPercentageVariationLinearB(popTmp[counter].getPercentageVariationLinearB());
-                a.setPercentageVariationGammaA(popTmp[counter].getPercentageVariationGammaA());
-                a.setPercentageVariationGammaB(popTmp[counter].getPercentageVariationGammaB());
-                a.setTranslation(popTmp[counter].getTranslation());
-
-                offspring[counter]= a;
-            }
-
+                (*itPoorGuy) = a;
 
         }
         // END SELECTION
 
 
         unsigned i;
-        for (i=maxNumberToConsider; i<_pop.size()/2; i++)
+        for (i=0; i<matingPool.size()/2; i++)
           {
             if ( rng.flip(crossoverRate) )
             {
                     // this crossover generates 2 offspring from two parents
-                    if (cross(offspring[2*i], offspring[2*i+1]))
+                    if (cross(matingPool[2*i], matingPool[2*i+1]))
                        {
-                             offspring[2*i].invalidate();
-                             offspring[2*i+1].invalidate();
+                             matingPool[2*i].invalidate();
+                             matingPool[2*i+1].invalidate();
                        }
             }
           }
 
-        for (i=maxNumberToConsider; i < offspring.size(); i++)
+        for (i=0; i < matingPool.size(); i++)
           {
             if (rng.flip(mutationRate) )
             {
-                     if (mutate(offspring[i]))
-                         offspring[i].invalidate();
+                     if (mutate(matingPool[i]))
+                         matingPool[i].invalidate();
             }
 
           }
 
-        offspring.invalidate();
+        for (unsigned int i=numberElitist; i< matingPool.size(); i++){
+             typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
+            EOT a;
+            a.setWFromNew(matingPool[i].getW());
+            a.setParFromNew(matingPool[i].getPar());
+            a.setFunctionTypeFromNew(matingPool[i].getFunctionType());
+            a.setYcombinataFromNew(matingPool[i].getYCombinata());
+            a.setPercentageVariationWeight(matingPool[i].getPercentageVariationWeight());
+            a.setPercentageVariationLinearA(matingPool[i].getPercentageVariationLinearA());
+            a.setPercentageVariationLinearB(matingPool[i].getPercentageVariationLinearB());
+            a.setPercentageVariationGammaA(matingPool[i].getPercentageVariationGammaA());
+            a.setPercentageVariationGammaB(matingPool[i].getPercentageVariationGammaB());
+            a.setTranslation(matingPool[i].getTranslation());
+            (*itPoorGuy) = a;
+        }
+
         _pop.clear();
         _pop.swap(offspring);
-        delete[] popTmp;
         apply<EOT>(eval, _pop);
+
       } while (cont(_pop));
   }
 
@@ -182,7 +157,7 @@ private :
       float crossoverRate;
       eoSelectPerc<EOT> select;
       eoEvalFunc<EOT>& eval;
-      int maxNumberToConsider;
+      int numberElitist;
 };
 
 

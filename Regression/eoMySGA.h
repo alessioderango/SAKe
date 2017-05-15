@@ -63,7 +63,7 @@ public :
 
     void operator()(eoPop<EOT>& _pop)
     {
-        _pop.printOn(std::cout);
+        //_pop.printOn(std::cout);
 
         eoPop<EOT> offspring;
 

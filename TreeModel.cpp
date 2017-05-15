@@ -16,12 +16,12 @@ void TreeModel::addEntry( const QString name,const QString& type, QString descri
     childEntry->setData( description, TreeModel_Role_Description );
     if(type == "Regression"){
         QString tmp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/regression/"+name+"/kernel.csv";
-        std::cout << tmp.toStdString() << std::endl;
+//        std::cout << tmp.toStdString() << std::endl;
     childEntry->setData( tmp, TreeModel_Role_Type );
     }
     else{
         QString tmp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+name+"/kernels.csv";
-        std::cout << tmp.toStdString() << std::endl;
+//        std::cout << tmp.toStdString() << std::endl;
         childEntry->setData( tmp, TreeModel_Role_Type );
 }
     //childEntry->parent();

@@ -20,35 +20,39 @@ Window {
 
     property  int typeProject : 0;
     property  string projectName : "";
+    Component.onCompleted: {
+        setX(Screen.width / 2 - width / 2);
+        setY(Screen.height / 2 - height / 2);
+    }
 
     function f(list){
         typeProject=1;
         projectName = list[0];
         textFieldProjectName.visible = false;
         textProjectName.visible = false;
-        console.log( " CIAOOOO " )
-        for(var i = 0; i< list.length ; i++){
-            console.log(i + "  " +list[i])
-        }
-        console.log( " CIAOOOO " )
+        //        console.log( " CIAOOOO " )
+        //        for(var i = 0; i< list.length ; i++){
+        //            console.log(i + "  " +list[i])
+        //        }
+        //        console.log( " CIAOOOO " )
         calibrationMask.title = "Project name               "  + list[0]
         //labelProjectNameFromFile.text=list[0]
-                if(list[1]==="StochTour(t)"){
-                            comboSelection.currentIndex=0
-                            parameter1.text=list[2]
-                        }else
-                            if(list[1]==="DetTour(T)"){
-                                comboSelection.currentIndex=1
-                                parameter1.text=list[2]
-                            }else
-                                if(list[1]==="Ranking(p,e)"){
-                                    comboSelection.currentIndex=2
-                                    parameter1.text=list[2]
-                                    parameter2.text=list[3]
-                                }else
-                                    if(list[1]==="Roulette"){
-                                            comboSelection.currentIndex=3
-                                        }
+        if(list[1]==="StochTour(t)"){
+            comboSelection.currentIndex=0
+            parameter1.text=list[2]
+        }else
+            if(list[1]==="DetTour(T)"){
+                comboSelection.currentIndex=1
+                parameter1.text=list[2]
+            }else
+                if(list[1]==="Ranking(p,e)"){
+                    comboSelection.currentIndex=2
+                    parameter1.text=list[2]
+                    parameter2.text=list[3]
+                }else
+                    if(list[1]==="Roulette"){
+                        comboSelection.currentIndex=3
+                    }
 
 
         textNumberProcessor.text=list[4]
@@ -63,13 +67,14 @@ Window {
         textFieldPropMutation.text=list[13]
         textFieldPme.text=list[14]
         textFieldPmb.text=list[15]
-        if(list[16]==="Rettangolare")
+
+        if(list[16]==="Rectangular")
             comboPattern.currentIndex=2
         else
-            if(list[16]==="Triangolare Disc")
+            if(list[16]==="Decreasing triangular")
                 comboPattern.currentIndex=0
             else
-                if(list[16]==="Triangolare Asc")
+                if(list[16]==="Increasing triangular")
                     comboPattern.currentIndex=1
 
         //var split = list[17].split("/")
@@ -80,6 +85,8 @@ Window {
         textFieldActivation.text=list[18]
         comboReplacament.currentIndex = list[19]
         replacementParameter.text = list[20]
+        textSeed.text = list[21]
+        textSaveKernels.text = list[22]
     }
 
 
@@ -129,13 +136,13 @@ Window {
                         title: "Please choose a file"
                         folder: shortcuts.home
                         onAccepted: {
-                            console.log("You chose: " + fileDialogRain.fileUrls)
+                            //                            console.log("You chose: " + fileDialogRain.fileUrls)
                             textFieldRain.text = fileDialogRain.fileUrl
                             //handlerCSV.loadCSV(fileDialogRain.fileUrl)
                             //Qt.quit()
                         }
                         onRejected: {
-                            console.log("Canceled")
+                            //                            console.log("Canceled")
                             //Qt.quit()
                         }
                         nameFilters: [ "files (*.csv)" ]
@@ -148,13 +155,13 @@ Window {
                         title: "Please choose a file"
                         folder: shortcuts.home
                         onAccepted: {
-                            console.log("You chose: " + fileDialogActivation.fileUrls)
+                            //                            console.log("You chose: " + fileDialogActivation.fileUrls)
                             textFieldActivation.text = fileDialogActivation.fileUrl
                             //handlerCSV.loadCSV(fileDialogActivation.fileUrl)
                             //Qt.quit()
                         }
                         onRejected: {
-                            console.log("Canceled")
+                            //                            console.log("Canceled")
                             //Qt.quit()
                         }
                         nameFilters: [ "files (*.csv)" ]
@@ -220,6 +227,7 @@ Window {
                         y: 38
                         width: 147
                         height: 20
+                        readOnly: true
                         text: qsTr("")
                     }
 
@@ -229,6 +237,7 @@ Window {
                         y: 68
                         width: 147
                         height: 20
+                        readOnly: true
                         text: qsTr("")
                     }
 
@@ -268,7 +277,7 @@ Window {
                     id: text2
                     x: 25
                     y: -7
-                    text: qsTr("2- Tournament Selection Additional Criteria")
+                    text: qsTr("2 - Tournament Selection Additional Criteria")
                     font.pixelSize: 23
                 }
 
@@ -285,20 +294,20 @@ Window {
                     ListModel {
                         id: selectionsOrder1
                         ListElement {
-                            text: "Delta critico"
+                            text: "Safety margin"
                         }
                     }
                     ListModel {
                         id: selectionsOrder2
                         ListElement {
-                            text: "Momento del primo ordine"
+                            text: "First-order momentum"
                         }
                     }
 
                     ListModel {
                         id: selectionsOrder3
                         ListElement {
-                            text: "tempo base"
+                            text: "Base time"
                         }
 
 
@@ -332,7 +341,7 @@ Window {
                         y: 38
                         function configComboBox3(currentIndex){
                             selectionsOrder3.clear();
-                            console.log("comboBox3 currentIndex = " +currentIndex+"\n")
+                            //                            console.log("comboBox3 currentIndex = " +currentIndex+"\n")
                             if(currentIndex === 0)
                             {
                                 selectionsOrder3.append(selectionsOrder2.get(1))
@@ -370,21 +379,21 @@ Window {
                             if(currentIndex === 0)
                             {
                                 for( i=1;i<3;i++ ){
-                                    console.log(" comboBox2 0 index i = "+i%3+"\n");
+                                    //                                    console.log(" comboBox2 0 index i = "+i%3+"\n");
                                     selectionsOrder2.append(selectionsOrder1.get(i%3))
                                 }
                             }else
                                 if(currentIndex === 1)
                                 {
                                     for( i=2;i<4;i++ ){
-                                        console.log(" comboBox2 1 index i = "+i%3+"\n");
+                                        //                                        console.log(" comboBox2 1 index i = "+i%3+"\n");
                                         selectionsOrder2.append(selectionsOrder1.get(i%3))
                                     }
                                 }else
                                     if(currentIndex === 2)
                                     {
                                         for( i=3;i<5;i++ ){
-                                            console.log(" comboBox2 2 index i = "+i%3+"\n");
+                                            //                                            console.log(" comboBox2 2 index i = "+i%3+"\n");
                                             selectionsOrder2.append(selectionsOrder1.get(i%3))
                                         }
                                     }
@@ -407,35 +416,35 @@ Window {
                         x: 29
                         y: 5
                         currentIndex: 0
-                        visible: true
+                        visible: false
                         function configComboBox1(currentIndex){
                             selectionsOrder1.clear();
                             var i=0;
                             if(currentIndex === 0)
                             {
                                 for( i=1;i<4;i++ ){
-                                    console.log("0 index i = "+i+"\n");
+                                    //                                    console.log("0 index i = "+i+"\n");
                                     selectionsOrder1.append(selectionsOrder.get(i))
                                 }
                             }else
                                 if(currentIndex === 1)
                                 {
                                     for( i=2;i<5;i++ ){
-                                        console.log("1 index i = "+i%4+"\n");
+                                        //                                        console.log("1 index i = "+i%4+"\n");
                                         selectionsOrder1.append(selectionsOrder.get(i%4))
                                     }
                                 }else
                                     if(currentIndex === 2)
                                     {
                                         for( i=3;i<6;i++ ){
-                                            console.log("2 index i = "+i%4+"\n");
+                                            //                                            console.log("2 index i = "+i%4+"\n");
                                             selectionsOrder1.append(selectionsOrder.get(i%4))
                                         }
                                     }else
                                         if(currentIndex === 3)
                                         {
                                             for( i=4;i<7;i++ ){
-                                                console.log("3 index i = "+i%4+"\n");
+                                                //                                                console.log("3 index i = "+i%4+"\n");
                                                 selectionsOrder1.append(selectionsOrder.get(i%4))
                                             }
                                         }
@@ -447,11 +456,20 @@ Window {
                         model: ListModel {
                             id: selectionsOrder
                             ListElement { text: "Fitness";  }
-                            ListElement { text: "Delta critico";  }
-                            ListElement { text: "Momento del primo ordine";  }
-                            ListElement { text: "tempo base"; }
+                            ListElement { text: "Safety margin";  }
+                            ListElement { text: "First-order momentum";  }
+                            ListElement { text: "Base time"; }
                         }
                         onCurrentIndexChanged: configComboBox1(currentIndex)
+                    }
+
+                    Label {
+                        id: label1
+                        x: 29
+                        y: 7
+                        width: 72
+                        height: 17
+                        text: qsTr("Fitness phi")
                     }
                 }
             }
@@ -524,7 +542,7 @@ Window {
                         width: 39
                         height: 16
                         visible: false
-                        text: "0"
+                        text: "2"
                     }
 
                     ComboBox {
@@ -537,9 +555,9 @@ Window {
 
                         model: ListModel {
                             id: patterns
-                            ListElement { text: "Triangolare Disc";  }
-                            ListElement { text: "Triangolare Asc";  }
-                            ListElement { text: "Rettangolare";  }
+                            ListElement { text: "Decreasing triangular";  }
+                            ListElement { text: "Increasing triangular";  }
+                            ListElement { text: "Rectangular";  }
                         }
                     }
 
@@ -634,6 +652,7 @@ Window {
 
                             if(currentIndex === 0  ){
                                 labelstochpar1.visible = true;
+                                parameter1.text = "0.55"
                             }else
                             {
                                 labelstochpar1.visible = false;
@@ -641,6 +660,7 @@ Window {
 
                             if(currentIndex === 1  ){
                                 labeldetpar1.visible = true;
+                                parameter1.text = "3"
                             }else
                             {
                                 labeldetpar1.visible = false;
@@ -650,6 +670,8 @@ Window {
                             if(currentIndex ===2){
                                 labelrankpar1.visible = true;
                                 labelrankpar2.visible = true;
+                                parameter1.text = "1.1"
+                                parameter2.text = "1.0"
                             }else
                             {
                                 labelrankpar1.visible = false;
@@ -988,42 +1010,6 @@ Window {
                     border.width: 1
                     border.color: "#110000"
 
-                    Label {
-                        id: labelNumberProcessor
-                        x: 8
-                        y: 14
-                        width: 120
-                        text: qsTr("Number Processor")
-                    }
-
-                    TextField {
-                        id: textNumberProcessor
-                        x: 165
-                        y: 12
-                        width: 63
-                        visible: true
-                        text: "1"
-                        placeholderText: "1"
-                    }
-
-                    Label {
-                        id: labellastGeneration
-                        x: 8
-                        y: 40
-                        width: 120
-                        text: qsTr("Continue from last generation")
-                    }
-
-                    CheckBox {
-                        id:lastGeneration
-                        activeFocusOnPress: false
-                        checked: false
-                        x: 165
-                        y: 38
-                        //text: qsTr("Start From Last Generation")
-
-                    }
-
                     Button {
                         id: start
                         objectName: "namestart"
@@ -1033,7 +1019,7 @@ Window {
                         signal qmlSignal(var var1,var var1,var var2,var var3,var var4,var var5,
                                          var var6,var var7,var var8,var var9,var var10,var var11,
                                          var var12,var var13,var var14)
-                        y: 58
+                        y: 69
                         text: qsTr("Start GA")
                         checkable: false
                         property  string para1;
@@ -1043,7 +1029,7 @@ Window {
                         property  string order3;
                         property  string order4;
                         property  int typeReplacement;
-                        x: 283
+                        x: 357
 
                         onClicked: {
                             order1="";
@@ -1085,103 +1071,195 @@ Window {
                                     order3=selectionsOrder2.get(comboBox3.currentIndex).text
                                     order4=selectionsOrder3.get(comboBox4.currentIndex).text
                                 }
-                                                    if(textProjectName.length ===0 && typeProject===0){
-                                                        messageDialogProjectNameEmpty.open()
-                                                    }else
-
-                                                        if( sakeStart.existProjectName(textProjectName.text) === 1 && typeProject===1){
-                                                            messageDialogProjectName.open()
-                                                        }
-                                                        else
-                            if(textfileRain.text == "Empty"){
-                                messageDialogRain.open()
+                            if(textProjectName.length ===0 && typeProject===0){
+                                messageDialogProjectNameEmpty.open()
                             }else
-                                if(textfileActivation.text == "Empty"){
-                                    messageDialogActivation.open()
-                                }else
-                                    if(textFieldPopulation.text == ""){
-                                        messageError.text = "Field Population can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldMaxGen.text == ""){
-                                        messageError.text = "Field max generations can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldtbMax.text == ""){
-                                        messageError.text = "Field tb Max can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldtbMin.text == ""){
-                                        messageError.text = "Field tb Min can not be empty"
-                                        messageError.open()
-                                    }else if(textFielddHpMax.text == ""){
-                                        messageError.text = "Field dHpMax can not be empty"
-                                        messageError.open()
-                                    }else if(textFielddHpMin.text == ""){
-                                        messageError.text = "Field dHpMin can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldPropCrossover.text == ""){
-                                        messageError.text = "Field Probability Crossover can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldPropMutation.text == ""){
-                                        messageError.text = "Field Probability Mutation can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldPme.text == ""){
-                                        messageError.text = "Field Pme can not be empty"
-                                        messageError.open()
-                                    }else if(textFieldPmb.text == ""){
-                                        messageError.text = "Field Pmb can not be empty"
-                                        messageError.open()
-                                    }else if(textNumberProcessor.text == ""){
-                                        messageError.text = "Field Number of Processor can not be empty"
-                                        messageError.open()
-                                    }else {
 
-//                                        console.log("order1 = "+selectionsOrder.get(comboBox1.currentIndex).text)
-//                                        console.log("order2 = "+selectionsOrder1.get(comboBox2.currentIndex).text)
-//                                        console.log("order3 = "+selectionsOrder2.get(comboBox3.currentIndex).text)
-//                                        console.log("order4 = "+selectionsOrder3.get(comboBox4.currentIndex).text)
+                                if( sakeStart.existProjectName(textProjectName.text) === 1 && typeProject===1){
+                                    messageDialogProjectName.open()
+                                }
+                                else
+                                    if(textfileRain.text == "Empty"){
+                                        messageDialogRain.open()
+                                    }else
+                                        if(textfileActivation.text == "Empty"){
+                                            messageDialogActivation.open()
+                                        }else
+                                            if(textFieldPopulation.text == ""){
+                                                messageError.text = "Field Population can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldMaxGen.text == ""){
+                                                messageError.text = "Field max generations can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldtbMax.text == ""){
+                                                messageError.text = "Field tb Max can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldtbMin.text == ""){
+                                                messageError.text = "Field tb Min can not be empty"
+                                                messageError.open()
+                                            }else if(textFielddHpMax.text == ""){
+                                                messageError.text = "Field dHpMax can not be empty"
+                                                messageError.open()
+                                            }else if(textFielddHpMin.text == ""){
+                                                messageError.text = "Field dHpMin can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldPropCrossover.text == ""){
+                                                messageError.text = "Field Probability Crossover can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldPropMutation.text == ""){
+                                                messageError.text = "Field Probability Mutation can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldPme.text == ""){
+                                                messageError.text = "Field Pme can not be empty"
+                                                messageError.open()
+                                            }else if(textFieldPmb.text == ""){
+                                                messageError.text = "Field Pmb can not be empty"
+                                                messageError.open()
+                                            }else if(textNumberProcessor.text == ""){
+                                                messageError.text = "Field Number of Processor can not be empty"
+                                                messageError.open()
+                                            }else {
+
+                                                //                                        console.log("order1 = "+selectionsOrder.get(comboBox1.currentIndex).text)
+                                                //                                        console.log("order2 = "+selectionsOrder1.get(comboBox2.currentIndex).text)
+                                                //                                        console.log("order3 = "+selectionsOrder2.get(comboBox3.currentIndex).text)
+                                                //                                        console.log("order4 = "+selectionsOrder3.get(comboBox4.currentIndex).text)
 
 
-//                                        console.log("order1 = "+selectionsOrder.currentIndex)
-//                                        console.log("order2 = "+selectionsOrder1.currentIndex)
-//                                        console.log("order3 = "+selectionsOrder2.currentIndex)
-//                                        console.log("order4 = "+selectionsOrder3.currentIndex)
+                                                //                                        console.log("order1 = "+selectionsOrder.currentIndex)
+                                                //                                        console.log("order2 = "+selectionsOrder1.currentIndex)
+                                                //                                        console.log("order3 = "+selectionsOrder2.currentIndex)
+                                                //                                        console.log("order4 = "+selectionsOrder3.currentIndex)
 
-//                                        console.log("order1 = "+selectionsOrder.get(selectionsOrder.currentIndex).text)
-//                                        console.log("order2 = "+selectionsOrder1.get(selectionsOrder1.currentIndex).text)
-//                                        console.log("order3 = "+selectionsOrder2.get(selectionsOrder2.currentIndex).text)
-//                                        console.log("order4 = "+selectionsOrder3.get(selectionsOrder3.currentIndex).text)
+                                                //                                        console.log("order1 = "+selectionsOrder.get(selectionsOrder.currentIndex).text)
+                                                //                                        console.log("order2 = "+selectionsOrder1.get(selectionsOrder1.currentIndex).text)
+                                                //                                        console.log("order3 = "+selectionsOrder2.get(selectionsOrder2.currentIndex).text)
+                                                //                                        console.log("order4 = "+selectionsOrder3.get(selectionsOrder3.currentIndex).text)
 
-                                                                                    sakeStart.InitAlgo(comboSelection.currentText,
-                                                                                                       textFieldPopulation.text,
-                                                                                                       textFieldMaxGen.text,
-                                                                                                        textFieldtbMax.text,
-                                                                                                       textFieldtbMin.text,
-                                                                                                       textFielddHpMax.text,
-                                                                                                       textFielddHpMin.text,
-                                                                                                       textProjectName.text,
-                                                                                                       textFieldPropCrossover.text,
-                                                                                                       textFieldPropMutation.text,
-                                                                                                       textFieldPme.text,
-                                                                                                       textFieldPmb.text,
-                                                                                                       comboPattern.currentText,
-                                                                                                       textFieldRain.text,
-                                                                                                       textFieldActivation.text,
-                                                                                                       projectName,
-                                                                                                       textNumberProcessor.text,
-                                                                                                       para1,
-                                                                                                       para2,
-                                                                                                       false,
-                                                                                                       typeProject,
-                                                                                                       typeReplacement,
-                                                                                                       order1,
-                                                                                                       order2,
-                                                                                                       order3,
-                                                                                                       order4,
-                                                                                                       replacementParameter.text
-                                                                                                       )
+                                                                                                                                    sakeStart.InitAlgo(comboSelection.currentText,
+                                                                                                                                                       textFieldPopulation.text,
+                                                                                                                                                       textFieldMaxGen.text,
+                                                                                                                                                       textFieldtbMax.text,
+                                                                                                                                                       textFieldtbMin.text,
+                                                                                                                                                       textFielddHpMax.text,
+                                                                                                                                                       textFielddHpMin.text,
+                                                                                                                                                       textProjectName.text,
+                                                                                                                                                       textFieldPropCrossover.text,
+                                                                                                                                                       textFieldPropMutation.text,
+                                                                                                                                                       textFieldPme.text,
+                                                                                                                                                       textFieldPmb.text,
+                                                                                                                                                       comboPattern.currentText,
+                                                                                                                                                       textFieldRain.text,
+                                                                                                                                                       textFieldActivation.text,
+                                                                                                                                                       projectName,
+                                                                                                                                                       textNumberProcessor.text,
+                                                                                                                                                       para1,
+                                                                                                                                                       para2,
+                                                                                                                                                       lastGeneration.checked,
+                                                                                                                                                       typeProject,
+                                                                                                                                                       typeReplacement,
+                                                                                                                                                       order1,
+                                                                                                                                                       order2,
+                                                                                                                                                       order3,
+                                                                                                                                                       order4,
+                                                                                                                                                       replacementParameter.text,
+                                                                                                                                                       textSeed.text,
+                                                                                                                                                       textSaveKernels.text
+                                                                                                                                                       )
 
-                                        close()
-                                    }
+                                                close()
+                                            }
 
+                        }
+
+                    }
+
+                    ColumnLayout {
+                        id: columnLayout1
+                        x: 8
+                        y: 4
+                        width: 447
+                        height: 81
+
+                        RowLayout {
+                            id: rowLayout2
+                            width: 100
+                            height: 100
+
+                            Label {
+                                id: labelNumberProcessor
+                                width: 120
+                                text: qsTr("Number Processor")
+                            }
+
+                            TextField {
+                                id: textNumberProcessor
+                                width: 30
+                                visible: true
+                                text: "1"
+                                placeholderText: "1"
+                            }
+
+
+                        }
+
+                        RowLayout {
+                            id: rowLayout1
+                            width: 100
+                            height: 100
+
+                            Label {
+                                id: labellastGeneration
+                                width: 151
+                                height: 14
+                                text: qsTr("Continue from last generations")
+                            }
+
+                            CheckBox {
+                                id:lastGeneration
+                                activeFocusOnPress: false
+                                checked: false
+                                //text: qsTr("Start From Last Generation")
+
+                            }
+                        }
+
+                        RowLayout {
+                            id: rowLayout3
+                            width: 100
+                            height: 100
+                            Label {
+                                id: labelSeed
+                                width: 120
+                                text: qsTr("Seed")
+                            }
+
+                            TextField {
+                                id: textSeed
+                                width: 30
+                                text: "1"
+                                placeholderText: "1"
+                                visible: true
+                            }
+                        }
+
+                        RowLayout {
+                            id: rowLayout4
+                            width: 100
+                            height: 100
+                            Label {
+                                id: labelSaveKernels
+                                width: 120
+                                text: qsTr("Save Kerrnels")
+                            }
+
+                            TextField {
+                                id: textSaveKernels
+                                width: 30
+                                text: "1"
+                                placeholderText: "1"
+                                visible: true
+                            }
                         }
 
                     }

@@ -62,7 +62,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      float _crate,
                                      eoMonOp<EOT>& _mutate,
                                      float _mrate,
-                                     int maxNumberToConsider,
+                                     int numberElitist,
                                      unsigned int typeAlgorithm,
                                      float _propSelection,
                                      eoDistance<EOT> * _dist = NULL
@@ -294,14 +294,14 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
   eoAlgo<EOT> *algo;
   if(typeAlgorithm==0)
   {
-      algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+      algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,numberElitist);
   }else
       if(typeAlgorithm==1)
       {
-         algo = new eoSGASteadyState<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+         algo = new eoSGASteadyState<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,numberElitist);
       }
-      else
-        algo = new eoMySGA<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
+//      else
+//        algo = new eoMySGA<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,maxNumberToConsider,_continue);
 
 
 

@@ -103,7 +103,8 @@ HEADERS += \
     Regression/eoMySGA.h \
     Regression/eoSGASteadyState.h \
     SAke/eosakedettournamentselect.h \
-    SAke/eosakestochtournamentselect.h
+    SAke/eosakestochtournamentselect.h \
+    SAke/make_pop_my.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686

@@ -29,7 +29,9 @@ public:
                                       QString pathRains,
                                       QString pathActivation,
                                       QString typeReplacement,
-                                      QString numberElitist
+                                      QString numberElitist,
+                                      QString seed,
+                                      QString saveKernels
                                       );
     int SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                   QString selection,
@@ -52,7 +54,7 @@ public:
                                                   QString pathActivation,
                                                   QString typeReplacement,
                                                   QString numberElitist
-                                                  );
+                                                  , QString seed, QString saveKernels);
     int SaveXMLFileValidationProject(const QString &_projectName,
                                      const QString &filenameRainPath,
                                      const QString &filenameActivaionPath,
@@ -79,7 +81,9 @@ public:
                                      std::vector<std::vector<double> > matrixLinear,
                                      const QVariant &checkControlPointsWithN,
                                      const QVariant &textN,
-                                     const QString typeExecution);
+                                     const QString typeExecution,
+                                     QString typeReplacement,
+                                     QString numberElitist);
 
     int SaveXMLFileAlreadyExistRegressionProject(const QString &_projectName,
                                                  const QString &selection,
@@ -96,7 +100,9 @@ public:
                                                  std::vector<std::vector<double> > matrixLinear,
                                                  const QVariant &checkControlPointsWithN,
                                                  const QVariant &textN,
-                                                 const QString &typeExecution);
+                                                 const QString &typeExecution,
+                                                 QString typeReplacement,
+                                                 QString numberElitist);
 
 
     int findProjectName(QString nameProject);

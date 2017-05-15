@@ -38,7 +38,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                          const QVariant &selectionOrder2,
                          const QVariant &selectionOrder3,
                          const QVariant &selectionOrder4,
-                         const QVariant &numberElitist
+                         const QVariant &numberElitist,
+                         const QVariant &seed,
+                         const QVariant &saveKernels
                          ){
 
     // **** converto e verifico che siano arrrivati dal QML tutti i parametri
@@ -65,7 +67,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                               filename.toString(),
                                                               _filenameActivation.toString(),
                                                               typeAlgorithm.toString(),
-                                                              numberElitist.toString());
+                                                              numberElitist.toString(),
+                                                              seed.toString(),
+                                                              saveKernels.toString());
     }else{
         xmlManager->SaveXMLFileCalibrationProject(_projectName.toString(),
                                                   selection.toString(),
@@ -87,7 +91,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                   filename.toString(),
                                                   _filenameActivation.toString(),
                                                   typeAlgorithm.toString(),
-                                                  numberElitist.toString());
+                                                  numberElitist.toString(),
+                                                  seed.toString(),
+                                                  saveKernels.toString());
     }
     // INIZIO
     QString  sselection          = selection.toString();
@@ -119,30 +125,30 @@ void SAKeStart::InitAlgo(const QVariant &selection,
     float    fpmb                = pmb.toFloat();
     bool     bLastGeneration     = _lastGeneration.toBool();
 
-           qDebug() << "selection arrivato " << selection << "\n";
-           qDebug() << "pattern arrivato " << pattern << "\n";
-           qDebug() << "ipop arrivato " <<   pop << "\n";
-           qDebug() << "imaxGen arrivato " << maxGen << "\n";
-           qDebug() << "itbMax arrivato " <<   tbMax << "\n";
-           qDebug() << "itbMin arrivato " <<   tbMin << "\n";
-           qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
-           qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
-           qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
-           qDebug() << "fpropMutation arrivato " << propMutation << "\n";
-           qDebug() << "fpme arrivato " << pme << "\n";
-           qDebug() << "fpmb arrivato " << pmb << "\n";
-           qDebug() << "filename arrivato " << sfilenameRain << "\n";
-           qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
-           qDebug() << "_projectName  arrivato " << sprojectname << "\n";
-           qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
-           qDebug() << "ipara1 arrivato " << ipara1 << "\n";
-           qDebug() << "ipara2 arrivato " << ipara2 << "\n";
-    qDebug() << "selectionOrder1 arrivato " << selectionOrder1 << "\n";
-    qDebug() << "selectionOrder2 arrivato " << selectionOrder2 << "\n";
-    qDebug() << "selectionOrder3 arrivato " << selectionOrder3 << "\n";
-    qDebug() << "selectionOrder4 arrivato " << selectionOrder4 << "\n";
-    qDebug() << "numberElitist arrivato " << numberElitist << "\n";
-    qDebug() << "tipo arrivato " << tipo << "\n";
+//           qDebug() << "selection arrivato " << selection << "\n";
+//           qDebug() << "pattern arrivato " << pattern << "\n";
+//           qDebug() << "ipop arrivato " <<   pop << "\n";
+//           qDebug() << "imaxGen arrivato " << maxGen << "\n";
+//           qDebug() << "itbMax arrivato " <<   tbMax << "\n";
+//           qDebug() << "itbMin arrivato " <<   tbMin << "\n";
+//           qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
+//           qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
+//           qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
+//           qDebug() << "fpropMutation arrivato " << propMutation << "\n";
+//           qDebug() << "fpme arrivato " << pme << "\n";
+//           qDebug() << "fpmb arrivato " << pmb << "\n";
+//           qDebug() << "filename arrivato " << sfilenameRain << "\n";
+//           qDebug() << "sfilenameActivation arrivato " << sfilenameActivation << "\n";
+//           qDebug() << "_projectName  arrivato " << sprojectname << "\n";
+//           qDebug() << "_numberProcessor arrivato " << inumberProcessor << "\n";
+//           qDebug() << "ipara1 arrivato " << ipara1 << "\n";
+//           qDebug() << "ipara2 arrivato " << ipara2 << "\n";
+//    qDebug() << "selectionOrder1 arrivato " << selectionOrder1 << "\n";
+//    qDebug() << "selectionOrder2 arrivato " << selectionOrder2 << "\n";
+//    qDebug() << "selectionOrder3 arrivato " << selectionOrder3 << "\n";
+//    qDebug() << "selectionOrder4 arrivato " << selectionOrder4 << "\n";
+//    qDebug() << "numberElitist arrivato " << numberElitist << "\n";
+//    qDebug() << "tipo arrivato " << tipo << "\n";
 
     vector<QString> orders;
     orders.push_back(selectionOrder1.toString());
@@ -205,7 +211,8 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                gen,
                                                tb,
                                                deltaCritico,
-                                               momentoDelPrimoOrdine);
+                                               momentoDelPrimoOrdine,
+                                               progressBar);
 
 
             SAKeController * controller = new SAKeController(qCustomPlotFitness,
@@ -237,7 +244,10 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                              update,
                                                              sprojectname,
                                                              orders,
-                                                             itypeAlgorithm);
+                                                             itypeAlgorithm,
+                                                             numberElitist.toInt(),
+                                                             seed.toInt(),
+                                                             saveKernels.toInt());
             controller->setPropSelection(propSelection.toFloat());
             controller->setPlotMobility(qCustomPlotMobilityFunction);
             controller->setPlotkernel(qCustomPlotKernel);
@@ -322,12 +332,7 @@ void SAKeStart::startValidation(
                 validationController->setKernelPlot(qCustomPlotKernel);
                 validationController->updateKernelPlot();
                 SAKeController* tmp =new SAKeController();
-
-
                 threadsController.push_back(tmp);
-
-
-
             }
         }
     //}
@@ -342,9 +347,9 @@ double fRand(double fMin, double fMax)
 }
 
 
-void SAKeStart::startRegression(   const QVariant &_projectaname,
+void SAKeStart::startRegression(const QVariant &_projectaname,
                                    const QVariant &selection,
-                                   const QVariant &selectionElitist,
+                                   const QVariant &elitist,
                                    const QVariant &populationSize,
                                    const QVariant &percentageCrossover,
                                    const QVariant &percentageMutation,
@@ -362,9 +367,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                    const QVariant &textN,
                                    const QVariant &para1,
                                    const QVariant &para2,
-                                   const QVariant &itypeAlgorithm,
-                                   const QVariant &propSelection
-                                   )
+                                   const QVariant &typeReplacement,
+                                   const QVariant &typeProject)
 {
     std::vector<std::vector<double> > matrixGamma1;
     int numberElementsTable = 12;
@@ -373,11 +377,11 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         QList <QVariant> tmpGammat1 = matrxGamma1QML[i].toList();
         std::vector<double> tmp;
         for (int j = 0; j < numberElementsTable; ++j) {
-            cout << tmpGammat1[j].toDouble() << " ";
+            //cout << tmpGammat1[j].toDouble() << " ";
             tmp.push_back(tmpGammat1[j].toDouble());
         }
         matrixGamma1.push_back(tmp);
-        cout << endl;
+        //cout << endl;
     }
 
     std::vector<std::vector<double> > matrixGamma2;
@@ -386,11 +390,11 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         QList <QVariant> tmpGammat2 = matrixGamma2QML[i].toList();
         std::vector<double> tmp;
         for (int j = 0; j < numberElementsTable; ++j) {
-            cout << tmpGammat2[j].toDouble() << " ";
+            //cout << tmpGammat2[j].toDouble() << " ";
             tmp.push_back(tmpGammat2[j].toDouble());
         }
         matrixGamma2.push_back(tmp);
-        cout << endl;
+        //cout << endl;
     }
 
     std::vector<std::vector<double> > matrixLinear;
@@ -399,11 +403,11 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
         QList <QVariant> tmpGammat3 = matrixLinearQML[i].toList();
         std::vector<double> tmp;
         for (int j = 0; j < numberElementsTable; ++j) {
-            cout << tmpGammat3[j].toDouble() << " ";
+            //cout << tmpGammat3[j].toDouble() << " ";
             tmp.push_back(tmpGammat3[j].toDouble());
         }
         matrixLinear.push_back(tmp);
-        cout << endl;
+        //cout << endl;
     }
 
     QString typeExecution="0";
@@ -417,8 +421,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     {
         xmlManager->SaveXMLFileAlreadyExistRegressionProject(_projectaname.toString(),
                                                              selection.toString(),
-                                                             selectionElitist.toString(),
-                                                             "-1",
+                                                             para1.toString(),
+                                                             para2.toString(),
                                                              populationSize.toString(),
                                                              percentageCrossover.toString(),
                                                              percentageMutation.toString(),
@@ -430,14 +434,16 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                                              matrixLinear,
                                                              checkControlPointsWithN,
                                                              textN,
-                                                             typeExecution);
+                                                             typeExecution,
+                                                             typeReplacement.toString(),
+                                                             elitist.toString());
 
 
     }else{
         xmlManager->SaveXMLFileRegressionProject(_projectaname.toString(),
                                                  selection.toString(),
-                                                 selectionElitist.toString(),
-                                                 "-1",
+                                                 para1.toString(),
+                                                 para2.toString(),
                                                  populationSize.toString(),
                                                  percentageCrossover.toString(),
                                                  percentageMutation.toString(),
@@ -449,11 +455,13 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                                  matrixLinear,
                                                  checkControlPointsWithN,
                                                  textN,
-                                                 typeExecution);
+                                                 typeExecution,
+                                                 typeReplacement.toString(),
+                                                 elitist.toString());
     }
 
     QString sselction= selection.toString();
-    int iselectionElitist = selectionElitist.toInt();
+    int ielitist = elitist.toInt();
     int ipopulationSize = populationSize.toInt();
     int imaxGeneration = maxGeneration.toInt();
     double dpercentageCrossover = percentageCrossover.toDouble();
@@ -467,7 +475,7 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
     int n = textN.toInt();
 
     //    qDebug() << "sselction : " << sselction ;
-    //    qDebug() << "iselectionElitist : " << iselectionElitist   ;
+    //    qDebug() << "ielitist : " << ielitist   ;
     //    qDebug() << "ipopulationSize : " << ipopulationSize   ;
     //    qDebug() << "dpercentageCrossover : " << dpercentageCrossover   ;
     //    qDebug() << "dpercentageMutation : " << dpercentageMutation   ;
@@ -513,7 +521,8 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                                              absoluteMaximumFitness,
                                              currentAverageFitness,
                                              absoluteAverageFitness,
-                                             gen);
+                                             gen,
+                                             progressBar);
 
     int dimension=matrixGamma1.size()+matrixGamma2.size()+matrixLinear.size();
     double * weight = new double[dimension];
@@ -644,17 +653,17 @@ void SAKeStart::startRegression(   const QVariant &_projectaname,
                 dimension,
                 size_kernel,
                 kernel,
-                iselectionElitist,
+                ielitist,
                 ipopulationSize,
                 imaxGeneration,
                 dpercentageCrossover,
                 dpercentageMutation,
                 inumberProcessor,
                 translation,
-                propSelection.toInt(),
+                typeReplacement.toInt(),
                 para1.toInt(),
                 para2.toInt(),
-                itypeAlgorithm.toInt(),
+                typeReplacement.toInt(),
                 selection.toString()
                 );
 
@@ -885,8 +894,8 @@ void SAKeStart::openFile(const QVariant &filePath)
 }
 
 void SAKeStart::stopSAKeController(int count){
-    cout << "count " << count << endl;
-    cout << "threadsSakeController.size() " << threadsController.size() << endl;
+//    cout << "count " << count << endl;
+//    cout << "threadsSakeController.size() " << threadsController.size() << endl;
     if(threadsController[count]->isRunning ()){
         ((SAKeController*) threadsController[count])->stopThread();
         while(threadsController[count]->isRunning ()){
@@ -897,8 +906,8 @@ void SAKeStart::stopSAKeController(int count){
     }
 }
 void SAKeStart::stopValidationController(int count){
-    cout << "count " << count << endl;
-    cout << "threadsSakeController.size() " << threadsController.size() << endl;
+//    cout << "count " << count << endl;
+//    cout << "threadsSakeController.size() " << threadsController.size() << endl;
     //        if(threadsController[count]->isRunning ()){
     //            ((ValidationController*)threadsController[count])->stopThread();
     //            while(threadsController[count]->isRunning ()){
@@ -908,8 +917,8 @@ void SAKeStart::stopValidationController(int count){
     threadsController[count]=NULL;
 }
 void SAKeStart::stopRegressionController(int count){
-    cout << "count " << count << endl;
-    cout << "threadsSakeController.size() " << threadsController.size() << endl;
+//    cout << "count " << count << endl;
+//    cout << "threadsSakeController.size() " << threadsController.size() << endl;
     if(threadsController[count]->isRunning ()){
         ((RegressionController*) threadsController[count])->stopThread();
         while(threadsController[count]->isRunning ()){

@@ -90,11 +90,11 @@ public:
 
         if (tb > tb0){
 			tb1 = tb0;
-            double dtb= ((double)tb/tb0);
+            //double dtb= ((double)tb/tb0);
 //            cout << "+  " << tb << "   " << tb0 << "  dtb " << ((double)dtb) << endl;
         }
         else{
-            double dtb=((double) tb/tb0);
+            //double dtb=((double) tb/tb0);
 //            cout << "-  " << tb << "   " << tb0 << "  %dtb " << ((double)dtb)  << endl;
 			tb1 = tb;
         }

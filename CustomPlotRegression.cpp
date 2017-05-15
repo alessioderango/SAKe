@@ -200,7 +200,7 @@ void CustomPlotRegression::setupQuadraticDemo(double * kernely,
     //    customPlot->graph( 0 )->setData( x1, y1 );
     QVector<double> x;
     QVector<double> y;
-    std::cout << "****************************************************************+++" <<endl;
+    //std::cout << "****************************************************************+++" <<endl;
     double maxx= DBL_MIN;
     double maxy= DBL_MIN;
     for (int i = 0; i < size_kernelx; i++) {
@@ -234,7 +234,9 @@ void CustomPlotRegression::setupQuadraticDemo(double * kernely,
 
     customPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables );
     connect( customPlot, SIGNAL( plottableClick( QCPAbstractPlottable*, QMouseEvent* ) ), this, SLOT( graphClicked( QCPAbstractPlottable* ) ) );
-
+    for (int i = 0; i < number_of_function; ++i) {
+            customPlot->addGraph();
+    }
 
 
 }
@@ -273,11 +275,11 @@ void CustomPlotRegression::drawGammaFunctions(QVector<double> x, QVector<int> fu
 
         //        if(x.size() > 20)
         //            m_CustomPlot->xAxis->setRange( 0, x.size() );
-        cout << "PLOT " << endl;
+        //cout << "PLOT " << endl;
         for (int i = 0; i < number_of_function; ++i) {
-            if(first_time){
-                m_CustomPlot->addGraph();
-            }
+//            if(first_time){
+//                m_CustomPlot->addGraph();
+//            }
 
             QVector<double> y(x.size());
 
@@ -308,7 +310,7 @@ void CustomPlotRegression::drawGammaFunctions(QVector<double> x, QVector<int> fu
             }
             //m_CustomPlot->replot();
         }
-        first_time=false;
+//        first_time=false;
     }
 
 }

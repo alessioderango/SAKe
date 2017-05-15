@@ -72,6 +72,22 @@ void getYmDecr(Ym*&ym,int &size){
 }
 
 void ValidationController::updatePlot(){
+
+//    printf("rain_size %d \n",rain_size);
+    //printf("tb %d \n",size);
+
+
+//    for (int i = 0; i < size; i++) {
+//           printf("Fi[%d] %f \n",i, Fi[i]);
+//     myfile <<< "Fi[ " << i<<"] = " << Fi[i] << "\n";
+//    }
+//    printf("tb %d \n",size);
+//    ofstream myfile;
+//    myfile.open ("C:\\Users\\Alessio\\Documents\\workspace\\calibration\\seed1\\validation.csv",ios::out);
+//        for (int i = 0; i < size; i++) {
+//    //           printf("Fi[%d] %f \n",i, Fi[i]);
+//         myfile << "Fi[ " << i<<"] = " << Fi[i] << "\n";
+//        }
     //Calcolo Mobiliy Function
     double * Y = new double[rain_size];
     for (int t = 0; t < rain_size; t++) {
@@ -80,10 +96,14 @@ void ValidationController::updatePlot(){
         for (int r = 0; r < t; r++)
             if ((t - r) < size){
                 ym += Fi[t - r] * rain[r].getRainMm();
+               // myfile << "Fi[t - r] = " << Fi[t - r] << ", rain[r].getRainMm() " << rain[r].getRainMm() << "\n";
             }
+//        myfile << "Y[" << t << "] " << ym << "\n";
         Y[t] = ym;
-    }
 
+
+    }
+//    myfile.close();
 
     double f=0;
     Ym * ym= new Ym[rain_size];
@@ -103,7 +123,6 @@ void ValidationController::updatePlot(){
 
 //        for (int i = 0; i < countYm; i++) {
 //               printf("ym[%d] %f \n",i, ym[i].getValue());
-
 //        }
 //        printf("countYm %d \n",countYm);
 
@@ -111,7 +130,7 @@ void ValidationController::updatePlot(){
     double YsMin = 999999999;
     int iMin =-1;
     std::vector<Ym> bests;
-    printf("activations_size %d \n",activations_size);
+//    printf("activations_size %d \n",activations_size);
     for (int s = 0; s < activations_size; s++) {
         for (int i = 0; i < countYm; i++) {
             //TODO inserire variabili intervallo giorni
@@ -120,11 +139,11 @@ void ValidationController::updatePlot(){
             if(result1>=-2 && result2>=-1){
                 //if(i<countYm)
                 //if(i<(activations_size)){
-                    printf("i %d \n",i);
+//                    printf("i %d \n",i);
 
                     f += 1 / (double)(i + 1);
-                    printf("f %f \n",f);
-                    fflush( stdout );
+//                    printf("f %f \n",f);
+                    //fflush( stdout );
                     bests.push_back(ym[i]);
 //                        int year = ym[i].getTime().tm_year +1900;
 //                        int mon = ym[i].getTime().tm_mon +1;
@@ -143,9 +162,17 @@ void ValidationController::updatePlot(){
             }//if
         }//for
     }//for
+    if(iMin < 0)  iMin = 0;
+    if(iMin > countYm-1)  iMin = countYm-1;
+    int index=(iMin+1);
+
+    double dYcr = (YsMin-ym[index].getValue())/YsMin;
+//    printf("dYcr %f \n",dYcr);
+//    printf("YsMin %f \n",YsMin);
+//    printf("YsMin2 %f \n",ym[index].getValue());
     Ym ymMin= ym[iMin];
     Ym ymMin2 = ym[iMin+1];
-    double dYcr = (ymMin.getValue()-ymMin2.getValue())/ymMin2.getValue();
+
     // tb = this->size
     double momentoDelPrimoOrdine = 0;
     for (int i = 0; i < size; i++) {
@@ -153,10 +180,11 @@ void ValidationController::updatePlot(){
     }
 
     double fMax=0;
-   // printf("activations_size %d \n",activations_size);
+//    printf("activations_size %d \n",activations_size);
     for (int i = 1; i <= activations_size; i++) {
         fMax +=(double)(1/(double)i);
     }
+//    printf("f %f fMax %f fitness = %f \n",f,fMax,(double) (f/fMax));
 
     QString fitnessString= QString("Fitness :    %1").arg((double) (f/fMax));
     this->fitness->setProperty("text",fitnessString);

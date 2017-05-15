@@ -64,7 +64,7 @@ public :
     void operator()(eoPop<EOT>& _pop)
     {
         //_pop.printOn(std::cout);
-        numberElitist=8;
+        //numberElitist=8;
 
 
         do
@@ -72,6 +72,7 @@ public :
             eoPop<EOT> offspring;
             eoPop<EOT> matingPool;
             offspring.resize(_pop.size());
+            //matingPool.resize(_pop.size());
 
             select(_pop, matingPool);
 
@@ -133,7 +134,7 @@ public :
             //            }
 
 
-            for (unsigned int i=numberElitist; i< matingPool.size(); i++){
+            for (unsigned int i=numberElitist; i< offspring.size(); i++){
 
 //                std::cout << "ELITISTI!!!!!!! " << " " << std::endl;
 //                typename eoPop<EOT>::iterator replace = _pop.begin() + i;

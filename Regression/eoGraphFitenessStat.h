@@ -13,7 +13,7 @@
 #include "CustomPlotItem.h"
 #include "CustomPlotRegression.h"
 #include "update.h"
-
+#include <QtConcurrent/QtConcurrent>
 
 
 template <class EOT>
@@ -50,7 +50,7 @@ public:
         absoluteMaximumFitness=_absoluteMaximumFitness;
         currentAverageFitness= _currentAverageFitness;
         absoluteAverageFitness=_absoluteAverageFitness;
-        AbsoluteMaximumFitness=-DBL_MIN;
+        AbsoluteMaximumFitness= - 1000000;
         AbsoluteAvarageFitness=-DBL_MIN;
         update=_update;
         //dsakecontroller =_sakecontroller;
@@ -75,7 +75,7 @@ private :
     void doit(const eoPop<EOT>& _pop, T)
     { // find the largest elements
         //value() = _pop.best_element().fitness();
-
+        //Sleep(uint(1000));
         count++;
         double fitness =_pop.best_element().fitness();
 
@@ -103,13 +103,24 @@ private :
             functiontype[i]= _pop.best_element().getFunctionTypeConst(i);
         }
 
-        if(_pop.size() < 200 && steps%200 ==0){
-            qCustomPlotRegression->drawGammaFunctions(xRegretmp,functiontype,parameter);
-            qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+
+
+        if(_pop.size() < 200 && steps%50 ==0){
+//            p.waitForFinished();
+            //qCustomPlotRegression->drawGammaFunctions(xRegretmp,functiontype,parameter);
+//            p = QtConcurrent::run(qCustomPlotRegression,qCustomPlotRegression->updateGraph1,xRegretmp,yRegretmp);
+//            p.waitForFinished();
+            //qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+            auto p = QtConcurrent::run(qCustomPlotRegression,qCustomPlotRegression->updateGraph1,xRegretmp,yRegretmp);
+            p.waitForFinished();
+            p = QtConcurrent::run(qCustomPlotRegression,qCustomPlotRegression->drawGammaFunctions,xRegretmp,functiontype,parameter);
+            p.waitForFinished();
         }
         else
             if(_pop.size() >200){
-                qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
+//                 p = QtConcurrent::run(qCustomPlotRegression,qCustomPlotRegression->updateGraph1,xRegretmp,yRegretmp);
+//                 p.waitForFinished();
+                //qCustomPlotRegression->updateGraph1(xRegretmp,yRegretmp);
             }
 
 
@@ -126,27 +137,38 @@ private :
         //       }
 
         QString genString= QString("Gen:    %1").arg(steps);
-        Q_EMIT update->valueGenRegression(genString);
+        auto p =QtConcurrent::run(update,update->valueGenRegression,genString);
+        p.waitForFinished();
+        //Q_EMIT update->valueGenRegression(genString);
         QString currentMaxiumFitness= QString("Current Maximum Fitness:    %1").arg(fitness );
-        Q_EMIT update->valueCurrentMaximumFitnessRegression(currentMaxiumFitness);
+        p=QtConcurrent::run(update,update->valueCurrentMaximumFitnessRegression,currentMaxiumFitness);
+        p.waitForFinished();
+        //Q_EMIT update->valueCurrentMaximumFitnessRegression(currentMaxiumFitness);
         QString currentAvarageFitness= QString("Current Average Fitness:    %1").arg( v / _pop.size() );
-        Q_EMIT update->valueCurrentAvarageFitnessRegression(currentAvarageFitness);
+        p=QtConcurrent::run(update,update->valueCurrentAvarageFitnessRegression,currentAvarageFitness);
+        p.waitForFinished();
+        //Q_EMIT update->valueCurrentAvarageFitnessRegression(currentAvarageFitness);
         if(AbsoluteAvarageFitness < ( v / _pop.size())){
             QString tmpAvarage= QString("Absolute Average Fitness:       %1").arg( v / _pop.size() );
-            Q_EMIT update->valueAbsoluteAvarageFitnessRegression(tmpAvarage);
+            p=QtConcurrent::run(update,update->valueAbsoluteAvarageFitnessRegression,tmpAvarage);
+            p.waitForFinished();
+            //Q_EMIT update->valueAbsoluteAvarageFitnessRegression(tmpAvarage);
             AbsoluteAvarageFitness=( v / _pop.size());
         }
 
         if(AbsoluteMaximumFitness < fitness){
             QString tmpAvarage= QString("Absolute Maximum Fitness:    %1").arg(fitness );
-            Q_EMIT update->valueAbsoluteMaximumFitnessRegression(tmpAvarage);
+            p=QtConcurrent::run(update,update->valueAbsoluteMaximumFitnessRegression,tmpAvarage);
+            p.waitForFinished();
+            //Q_EMIT update->valueAbsoluteMaximumFitnessRegression(tmpAvarage);
             AbsoluteMaximumFitness=fitness;
         }
 
         steps++;
         //       cout << (steps*100)/maxGen << endl;
-        progressBar->setProperty("value",((steps*100)/maxGen));
-
+        //progressBar->setProperty("value",((steps*100)/maxGen));
+        p=QtConcurrent::run(update,update->valueProgressBar,QString("%1").arg((steps*100)/maxGen));
+        p.waitForFinished();
     }
     int count;
     QVector<double> x;

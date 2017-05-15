@@ -21,13 +21,15 @@ public:
                    QObject *__absoluteMaximumFitnessRegression,
                    QObject *__currentAverageFitnessRegression,
                    QObject *__absoluteAverageFitnessRegression,
-                   QObject *__genRegression);
+                   QObject *__genRegression,
+                   QObject * progressBar);
     UpdateProjects(Update *_update);
     void UpdateProjectsRegression(QObject *__currentMaximumFitnessRegression,
                                   QObject *__absoluteMaximumFitnessRegression,
                                   QObject *__currentAverageFitnessRegression,
                                   QObject *__absoluteAverageFitnessRegression,
-                                  QObject *__genRegression);
+                                  QObject *__genRegression,
+                                  QObject *_progressBar);
     void UpdateProjectsSAke(QObject *__currentMaximumFitness,
                             QObject *__absoluteMaximumFitness,
                             QObject *__currentAverageFitness,
@@ -35,7 +37,8 @@ public:
                             QObject *__gen,
                             QObject *__tb,
                             QObject *__deltaCritico,
-                            QObject *__momentoDelPrimoOrdine);
+                            QObject *__momentoDelPrimoOrdine,
+                            QObject *_progressBar);
 
 
 public slots:
@@ -47,6 +50,7 @@ public slots:
     void updateTb(QString s);
     void updateDeltaCritico(QString s);
     void updateMomentoDelPrimoOrdine(QString s);
+    void updateProgressBar(QString s);
 
     void updateCurrentMaximumFitnessRegression(QString);
     void updateAbsoluteMaximumFitnessRegression(QString);
@@ -64,6 +68,7 @@ private:
     QObject *_deltaCritico;
     QObject *_momentoDelPrimoOrdine;
     Update * update;
+    QObject * progressBar;
 
     QObject *_currentMaximumFitnessRegression;
     QObject *_absoluteMaximumFitnessRegression;

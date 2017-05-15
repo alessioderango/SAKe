@@ -4,7 +4,7 @@ TableModel::TableModel(QObject *parent) :
     QStandardItemModel(1,9,parent)
 {
 
-    std::cout << "Entrato" << std::endl;
+//    std::cout << "Entrato" << std::endl;
     m_roleNameMapping[TableModel_Role_Name] = "name_role";
     m_roleNameMapping[TableModel_Role_Description] = "description_role";
     for(int row = 0; row < 1; row++)

@@ -83,13 +83,13 @@ void CustomPlotMobilityFunction::paint( QPainter* painter )
 
 void CustomPlotMobilityFunction::mousePressEvent( QMouseEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO;
     routeMouseEvents( event );
 }
 
 void CustomPlotMobilityFunction::mouseReleaseEvent( QMouseEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
+    //qDebug() << Q_FUNC_INFO;
     routeMouseEvents( event );
 }
 

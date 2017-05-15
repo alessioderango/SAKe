@@ -96,7 +96,7 @@ public:
                              int parametersSize,
                              int sizeKernel,
                              double *kernel,
-                             int iselectionElitist,
+                             int ielitist,
                              int ipopulationSize,
                              int imaxGeneration,
                              double dpercentageCrossover,
@@ -184,7 +184,7 @@ private:
     QObject *currentAverageFitness;
     QObject *absoluteAverageFitness;
 
-    int selectionElitist;
+    int elitist;
     int populationSize;
     int maxGeneration;
     double percentageCrossover;
@@ -193,7 +193,7 @@ private:
     std::vector< double> x;
     std::vector< double> y;
 
-    unsigned int typeAlgorithm;
+    unsigned int typeReplacement;
     double parameter1;
     double parameter2;
     float  propSelection;

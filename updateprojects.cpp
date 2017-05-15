@@ -12,7 +12,8 @@ void UpdateProjects::UpdateProjectsSAke(QObject *__currentMaximumFitness,
                                         QObject *__gen,
                                         QObject *__tb,
                                         QObject *__deltaCritico,
-                                        QObject *__momentoDelPrimoOrdine)
+                                        QObject *__momentoDelPrimoOrdine,
+                                        QObject *_progressBar)
 {
     _currentMaximumFitness = __currentMaximumFitness;
     _absoluteMaximumFitness = __absoluteMaximumFitness;
@@ -22,6 +23,7 @@ void UpdateProjects::UpdateProjectsSAke(QObject *__currentMaximumFitness,
     _tb=__tb;
     _deltaCritico=__deltaCritico;
     _momentoDelPrimoOrdine=__momentoDelPrimoOrdine;
+    progressBar = _progressBar;
 
     QObject::connect(update, SIGNAL(valueCurrentMaximumFitness(QString)),this, SLOT( updateCurrentMaximumFitness(QString)));
     QObject::connect(update, SIGNAL(valueAbsoluteMaximumFitness(QString)),this, SLOT( updateAbosulteMaximumFitness(QString)));
@@ -31,6 +33,7 @@ void UpdateProjects::UpdateProjectsSAke(QObject *__currentMaximumFitness,
     QObject::connect(update, SIGNAL(valueTb(QString)),this, SLOT( updateTb(QString)));
     QObject::connect(update, SIGNAL(valueDeltaCritico(QString)),this, SLOT( updateDeltaCritico(QString)));
     QObject::connect(update, SIGNAL(valueMomentoDelPrimoOrdine(QString)),this, SLOT( updateMomentoDelPrimoOrdine(QString)));
+    QObject::connect(update, SIGNAL(valueProgressBar(QString)),this, SLOT( updateProgressBar(QString)));
 
 }
 
@@ -38,19 +41,23 @@ void UpdateProjects::UpdateProjectsRegression(QObject *__currentMaximumFitnessRe
                                               QObject *__absoluteMaximumFitnessRegression,
                                               QObject *__currentAverageFitnessRegression,
                                               QObject *__absoluteAverageFitnessRegression,
-                                              QObject *__genRegression)
+                                              QObject *__genRegression,
+                                              QObject *_progressBar)
 {
     _currentMaximumFitnessRegression = __currentMaximumFitnessRegression;
     _absoluteMaximumFitnessRegression = __absoluteMaximumFitnessRegression;
     _currentAverageFitnessRegression= __currentAverageFitnessRegression;
     _absoluteAverageFitnessRegression = __absoluteAverageFitnessRegression;
     _genRegression = __genRegression;
+    progressBar = _progressBar;
 
     QObject::connect(update, SIGNAL(valueCurrentMaximumFitnessRegression(QString)),this, SLOT( updateCurrentMaximumFitnessRegression(QString)));
     QObject::connect(update, SIGNAL(valueAbsoluteMaximumFitnessRegression(QString)),this, SLOT( updateAbsoluteMaximumFitnessRegression(QString)));
     QObject::connect(update, SIGNAL(valueCurrentAvarageFitnessRegression(QString)),this, SLOT( updateCurrentAvarageFitnessRegression(QString)));
     QObject::connect(update, SIGNAL(valueAbsoluteAvarageFitnessRegression(QString)),this, SLOT( updateAbsoluteAvarageFitnessRegression(QString)));
     QObject::connect(update, SIGNAL(valueGenRegression(QString)),this, SLOT( updateGenRegression(QString)));
+    QObject::connect(update, SIGNAL(valueProgressBar(QString)),this, SLOT( updateProgressBar(QString)));
+
 }
 
 UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
@@ -67,7 +74,7 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
                                QObject *__currentAverageFitnessRegression,
                                QObject *__absoluteAverageFitnessRegression,
                                QObject *__genRegression
-                               )
+                               , QObject *_progressBar)
 {
 
     _currentMaximumFitness = __currentMaximumFitness;
@@ -80,6 +87,7 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
     _momentoDelPrimoOrdine=__momentoDelPrimoOrdine;
 
     update=_update;
+    progressBar = _progressBar;
     QObject::connect(update, SIGNAL(valueCurrentMaximumFitness(QString)),this, SLOT( updateCurrentMaximumFitness(QString)));
     QObject::connect(update, SIGNAL(valueAbsoluteMaximumFitness(QString)),this, SLOT( updateAbosulteMaximumFitness(QString)));
     QObject::connect(update, SIGNAL(valueCurrentAvarageFitness(QString)),this, SLOT( updateCurrentAvarageFitness(QString)));
@@ -89,6 +97,7 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
     QObject::connect(update, SIGNAL(valueDeltaCritico(QString)),this, SLOT( updateDeltaCritico(QString)));
     QObject::connect(update, SIGNAL(valueMomentoDelPrimoOrdine(QString)),this, SLOT( updateMomentoDelPrimoOrdine(QString)));
 
+    QObject::connect(update, SIGNAL(valueProgressBar(QString)),this, SLOT( updateProgressBar(QString)));
 
     _currentMaximumFitnessRegression = __currentMaximumFitnessRegression;
     _absoluteMaximumFitnessRegression = __absoluteMaximumFitnessRegression;
@@ -102,6 +111,10 @@ UpdateProjects::UpdateProjects(QObject *__currentMaximumFitness,
     QObject::connect(update, SIGNAL(valueAbsoluteAvarageFitnessRegression(QString)),this, SLOT( updateAbsoluteAvarageFitnessRegression(QString)));
     QObject::connect(update, SIGNAL(valueGenRegression(QString)),this, SLOT( updateGenRegression(QString)));
 
+}
+
+void UpdateProjects::updateProgressBar(QString s){
+    progressBar->setProperty("value",s);
 }
 
 void UpdateProjects::updateCurrentMaximumFitness(QString s){

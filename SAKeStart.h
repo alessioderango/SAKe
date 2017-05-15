@@ -103,8 +103,10 @@ public slots:
                   const QVariant &selectionOrder1,
                   const QVariant &selectionOrder2,
                   const QVariant &selectionOrder3,
-                  const QVariant &selectionOrder4
-                  , const QVariant &numberElitist);
+                  const QVariant &selectionOrder4,
+                  const QVariant &numberElitist,
+                  const QVariant &seed,
+                  const QVariant &saveKernels);
     void startValidation(
             const QVariant &_projectName,
             const QVariant &filenameRainPath,
@@ -132,8 +134,8 @@ public slots:
                          const QVariant &textN,
                          const QVariant &para1,
                          const QVariant &para2,
-                         const QVariant &propSelection,
-                         const QVariant &typeAlgorithm);
+                         const QVariant &typeReplacement,
+                         const QVariant &typeProject);
 
 
 
