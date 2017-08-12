@@ -46,11 +46,21 @@ void Validation::on_buttonBox_accepted()
     std::vector<double> Fi;
     int size_Fi;
     double zCr;
-
-    int errorRain = HandlerCSV::loadCSVRain(ui->lineEdit_rain->text(), rain, rain_size);
-    //    if(errorRain){
-    int errorActivation = HandlerCSV::loadCSVActivation(ui->lineEdit_activation->text(), activation, activation_size);
-    //        if(errorActivation){
+    int rowError=0;
+    QString e;
+     QString rainPath = ui->lineEdit_rain->text();
+    connect(this, SIGNAL(showAlertInputCsv(int,QString,QString)), mainWindow, SLOT(showAlertInputCsv(int,QString,QString))) ;
+    int errorRain = HandlerCSV::loadCSVRain(ui->lineEdit_rain->text(), rain, rain_size, rowError, e);
+        if(errorRain==0){
+            emit showAlertInputCsv(rowError,rainPath, e);
+            return;
+        }
+        QString actPath = ui->lineEdit_activation->text();
+    int errorActivation = HandlerCSV::loadCSVActivation(actPath, activation, activation_size, rowError, e);
+    if(errorActivation ==0){
+        emit showAlertInputCsv(rowError,actPath, e);
+        return;
+    }
     int errorKernel = HandlerCSV::loadCSVKernel(ui->lineEdit_kernel->text(), Fi, size_Fi,zCr);
     //            if(errorKernel){
     if(ui->lineEditProjName->isReadOnly() )
@@ -84,8 +94,8 @@ void Validation::on_buttonBox_accepted()
     qRegisterMetaType<std::vector<QCPItemText*>>("std::vector<QCPItemText*>");
     qRegisterMetaType<std::vector<double>>("std::vector<double>");
     qRegisterMetaType<QVector<double>>("QVector<double>");
-    connect(validationController, SIGNAL(updateMobPlot(int,Rain * , int , std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
-                                                       std::vector<QCPItemLine*> )), mainWindow, SLOT(updateMobPlot(int,Rain * , int , std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
+    connect(validationController, SIGNAL(updateMobPlot(int,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
+                                                       std::vector<QCPItemLine*> )), mainWindow, SLOT(updateMobPlot(int,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
                                                                                                                     std::vector<QCPItemLine*> )));
 
 

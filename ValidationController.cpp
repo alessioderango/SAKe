@@ -260,7 +260,7 @@ void ValidationController::startValidation(){
         mutex->lock();
         ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
 
-        emit this->updateMobPlot(pos,rain,rain_size,Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray,arrowArray);
+        emit this->updateMobPlot(pos,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray,arrowArray);
 
         emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 

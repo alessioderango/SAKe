@@ -37,6 +37,8 @@ private slots:
     void on_buttonBox_accepted();
 
     void on_buttonBox_rejected();
+signals:
+    void showAlertInputCsv(int row,QString a, QString e);
 
 private:
     Ui::Validation *ui;

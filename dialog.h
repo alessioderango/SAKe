@@ -50,6 +50,9 @@ private slots:
 
     void on_comboBoxReplacement_currentIndexChanged(int index);
 
+signals:
+    void showAlertInputCsv(int row,QString a,  QString e);
+
 private:
     Ui::Dialog *ui;
     QTabWidget * tab;

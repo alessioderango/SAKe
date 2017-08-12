@@ -54,7 +54,7 @@ bool testDirRes(std::string _dirName, bool _erase);
  * @ingroup Builders
  */
 template <class EOT>
-eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser, eoState& _state, eoValueParam<unsigned long>& _eval, eoContinue<EOT>& _continue, Rain* rain,int rain_size,int maxGen, SAKeController* s)
+eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser, eoState& _state, eoValueParam<unsigned long>& _eval, eoContinue<EOT>& _continue, Rain* rain,int rain_size,Activation * activation, int act_size,int maxGen, SAKeController* s)
 {
     // first, create a checkpoint from the eoContinue
     eoCheckPoint<EOT> *checkpoint = new eoCheckPoint<EOT>(_continue);
@@ -132,7 +132,7 @@ eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser, eoState& _state, eoV
     if ( printBestParam.value() || plotBestParam.value() || fileBestParam.value() )
     // we need the bestStat for at least one of the 3 above
     {
-        bestStat = new eoGraphFitnessStat<EOT>(maxGen,rain,rain_size,s);
+        bestStat = new eoGraphFitnessStat<EOT>(maxGen,rain,rain_size,activation, act_size,s);
         // store it
         _state.storeFunctor(bestStat);
         // add it to the checkpoint

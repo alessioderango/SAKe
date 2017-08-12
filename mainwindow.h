@@ -58,6 +58,8 @@ private slots:
     void updateMobPlot(int indexTab,
                                     Rain * rain,
                                     int rain_size,
+                                    Activation *,
+                                    int,
                                     std::vector<double> Y,
                                     double,
                                     tm,
@@ -111,6 +113,7 @@ private slots:
     void contextMenuRequestMobilityFunction(QPoint pos);
     void contextMenuRequestKernel(QPoint pos);
     void contextMenuRequestFitness(QPoint pos);
+    void showAlertInputCsv(int row, QString filename , QString e);
 
 signals:
      void expandTreeViewSignals();

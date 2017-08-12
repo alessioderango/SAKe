@@ -699,7 +699,7 @@ void XMLManager::ReadCalibrationProjectXML()
     QTreeWidgetItem * regre = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Regression")));
 
     treeview->insertTopLevelItem(0, vali);
-    treeview->insertTopLevelItem(0, regre);
+//    treeview->insertTopLevelItem(0, regre);
     treeview->insertTopLevelItem(0, cali);
 
     for (int i = 0; i < calibrationProject.length(); i++) {
@@ -708,13 +708,13 @@ void XMLManager::ReadCalibrationProjectXML()
         cali->addChild(tmp);
      }
 
-    QDomNodeList regressionProject = documentElement.elementsByTagName("RegressionProject");
+//    QDomNodeList regressionProject = documentElement.elementsByTagName("RegressionProject");
 
-    for (int i = 0; i < regressionProject.length(); i++) {
-        QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue()));
-        tmp->setData(0, Qt::UserRole,regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue());
-        regre->addChild(tmp);
-     }
+//    for (int i = 0; i < regressionProject.length(); i++) {
+//        QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue()));
+//        tmp->setData(0, Qt::UserRole,regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue());
+//        regre->addChild(tmp);
+//     }
 
     QDomNodeList validationProject = documentElement.elementsByTagName("ValidationProject");
     for (int i = 0; i < validationProject.length(); i++) {

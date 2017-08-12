@@ -230,6 +230,8 @@ void SAKeController::startAlgorithm()
                                                                 term,
                                                                 rain,
                                                                 rain_size,
+                                                                activations,
+                                                                activations_size,
                                                                 this->maxGen,
                                                                 this);
         // algorithm (need the operator!)

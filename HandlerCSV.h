@@ -20,8 +20,8 @@ class HandlerCSV
 public:
     HandlerCSV();
     static void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);
-    static int loadCSVRain(QString fileurl, Rain * &rain, int &size);
-    static int loadCSVActivation(QString fileurl, Activation *&activation, int &activation_size);
+    static int loadCSVRain(QString fileurl, Rain * &rain, int &size, int &row, QString &_e);
+    static int loadCSVActivation(QString fileurl, Activation *&activation, int &activation_size,int &row, QString&  _e);
     static int loadCSVKernel(QString fileurl,double *& Fi,int & size, double & zCr,QObject * errorHandler);
     static int loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & size, double & zCr);
     static int loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFromFile, int& numberGen);

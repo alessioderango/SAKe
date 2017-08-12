@@ -29,7 +29,7 @@ void HandlerCSV::ReplaceStringInPlace(std::string& subject, const std::string& s
     }
 }
 
-int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size)
+int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QString&  _e)
 {
 
 
@@ -56,10 +56,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size)
     for(unsigned int i =0; i < rows.size();i++){
         double mm = atof(rows[i].at(1).c_str());
         string date =  rows[i].at(0);
-        //string a =" 00:00:00.000";
-        //date+=a;
 
-       // cout << "mm " << mm << " date " << date << endl;
         ptime rain0;
         try{
             rain0 = time_from_string(date);
@@ -67,7 +64,8 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size)
             size++;
 
         }catch(std::exception& e){
-
+            _e.append(e.what());
+            row = i;
             return 0;
         }
     }
@@ -77,7 +75,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size)
 }
 
 
-int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &activation_size)
+int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &activation_size,int &row, QString& _e)
 {
 
     //    qDebug() << "Entrato in loadCSV";
@@ -119,7 +117,8 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
 
     }catch(std::exception& e){
         //std::cout << "  Exception: " <<  e.what() << std::endl;
-
+            _e.append(e.what());
+            row = i;
         return 0;
     }
     }

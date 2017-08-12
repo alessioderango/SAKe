@@ -71,6 +71,8 @@ signals:
     void updateMobPlot(int indexTab,
                        Rain * rain,
                        int rain_size,
+                       Activation * a,
+                       int act_size,
                        std::vector<double> Y,
                        double,
                        tm,

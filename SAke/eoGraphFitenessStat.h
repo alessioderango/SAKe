@@ -29,12 +29,16 @@ public:
     eoGraphFitnessStat();
     eoGraphFitnessStat(int _maxGen,
                        Rain*& rain,
-                       int& size,SAKeController* s,
+                       int& size,
+                       Activation *_activation,
+                       int _activation_size,SAKeController* s,
     std::string _description = "Best ")
         : eoStat<EOT, Fitness>(Fitness(), _description)
     {
         P=rain;
         rain_size=size;
+        activation =_activation;
+        activation_size = _activation_size;
         count=0;
         steps= 1;
         maxGen = _maxGen;
@@ -90,7 +94,7 @@ private :
         ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
 
         cout << "aggiorno " << pos << endl;
-       emit controller->updateMobPlot(pos,P,rain_size,Y,best_element.getYmMinConst().getValue(),best_element.getYmMinConst().getTime(), best_element.getYmMin2Const().getValue(), best_element.getYmMin2Const().getTime(),best_element.getBestsConst(),controller->widgetArray, controller->arrowArray);
+       emit controller->updateMobPlot(pos,P,rain_size,activation, activation_size, Y,best_element.getYmMinConst().getValue(),best_element.getYmMinConst().getTime(), best_element.getYmMin2Const().getValue(), best_element.getYmMin2Const().getTime(),best_element.getBestsConst(),controller->widgetArray, controller->arrowArray);
 
        emit controller->updateKernelPlot(pos,QVector<double>::fromStdVector(best_element.getFiConst()),best_element.getSizeConst());
 
@@ -127,6 +131,8 @@ private :
 
     Rain * P;
     int rain_size;
+    Activation *activation;
+    int activation_size;
     int steps ;
     int maxGen;
     int firstOccurance;
