@@ -172,7 +172,7 @@ void CustomPlotRegression::updateCustomPlotSize()
 
     if (m_CustomPlot)
     {
-        // std::cout << " width() "<< width() << "  height() " << height() << std::endl;
+        std::cout << "Regression width() "<< width() << "  height() " << height() << std::endl;
         m_CustomPlot->setGeometry( 0, 0, width(), height() );
         m_CustomPlot->setViewport(QRect(0, 0, (int)width(), (int)height()));
     }
@@ -196,7 +196,7 @@ void CustomPlotRegression::setupQuadraticDemo(double * kernely,
     QVector<double> x1( 0 ), y1( 0 );   // initialize with entries 0..100
     customPlot->addGraph();
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
-    customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     //    customPlot->graph( 0 )->setData( x1, y1 );
     QVector<double> x;
     QVector<double> y;
@@ -220,7 +220,7 @@ void CustomPlotRegression::setupQuadraticDemo(double * kernely,
 
     customPlot->addGraph();
     customPlot->graph( 1 )->setPen( QPen( Qt::green ) );
-    customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     //    customPlot->graph( 1 )->setData( x1, y1 );
     customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
 

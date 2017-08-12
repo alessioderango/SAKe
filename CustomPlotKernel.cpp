@@ -123,7 +123,7 @@ void CustomPlotKernel::updateCustomPlotSize()
 
     if (m_CustomPlot)
     {
-        // std::cout << " width() "<< width() << "  height() " << height() << std::endl;
+         std::cout << "Kernel  width() "<< width() << "  height() " << height() << std::endl;
         m_CustomPlot->setGeometry( 0, 0, width(), height() );
         m_CustomPlot->setViewport(QRect(0, 0, (int)width(), (int)height()));
 
@@ -169,8 +169,6 @@ void CustomPlotKernel::setupQuadraticDemo( QCustomPlot* customPlot )
 
 
     myBars = new QCPBars(customPlot->xAxis, customPlot->yAxis);
-    customPlot->addPlottable(myBars);
-    // now we can modify properties of myBars:
     myBars->setName("Bars Series 1");
     //    QVector<double> keyData;
     //    QVector<double> valueData;

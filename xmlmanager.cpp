@@ -1,6 +1,6 @@
 #include "xmlmanager.h"
 
-XMLManager::XMLManager(QObject *_listProjects)
+XMLManager::XMLManager()
 {
 
 #ifdef __arm__ //on the target

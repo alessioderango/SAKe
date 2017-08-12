@@ -54,7 +54,7 @@ class SAKeController: public QThread
        Q_OBJECT
 
 public:
-    SAKeController(CustomPlotItem *& qCustomPlot,
+    SAKeController(
                    QString  sselection,
                    QString  spattern,
                    Rain *rain,
@@ -96,6 +96,7 @@ public:
     void setApplication(QApplication * _a);
     CustomPlotKernel *getPlotkernel() const;
     void setPlotkernel(CustomPlotKernel *value);
+     void setPlotGenerations(CustomPlotItem *value);
     void setProgressBar(QObject* progressBar);
     int getCsvHandlerstatusRain() const;
     void setCsvHandlerstatusRain(int value);

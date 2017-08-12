@@ -185,9 +185,9 @@ void SAKeStart::InitAlgo(const QVariant &selection,
 
             //identifico i puntatori agli oggetti che in seguito dovrò aggiornare
             //INIZIO
-            CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(idProject));
-            CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
-            CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
+//            CustomPlotItem *qCustomPlotFitness = rootObject->findChild<CustomPlotItem*>(QString("customPlotFitness%1").arg(idProject));
+//            CustomPlotMobilityFunction *qCustomPlotMobilityFunction = rootObject->findChild<CustomPlotMobilityFunction*>( QString("customPlotMobilityFunction%1").arg(idProject) );
+//            CustomPlotKernel *qCustomPlotKernel = rootObject->findChild<CustomPlotKernel*>(QString("customPlotKernel%1").arg(idProject) );
             QObject *gen = rootObject->findChild<QObject*>(QString("gen%1").arg(idProject));
             QObject *currentMaximumFitness = rootObject->findChild<QObject*>(QString("currentMaximumFitness%1").arg(idProject));
             QObject *absoluteMaximumFitness = rootObject->findChild<QObject*>(QString("absoluteMaximumFitness%1").arg(idProject));
@@ -215,8 +215,7 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                progressBar);
 
 
-            SAKeController * controller = new SAKeController(qCustomPlotFitness,
-                                                             sselection,
+            SAKeController * controller = new SAKeController(sselection,
                                                              spattern,
                                                              rain,
                                                              rain_size,
@@ -248,9 +247,10 @@ void SAKeStart::InitAlgo(const QVariant &selection,
                                                              numberElitist.toInt(),
                                                              seed.toInt(),
                                                              saveKernels.toInt());
+//            controller->setPlotGenerations(qCustomPlotFitness);
             controller->setPropSelection(propSelection.toFloat());
-            controller->setPlotMobility(qCustomPlotMobilityFunction);
-            controller->setPlotkernel(qCustomPlotKernel);
+//            controller->setPlotMobility(qCustomPlotMobilityFunction);
+//            controller->setPlotkernel(qCustomPlotKernel);
             controller->setApplication(a);
             progressBar->setProperty("maximumValue",100);
             progressBar->setProperty("minimumValue",0);

@@ -13,7 +13,7 @@ SAKeController::SAKeController(){
 
 }
 
-SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
+SAKeController::SAKeController(
                                QString  sselection,
                                QString  spattern,
                                Rain *rain,
@@ -56,8 +56,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     typeAlgorithm =itypeAlgorithm;
     this->start=false;
     this->finish=true;
-    qCustomPlot = _qCustomPlot;
-    qCustomPlot->initCustomPlotFitness();
+
     seed =_seed;
     saveKernels = _saveKernels;
 
@@ -153,6 +152,8 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
         lastGeneration = _lastGeneration;
     }else
         lastGeneration = false;
+
+
 
 
 }
@@ -334,6 +335,12 @@ void SAKeController::setPlotkernel(CustomPlotKernel *value)
 {
     plotkernel = value;
     plotkernel->initCustomPlotFitness();
+}
+
+void SAKeController::setPlotGenerations(CustomPlotItem *value)
+{
+   qCustomPlot = value;
+   qCustomPlot->initCustomPlotFitness();
 }
 
 void SAKeController::setPlotMobility(CustomPlotMobilityFunction *value)

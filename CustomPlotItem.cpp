@@ -131,12 +131,12 @@ void CustomPlotItem::setupQuadraticDemo( QCustomPlot* customPlot )
     QVector<double> x1( 0 ), y1( 0 );   // initialize with entries 0..100
     customPlot->addGraph();
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
-    customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->graph( 0 )->setData( x1, y1 );
 
     customPlot->addGraph();
     customPlot->graph( 1 )->setPen( QPen( Qt::green ) );
-    customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->graph( 1 )->setData( x1, y1 );
 
     // give the axes some labels:

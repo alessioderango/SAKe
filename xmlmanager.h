@@ -7,7 +7,7 @@
 class XMLManager
 {
 public:
-    XMLManager(QObject *_listProjects);
+    XMLManager();
     void ReadCalibrationProjectXML();
     int SaveXMLFileCalibrationProject(QString name,
                                       QString selection,
@@ -116,8 +116,6 @@ public:
     void setTreeview(TreeModel *value);
 
 private:
-
-    QObject * listProjects;
     TreeModel * treeview;
     QDomElement getGamma1ElementXML(std::vector<std::vector<double> > matrixGamma1, QDomDocument document);
     QDomElement getGamma2ElementXML(std::vector<std::vector<double> > matrixGamma2, QDomDocument document);

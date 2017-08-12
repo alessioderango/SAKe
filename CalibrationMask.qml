@@ -456,9 +456,12 @@ Window {
                         model: ListModel {
                             id: selectionsOrder
                             ListElement { text: "Fitness";  }
-                            ListElement { text: "Safety margin";  }
+
                             ListElement { text: "First-order momentum";  }
+
+                            ListElement { text: "Safety margin";  }
                             ListElement { text: "Base time"; }
+
                         }
                         onCurrentIndexChanged: configComboBox1(currentIndex)
                     }
@@ -1189,7 +1192,7 @@ Window {
                             Label {
                                 id: labelNumberProcessor
                                 width: 120
-                                text: qsTr("Number Processor")
+                                text: qsTr("Number of processors")
                             }
 
                             TextField {
@@ -1212,7 +1215,7 @@ Window {
                                 id: labellastGeneration
                                 width: 151
                                 height: 14
-                                text: qsTr("Continue from last generations")
+                                text: qsTr("Continue from last generation")
                             }
 
                             CheckBox {
@@ -1250,7 +1253,7 @@ Window {
                             Label {
                                 id: labelSaveKernels
                                 width: 120
-                                text: qsTr("Save Kerrnels")
+                                text: qsTr("Frequency of kernel saving (iterations)")
                             }
 
                             TextField {

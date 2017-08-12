@@ -3,13 +3,12 @@ QT += xml
 QT += qml quick
 
 greaterThan(QT_MAJOR_VERSION, 4) :QT+= widgets printsupport #declarative
-
-DEFINES += QT_NO_DEBUG
+#CONFIG += force_debug_info
+#DEFINES += QT_NO_DEBUG
 CONFIG += console
 
 SOURCES += main.cpp \
     CustomPlotItem.cpp \
-    qcustomplot.cpp \
     SAke/SAKeEA.cpp \
     SAke/SAKeController.cpp \
     SAke/eoGraphFitenessStat.cpp \
@@ -27,7 +26,8 @@ SOURCES += main.cpp \
     tablemodel.cpp \
     controlpoints.cpp \
     CustomPlotRegressionPreviewKernel.cpp \
-    Regression/funtciontype.cpp
+    Regression/funtciontype.cpp \
+    qcustomplot.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,7 +39,6 @@ include(deployment.pri)
 
 HEADERS += \
     CustomPlotItem.h \
-    qcustomplot.h \
     SAke/Activation.h \
     SAke/eoSAKe.h \
     SAke/eoSAKeEvalFunc.h \
@@ -104,7 +103,8 @@ HEADERS += \
     Regression/eoSGASteadyState.h \
     SAke/eosakedettournamentselect.h \
     SAke/eosakestochtournamentselect.h \
-    SAke/make_pop_my.h
+    SAke/make_pop_my.h \
+    qcustomplot.h
 
 CONFIG += c++11
 QMAKE_CXXFLAGS += -march=i686
@@ -114,6 +114,7 @@ QMAKE_CXXFLAGS+=  -static -static-libgcc
 QMAKE_CXXFLAGS+= -static-libstdc++
 QMAKE_LFLAGS +=  -fopenmp
 #CONFIG += static
+
 #LIBS += -fopenm
 
 

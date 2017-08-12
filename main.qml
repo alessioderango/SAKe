@@ -517,55 +517,55 @@
                             Layout.maximumHeight:  1500
 
 
-                            CustomPlotItem {
+//                            CustomPlotItem {
 
 
-                                Layout.fillWidth: true
-                                 Layout.fillHeight: true
-                                Layout.preferredWidth: 700
-                                Layout.preferredHeight: 200
-                                Layout.maximumWidth:  1000000
-                                Layout.maximumHeight: 1000000
+//                                Layout.fillWidth: true
+//                                 Layout.fillHeight: true
+//                                Layout.preferredWidth: 700
+//                                Layout.preferredHeight: 200
+//                                Layout.maximumWidth:  1000000
+//                                Layout.maximumHeight: 1000000
 
 
-                                objectName: '"+tmp+"'
-                                //antialiasing: true
-                                // Component.onCompleted: initCustomPlot()
+//                                objectName: '"+tmp+"'
+//                                //antialiasing: true
+//                                // Component.onCompleted: initCustomPlot()
 
 
-                            }
+//                            }
 
-                            CustomPlotKernel {
+//                            CustomPlotKernel {
 
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
+//                                Layout.fillWidth: true
+//                                Layout.fillHeight: true
 
-                                Layout.preferredWidth: 700
-                                Layout.preferredHeight: 200
-                                Layout.maximumWidth:  1000000
-                                Layout.maximumHeight: 1000000
-                                objectName:  'customPlotKernel"+count+"'
-                                //anchors.top: customPlot1.bottom
-                                // Component.onCompleted: initCustomPlotMobilityFunction()
+//                                Layout.preferredWidth: 700
+//                                Layout.preferredHeight: 200
+//                                Layout.maximumWidth:  1000000
+//                                Layout.maximumHeight: 1000000
+//                                objectName:  'customPlotKernel"+count+"'
+//                                //anchors.top: customPlot1.bottom
+//                                // Component.onCompleted: initCustomPlotMobilityFunction()
 
-                            }
+//                            }
 
-                            CustomPlotMobilityFunction {
+//                            CustomPlotMobilityFunction {
 
 
-                                Layout.fillWidth: true
-                                 Layout.fillHeight: true
-                                Layout.preferredWidth: 700
-                                Layout.preferredHeight: 200
-                                clip: false
-                                Layout.maximumWidth:  1000000
-                                Layout.maximumHeight: 1000000
+//                                Layout.fillWidth: true
+//                                 Layout.fillHeight: true
+//                                Layout.preferredWidth: 700
+//                                Layout.preferredHeight: 200
+//                                clip: false
+//                                Layout.maximumWidth:  1000000
+//                                Layout.maximumHeight: 1000000
 
-                                objectName:  'customPlotMobilityFunction"+count+"'
-                                //anchors.top: customPlot1.bottom
-                                // Component.onCompleted: initCustomPlotMobilityFunction()
+//                                objectName:  'customPlotMobilityFunction"+count+"'
+//                                //anchors.top: customPlot1.bottom
+//                                // Component.onCompleted: initCustomPlotMobilityFunction()
 
-                            }
+//                            }
 
 
 

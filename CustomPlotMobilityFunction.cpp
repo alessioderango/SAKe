@@ -36,7 +36,7 @@ void CustomPlotMobilityFunction::initCustomPlotMobilityFunction()
 
     for(int i = 0; i < activation_size;i++){
         QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
-        m_CustomPlot->addItem(textLabel);
+        //m_CustomPlot->addItem(textLabel);
         textLabel->setPositionAlignment(Qt::AlignTop);
         //textLabel->position->setType(QCPItemPosition::ptPlotCoords);
         //textLabel->position->setCoords(15, 18); // place position at center/top of axis rect
@@ -46,7 +46,7 @@ void CustomPlotMobilityFunction::initCustomPlotMobilityFunction()
         widgetArray.push_back(textLabel);
 
         QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
-        m_CustomPlot->addItem(arrow);
+        //m_CustomPlot->addItem(arrow);
         arrow->start->setParentAnchor(textLabel->bottom);
         arrow->end->setType(QCPItemPosition::ptPlotCoords);
         //arrow->end->setCoords(0.23, 1.6); // point to (4, 1.6) in x-y-plot coordinates
@@ -167,9 +167,10 @@ void CustomPlotMobilityFunction::updateCustomPlotSize()
 
     if (m_CustomPlot)
     {
-        // std::cout << " width() "<< width() << "  height() " << height() << std::endl;
+        std::cout << "Mobility Function width() "<< width() << "  height() " << height() << std::endl;
         m_CustomPlot->setGeometry( 0, 0, width(), height() );
         m_CustomPlot->setViewport(QRect(0, 0, (int)width(), (int)height()));
+        //m_CustomPlot->scale(width(), height());
     }
 }
 
@@ -189,7 +190,7 @@ void CustomPlotMobilityFunction::setupQuadraticDemo( QCustomPlot* customPlot )
     QPen pen;
     pen.setColor(QColor(0, 0, 255, 200));
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
-    customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->yAxis->setRange( 0,20 );
 
     customPlot->addGraph();
@@ -218,14 +219,17 @@ void CustomPlotMobilityFunction::setupQuadraticDemo( QCustomPlot* customPlot )
 
     //}
     // configure bottom axis to show date and time instead of number:
-    customPlot->xAxis->setTickLabelType(QCPAxis::ltDateTime);
-    customPlot->xAxis->setDateTimeFormat("dd\nMMMM\nyyyy");
+    QSharedPointer<QCPAxisTickerDateTime> dateTimeTicker(new QCPAxisTickerDateTime);
+    dateTimeTicker->setDateTimeSpec(Qt::UTC);
+    dateTimeTicker->setDateTimeFormat("dd\nMMMM\nyyyy");
+    //customPlot->xAxis->setTicker(dateTimeTicker);
+    //customPlot->xAxis->setDateTimeFormat("dd\nMMMM\nyyyy");
     // set a more compact font size for bottom and left axis tick labels:
     customPlot->xAxis->setTickLabelFont(QFont(QFont().family(), 8));
     customPlot->yAxis->setTickLabelFont(QFont(QFont().family(), 8));
     // set a fixed tick-step to one tick per month:
-    customPlot->xAxis->setAutoTickStep(true);
-    customPlot->xAxis->setTickStep(2628000); // one month in seconds
+   // customPlot->xAxis->setAutoTickStep(true);
+   // customPlot->xAxis->setTickStep(2628000); // one month in seconds
 
     customPlot->xAxis->setLabel("Date");
     customPlot->yAxis->setLabel("y");

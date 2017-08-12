@@ -127,12 +127,12 @@ void CustomPlotRegressionPreviewKernel::setupQuadraticDemo(QCustomPlot* m_Custom
     QVector<double> x1( 0 ), y1( 0 );   // initialize with entries 0..100
     customPlot->addGraph();
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
-    customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->graph( 0 )->setData( x1, y1 );
 customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
     customPlot->addGraph();
     customPlot->graph( 1 )->setPen( QPen( Qt::green ) );
-    customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
+    //customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->graph( 1 )->setData( x1, y1 );
 customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
     // give the axes some labels:
@@ -143,7 +143,7 @@ customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 1
     customPlot->yAxis->setRange(  -0.01,0.25 );
 
     myBars = new QCPBars(customPlot->xAxis, customPlot->yAxis);
-    customPlot->addPlottable(myBars);
+    //customPlot->addPlottable(myBars);
     // now we can modify properties of myBars:
     myBars->setName("Bars Series 1");
 

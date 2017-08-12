@@ -70,6 +70,7 @@ public :
         eoPop<EOT> offspring;
         eoPop<EOT> matingPool;
         offspring.resize(_pop.size());
+        //matingPool.resize(_pop.size());
 
         select(_pop, matingPool);
 
