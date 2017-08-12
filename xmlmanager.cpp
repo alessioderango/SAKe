@@ -1,6 +1,6 @@
 #include "xmlmanager.h"
 
-XMLManager::XMLManager(QObject *_listProjects)
+XMLManager::XMLManager()
 {
 
 #ifdef __arm__ //on the target
@@ -39,8 +39,6 @@ XMLManager::XMLManager(QObject *_listProjects)
 //    qDebug() << xmlFilePath << endl;
 #endif
 #endif
-
-    listProjects=_listProjects;
 
 }
 
@@ -286,12 +284,12 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
     return matrix;
 }
 
-TreeModel *XMLManager::getTreeview()
+QTreeWidget *XMLManager::getTreeview()
 {
     return treeview;
 }
 
-void XMLManager::setTreeview(TreeModel *value)
+void XMLManager::setTreeview(QTreeWidget *value)
 {
     treeview = value;
 }
@@ -610,7 +608,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
 
 }
 
-void parseProject(QXmlStreamReader& xml,QVariantList &a,TreeModel* treeview){
+void parseProject(QXmlStreamReader& xml,QTreeWidget* treeview){
     //check to ensure that we were called in the appropriate spot!
     if(xml.tokenType() != QXmlStreamReader::StartElement
             && xml.name() != "CalibrationProject"){
@@ -629,7 +627,6 @@ void parseProject(QXmlStreamReader& xml,QVariantList &a,TreeModel* treeview){
         //keep reading.
 //        qDebug() << "Name projects " << xml.name()<< endl;
         if(xml.tokenType() == QXmlStreamReader::StartElement){
-            //If the element is a text element, save it
             if(xml.name() == "Name"){
                 xml.readNext();
                 QString name = xml.text().toString();
@@ -646,8 +643,7 @@ void parseProject(QXmlStreamReader& xml,QVariantList &a,TreeModel* treeview){
                 }
 //                qDebug() << "Name projects " << name<< endl;
 //                qDebug() << "id projects " << id<< endl;
-                //a.append(QVariant(xml.text().toString()));
-                treeview->addEntry(name,"Calibration",id,treeview);
+                //treeview->addEntry(name,"Calibration",id,treeview);
             }
 
 
@@ -694,30 +690,40 @@ void XMLManager::ReadCalibrationProjectXML()
     {
         qDebug( "Failed to parse the file into a DOM tree." );
         inFile.close();
-        //return 0;
     }
     QDomElement documentElement = document.documentElement();
 
     QDomNodeList calibrationProject = documentElement.elementsByTagName("CalibrationProject");
+    QTreeWidgetItem * cali = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Calibration")));
+    QTreeWidgetItem * vali = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Validation")));
+    QTreeWidgetItem * regre = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Regression")));
+
+    treeview->insertTopLevelItem(0, vali);
+    treeview->insertTopLevelItem(0, regre);
+    treeview->insertTopLevelItem(0, cali);
 
     for (int i = 0; i < calibrationProject.length(); i++) {
-
-        treeview->addEntry(calibrationProject.at(i).childNodes().at(0).firstChild().nodeValue(),"Calibration",calibrationProject.at(i).childNodes().at(calibrationProject.at(i).childNodes().length()-1).firstChild().nodeValue(), treeview);
-    }
-
-    QDomNodeList validationProject = documentElement.elementsByTagName("ValidationProject");
-
-    for (int i = 0; i < validationProject.length(); i++) {
-
-        treeview->addEntry(validationProject.at(i).childNodes().at(0).firstChild().nodeValue(),"Validation",validationProject.at(i).childNodes().at(validationProject.at(i).childNodes().length()-1).firstChild().nodeValue(), treeview);
-    }
+        QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(calibrationProject.at(i).childNodes().at(0).firstChild().nodeValue()));
+        tmp->setData(0, Qt::UserRole, calibrationProject.at(i).childNodes().at(calibrationProject.at(i).childNodes().length()-1).firstChild().nodeValue());
+        cali->addChild(tmp);
+     }
 
     QDomNodeList regressionProject = documentElement.elementsByTagName("RegressionProject");
 
     for (int i = 0; i < regressionProject.length(); i++) {
+        QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue()));
+        tmp->setData(0, Qt::UserRole,regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue());
+        regre->addChild(tmp);
+     }
 
-        treeview->addEntry(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue(),"Regression",regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue(), treeview);
-    }
+    QDomNodeList validationProject = documentElement.elementsByTagName("ValidationProject");
+    for (int i = 0; i < validationProject.length(); i++) {
+        QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(validationProject.at(i).childNodes().at(0).firstChild().nodeValue()));
+        tmp->setData(0, Qt::UserRole,validationProject.at(i).childNodes().at(validationProject.at(i).childNodes().length()-1).firstChild().nodeValue());
+        vali->addChild(tmp);
+     }
+
+
 }
 
 
@@ -764,6 +770,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     // create Elements
     QDomElement project = document.createElement( "ValidationProject" );
     QDomElement id = document.createElement( "ID" );
+    numProjectInt++;
     QDomText idText = document.createTextNode( QString("%1").arg(numProjectInt));
     document.childNodes().at(1).childNodes().at(0).firstChild().setNodeValue(QString("%1").arg(numProjectInt));
     QDomElement nameElement = document.createElement( "Name" );
@@ -779,7 +786,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     QDomText filenameActivationPathText = document.createTextNode( filenameActivationPath );
     QDomText filenameKernelPathText = document.createTextNode( filenameKernelPath );
     QDomText folderSaveText = document.createTextNode( _folderSave );
-    numProjectInt++;
+
 
     nameElement.appendChild(nameText);
     fileNameRainPath.appendChild(filenameRainPathText);

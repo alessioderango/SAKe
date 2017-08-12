@@ -54,13 +54,7 @@ bool testDirRes(std::string _dirName, bool _erase);
  * @ingroup Builders
  */
 template <class EOT>
-eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser, eoState& _state, eoValueParam<unsigned long>& _eval, eoContinue<EOT>& _continue,CustomPlotItem *& qCustomPlot,CustomPlotMobilityFunction* a, Rain*b,int c,CustomPlotKernel*d,QObject *progressbar,int maxGen,
-                                         QObject *_currentMaximumFitness,
-                                         QObject *_absoluteMaximumFitness,
-                                         QObject *_currentAverageFitness,
-                                         QObject *_absoluteAverageFitness,
-                                         QApplication * appli,
-                                         Update* update)
+eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser, eoState& _state, eoValueParam<unsigned long>& _eval, eoContinue<EOT>& _continue, Rain* rain,int rain_size,int maxGen, SAKeController* s)
 {
     // first, create a checkpoint from the eoContinue
     eoCheckPoint<EOT> *checkpoint = new eoCheckPoint<EOT>(_continue);
@@ -138,11 +132,7 @@ eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser, eoState& _state, eoV
     if ( printBestParam.value() || plotBestParam.value() || fileBestParam.value() )
     // we need the bestStat for at least one of the 3 above
     {
-        bestStat = new eoGraphFitnessStat<EOT>(maxGen,progressbar,qCustomPlot,a,b,c,d,_currentMaximumFitness,
-                                               _absoluteMaximumFitness,
-                                               _currentAverageFitness,
-                                               _absoluteAverageFitness,
-                                               appli,update);
+        bestStat = new eoGraphFitnessStat<EOT>(maxGen,rain,rain_size,s);
         // store it
         _state.storeFunctor(bestStat);
         // add it to the checkpoint

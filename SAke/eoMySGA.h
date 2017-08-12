@@ -85,11 +85,15 @@ public :
 //                EOT oldChamp = *replace;
 //                (*itPoorGuy) = oldChamp;
                 EOT a;
-                double * r = (double*) malloc(sizeof(double)*_pop[i]. getSize());
+                //double * r = (double*) malloc(sizeof(double)*_pop[i]. getSize());
+                std::vector<double> r;
+                r.resize(_pop[i].getSize());
                 a.setFi(r);
-                a.setSize(_pop[i]. getSize());
+                a.setSize(_pop[i].getSize());
                 for (int tmp = 0; tmp < _pop[i].getSize(); tmp++) {
-                    a.setFiIndex(tmp, _pop[i]. getFiIndex(tmp));
+                    a.setFiIndex(tmp, _pop[i].getFi()[tmp]);
+                    //std::cout << "a.getFi()[tmp] " << a.getFi()[tmp] << "  =  " << "_pop[i].getFi()[tmp]  = " << _pop[i].getFi()[tmp]<<std::endl;
+                    //a.setFiIndex(tmp, _pop[i]. getFiIndex(tmp));
                 }
                 (*itPoorGuy) = a;
 //                offspring[i] =_pop[i].clone();
@@ -142,11 +146,14 @@ public :
 //                EOT oldChamp = *replace;
 //                (*itPoorGuy) = oldChamp;
                 EOT a;
-                double * r = (double*) malloc(sizeof(double)*matingPool[i]. getSize());
+                //double * r = (double*) malloc(sizeof(double)*matingPool[i]. getSize());
+                std::vector<double> r;
+                r.resize(matingPool[i].getSize());
                 a.setFi(r);
-                a.setSize(matingPool[i]. getSize());
+                a.setSize(matingPool[i].getSize());
                 for (int tmp = 0; tmp < matingPool[i].getSize(); tmp++) {
-                    a.setFiIndex(tmp, matingPool[i]. getFiIndex(tmp));
+                    a.setFiIndex(tmp, matingPool[i].getFiIndex(tmp));
+                    //a.setFiIndex(tmp, matingPool[i]. getFiIndex(tmp));
                 }
                 (*itPoorGuy) = a;
 //                offspring[i] =_pop[i].clone();

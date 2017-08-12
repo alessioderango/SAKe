@@ -1,11 +1,11 @@
 #include "ValidationController.h"
 
-ValidationController::ValidationController(
+ValidationController::ValidationController(QMutex *_mutex,
                                            Rain *  rain,
                                            int  rain_size,
                                            Activation *  activations,
                                            int  activations_size,
-                                           double * Fi,
+                                           std::vector<double> &Fi,
                                            int size,
                                            double zCr
                                            )
@@ -14,6 +14,7 @@ ValidationController::ValidationController(
 //       HandlerCSV::loadCSVRain(filenameRainPath,rain,rain_size);
 //       HandlerCSV::loadCSVActivation(filenameActivationPath,activations,activations_size);
 //       HandlerCSV::loadCSVKernel(filenameKernelPath,Fi,size,zCr);
+    mutex = _mutex;
     this->rain = rain;
     this->rain_size = rain_size;
     this->activations = activations;
@@ -24,14 +25,6 @@ ValidationController::ValidationController(
 
 
 
-}
-
-void ValidationController::setPlotMobility(CustomPlotMobilityFunction *value)
-{
-    plotMobility = value;
-    plotMobility->setActivation(this->activations,this->activations_size);
-    plotMobility->setRain(this->rain,this->rain_size);
-    plotMobility->initCustomPlotMobilityFunction();
 }
 
 static int  compareDouble (const void * a, const void * b)
@@ -47,6 +40,7 @@ static int  compareDouble (const void * a, const void * b)
       return 0;
   }
 }
+
 int getDifferenceTime(tm temp1,tm temp2){
     ptime rain0 = ptime_from_tm(temp1);
     ptime rainLast = ptime_from_tm(temp2);
@@ -69,138 +63,6 @@ int getDifferenceTime(tm temp1,tm temp2){
 void getYmDecr(Ym*&ym,int &size){
     qsort (ym, size, sizeof(Ym),compareDouble);
 
-}
-
-void ValidationController::updatePlot(){
-
-//    printf("rain_size %d \n",rain_size);
-    //printf("tb %d \n",size);
-
-
-//    for (int i = 0; i < size; i++) {
-//           printf("Fi[%d] %f \n",i, Fi[i]);
-//     myfile <<< "Fi[ " << i<<"] = " << Fi[i] << "\n";
-//    }
-//    printf("tb %d \n",size);
-//    ofstream myfile;
-//    myfile.open ("C:\\Users\\Alessio\\Documents\\workspace\\calibration\\seed1\\validation.csv",ios::out);
-//        for (int i = 0; i < size; i++) {
-//    //           printf("Fi[%d] %f \n",i, Fi[i]);
-//         myfile << "Fi[ " << i<<"] = " << Fi[i] << "\n";
-//        }
-    //Calcolo Mobiliy Function
-    double * Y = new double[rain_size];
-    for (int t = 0; t < rain_size; t++) {
-        double ym = 0;
-        Y[t] = 0;
-        for (int r = 0; r < t; r++)
-            if ((t - r) < size){
-                ym += Fi[t - r] * rain[r].getRainMm();
-               // myfile << "Fi[t - r] = " << Fi[t - r] << ", rain[r].getRainMm() " << rain[r].getRainMm() << "\n";
-            }
-//        myfile << "Y[" << t << "] " << ym << "\n";
-        Y[t] = ym;
-
-
-    }
-//    myfile.close();
-
-    double f=0;
-    Ym * ym= new Ym[rain_size];
-    int countYm=0;
-
-    for (int t = 1; t < rain_size-1; t++) {
-        bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
-        if(cross){
-            // trovato un picco deve essere considerato
-            ym[countYm].setValue(Y[t]);
-            ym[countYm].setTime(rain[t].getTime());
-            countYm++;
-        }
-    }
-
-    getYmDecr(ym,countYm);
-
-//        for (int i = 0; i < countYm; i++) {
-//               printf("ym[%d] %f \n",i, ym[i].getValue());
-//        }
-//        printf("countYm %d \n",countYm);
-
-
-    double YsMin = 999999999;
-    int iMin =-1;
-    std::vector<Ym> bests;
-//    printf("activations_size %d \n",activations_size);
-    for (int s = 0; s < activations_size; s++) {
-        for (int i = 0; i < countYm; i++) {
-            //TODO inserire variabili intervallo giorni
-            int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
-            int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
-            if(result1>=-2 && result2>=-1){
-                //if(i<countYm)
-                //if(i<(activations_size)){
-//                    printf("i %d \n",i);
-
-                    f += 1 / (double)(i + 1);
-//                    printf("f %f \n",f);
-                    //fflush( stdout );
-                    bests.push_back(ym[i]);
-//                        int year = ym[i].getTime().tm_year +1900;
-//                        int mon = ym[i].getTime().tm_mon +1;
-//                        int day = ym[i].getTime().tm_mday ;
-//                        std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
-//                        std::cout << "ym[i] value " << ym[i].getValue() << std::endl;
-                    //printf("+  %f \n",(1 / (double)(i + 1)));
-                    if(ym[i].getValue() < YsMin){
-                        YsMin =ym[i].getValue();
-                        iMin=i;
-                    }//if
-                    break;
-                //}
-                // calcolo valori per calcolare dYcr per risparmiare calcoli
-
-            }//if
-        }//for
-    }//for
-    if(iMin < 0)  iMin = 0;
-    if(iMin > countYm-1)  iMin = countYm-1;
-    int index=(iMin+1);
-
-    double dYcr = (YsMin-ym[index].getValue())/YsMin;
-//    printf("dYcr %f \n",dYcr);
-//    printf("YsMin %f \n",YsMin);
-//    printf("YsMin2 %f \n",ym[index].getValue());
-    Ym ymMin= ym[iMin];
-    Ym ymMin2 = ym[iMin+1];
-
-    // tb = this->size
-    double momentoDelPrimoOrdine = 0;
-    for (int i = 0; i < size; i++) {
-        momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
-    }
-
-    double fMax=0;
-//    printf("activations_size %d \n",activations_size);
-    for (int i = 1; i <= activations_size; i++) {
-        fMax +=(double)(1/(double)i);
-    }
-//    printf("f %f fMax %f fitness = %f \n",f,fMax,(double) (f/fMax));
-
-    QString fitnessString= QString("Fitness :    %1").arg((double) (f/fMax));
-    this->fitness->setProperty("text",fitnessString);
-
-
-    QString momentoDelPrimoOrdineString= QString("Momento del primo ordine:    %1").arg(momentoDelPrimoOrdine);
-    this->momentoDelPrimoOrdine->setProperty("text",momentoDelPrimoOrdineString);
-
-    QString deltaCriticoString= QString("Δcritico:    %1").arg(dYcr);
-    this->deltaCritico->setProperty("text",deltaCriticoString);
-
-    QString tbString= QString("tb:    %1").arg(this->size );
-    this->tb->setProperty("text",tbString);
-
-
-    plotMobility->updateGraph(Y,ymMin,ymMin2,bests);
 }
 
 Rain *ValidationController::getRain() const
@@ -283,14 +145,134 @@ void ValidationController::setFitness(QObject *value)
     fitness = value;
 }
 
-void ValidationController::setKernelPlot(CustomPlotKernel *value){
-    plotkernel = value;
-    plotkernel->initCustomPlotFitness();
 
+//void ValidationController::updateKernelPlot(){
+
+////    plotkernel->updateGraph(Fi,size);
+//}
+
+void ValidationController::run(){
+    startValidation();
 }
 
-void ValidationController::updateKernelPlot(){
+void ValidationController::startValidation(){
 
-    plotkernel->updateGraph(Fi,size);
+        //Calcolo Mobiliy Function
+        //double * Y = new double[rain_size];
+        std::vector<double> Y;
+        Y.resize(rain_size);
+        for (int t = 0; t < rain_size; t++) {
+            double ym = 0;
+            Y[t] = 0;
+            for (int r = 0; r < t; r++)
+                if ((t - r) < size){
+                    ym += Fi[t - r] * rain[r].getRainMm();
+                   // myfile << "Fi[t - r] = " << Fi[t - r] << ", rain[r].getRainMm() " << rain[r].getRainMm() << "\n";
+                }
+    //        myfile << "Y[" << t << "] " << ym << "\n";
+            Y[t] = ym;
+
+
+        }
+    //    myfile.close();
+
+        double f=0;
+        //Ym * ym= new Ym[rain_size];
+        std::vector<Ym> ym;
+        ym.resize(rain_size);
+        int countYm=0;
+
+        for (int t = 1; t < rain_size-1; t++) {
+            bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
+            if(cross){
+                // trovato un picco deve essere considerato
+                ym[countYm].setValue(Y[t]);
+                ym[countYm].setTime(rain[t].getTime());
+                countYm++;
+            }
+        }
+
+       // getYmDecr(ym,countYm);
+        qsort (&ym[0], ym.size(), sizeof(Ym),compareDouble);
+
+
+    //        for (int i = 0; i < countYm; i++) {
+    //               printf("ym[%d] %f \n",i, ym[i].getValue());
+    //        }
+    //        printf("countYm %d \n",countYm);
+
+
+        double YsMin = 999999999;
+        int iMin =-1;
+        std::vector<Ym> bests;
+    //    printf("activations_size %d \n",activations_size);
+        for (int s = 0; s < activations_size; s++) {
+            for (int i = 0; i < countYm; i++) {
+                //TODO inserire variabili intervallo giorni
+                int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
+                int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
+                if(result1>=-2 && result2>=-1){
+                    //if(i<countYm)
+                    //if(i<(activations_size)){
+    //                    printf("i %d \n",i);
+
+                        f += 1 / (double)(i + 1);
+    //                    printf("f %f \n",f);
+                        //fflush( stdout );
+                        ym[i].setI(i+1);
+                        bests.push_back(ym[i]);
+    //                        int year = ym[i].getTime().tm_year +1900;
+    //                        int mon = ym[i].getTime().tm_mon +1;
+    //                        int day = ym[i].getTime().tm_mday ;
+    //                        std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
+    //                        std::cout << "ym[i] value " << ym[i].getValue() << std::endl;
+                        //printf("+  %f \n",(1 / (double)(i + 1)));
+                        if(ym[i].getValue() < YsMin){
+                            YsMin =ym[i].getValue();
+                            iMin=i;
+                        }//if
+                        break;
+                    //}
+                    // calcolo valori per calcolare dYcr per risparmiare calcoli
+
+                }//if
+            }//for
+        }//for
+        if(iMin < 0)  iMin = 0;
+        if(iMin > countYm-1)  iMin = countYm-1;
+        int index=(iMin+1);
+
+        double dYcr = (YsMin-ym[index].getValue())/YsMin;
+
+        Ym ymMin= ym[iMin];
+        Ym ymMin2 = ym[iMin+1];
+
+        double momentoDelPrimoOrdine = 0;
+        for (int i = 0; i < size; i++) {
+            momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
+        }
+
+        double fMax=0;
+
+        for (int i = 1; i <= activations_size; i++) {
+            fMax +=(double)(1/(double)i);
+        }
+        mutex->lock();
+        ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
+
+        emit this->updateMobPlot(pos,rain,rain_size,Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray,arrowArray);
+
+        emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
+
+        emit this->updateTextsValidation(pos,QString("%1").arg((double) (f/fMax)),
+                                              QString("%1").arg(this->size),
+                                              QString("%1").arg(dYcr),
+                                              QString("%1").arg(momentoDelPrimoOrdine)
+                                              );
+         mutex->unlock();
+}
+
+void ValidationController::startThread(){
+    QThread::start();
 }
 

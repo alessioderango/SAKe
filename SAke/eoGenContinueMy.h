@@ -4,7 +4,6 @@
 
 #include <eoContinue.h>
 #include <utils/eoParam.h>
-#include <QtQuick>
 #include <utils/eoLogger.h>
 #include <fstream>
 #include <algorithm>    // std::sort
@@ -132,7 +131,7 @@ public:
                 //myfile << " ;";
                 //  myfile << "fitness ; "<<tmp <<" ; ";
                 for (int i = 0; i < stop; i++) {
-                    myfile << _vEO[t].getFiConst()[i] << ";";
+                    myfile << _vEO[t].getFiConstIndex(i) << ";";
                 }
                 myfile << "\n";
 
@@ -143,7 +142,7 @@ public:
                 myfileWithHeader << stop << " ;";
                 myfileWithHeader << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
                 for (int i = 0; i < stop; i++) {
-                    myfileWithHeader << _vEO[t].getFiConst()[i] << ";";
+                    myfileWithHeader << _vEO[t].getFiConstIndex(i) << ";";
                 }
                 myfileWithHeader << "\n";
 
@@ -170,7 +169,7 @@ public:
                         tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
                         for (int i = 0; i < stop; i++) {
                             //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                            tmpKernel.push_back(_vEO[t].getFiConst()[i]);
+                            tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
                         }
                         //kernelStream << "\n";
                         kernels.push_back(tmpKernel);
@@ -192,7 +191,7 @@ public:
                                     tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
                                     for (int i = 0; i < stop; i++) {
                                         //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                                        tmpKernel.push_back(_vEO[t].getFiConst()[i]);
+                                        tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
                                     }
                                     //kernelStream << "\n";
                                     kernels.insert(kernels.begin()+g,tmpKernel);
@@ -219,7 +218,7 @@ public:
                                     tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
                                     for (int i = 0; i < stop; i++) {
                                         //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                                        tmpKernel.push_back(_vEO[t].getFiConst()[i]);
+                                        tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
                                     }
                                     //kernelStream << "\n";
                                     kernels.insert(kernels.begin()+g,tmpKernel);

@@ -3,11 +3,12 @@
 #include <QtXml>
 #include <TreeModel.h>
 #include <QString>
+#include <QTreeWidget>
 
 class XMLManager
 {
 public:
-    XMLManager(QObject *_listProjects);
+    XMLManager();
     void ReadCalibrationProjectXML();
     int SaveXMLFileCalibrationProject(QString name,
                                       QString selection,
@@ -112,13 +113,13 @@ public:
     bool deleteProject(int idProject);
 
 
-    TreeModel *getTreeview();
-    void setTreeview(TreeModel *value);
+    QTreeWidget *getTreeview();
+    void setTreeview(QTreeWidget *value);
 
 private:
 
     QObject * listProjects;
-    TreeModel * treeview;
+    QTreeWidget * treeview;
     QDomElement getGamma1ElementXML(std::vector<std::vector<double> > matrixGamma1, QDomDocument document);
     QDomElement getGamma2ElementXML(std::vector<std::vector<double> > matrixGamma2, QDomDocument document);
     QDomElement getLinearElementXML(std::vector<std::vector<double> > matrixLinear, QDomDocument document);

@@ -53,7 +53,7 @@ public:
 		// END   Code of Ctor of an eoSAKeEvalFunc object
 	}
 
-	double * getY(Rain *& P, double *&Fi, int tb) {
+    std::vector<double> getY(Rain *& P, std::vector<double> Fi, int tb) {
 //        printf("rain_size %d \n",rain_size);
 //        for (int i = 0; i < tb; i++) {
 //               printf("Fi[%d] %f \n",i, Fi[i]);
@@ -66,7 +66,9 @@ public:
 //                     //  printf("Fi[%d] %f \n",i, Fi[i]);
 //                    myfile << "Fi[ " << i<<"] = " << Fi[i] << "\n";
 //                }
-		double * Y = new double[rain_size];
+        //double * Y = new double[rain_size];
+        std::vector<double> Y;
+        Y.resize(rain_size);
 		for (int t = 0; t < rain_size; t++) {
 			double ym = 0;
 			Y[t] = 0;
@@ -125,23 +127,29 @@ public:
 	}
 
 
-    double getFitness(double *& Y,EOT & _eo){
+    double getFitness(std::vector<double> Y,EOT & _eo){
 
 		double f=0;
-		Ym * ym= new Ym[rain_size];
+        std::vector<Ym> ym;//= new Ym[rain_size];
+        //ym.resize(rain_size);
 		int countYm=0;
 
 		for (int t = 1; t < rain_size-1; t++) {
             bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
 			if(cross){
 				// trovato un picco deve essere considerato
-				ym[countYm].setValue(Y[t]);
-				ym[countYm].setTime(rain[t].getTime());
-				countYm++;
+                Ym p;
+                p.setValue(Y[t]);
+                p.setTime(rain[t].getTime());
+                ym.push_back(p);
+//				ym[countYm].setValue(Y[t]);
+//				ym[countYm].setTime(rain[t].getTime());
+//				countYm++;
 			}
 		}
 
-		getYmDecr(ym,countYm);
+        //getYmDecr(ym,countYm);
+        qsort (&ym[0], ym.size(), sizeof(Ym),compareDouble);
 
 //        for (int i = 0; i < countYm; i++) {
 //               printf("ym[%d] %f \n",i, ym[i].getValue());
@@ -154,7 +162,7 @@ public:
         int iMin =-1;
         std::vector<Ym> bests;
         for (int s = 0; s < activations_size; s++) {
-            for (int i = 0; i < countYm; i++) {
+            for (int i = 0; i < ym.size(); i++) {
                 //TODO inserire variabili intervallo giorni
                 int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
                 int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
@@ -165,6 +173,7 @@ public:
 
                         f += 1 / (double)(i + 1);
 //                        printf("f %f \n",f);
+                        ym[i].setI(i+1);
                         bests.push_back(ym[i]);
 //                        int year = ym[i].getTime().tm_year +1900;
 //                        int mon = ym[i].getTime().tm_mon +1;
@@ -186,7 +195,7 @@ public:
         //std::cout << std::endl;
         _eo.setBests(bests);
 		if(iMin < 0)  iMin = 0;
-		if(iMin > countYm-1)  iMin = countYm-1;
+        if(iMin > ym.size()-1)  iMin = ym.size()-1;
         int index=(iMin+1);
         double dYcr = (YsMin-ym[index].getValue())/YsMin;
 //        printf("dYcr %f \n",dYcr);
@@ -210,7 +219,7 @@ public:
 
 //       printf("f %f fMax %f fitness = %f \n",f,fMax,(double) (f/fMax));
 
-		delete []ym;
+        //delete []ym;
 
         return (double) (f/fMax);
 	}
@@ -230,20 +239,31 @@ public:
             //printf("valito individuo con tb %d \n",tb);
 
 			//Prelevo kernels
-			double * Fi = _eo.getFi();
+            //double * Fi = _eo.getFi();
             //Calcolo funzione di mobilità
-			double * Y = getY(rain, Fi, tb);
+            std::vector<double> Y = getY(rain, _eo.getFi(), tb);
 //			il primo elemento il dato relativo alla prima piogge
 //			tm temp = rain[0].getTime();
-            double f = getFitness(Y,_eo);
-
-            double momentoDelPrimoOrdine = 0;
-            for (int i = 0; i < tb; i++) {
-                momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
+            bool allzero=true;
+            for (int i = 0; i < Y.size(); ++i) {
+                if(Y[i] != 0){
+                    allzero=false;
+                }
             }
-            _eo.setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
+            double f;
+            if(allzero){
+                f=0;
+            }
+            else{
+                f = getFitness(Y,_eo);
 
-			delete []Y;
+                double momentoDelPrimoOrdine = 0;
+                for (int i = 0; i < tb; i++) {
+                    momentoDelPrimoOrdine += _eo.getFi()[i]*((i+1)-0.5);
+                }
+                _eo.setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
+            }
+            //delete []Y;
 			_eo.fitness(f);
         //}
 	}

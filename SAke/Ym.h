@@ -11,7 +11,7 @@
 class Ym {
 public:
 	Ym(){
-
+        i = 0;
 	};
 	virtual ~Ym(){
 			};
@@ -32,9 +32,18 @@ public:
 		this->value = value;
 	}
 
+    int getI() const{
+        return i;
+    }
+    void setI(int value){
+        i = value;
+    }
+
 private:
-	tm time;
-	double value;
+    tm time;
+    double value;
+    int i;
 };
 
 #endif /* YM_H_ */
+

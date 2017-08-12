@@ -72,7 +72,6 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      int maxNumberToConsider,
                                      unsigned int typeAlgorithm,
                                      SelectionStrategy<EOT> ** selectionStrategy,
-                                     float _propSelection,
                                      eoDistance<EOT> * _dist = NULL
                                      )
 {
@@ -327,7 +326,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
   eoAlgo<EOT> *algo;
   if(typeAlgorithm==0)
   {
-      algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
+      algo = new eoSGAGenerational<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,maxNumberToConsider);
   }else
       if(typeAlgorithm==1)
       {

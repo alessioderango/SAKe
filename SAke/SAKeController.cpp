@@ -1,4 +1,5 @@
 #include "SAKeController.h"
+#include "make_checkpoint_my.h"
 
 bool fileExists(QString path) {
     QFileInfo checkFile(path);
@@ -13,8 +14,9 @@ SAKeController::SAKeController(){
 
 }
 
-SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
+SAKeController::SAKeController(MainWindow *_main,
                                QString  sselection,
+                               QString  replacement,
                                QString  spattern,
                                Rain *rain,
                                int rain_size,
@@ -30,25 +32,20 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                                float    fpropMutation,
                                float    fpme,
                                float    fpmb,
-                               QObject *_currentMaximumFitness,
-                               QObject *_absoluteMaximumFitness,
-                               QObject *_currentAverageFitness,
-                               QObject *_absoluteAverageFitness,
                                int _numberofProcessor,
-                               int para1,
-                               int para2,
-                               QString spara1,
+                               float para1,
+                               float para2,
                                bool _lastGeneration,
-                               Update* _update,
                                const QString& projectName,
                                vector<QString> orders,
                                int itypeAlgorithm,
                                int numberElitist,
                                int _seed,
-                               int _saveKernels)
+                               int _saveKernels,
+                               int numberOfKernelToBeSaved)
 
 {
-
+    mainwindows = _main;
     this->rain=rain;
     this->rain_size = rain_size;
     this->activations=activation;
@@ -56,8 +53,8 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     typeAlgorithm =itypeAlgorithm;
     this->start=false;
     this->finish=true;
-    qCustomPlot = _qCustomPlot;
-    qCustomPlot->initCustomPlotFitness();
+    this->replacement=replacement;
+
     seed =_seed;
     saveKernels = _saveKernels;
 
@@ -103,11 +100,6 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
     propMutation     = fpropMutation;
     pme              = fpme;
     pmb              = fpmb;
-    currentMaximumFitness=_currentMaximumFitness;
-    absoluteMaximumFitness=_absoluteMaximumFitness;
-    currentAverageFitness= _currentAverageFitness;
-    absoluteAverageFitness=_absoluteAverageFitness;
-    update = _update;
 
     QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+projectName;
     QDir dir3(tmp2);
@@ -137,13 +129,7 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
                     parameter1=para1;
                     parameter2=para2;
                     selection = QString("Roulette");
-                }else
-                    if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
-                        parameter1=para1;
-                        parameter2=para2;
-                        selection = QString("Sequential(%1)").arg(spara1);
-                        //std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
-                    }
+                }
 
 
     maxNumberToConsider=numberElitist;
@@ -155,12 +141,42 @@ SAKeController::SAKeController(CustomPlotItem *& _qCustomPlot,
         lastGeneration = false;
 
 
+    qDebug() << "selection arrivato " << selection << "\n";
+    qDebug() << "pattern arrivato " << pattern << "\n";
+    qDebug() << "ipop arrivato " <<   pop << "\n";
+    qDebug() << "imaxGen arrivato " << maxGen << "\n";
+    qDebug() << "itbMax arrivato " <<   tbMax << "\n";
+    qDebug() << "itbMin arrivato " <<   tbMin << "\n";
+    qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
+    qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
+    qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
+    qDebug() << "fpropMutation arrivato " << propMutation << "\n";
+    qDebug() << "fpme arrivato " << pme << "\n";
+    qDebug() << "fpmb arrivato " << pmb << "\n";
+    qDebug() << "rain_size arrivato " << rain_size << "\n";
+    qDebug() << "act_size arrivato " << activation_size << "\n";
+    qDebug() << "_projectName  arrivato " << projectName << "\n";
+    qDebug() << "_numberProcessor arrivato " << numberofProcessor << "\n";
+    qDebug() << "ipara1 arrivato " << parameter1 << "\n";
+    qDebug() << "ipara2 arrivato " << parameter2 << "\n";
+    qDebug() << "selectionOrder1 arrivato " << orders[0] << "\n";
+    qDebug() << "selectionOrder2 arrivato " << orders[1] << "\n";
+    qDebug() << "selectionOrder3 arrivato " << orders[2]  << "\n";
+    qDebug() << "selectionOrder4 arrivato " << orders[3] << "\n";
+    qDebug() << "numberElitist arrivato " << numberElitist << "\n";
+    qDebug() << "tipo arrivato " << typeAlgorithm << "\n";
+    qDebug() << "seed " << seed << "\n";
+    qDebug() << "_saveKernels " << _saveKernels << "\n";
+    qDebug() << "numberOfKernelToBeSaved" << numberOfKernelToBeSaved << "\n";
+    qDebug() << "replacement" << replacement << "\n";
+
+    clickCloseTab=false;
+
 }
 void SAKeController::startAlgorithm()
 {
+
     parallel.setNumberProcessor(numberofProcessor);
-    //srand(time(0));
-    //    qDebug() << "Start Algorithm %d /n"<< "/n";
 
     int argc=1;
     char **x= (char**)malloc(sizeof(char*) * 1);
@@ -177,34 +193,12 @@ void SAKeController::startAlgorithm()
         }
 
         parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
-        //        parser.setORcreateParam(eoParamParamType("ElitistReplacement(8)"), "replacement", "Replacement: Comma, Plus or EPTour(T), SSGAWorst, SSGADet(T), SSGAStoch(t)", 'R', "Evolution Engine");
-
-        //parser.setORcreateParam(eoParamParamType("MySelection"), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
-
         parser.setORcreateParam(unsigned(this->pop), "popSize", "Population Size", 'P', "Evolution Engine");
         parser.setORcreateParam(unsigned(this->maxGen), "maxGen", "Maximum number of generations () = none)",'G',"Stopping criterion");
-        //          parser.setORcreateParam(relRateCrossover, "cross1Rate", "Relative rate for crossover 1", '1', "Variation Operators").value();
-        //          parser.setORcreateParam(relRateMutation, "mut1Rate", "Relative rate for mutation 1", '1', "Variation Operators").value();
-        //parser.setORcreateParam(propCrossover, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
-        //parser.setORcreateParam(propMutation, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
-        //srand(seed);
-        //rng.initialize((uint32_t)seed);
         uint32_t t32 =  (uint32_t) seed;
-        eoValueParam<uint32_t>& seedParam = parser.setORcreateParam(t32, "seed", "Random number seed", 'S');
-        //std::cout << seedParam.value()<< std::endl;
-        //          int tbMin=30;
-        //          int tbMax=180;
-        //          double Pme=25;
-        //          double Pmb=0.3;
-        //          double dHpMin=0;
-        //          double dHpMax=10;
-        //          string pattern = "Triangolare Disc";
-
-
+        parser.setORcreateParam(t32, "seed", "Random number seed", 'S');
 
         eoState state;    // keeps all things allocated
-
-        //plotMobility->initCustomPlotMobilityFunction();
 
         // The fitness
         //////////////
@@ -212,7 +206,6 @@ void SAKeController::startAlgorithm()
 
         // turn that object into an evaluation counter
         eoEvalFuncCounter<Indi> eval(plainEval);
-
 
         // the genotype - through a genotype initializerdo_make_genotype(_parser, _state, _eo);
         eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile,lastGeneration);
@@ -223,14 +216,6 @@ void SAKeController::startAlgorithm()
         eoQuadOp<Indi> *cross = new eoSAKeQuadCrossover<Indi> /* (varType  _anyVariable) */;
         eoMonOp<Indi> *mut = new eoSAKeMutation<Indi>(tbMin,tbMax, pme, pmb,dHpMin,dHpMax)/* (varType  _anyVariable) */;
 
-
-
-        //// Now the representation-independent things
-        //
-        // YOU SHOULD NOT NEED TO MODIFY ANYTHING BEYOND THIS POINT
-        // unless you want to add specific statistics to the checkpoint
-        //////////////////////////////////////////////
-
         // initialize the population
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Indi>& pop   = do_make_pop(parser, state, init);
@@ -239,18 +224,14 @@ void SAKeController::startAlgorithm()
         // stopping criteria
         eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
         // output
-        eoCheckPoint<Indi> & checkpoint = do_make_checkpoint_my(parser, state, eval, term,
-                                                              qCustomPlot,
-                                                                 plotMobility,
-                                                                rain,rain_size,
-                                                                 plotkernel,progressBar,
+        eoCheckPoint<Indi> & checkpoint = do_make_checkpoint_my(parser,
+                                                                state,
+                                                                eval,
+                                                                term,
+                                                                rain,
+                                                                rain_size,
                                                                 this->maxGen,
-                                                                currentMaximumFitness,
-                                                                absoluteMaximumFitness,
-                                                                currentAverageFitness,
-                                                                absoluteAverageFitness,
-                                                                a,
-                                                                update);
+                                                                this);
         // algorithm (need the operator!)
         eoAlgo<Indi>& ga = do_make_algo_scalar_my(parser,
                                                   state,
@@ -262,57 +243,50 @@ void SAKeController::startAlgorithm()
                                                   propMutation,
                                                   maxNumberToConsider,
                                                   typeAlgorithm,
-                                                  selectionStrategy,
-                                                  propSelection);
-
-        ///// End of construction of the algorithm
-
-        //parallel.make_parallel_my(numberofProcessor);
+                                                  selectionStrategy
+                                                  );
 
 #ifdef _OPENMP
         omp_set_num_threads( numberofProcessor );
 #endif // !_OPENMP
-        //parallel.setNumberProcessor(numberofProcessor);
-        //parallel.setNumberProcessor(8);
-
-        /////////////////////////////////////////
-        // to be called AFTER all parameters have been read!!!
-        //make_help(parser);
-
-        //// GO
-        ///////
-        // evaluate intial population AFTER help and status in case it takes time
 
         apply<Indi>(eval, pop);
-        // if you want to print it out
-        //           cout << "Initial Population\n";
-        //           pop.sortedPrintOn(cout);
-        //           qDebug() << "initialized population %d /n"<< "/n";
-        //           cout << endl;
-        //            qDebug() << "start %d /n"<< "/n";
         do_run(ga, pop); // run the ga
-        //            cout << "tempo esecuzione " << end_time -start_time<< "\n";
-        //          cout << "Final Population\n";
-        //  cout << pop.it_best_element().base()->fitness() << endl;
-        //  cout << *(pop.it_best_element())<< endl;
-        //          pop.sortedPrintOn(cout);
-        //          cout << endl;
 
     }
     catch(exception& e)
     {
         //            cout << e.what() << endl;
     }
+    //QThread::sleep(10);
+    getMainwindows()->mutex.lock();
+    ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
+    //MainWindow::threads.erase(MainWindow::threads.begin()+pos);
+    if(clickCloseTab)
+        emit finished(pos);
+     getMainwindows()->mutex.unlock();
+    //MainWindow::closeTab(pos);
+
 }
 
-float SAKeController::getPropSelection() const
+MainWindow *SAKeController::getMainwindows() const
 {
-    return propSelection;
+    return mainwindows;
 }
 
-void SAKeController::setPropSelection(float value)
+void SAKeController::setMainwindows(MainWindow *value)
 {
-    propSelection = value;
+    mainwindows = value;
+}
+
+bool SAKeController::getClickCloseTab() const
+{
+    return clickCloseTab;
+}
+
+void SAKeController::setClickCloseTab(bool value)
+{
+    clickCloseTab = value;
 }
 
 int SAKeController::getCsvHandlerstatusRain() const
@@ -325,28 +299,6 @@ void SAKeController::setCsvHandlerstatusRain(int value)
     csvHandlerstatusRain = value;
 }
 
-CustomPlotKernel *SAKeController::getPlotkernel() const
-{
-    return plotkernel;
-}
-
-void SAKeController::setPlotkernel(CustomPlotKernel *value)
-{
-    plotkernel = value;
-    plotkernel->initCustomPlotFitness();
-}
-
-void SAKeController::setPlotMobility(CustomPlotMobilityFunction *value)
-{
-    plotMobility = value;
-    plotMobility->setActivation(activations,activations_size);
-    plotMobility->setRain(this->rain,this->rain_size);
-    plotMobility->initCustomPlotMobilityFunction();
-}
-
-void SAKeController::setProgressBar(QObject* _progressBar){
-    progressBar=_progressBar;
-}
 
 void SAKeController::run(){
     startAlgorithm();
@@ -356,21 +308,19 @@ void SAKeController::startThread(){
     QThread::start();
 }
 
-void SAKeController::setApplication(QApplication * _a){
-    a=_a;
-}
 
 void SAKeController::stopThread(){
-//    qDebug() << "close " << "\n";
-    //this->moveToThread(QApplication::instance()->thread());
-    //  this->exit(0);
-    //    this->requestInterruption();
-    //    if(this->isInterruptionRequested())
-    //        this->stop();
-    //    this->sleep(10000);
+
     if(stop){
-//        qDebug() << "close2 " << "\n";
         stop->setStop(true);
+    }
+
+}
+
+bool SAKeController::getStop()
+{
+    if(stop){
+        return stop->getStop();
     }
 
 }

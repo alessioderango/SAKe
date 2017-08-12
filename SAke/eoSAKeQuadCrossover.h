@@ -52,10 +52,10 @@ public:
 	void normalizaElement(GenotypeT& _genotype1) {
 		double s = 0;
 		for (int i = 0; i < _genotype1.getSize(); i++)
-            s += _genotype1.getFi()[i];
+            s += _genotype1.getFiIndex(i);
 		if (s != 1)
 			for (int t = 0; t < _genotype1.getSize(); t++)
-				_genotype1.getFi()[t] = (1 / s) * _genotype1.getFi()[t];
+                _genotype1.setFiIndex(t, (1 / s) * _genotype1.getFiIndex(t));
 
 
 	}
@@ -104,8 +104,21 @@ public:
 			_genotype1.setFiIndex(i,fi2);
 			_genotype2.setFiIndex(i,fi1);
 		}
-
+        bool allzero=true;
+        for (int i = 0; i < _genotype1.getSize(); ++i) {
+            if(_genotype1.getFi()[i] != 0){
+                allzero=false;
+            }
+        }
+        if(!allzero)
 		normalizaElement(_genotype1);
+        allzero=true;
+        for (int i = 0; i < _genotype2.getSize(); ++i) {
+            if(_genotype2.getFi()[i] != 0){
+                allzero=false;
+            }
+        }
+        if(!allzero)
 		normalizaElement(_genotype2);
 
 		// START code for crossover of _genotype1 and _genotype2 objects

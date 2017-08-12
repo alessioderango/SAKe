@@ -29,12 +29,12 @@ void HandlerCSV::ReplaceStringInPlace(std::string& subject, const std::string& s
     }
 }
 
-int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,QObject * errorHandler)
+int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size)
 {
 
 
     //    qDebug() << "Entrato in loadCSV";
-    fileurl.remove(0,8);
+    //fileurl.remove(0,8);
     //       qDebug() << fileurl;
     size=0;
     //       qDebug() << fileurl;
@@ -43,8 +43,6 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,QObject * err
 
     std::string line;
     std::vector< std::vector<std::string>> rows;
-
-    clock_t start=clock();
     while (std::getline(in, line)){
         size++;
         std::vector<std::string> x;
@@ -52,13 +50,10 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,QObject * err
         rows.push_back(x);
         // cout << line << endl;
     }
-    clock_t stop=clock();
-    //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
-    //           qDebug() << size;
     rain = new Rain[size];
     size=0;
 
-    for(int i =0; i < rows.size();i++){
+    for(unsigned int i =0; i < rows.size();i++){
         double mm = atof(rows[i].at(1).c_str());
         string date =  rows[i].at(0);
         //string a =" 00:00:00.000";
@@ -73,12 +68,6 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,QObject * err
 
         }catch(std::exception& e){
 
-            QVariant returnedValue;
-            QMetaObject::invokeMethod(errorHandler, "errorcsvFunction",
-                       Q_RETURN_ARG(QVariant, returnedValue),
-                       Q_ARG(QVariant,fileurl),
-                       Q_ARG(QVariant, i+1),
-                       Q_ARG(QVariant, e.what()));
             return 0;
         }
     }
@@ -88,11 +77,11 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,QObject * err
 }
 
 
-int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &activation_size,QObject * errorHandler)
+int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &activation_size)
 {
 
     //    qDebug() << "Entrato in loadCSV";
-    fileurl.remove(0,8);
+    //fileurl.remove(0,8);
     //       qDebug() << fileurl;
     activation_size=0;
     //       qDebug() << fileurl;
@@ -116,12 +105,12 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
     activation = new Activation[activation_size];
     activation_size=0;
 
-    for(int i =0; i < rows.size();i++){
+    for(unsigned int i =0; i < rows.size();i++){
         string dateStart =  rows[i].at(0);
         string dateEnd =  rows[i].at(1);
 
     try{
-        //cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
+        cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
 
         ptime activationStart = time_from_string(dateStart);
         ptime activationEnd = time_from_string(dateEnd);
@@ -131,12 +120,6 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
     }catch(std::exception& e){
         //std::cout << "  Exception: " <<  e.what() << std::endl;
 
-        QVariant returnedValue;
-        QMetaObject::invokeMethod(errorHandler, "errorcsvFunction",
-                   Q_RETURN_ARG(QVariant, returnedValue),
-                   Q_ARG(QVariant,fileurl),
-                   Q_ARG(QVariant, i+1),
-                   Q_ARG(QVariant, e.what()));
         return 0;
     }
     }
@@ -145,8 +128,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
 
 }
 
-int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double & zCr){
-    fileurl.remove(0,8);
+int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & size, double & zCr){
     std::ifstream in(fileurl.toStdString());
 
     std::string line;
@@ -161,10 +143,11 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
 
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
     //           qDebug() << activation_size;
-    Fi = new double[x.size()];
+    //Fi = new double[x.size()];
+    Fi.resize(x.size());
     size=x.size();
 
-    for(int i =0; i < x.size();i++){
+    for(unsigned int i =0; i < x.size();i++){
         double tmp = std::stod(x[i]);
         //cout << " tmp " << tmp <<  endl;
         Fi[i]= tmp;
@@ -199,20 +182,13 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
     Fi = new double[x.size()];
     size=x.size();
 
-    for(int i =0; i < x.size();i++){
+    for(unsigned int i =0; i < x.size();i++){
         double tmp = std::stod(x[i]);
         //cout << " tmp " << tmp <<  endl;
     try{
         Fi[i]= tmp;
     }catch(std::exception& e){
         std::cout << "  Exception: " <<  e.what() << std::endl;
-
-        QVariant returnedValue;
-        QMetaObject::invokeMethod(errorHandler, "errorcsvFunction",
-                   Q_RETURN_ARG(QVariant, returnedValue),
-                   Q_ARG(QVariant,fileurl),
-                   Q_ARG(QVariant, i+1),
-                   Q_ARG(QVariant, e.what()));
         return 0;
     }
     }
@@ -237,7 +213,7 @@ int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFr
         numberGen = std::stod(x[0]);
         x.erase(x.begin(),x.begin()+6);
         std::vector<double> tmp;
-        for (int i = 0; i < x.size(); i++) {
+        for (unsigned int i = 0; i < x.size(); i++) {
             tmp.push_back(std::stod(x[i]));
         }
         popFromFile.push_back(tmp);

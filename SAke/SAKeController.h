@@ -13,7 +13,6 @@ using namespace std;
 #include "utils/eoRealVectorBounds.h"
 #include "eoSAKe.h"
 #include "eoSAKeInit.h"
-#include "updateprojects.h"
 //#include "SAke/eoParallelMy.h"
 #include "handlercsv.h"
 
@@ -34,28 +33,24 @@ typedef eoSAKe<MyFitT> Indi;      // ***MUST*** derive from EO
 #include "make_algo_scalar_my.h"
 #include <do/make_run.h>
 #include <eoScalarFitness.h>
+#include "mainwindow.h"
 void make_help(eoParser & _parser);
 
 
 
 #include <QObject>
-#include <QtQuick>
-#include "CustomPlotItem.h"
-#include "CustomPlotMobilityFunction.h"
-#include "CustomPlotKernel.h"
-#include "make_checkpoint_my.h"
 #include "SAke/eoGenContinueMy.h"
-#include "update.h"
 
 using namespace eo;
 
 class SAKeController: public QThread
 {
-       Q_OBJECT
+    Q_OBJECT
 
 public:
-    SAKeController(CustomPlotItem *& qCustomPlot,
+    SAKeController(MainWindow *main,
                    QString  sselection,
+                   QString  replacement,
                    QString  spattern,
                    Rain *rain,
                    int rain_size,
@@ -71,57 +66,84 @@ public:
                    float    fpropMutation,
                    float    fpme,
                    float    fpmb,
-                   QObject *_currentMaximumFitness,
-                   QObject *_absoluteMaximumFitness,
-                   QObject *_currentAverageFitness,
-                   QObject *_absoluteAverageFitness,
                    int numberofProcessor,
-                   int para1,
-                   int para2,
-                   QString spara1,
+                   float para1,
+                   float para2,
                    bool _lastGeneration,
-                   Update* update,
                    const QString& projectName,
                    vector<QString> orders,
                    int itypeAlgorithm,
                    int numberElitist,
                    int seed,
-                   int saveKernels);
+                   int saveKernels, int numberOfKernelToBeSaved);
 
     SAKeController();
-
-
-    void setPlotMobility(CustomPlotMobilityFunction *value);
-
-    void setApplication(QApplication * _a);
-    CustomPlotKernel *getPlotkernel() const;
-    void setPlotkernel(CustomPlotKernel *value);
+    bool finish;
     void setProgressBar(QObject* progressBar);
     int getCsvHandlerstatusRain() const;
     void setCsvHandlerstatusRain(int value);
+    vector<QCPItemText *> getWidgetArray() const;
+    void setWidgetArray(const vector<QCPItemText *> &value);
 
-    float getPropSelection() const;
-    void setPropSelection(float value);
+    vector<QCPItemLine *> getArrowArray() const;
+    void setArrowArray(const vector<QCPItemLine *> &value);
+    vector<QCPItemText*> widgetArray;
+    vector<QCPItemLine*> arrowArray;
+    bool getClickCloseTab() const;
+    void setClickCloseTab(bool value);
+
+    MainWindow *getMainwindows() const;
+    void setMainwindows(MainWindow *value);
+
+signals:
+    void finished(int index);
+    void updateMobPlot(int indexTab,
+                       Rain * rain,
+                       int rain_size,
+                       std::vector<double> Y,
+                       double,
+                       tm,
+                       double,
+                       tm,
+                       std::vector<Ym> bests,
+                       std::vector<QCPItemText*> widgetArray,
+                       std::vector<QCPItemLine*> arrowArray);
+    void updateFitnessPlot(int indexTab,
+                           QVector<double> x,
+                           QVector<double> y,
+                           QVector<double> x1,
+                           QVector<double> y1);
+
+    void updateKernelPlot(int indexTab,
+                          QVector<double> Fi,
+                          int tb);
+    void updateTexts(int indexTab,
+                     QString s,
+                     QString fitness,
+                     QString cuavfitness,
+                     QString tb,
+                     QString safetyMargin,
+                     QString momentum,
+                     int barValur,
+                     int);
+
+    void updateAbsMaxFit(int indexTab, QString s);
+    void updateAbsAvFit(int indexTab, QString s);
+
 
 protected:
 
 public slots:
     void startThread();
     void stopThread();
+    bool getStop();
 private:
     void run();
     void startAlgorithm();
     bool start;
-    bool finish;
-    //Graphs
-    CustomPlotItem *qCustomPlot;
-    CustomPlotMobilityFunction * plotMobility;
-    CustomPlotKernel * plotkernel;
-    QObject *progressBar;
-    QObject *currentMaximumFitness;
-    QObject *absoluteMaximumFitness;
-    QObject *currentAverageFitness;
-    QObject *absoluteAverageFitness;
+    //bool finish;
+
+    //Plot temporary info
 
 
     //stop algorithm
@@ -142,9 +164,7 @@ private:
     int      tbMin;
     int      dHpMax;
     int      dHpMin;
-    float    relRateCrossover;
-    float    relRateMutation;
-    float    propSelection;
+
     float    propCrossover;
     float    propMutation;
     float    pme;
@@ -153,8 +173,6 @@ private:
     int numberofProcessor;
     bool lastGeneration;
     QString  savePath;
-    QApplication * a;
-    Update* update;
 
     unsigned int typeAlgorithm;
     double parameter1;
@@ -164,6 +182,8 @@ private:
 
     int seed;
     int saveKernels;
+    bool clickCloseTab;
+    MainWindow *mainwindows;
 };
 
 #endif // SAKCONTROLLER_H

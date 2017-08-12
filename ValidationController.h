@@ -1,8 +1,6 @@
 #ifndef VALIDATIONCONTROLLER_H
 #define VALIDATIONCONTROLLER_H
 #include <QObject>
-#include "CustomPlotMobilityFunction.h"
-#include "CustomPlotKernel.h"
 #include "SAke/Rain.h"
 #include "SAke/Activation.h"
 #include <fstream>
@@ -10,31 +8,35 @@
 #include <stdlib.h>
 #include <algorithm>
 #include <iostream>
+#include <QThread>
 #include "handlercsv.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/local_time_adjustor.hpp"
 #include "boost/date_time/c_local_time_adjustor.hpp"
+#include <SAke/Ym.h>
+#include "qcustomplot.h"
+#include <mainwindow.h>
+
 using namespace std;
 using boost::posix_time::ptime;
 using namespace boost::gregorian;
 using namespace boost::posix_time;
 
-class ValidationController
+class ValidationController : public QThread
 {
+    Q_OBJECT
 public:
-    ValidationController(
-            Rain *  rain,
+    ValidationController(QMutex * mutex,
+                         Rain *  rain,
             int  rain_size,
             Activation *  activations,
             int  activations_size,
-            double * Fi,
+            std::vector<double> &Fi,
             int size,
             double zCr
             );
-    void setPlotMobility(CustomPlotMobilityFunction *value);
-    void setKernelPlot(CustomPlotKernel *value);
-    void updateKernelPlot();
-    void updatePlot();
+
+    void startThread();
     Rain *getRain() const;
     void setRain(Rain *value);
 
@@ -60,21 +62,57 @@ public:
     QObject *getFitness() const;
     void setFitness(QObject *value);
 
+    void startValidation();
+
+    vector<QCPItemText*> widgetArray;
+    vector<QCPItemLine*> arrowArray;
+
+signals:
+    void updateMobPlot(int indexTab,
+                       Rain * rain,
+                       int rain_size,
+                       std::vector<double> Y,
+                       double,
+                       tm,
+                       double,
+                       tm,
+                       std::vector<Ym> bests,
+                       std::vector<QCPItemText*> widgetArray,
+                       std::vector<QCPItemLine*> arrowArray);
+    void updateFitnessPlot(int indexTab,
+                           QVector<double> x,
+                           QVector<double> y,
+                           QVector<double> x1,
+                           QVector<double> y1);
+
+    void updateKernelPlot(int indexTab,
+                          QVector<double> Fi,
+                          int tb);
+    void updateTextsValidation(int indexTab,
+                              QString fitness,
+                              QString tb,
+                              QString safetyMargin,
+                              QString momentum);
+
 private:
-    CustomPlotMobilityFunction * plotMobility;
-    CustomPlotKernel * plotkernel;
+    void run();
+
     QObject *tb;
     QObject *deltaCritico;
     QObject *momentoDelPrimoOrdine;
     QObject *fitness;
 
-    double* Fi;
+    std::vector<double> Fi;
     int size;
     Rain * rain;
     int rain_size;
     Activation * activations;
     int activations_size;
     double zCr;
+
+    QMutex * mutex;
+
+
 };
 
 #endif // VALIDATIONCONTROLLER_H

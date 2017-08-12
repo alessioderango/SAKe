@@ -47,8 +47,10 @@ public:
         // END   Code of Ctor of an eoSAKeInit object
     }
 
-    double * GetFunzioneFiltro(int tb,string Inputpattern) {
-        double* fi = (double*) malloc(sizeof(double)*tb);
+    std::vector<double> GetFunzioneFiltro(int tb,string Inputpattern) {
+       // double* fi = (double*) malloc(sizeof(double)*tb);
+        std::vector<double> fi;
+        fi.resize(tb);
         int i;
         if (Inputpattern.compare("Rectangular") == 0) {
             for (i = 0; i < tb; i++) {
@@ -83,7 +85,9 @@ public:
             int tb = popFromFile[count].size();
             _genotype.setSize(tb);
             //double* fi = GetFunzioneFiltro(tb, pattern);
-            double* fi= (double*) malloc(sizeof(double)*tb);
+            //double* fi= (double*) malloc(sizeof(double)*tb);
+            std::vector<double> fi;
+            fi.resize(tb);
             for (int i = 0; i < tb; i++) {
                 fi[i] =  popFromFile[count][i];
             }
@@ -98,7 +102,9 @@ public:
             int tb =( rand()%(tbMax-tbMin))+tbMin;
 //             cout << tb  << endl;
             _genotype.setSize(tb);
-            double* fi = GetFunzioneFiltro(tb, pattern);
+            //double* fi = GetFunzioneFiltro(tb, pattern);
+            std::vector<double> fi = GetFunzioneFiltro(tb, pattern);
+            //fi.resize(tb);
             _genotype.setFi(fi);
             _genotype.number=count;
             count++;
