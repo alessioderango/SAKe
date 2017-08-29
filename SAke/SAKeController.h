@@ -76,7 +76,7 @@ public:
                    int numberElitist,
                    int seed,
                    int saveKernels, int numberOfKernelToBeSaved);
-
+    static bool fileExists(QString path);
     SAKeController();
     bool finish;
     void setProgressBar(QObject* progressBar);

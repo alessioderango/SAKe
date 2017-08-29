@@ -64,8 +64,10 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
             size++;
 
         }catch(std::exception& e){
+            std::cout << "rain row = " << i << std::endl;
             _e.append(e.what());
             row = i;
+
             return 0;
         }
     }
@@ -117,8 +119,10 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
 
     }catch(std::exception& e){
         //std::cout << "  Exception: " <<  e.what() << std::endl;
+            std::cout << "act row = " << i << std::endl;
             _e.append(e.what());
             row = i;
+
         return 0;
     }
     }
@@ -138,17 +142,13 @@ int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & si
     zCr = std::stod(x[2]);
     //cout << line << endl;
     x.erase(x.begin(),x.begin()+5);
-    //cout << line << endl;
 
-    //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
-    //           qDebug() << activation_size;
-    //Fi = new double[x.size()];
     Fi.resize(x.size());
     size=x.size();
 
     for(unsigned int i =0; i < x.size();i++){
         double tmp = std::stod(x[i]);
-        //cout << " tmp " << tmp <<  endl;
+        cout << " tmp " << tmp <<  endl;
         Fi[i]= tmp;
 
     }

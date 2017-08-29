@@ -1,7 +1,7 @@
 #include "SAKeController.h"
 #include "make_checkpoint_my.h"
 
-bool fileExists(QString path) {
+bool SAKeController::fileExists(QString path) {
     QFileInfo checkFile(path);
     // check if file exists and if yes: Is it really a file and no directory?
     if (checkFile.exists() && checkFile.isFile()) {

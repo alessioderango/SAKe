@@ -26,8 +26,7 @@ class ValidationController : public QThread
 {
     Q_OBJECT
 public:
-    ValidationController(QMutex * mutex,
-                         Rain *  rain,
+    ValidationController(Rain *  rain,
             int  rain_size,
             Activation *  activations,
             int  activations_size,
@@ -66,6 +65,9 @@ public:
 
     vector<QCPItemText*> widgetArray;
     vector<QCPItemLine*> arrowArray;
+
+    MainWindow *getMainwindows() const;
+    void setMainwindows(MainWindow *value);
 
 signals:
     void updateMobPlot(int indexTab,
@@ -111,8 +113,7 @@ private:
     Activation * activations;
     int activations_size;
     double zCr;
-
-    QMutex * mutex;
+MainWindow *mainwindows;
 
 
 };

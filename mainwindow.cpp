@@ -684,7 +684,10 @@ void MainWindow::on_newCalibrationProject_triggered()
 void MainWindow::myClick(QTreeWidgetItem *item, int column)
 {
     QVariantList listParameter = xmlmanager->getAllElementsFromProjectName(item->data(0,Qt::UserRole).toString());
-    if(QString::compare(item->parent()->text(column), "Calibration", Qt::CaseInsensitive)==0){
+    QTreeWidgetItem * p = item->parent();
+    int i = ui->treeWidget->indexOfTopLevelItem(item);
+    cout << i << endl;
+    if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Calibration", Qt::CaseInsensitive)==0){
         if(listParameter.size() > 5){
             Dialog *dialog = new Dialog();
             dialog->setReadOnlyProjName(true);
@@ -693,7 +696,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
             dialog->show();
         }
     }else
-        if(QString::compare(item->parent()->text(column), "Validation", Qt::CaseInsensitive)==0){
+        if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Validation", Qt::CaseInsensitive)==0){
             if(listParameter.size() > 5){
                 Validation *validation = new Validation();
                 validation->setReadOnlyProjName(true);
@@ -934,6 +937,8 @@ void MainWindow::showAlertInputCsv(int row, QString filename, QString e)
                 tr(error.toStdString().c_str()) );
 
 }
+
+
 
 void MainWindow::deleteProject(int item)
 {

@@ -79,8 +79,7 @@ void Validation::on_buttonBox_accepted()
                                                                   "");
     }
 
-    ValidationController * validationController=new ValidationController(&(mainWindow->mutex),
-                rain,
+    ValidationController * validationController=new ValidationController(rain,
                 rain_size,
                 activation,
                 activation_size,
@@ -88,6 +87,7 @@ void Validation::on_buttonBox_accepted()
                 size_Fi,
                 zCr
                 );
+    validationController->setMainwindows(mainWindow);
     qRegisterMetaType<tm>("tm");
     qRegisterMetaType<std::vector<Ym>>("std::vector<Ym>");
     qRegisterMetaType<std::vector<QCPItemLine*>>("std::vector<QCPItemLine*>");

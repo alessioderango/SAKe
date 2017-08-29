@@ -12,6 +12,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->label_14->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
     ui->label_15->hide();
     ui->lineEditPar2->hide();
+
 }
 
 Dialog::~Dialog()
@@ -138,6 +139,8 @@ void Dialog::on_pushButton_2_clicked()
     ui->lineEditActivation->setText(fileName);
 }
 //
+
+
 void Dialog::on_pushButtonStart_clicked()
 {
     HandlerCSV * csv = new HandlerCSV();
@@ -146,7 +149,19 @@ void Dialog::on_pushButtonStart_clicked()
     int rain_size=0;
     int rowError=0;
     QString e;
-    connect(this, SIGNAL(showAlertInputCsv(int,QString,QString)), mainWindow, SLOT(showAlertInputCsv(int,QString,QString))) ;
+
+    if(!SAKeController::fileExists(rainPath)){
+        //emit showAlertFileNotExist(rainPath);
+        QString error = QString("File does not exist "+ rainPath+"\n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("File does not exist").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
+
     int result = csv->loadCSVRain(rainPath,rain,rain_size, rowError, e);
     if(result == 0)
     {
@@ -156,6 +171,15 @@ void Dialog::on_pushButtonStart_clicked()
     QString actPath = ui->lineEditActivation->text();
     Activation * activation;
     int activation_size=0;
+    if(!SAKeController::fileExists(actPath)){
+        QString error = QString("File does not exist "+ rainPath+"\n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("File does not exist").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
     result = csv->loadCSVActivation(actPath,activation,activation_size, rowError, e);
     if(result== 0)
     {
@@ -409,6 +433,7 @@ MainWindow *Dialog::getMainWindow() const
 void Dialog::setMainWindow(MainWindow *value)
 {
     mainWindow = value;
+
 }
 
 QTabWidget *Dialog::getTab() const

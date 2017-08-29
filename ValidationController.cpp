@@ -1,6 +1,6 @@
 #include "ValidationController.h"
 
-ValidationController::ValidationController(QMutex *_mutex,
+ValidationController::ValidationController(
                                            Rain *  rain,
                                            int  rain_size,
                                            Activation *  activations,
@@ -14,7 +14,7 @@ ValidationController::ValidationController(QMutex *_mutex,
 //       HandlerCSV::loadCSVRain(filenameRainPath,rain,rain_size);
 //       HandlerCSV::loadCSVActivation(filenameActivationPath,activations,activations_size);
 //       HandlerCSV::loadCSVKernel(filenameKernelPath,Fi,size,zCr);
-    mutex = _mutex;
+
     this->rain = rain;
     this->rain_size = rain_size;
     this->activations = activations;
@@ -42,6 +42,7 @@ static int  compareDouble (const void * a, const void * b)
 }
 
 int getDifferenceTime(tm temp1,tm temp2){
+    try {
     ptime rain0 = ptime_from_tm(temp1);
     ptime rainLast = ptime_from_tm(temp2);
     boost::posix_time::time_duration diff1 =(rain0-ptime(date(1970, Jan, 1)));
@@ -51,13 +52,21 @@ int getDifferenceTime(tm temp1,tm temp2){
     if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) )
     {
         //TODO [differenza in minuti] [differenza in ore] [ differenza in giorni ]
-        int difference = std::difftime(y, x) / (60*60*24);
+        int difference = 0;
+
+            difference = std::difftime(y, x) / (60*60*24);
+
+
 //	        std::cout << std::ctime(&x);
 //	        std::cout << std::ctime(&y);
 //	        std::cout << "difference = " << difference << " days" << std::endl;
         return difference;
     }
+
     return -1;
+    } catch (std::exception& e){
+        std::cout << "  Exception: " <<  e.what() << std::endl;
+    }
 }
 
 void getYmDecr(Ym*&ym,int &size){
@@ -155,12 +164,22 @@ void ValidationController::run(){
     startValidation();
 }
 
+MainWindow *ValidationController::getMainwindows() const
+{
+    return mainwindows;
+}
+
+void ValidationController::setMainwindows(MainWindow *value)
+{
+    mainwindows = value;
+}
+
 void ValidationController::startValidation(){
 
-        //Calcolo Mobiliy Function
-        //double * Y = new double[rain_size];
-        std::vector<double> Y;
-        Y.resize(rain_size);
+    //Calcolo Mobiliy Function
+    //double * Y = new double[rain_size];
+    std::vector<double> Y;
+    Y.resize(rain_size);
         for (int t = 0; t < rain_size; t++) {
             double ym = 0;
             Y[t] = 0;
@@ -179,27 +198,36 @@ void ValidationController::startValidation(){
         double f=0;
         //Ym * ym= new Ym[rain_size];
         std::vector<Ym> ym;
-        ym.resize(rain_size);
+        //ym.resize(rain_size);
         int countYm=0;
 
         for (int t = 1; t < rain_size-1; t++) {
             bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
             if(cross){
                 // trovato un picco deve essere considerato
-                ym[countYm].setValue(Y[t]);
-                ym[countYm].setTime(rain[t].getTime());
+//                ym[countYm].setValue(Y[t]);
+//                ym[countYm].setTime(rain[t].getTime());
+
+                Ym p;
+                p.setValue(Y[t]);
+                p.setTime(rain[t].getTime());
+                ym.push_back(p);
                 countYm++;
             }
         }
 
-       // getYmDecr(ym,countYm);
-        qsort (&ym[0], ym.size(), sizeof(Ym),compareDouble);
+        //getYmDecr(ym,countYm);
+       qsort (&ym[0], ym.size(), sizeof(Ym),compareDouble);
 
 
-    //        for (int i = 0; i < countYm; i++) {
-    //               printf("ym[%d] %f \n",i, ym[i].getValue());
-    //        }
-    //        printf("countYm %d \n",countYm);
+//            for (int i = 0; i < countYm; i++) {
+//                int year = ym[i].getTime().tm_year +1900;
+//                int mon = ym[i].getTime().tm_mon +1;
+//                int day = ym[i].getTime().tm_mday ;
+//                std::cout << "ym countYm  year " << year << " mon " << mon << " day " << day << "   ym["<< i <<"] = " <<  ym[i].getValue() << std::endl;
+//                   //printf("ym[%d] %f \n",i, ym[i].getValue());
+//            }
+//            printf("countYm %d \n",countYm);
 
 
         double YsMin = 999999999;
@@ -211,6 +239,9 @@ void ValidationController::startValidation(){
                 //TODO inserire variabili intervallo giorni
                 int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
                 int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
+
+
+
                 if(result1>=-2 && result2>=-1){
                     //if(i<countYm)
                     //if(i<(activations_size)){
@@ -221,11 +252,7 @@ void ValidationController::startValidation(){
                         //fflush( stdout );
                         ym[i].setI(i+1);
                         bests.push_back(ym[i]);
-    //                        int year = ym[i].getTime().tm_year +1900;
-    //                        int mon = ym[i].getTime().tm_mon +1;
-    //                        int day = ym[i].getTime().tm_mday ;
-    //                        std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
-    //                        std::cout << "ym[i] value " << ym[i].getValue() << std::endl;
+
                         //printf("+  %f \n",(1 / (double)(i + 1)));
                         if(ym[i].getValue() < YsMin){
                             YsMin =ym[i].getValue();
@@ -257,7 +284,8 @@ void ValidationController::startValidation(){
         for (int i = 1; i <= activations_size; i++) {
             fMax +=(double)(1/(double)i);
         }
-        mutex->lock();
+        //mutex->lock();
+        mainwindows->mutex.lock();
         ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
 
         emit this->updateMobPlot(pos,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray,arrowArray);
@@ -269,7 +297,10 @@ void ValidationController::startValidation(){
                                               QString("%1").arg(dYcr),
                                               QString("%1").arg(momentoDelPrimoOrdine)
                                               );
-         mutex->unlock();
+        mainwindows->mutex.unlock();
+        // mutex->unlock();
+        //delete ym;
+
 }
 
 void ValidationController::startThread(){
