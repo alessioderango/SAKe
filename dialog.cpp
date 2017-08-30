@@ -13,6 +13,14 @@ Dialog::Dialog(QWidget *parent) :
     ui->label_15->hide();
     ui->lineEditPar2->hide();
 
+    // check input
+    ui->lineEditPopSize->setValidator(new QIntValidator(1, 5000, this));
+//    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 5000, this));
+//    QDoubleValidator* doubleValidator = new MyValidatorDouble(0.55, 1, 2, ui->lineEditPar1);
+//    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
+//    ui->lineEditPar1->setValidator(doubleValidator);
+    //ui->lineEdit
+
 }
 
 Dialog::~Dialog()
@@ -67,6 +75,9 @@ void Dialog::setParameters(QVariantList list)
     ui->lineEditNumberElitists->setText(list[20].toString());
     ui->lineEditSeed->setText(list[21].toString());
     ui->lineEditFrequKerSav->setText(list[22].toString());
+    ui->lineEditNumBestKernelSaved->setText(list[23].toString());
+    ui->selectOrder1->setCurrentText(list[25].toString());
+    ui->selectOrder2->setCurrentText(list[26].toString());
 }
 
 void Dialog::setReadOnlyProjName(bool a)
@@ -139,7 +150,19 @@ void Dialog::on_pushButton_2_clicked()
     ui->lineEditActivation->setText(fileName);
 }
 //
+bool Dialog::checklineEdit(QString l, QString s){
+    if(l.isEmpty()){
+        QString error = QString(s);
 
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return true;
+    }
+
+    return false;
+}
 
 void Dialog::on_pushButtonStart_clicked()
 {
@@ -149,6 +172,21 @@ void Dialog::on_pushButtonStart_clicked()
     int rain_size=0;
     int rowError=0;
     QString e;
+    QString actPath = ui->lineEditActivation->text();
+    Activation * activation;
+    int activation_size=0;
+
+
+    if(ui->lineEditProjName->text().isEmpty())
+    {
+        QString error = QString("Projet name cannot be empty \n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
 
     if(!SAKeController::fileExists(rainPath)){
         //emit showAlertFileNotExist(rainPath);
@@ -161,18 +199,8 @@ void Dialog::on_pushButtonStart_clicked()
         return;
     }
 
-
-    int result = csv->loadCSVRain(rainPath,rain,rain_size, rowError, e);
-    if(result == 0)
-    {
-        emit showAlertInputCsv(rowError,rainPath, e);
-        return;
-    }
-    QString actPath = ui->lineEditActivation->text();
-    Activation * activation;
-    int activation_size=0;
     if(!SAKeController::fileExists(actPath)){
-        QString error = QString("File does not exist "+ rainPath+"\n");
+        QString error = QString("File does not exist "+ actPath+"\n");
 
         QMessageBox::information(
                     this,
@@ -180,6 +208,68 @@ void Dialog::on_pushButtonStart_clicked()
                     tr(error.toStdString().c_str()) );
         return;
     }
+    bool check = checklineEdit(ui->lineEditPopSize->text(), QString("Population size cannot be empty \n"));
+    if(check) return;
+
+
+    // elitist
+    if(ui->comboBoxReplacement->currentIndex() == 1){
+        check = checklineEdit(ui->lineEditNumberElitists->text(), QString("number of elitists cannot be empty \n"));
+        if(check) return;
+    }
+
+    if(ui->comboBoxSelection->currentIndex() ==0 ){
+        check = checklineEdit(ui->lineEditPar1->text(), QString("Tr cannot be empty \n"));
+        if(check) return;
+    }else
+        if(ui->comboBoxSelection->currentIndex() ==1 ){
+            check = checklineEdit(ui->lineEditPar1->text(), QString("Ts cannot be empty \n"));
+            if(check) return;
+        }
+        else
+          if(ui->comboBoxSelection->currentIndex() ==2 ){
+                    check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
+                    if(check) return;
+                    check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
+                    if(check) return;
+           }
+
+    check = checklineEdit(ui->lineEditMutationP->text(), QString("Mutation probability cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditCrossoverP->text(), QString("Crossover probability cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditPme->text(), QString("Pme cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditPmb->text(), QString("Pmb cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditTbMin->text(), QString("Tbmin cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditTbMax->text(), QString("Tbmax cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditdHpMax->text(), QString("dHpMax cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditdHpMin->text(), QString("dHpMin cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditMaxNumIte->text(), QString("Max number of iteration cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditNumProc->text(), QString("Number of processors cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditSeed->text(), QString("Seed cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditFrequKerSav->text(), QString("Frequency of kernel saving cannot be empty \n"));
+    if(check) return;
+    check = checklineEdit(ui->lineEditNumBestKernelSaved->text(), QString("Number of best kernels to saved cannot be empty \n"));
+    if(check) return;
+
+
+
+    int result = csv->loadCSVRain(rainPath,rain,rain_size, rowError, e);
+    if(result == 0)
+    {
+        emit showAlertInputCsv(rowError,rainPath, e);
+        return;
+    }
+
     result = csv->loadCSVActivation(actPath,activation,activation_size, rowError, e);
     if(result== 0)
     {
@@ -253,7 +343,9 @@ void Dialog::on_pushButtonStart_clicked()
                                                               QString("%1").arg(x),
                                                               ui->lineEditNumberElitists->text(),
                                                               ui->lineEditSeed->text(),
-                                                              ui->lineEditFrequKerSav->text());
+                                                              ui->lineEditFrequKerSav->text(),
+                                                              ui->lineEditNumBestKernelSaved->text(),
+                                                              ordersSelectionCriterion);
     }else{
         mainWindow->getXmlmanager()->SaveXMLFileCalibrationProject(ui->lineEditProjName->text(),
                                                   ui->comboBoxSelection->currentText(),
@@ -277,7 +369,9 @@ void Dialog::on_pushButtonStart_clicked()
                                                   QString("%1").arg(x),
                                                   ui->lineEditNumberElitists->text(),
                                                   ui->lineEditSeed->text(),
-                                                  ui->lineEditFrequKerSav->text());
+                                                  ui->lineEditFrequKerSav->text(),
+                                                  ui->lineEditNumBestKernelSaved->text(),
+                                                  ordersSelectionCriterion);
     }
 
 
@@ -376,7 +470,9 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
     if(index ==0){
         //StockTour
         ui->label_14->show();
+        ui->lineEditPar1->setValidator(new QDoubleValidator(0.55, 1,2, this));
         ui->lineEditPar1->show();
+
         ui->label_14->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
         ui->label_15->hide();
         ui->lineEditPar2->hide();
@@ -385,6 +481,7 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
             //DetTour
             ui->label_14->show();
             ui->lineEditPar1->show();
+            ui->lineEditPar1->setValidator(new QIntValidator(2, ui->lineEditPopSize->text().toInt(), this));
             ui->label_14->setText(" Ts (tournament size 2 <= Ts <=N))");
             ui->label_15->hide();
             ui->lineEditPar2->hide();
@@ -393,8 +490,10 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
             {
                 ui->label_14->show();
                 ui->label_14->setText("p (selective pressure 1 < p <= 2)");
+                ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
                 ui->label_15->show();
                 ui->label_15->setText("e (exponent 1=linear)");
+                ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
                 ui->lineEditPar2->show();
                 ui->lineEditPar1->show();
             }else
@@ -449,4 +548,9 @@ void Dialog::setTab(QTabWidget *value)
 QString Dialog::getProjectName()
 {
     ui->lineEditProjName->text();
+}
+
+void Dialog::on_lineEditPopSize_textChanged(const QString &arg1)
+{
+    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, ui->lineEditPopSize->text().toInt(), this));
 }

@@ -113,6 +113,7 @@ private slots:
     void contextMenuRequestMobilityFunction(QPoint pos);
     void contextMenuRequestKernel(QPoint pos);
     void contextMenuRequestFitness(QPoint pos);
+    void openFolderProject();
     void showAlertInputCsv(int row, QString filename , QString e);
 
 signals:
@@ -122,6 +123,7 @@ private:
     Ui::MainWindow *ui;
     XMLManager * xmlmanager;
     QSignalMapper *signalMapper;
+    QMenu menu;
 
 
 

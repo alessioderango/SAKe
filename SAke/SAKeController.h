@@ -184,6 +184,7 @@ private:
 
     int seed;
     int saveKernels;
+    int numberOfKernelToBeSaved;
     bool clickCloseTab;
     MainWindow *mainwindows;
 };

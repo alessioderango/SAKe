@@ -767,11 +767,11 @@ void MainWindow::prepareMenu(const QPoint &pos)
     QAction *delAct = new QAction(QIcon(""), tr("&Delete Project"), this);
     QAction *show = new QAction(QIcon(""), tr("&Show Result"), this);
     QTreeWidgetItem *item = ui->treeWidget->itemAt( pos );
-    connect(delAct, SIGNAL(triggered()),signalMapper, SLOT(map())) ;//
+    connect(show, SIGNAL(triggered()),this, SLOT(openFolderProject()),Qt::UniqueConnection) ;
+    connect(delAct, SIGNAL(triggered()),signalMapper, SLOT(map()),Qt::UniqueConnection) ;//
     //this, deleteProject(QString));//item->data(0,Qt::UserRole).toString() });
-
     signalMapper -> setMapping(delAct,item->data(0,Qt::UserRole).toInt());
-    connect (signalMapper, SIGNAL(mapped(int )), this, SLOT(deleteProject(int))) ;
+    connect (signalMapper, SIGNAL(mapped(int )), this, SLOT(deleteProject(int)),Qt::UniqueConnection) ;
 
 
     QMenu menu(this);
@@ -925,6 +925,11 @@ void MainWindow::contextMenuRequestFitness(QPoint pos)
 
 }
 
+void MainWindow::openFolderProject()
+{
+    QDesktopServices::openUrl(QUrl(xmlmanager->folderPath+"/workspace/calibration"));
+}
+
 void MainWindow::showAlertInputCsv(int row, QString filename, QString e)
 {
     QString error = QString("Inside file : "+ filename+"\n");
@@ -942,11 +947,18 @@ void MainWindow::showAlertInputCsv(int row, QString filename, QString e)
 
 void MainWindow::deleteProject(int item)
 {
-    xmlmanager->deleteProject(item);
-    //item->parent()->setExpanded(true);
+    QMessageBox::StandardButton reply;
+      reply = QMessageBox::question(this, "Warning", "Are you sure you want to delete the project?",
+                                    QMessageBox::Yes|QMessageBox::No);
+      if (reply == QMessageBox::Yes) {
+          xmlmanager->deleteProject(item);
+          //item->parent()->setExpanded(true);
 
-    xmlmanager->ReadCalibrationProjectXML();
-    emit expandTreeViewSignals();
+          xmlmanager->ReadCalibrationProjectXML();
+          emit expandTreeViewSignals();
+      }
+
+
 }
 
 

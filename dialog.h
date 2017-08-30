@@ -6,6 +6,7 @@
 #include <iostream>
 #include <SAke/SAKeController.h>
 #include "mainwindow.h"
+#include <myvalidatordouble.h>
 using namespace std;
 namespace Ui {
 class Dialog;
@@ -49,6 +50,9 @@ private slots:
     void on_comboBoxSelection_currentIndexChanged(int index);
 
     void on_comboBoxReplacement_currentIndexChanged(int index);
+
+    void on_lineEditPopSize_textChanged(const QString &arg1);
+    bool checklineEdit(QString l, QString s);
 
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);

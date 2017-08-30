@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>917</height>
+    <height>928</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -984,6 +984,9 @@
               <bold>false</bold>
              </font>
             </property>
+            <property name="text">
+             <string>500</string>
+            </property>
            </widget>
           </item>
           <item>
@@ -1071,7 +1074,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Number of best kernels to be safed</string>
+             <string>Number of best kernels to be saved</string>
             </property>
            </widget>
           </item>

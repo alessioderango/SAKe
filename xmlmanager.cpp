@@ -324,7 +324,9 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                           QString typeReplacement,
                                                           QString numberElitist,
                                                           QString seed,
-                                                          QString saveKernels)
+                                                          QString saveKernels,
+                                                          QString numberOfKernelToBeSaved,
+                                                          std::vector<QString> orders)
 {
 
     QFile inFile( xmlFilePath );
@@ -377,6 +379,12 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
             a.at(i).childNodes().at(18).firstChild().setNodeValue(numberElitist);
             a.at(i).childNodes().at(19).firstChild().setNodeValue(seed);
             a.at(i).childNodes().at(20).firstChild().setNodeValue(saveKernels);
+            a.at(i).childNodes().at(21).firstChild().setNodeValue(numberOfKernelToBeSaved);
+            a.at(i).childNodes().at(22).firstChild().setNodeValue(orders[0]);
+            a.at(i).childNodes().at(23).firstChild().setNodeValue(orders[1]);
+            a.at(i).childNodes().at(24).firstChild().setNodeValue(orders[2]);
+            a.at(i).childNodes().at(25).firstChild().setNodeValue(orders[3]);
+
         }
 
     }
@@ -421,7 +429,9 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
                                               QString typeReplacement,
                                               QString numberElitist,
                                               QString seed,
-                                              QString saveKernels)
+                                              QString saveKernels,
+                                              QString numberOfKernelToBeSaved,
+                                              std::vector<QString> orders)
 {
 
     //Controllare se esiste un altro progetto con lo stesso nome
@@ -492,6 +502,11 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomElement numberElitistDom = document.createElement( "numberElitist" );
     QDomElement seedDom = document.createElement( "seed" );
     QDomElement saveKernelsDom = document.createElement( "saveKernels" );
+    QDomElement numberOfKernelToBeSavedDom = document.createElement( "numberOfKernelToBeSaved" );
+    QDomElement order0Dom = document.createElement( "order0Dom" );
+    QDomElement order1Dom = document.createElement( "order1Dom" );
+    QDomElement order2Dom = document.createElement( "order2Dom" );
+    QDomElement order3Dom = document.createElement( "order3Dom" );
 
     //create TextElement
     QDomText typeText = document.createTextNode( selection );
@@ -523,8 +538,19 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
 
     QDomText seedText = document.createTextNode( seed );
     QDomText saveKernelsText = document.createTextNode( saveKernels );
+    QDomText numberOfKernelToBeSavedText = document.createTextNode( numberOfKernelToBeSaved );
+    QDomText order0Text = document.createTextNode( orders[0] );
+    QDomText order1Text = document.createTextNode( orders[1] );
+    QDomText order2Text = document.createTextNode( orders[2] );
+    QDomText order3Text = document.createTextNode( orders[3] );
     seedDom.appendChild(seedText);
     saveKernelsDom.appendChild(saveKernelsText);
+    numberOfKernelToBeSavedDom.appendChild(numberOfKernelToBeSavedText);
+    order0Dom.appendChild(order0Text);
+    order1Dom.appendChild(order1Text);
+    order2Dom.appendChild(order2Text);
+    order3Dom.appendChild(order3Text);
+
 
     typeElement.appendChild(typeText);
     value1Element.appendChild(value1Text);
@@ -587,6 +613,11 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
 
     project.appendChild(seedDom);
     project.appendChild(saveKernelsDom);
+    project.appendChild(numberOfKernelToBeSavedDom);
+    project.appendChild(order0Dom);
+    project.appendChild(order1Dom);
+    project.appendChild(order2Dom);
+    project.appendChild(order3Dom);
 
     id.appendChild(idText);
     project.appendChild(id);

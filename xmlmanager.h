@@ -32,8 +32,9 @@ public:
                                       QString typeReplacement,
                                       QString numberElitist,
                                       QString seed,
-                                      QString saveKernels
-                                      );
+                                      QString saveKernels,
+                                      QString numberOfKernelToBeSaved,
+                                      std::vector<QString> orders);
     int SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                   QString selection,
                                                   QString value1,
@@ -54,8 +55,11 @@ public:
                                                   QString pathRains,
                                                   QString pathActivation,
                                                   QString typeReplacement,
-                                                  QString numberElitist
-                                                  , QString seed, QString saveKernels);
+                                                  QString numberElitist,
+                                                  QString seed,
+                                                  QString saveKernels,
+                                                  QString numberOfKernelToBeSaved,
+                                                  std::vector<QString> orders);
     int SaveXMLFileValidationProject(const QString &_projectName,
                                      const QString &filenameRainPath,
                                      const QString &filenameActivaionPath,

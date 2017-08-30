@@ -42,7 +42,7 @@ SAKeController::SAKeController(MainWindow *_main,
                                int numberElitist,
                                int _seed,
                                int _saveKernels,
-                               int numberOfKernelToBeSaved)
+                               int _numberOfKernelToBeSaved)
 
 {
     mainwindows = _main;
@@ -57,6 +57,7 @@ SAKeController::SAKeController(MainWindow *_main,
 
     seed =_seed;
     saveKernels = _saveKernels;
+    numberOfKernelToBeSaved  =_numberOfKernelToBeSaved;
 
     if(orders.size() != 0){
         selectionStrategy = new SelectionStrategy<Indi>*[4];
@@ -167,7 +168,7 @@ SAKeController::SAKeController(MainWindow *_main,
     qDebug() << "tipo arrivato " << typeAlgorithm << "\n";
     qDebug() << "seed " << seed << "\n";
     qDebug() << "_saveKernels " << _saveKernels << "\n";
-    qDebug() << "numberOfKernelToBeSaved" << numberOfKernelToBeSaved << "\n";
+    qDebug() << "numberOfKernelToBeSaved" << _numberOfKernelToBeSaved << "\n";
     qDebug() << "replacement" << replacement << "\n";
 
     clickCloseTab=false;
@@ -220,7 +221,7 @@ void SAKeController::startAlgorithm()
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Indi>& pop   = do_make_pop(parser, state, init);
 
-        this->stop = new eoGenContinueMy<Indi>(savePath, saveKernels);
+        this->stop = new eoGenContinueMy<Indi>(savePath, saveKernels, numberOfKernelToBeSaved);
         // stopping criteria
         eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
         // output

@@ -23,7 +23,7 @@ public:
     using eoCountContinue<EOT>::thisGenerationPlaceholder;
 
     /// Ctor for setting a
-    eoGenContinueMy( QString _savePath, int _stepToSave)
+    eoGenContinueMy( QString _savePath, int _stepToSave, int _numberOfKernelToBeSaved)
         : eoCountContinue<EOT>( ),
           eoValueParam<unsigned>(0, "Generations", "Generations"),
           stop( false )
@@ -36,7 +36,7 @@ public:
         savePathKernels=savePath+"/kernels.csv";
         savePath+="/currentGeneration.csv";
         savePathWithHeader+= "/currentGenerationWithHeader.csv";
-        numberOfKernels=1000;
+        numberOfKernelToBeSaved=_numberOfKernelToBeSaved;
         stepToSave = _stepToSave;
     }
 
@@ -157,7 +157,7 @@ public:
             bool numElementsEqualFitness=allElementsEqualFitness(kernels);
 
                 if(!presents(kernels,_vEO[t],tmp,delta,stop,_vEO[t].getMomentoDelPrimoOrdineConst())){
-                    if(kernels.size() < numberOfKernels )
+                    if(kernels.size() < numberOfKernelToBeSaved )
                     {
                         //                    //myfile << " ;";
                         //                    //  myfile << "fitness ; "<<tmp <<" ; ";
@@ -195,7 +195,7 @@ public:
                                     }
                                     //kernelStream << "\n";
                                     kernels.insert(kernels.begin()+g,tmpKernel);
-                                    kernels.erase(kernels.begin()+numberOfKernels);
+                                    kernels.erase(kernels.begin()+numberOfKernelToBeSaved);
                                     break;
                                 }
                             }
@@ -222,7 +222,7 @@ public:
                                     }
                                     //kernelStream << "\n";
                                     kernels.insert(kernels.begin()+g,tmpKernel);
-                                    kernels.erase(kernels.begin()+numberOfKernels);
+                                    kernels.erase(kernels.begin()+numberOfKernelToBeSaved);
                                     break;
                                 }
                             }
@@ -294,7 +294,7 @@ private:
     QString savePathKernels;
     QObject *gen;
     std::vector<std::vector<double>> kernels;
-    int numberOfKernels;
+    int numberOfKernelToBeSaved;
     int stepToSave;
 };
 

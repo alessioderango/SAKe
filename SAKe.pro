@@ -71,7 +71,8 @@ HEADERS  += mainwindow.h \
     SAke/Ym.h \
     Activation.h \
     validation.h \
-    ValidationController.h
+    ValidationController.h \
+    myvalidatordouble.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \
