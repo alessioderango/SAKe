@@ -156,9 +156,9 @@ public :
 //                    break;
 //            }
          //   std::cout <<"tmpSelection = "<< tmpSelection<<"\n" << " ";
-//            if(tmpSelection==0){
-//                selectionStrategy[3]->selectionLast(gen1,gen2,popTmp,offspring,counter);
-//            }
+            //if(tmpSelection==0){
+            //    selectionStrategy[3]->selectionLast(gen1,gen2,popTmp,offspring,counter);
+            // }
         //     printf(" countFitenss = %d; countDelta = %d; countMomento = %d; countTb = %d \n", countFitness, countDeltaCritico, countMomento, countTb);
 
         }

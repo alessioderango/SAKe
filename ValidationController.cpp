@@ -164,6 +164,11 @@ void ValidationController::run(){
     startValidation();
 }
 
+void ValidationController::setFt(const FitenessType &value)
+{
+    ft = value;
+}
+
 MainWindow *ValidationController::getMainwindows() const
 {
     return mainwindows;
@@ -240,14 +245,18 @@ void ValidationController::startValidation(){
                 int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
                 int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
 
-
-
                 if(result1>=-2 && result2>=-1){
-                    //if(i<countYm)
-                    //if(i<(activations_size)){
-    //                    printf("i %d \n",i);
+                    if(ft == FitnessGMD)
+                         f += 1 / (double)(i + 1);
 
-                        f += 1 / (double)(i + 1);
+                    if(ft == FitnessEqualWeights)
+                    {
+                        if(i < activations_size )
+                            f += 1 / (double)activations_size;
+                        else
+                            f += 1 / (double)(i + 1);
+                    }
+
     //                    printf("f %f \n",f);
                         //fflush( stdout );
                         ym[i].setI(i+1);
@@ -292,7 +301,13 @@ void ValidationController::startValidation(){
 
         emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 
-        emit this->updateTextsValidation(pos,QString("%1").arg((double) (f/fMax)),
+        QString finalFitness;
+        if(ft == FitnessGMD)
+            finalFitness = QString("%1").arg((double) (f/fMax));
+        if(ft == FitnessEqualWeights)
+            finalFitness = QString("%1").arg((double) (f));
+
+        emit this->updateTextsValidation(pos,finalFitness,
                                               QString("%1").arg(this->size),
                                               QString("%1").arg(dYcr),
                                               QString("%1").arg(momentoDelPrimoOrdine)

@@ -21,6 +21,11 @@ Dialog::Dialog(QWidget *parent) :
 //    ui->lineEditPar1->setValidator(doubleValidator);
     //ui->lineEdit
 
+    ui->label_21->setVisible(false);
+    ui->lineEditdHpMin->setVisible(false);
+
+    ui->groupBox_7->setVisible(false);
+
 }
 
 Dialog::~Dialog()
@@ -319,6 +324,13 @@ void Dialog::on_pushButtonStart_clicked()
                                                      ui->lineEditSeed->text().toInt(),//seed.toInt(),
                                                      ui->lineEditFrequKerSav->text().toInt(),//saveKernels.toInt());
                                                      ui->lineEditNumBestKernelSaved->text().toInt());//lineEditNumBestKernelSaved.toInt());
+    if(ui->comboBoxFitness->currentIndex() == 0)
+        controller->setFt(FitnessGMD);
+    else
+        if(ui->comboBoxFitness->currentIndex() == 1){
+          controller->setFt(FitnessEqualWeights);
+        }
+
     if(ui->lineEditProjName->isReadOnly() )
     {
         mainWindow->getXmlmanager()->SaveXMLFileAlreadyExistCalibrationProject(ui->lineEditProjName->text(),
@@ -414,7 +426,9 @@ void Dialog::on_pushButtonStart_clicked()
                                            QString ,
                                            QString ,
                                            int ,
-                                           int)), mainWindow, SLOT(updateTexts(int ,
+                                           int,
+                                           QString ,
+                                           QString )), mainWindow, SLOT(updateTexts(int ,
                                                                                QString,
                                                                                QString,
                                                                                QString ,
@@ -422,7 +436,9 @@ void Dialog::on_pushButtonStart_clicked()
                                                                                QString ,
                                                                                QString ,
                                                                                int,
-                                                                               int)));
+                                                                               int,
+                                                                               QString ,
+                                                                               QString )));
     connect(controller, SIGNAL(updateAbsMaxFit(int , QString )), mainWindow, SLOT(updateAbsMaxFit(int , QString )));
 
     connect(controller, SIGNAL(updateAbsAvFit(int , QString )), mainWindow, SLOT(updateAbsAvFit(int , QString )));
@@ -481,6 +497,7 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
             //DetTour
             ui->label_14->show();
             ui->lineEditPar1->show();
+            ui->lineEditPar1->setText("2");
             ui->lineEditPar1->setValidator(new QIntValidator(2, ui->lineEditPopSize->text().toInt(), this));
             ui->label_14->setText(" Ts (tournament size 2 <= Ts <=N))");
             ui->label_15->hide();
@@ -490,10 +507,12 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
             {
                 ui->label_14->show();
                 ui->label_14->setText("p (selective pressure 1 < p <= 2)");
-                ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                ui->lineEditPar1->setText("2");
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
                 ui->label_15->show();
                 ui->label_15->setText("e (exponent 1=linear)");
-                ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                ui->lineEditPar2->setText("1");
                 ui->lineEditPar2->show();
                 ui->lineEditPar1->show();
             }else

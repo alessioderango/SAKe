@@ -15,6 +15,9 @@ using namespace std;
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 
+enum FitenessType { FitnessGMD = 0, FitnessEqualWeights, AUCROC };
+
+
 class HandlerCSV
 {
 public:

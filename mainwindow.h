@@ -13,6 +13,8 @@
 #include <QMutex>
 
 
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -27,7 +29,7 @@ public:
 
     void makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, int rain_size, Activation *activation, int activation_size);
 
-    void makeKernelPlot(QCustomPlot * customPlot);
+    static void makeKernelPlot(QCustomPlot * customPlot, MainWindow *w);
     void updateMobilityKernelPlot(QCustomPlot * customPlot);
     static void pushBackThread(QThread *thread);
     void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
@@ -44,6 +46,7 @@ public:
     QCustomPlot *getKernelPlot(int indexTab);
     XMLManager *getXmlmanager() const;
     void setXmlmanager(XMLManager *value);
+    void showLoadingWheel();
 
 
     QMutex mutex;
@@ -76,14 +79,15 @@ private slots:
     void updateKernelPlot(int indexTab,
                            QVector<double> Fi,
                            int tb);
-    void updateTexts(int indexTab, QString s,
+    void updateTexts(int indexTab,
+                     QString s,
                               QString fitness,
                               QString cuavfitness,
                               QString tb,
                               QString safetyMargin,
                               QString momentum,
                               int barValur,
-                              int firstOccurence);
+                              int firstOccurence, QString abmaxfitness, QString avmaxfitness);
     void updateTextsValidation(int indexTab,
                               QString fitness,
                               QString tb,
@@ -115,6 +119,9 @@ private slots:
     void contextMenuRequestFitness(QPoint pos);
     void openFolderProject();
     void showAlertInputCsv(int row, QString filename , QString e);
+
+
+    void on_actionNew_Regression_Project_triggered();
 
 signals:
      void expandTreeViewSignals();

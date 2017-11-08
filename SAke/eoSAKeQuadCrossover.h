@@ -33,9 +33,7 @@ public:
 	eoSAKeQuadCrossover()
 	//  eoSAKeQuadCrossover( varType  _anyVariable) : anyVariable(_anyVariable)
 	// END eventually add or modify the anyVariable argument
-	{
-		// START Code of Ctor of an eoSAKeEvalFunc object
-		// END   Code of Ctor of an eoSAKeEvalFunc object
+    {
 	}
 
 	/// The class name. Used to display statistics

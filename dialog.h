@@ -31,6 +31,7 @@ public:
 
     MainWindow *getMainWindow() const;
     void setMainWindow(MainWindow *value);
+    bool checklineEdit(QString l, QString s);
 
 private slots:
 
@@ -52,7 +53,7 @@ private slots:
     void on_comboBoxReplacement_currentIndexChanged(int index);
 
     void on_lineEditPopSize_textChanged(const QString &arg1);
-    bool checklineEdit(QString l, QString s);
+
 
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);

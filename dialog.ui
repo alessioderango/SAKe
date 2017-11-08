@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>928</height>
+    <height>956</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -298,7 +298,7 @@
              </font>
             </property>
             <property name="text">
-             <string>8</string>
+             <string>10</string>
             </property>
            </widget>
           </item>
@@ -312,7 +312,7 @@
              </font>
             </property>
             <property name="text">
-             <string>20</string>
+             <string>100</string>
             </property>
            </widget>
           </item>
@@ -504,7 +504,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>3</string>
+                <string>2</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -532,38 +532,6 @@
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QComboBox" name="selectOrder1">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="font">
-                <font>
-                 <pointsize>8</pointsize>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Safety margin</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>First-order momentum</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Base time</string>
-                </property>
-               </item>
               </widget>
              </item>
              <item row="0" column="1">
@@ -601,6 +569,38 @@
                  <bold>false</bold>
                 </font>
                </property>
+               <item>
+                <property name="text">
+                 <string>Base time</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QComboBox" name="selectOrder1">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>8</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Safety margin</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>First-order momentum</string>
+                </property>
+               </item>
                <item>
                 <property name="text">
                  <string>Base time</string>
@@ -674,7 +674,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>2</string>
+                <string>3</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -718,63 +718,7 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEditCrossoverP">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>0.75</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLineEdit" name="lineEditTbMax">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>130</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="labeltbMax">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>tbMax</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEditMutationP">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>0.25</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
+          <item row="3" column="2">
            <widget class="QLabel" name="labeltbMin">
             <property name="font">
              <font>
@@ -788,35 +732,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="labelPme">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Pme</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_17">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Mutation probability</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
+          <item row="3" column="3">
            <widget class="QLineEdit" name="lineEditTbMin">
             <property name="font">
              <font>
@@ -827,104 +743,6 @@
             </property>
             <property name="text">
              <string>3</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label_21">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>dHpMin</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="labelPmb">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Pmb</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_22">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>dHpMax</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLineEdit" name="lineEditdHpMin">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>-50</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEditPmb">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>0.5</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEditPme">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>25</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="3">
-           <widget class="QLineEdit" name="lineEditdHpMax">
-            <property name="font">
-             <font>
-              <pointsize>8</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>50</string>
             </property>
            </widget>
           </item>
@@ -941,6 +759,249 @@
             </property>
            </spacer>
           </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEditCrossoverP">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.75</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="lineEditTbMax">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>73</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="labeltbMax">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>tbMax</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Pm (mutation probability)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEditPme">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>25</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEditMutationP">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.25</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEditPmb">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>0.5</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="labelPmb">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Pmtb</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="labelPme">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Pme (% of tb) </string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="3">
+           <widget class="QLineEdit" name="lineEditdHpMin">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>-50</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QLabel" name="label_21">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>dHpMin</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QLabel" name="label_22">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>PdH</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLineEdit" name="lineEditdHpMax">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>50</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_8">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="title">
+        <string>5 - Fitness</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_11">
+        <item>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBoxFitness">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>GMD</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>EW</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="font">
+             <font>
+              <pointsize>8</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Type</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -956,7 +1017,7 @@
         </font>
        </property>
        <property name="title">
-        <string>5 - Stopping criteria</string>
+        <string>6 - Stopping criteria</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
@@ -985,7 +1046,7 @@
              </font>
             </property>
             <property name="text">
-             <string>500</string>
+             <string>10000</string>
             </property>
            </widget>
           </item>
@@ -1032,7 +1093,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Number Processor</string>
+             <string>Number of processors</string>
             </property>
            </widget>
           </item>
@@ -1046,7 +1107,7 @@
              </font>
             </property>
             <property name="text">
-             <string>seed</string>
+             <string>Seed</string>
             </property>
            </widget>
           </item>
@@ -1088,7 +1149,7 @@
              </font>
             </property>
             <property name="text">
-             <string>1</string>
+             <string>4</string>
             </property>
            </widget>
           </item>
@@ -1147,7 +1208,7 @@
              </font>
             </property>
             <property name="text">
-             <string>10</string>
+             <string>100</string>
             </property>
            </widget>
           </item>
@@ -1161,7 +1222,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Continue from last genrations</string>
+             <string>Continue from last generation</string>
             </property>
            </widget>
           </item>

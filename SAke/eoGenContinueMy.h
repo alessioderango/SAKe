@@ -7,7 +7,70 @@
 #include <utils/eoLogger.h>
 #include <fstream>
 #include <algorithm>    // std::sort
+#include <set>
+#include <iomanip>
 using namespace std;
+
+struct row {
+    double fitness;
+    int tb;
+    double safetyMargin;
+    double firstOrderMomentum;
+    double ymin;
+    std::vector<double> kernel;
+};
+
+
+
+struct compareRow {
+    double roundMy(double x, int prec)
+    {
+        double power = 1.0;
+        int i;
+
+        if (prec > 0)
+            for (i = 0; i < prec; i++)
+                power *= 10.0;
+        else if (prec < 0)
+            for (i = 0; i < prec; i++)
+                power /= 10.0;
+
+        if (x > 0)
+            x = floor(x * power + 0.5) / power;
+        else if (x < 0)
+            x = ceil(x * power - 0.5) / power;
+
+        if (x == -0)
+            x = 0;
+
+        return x;
+    }
+
+    bool operator()(const row& r1, const row& r2) {
+        return compare(r1,r2);
+    }
+    bool absequal(const double a,const double b, const double e){
+        return fabs(a-b) < e;
+    }
+    bool doubleMin(const double a,const double b, const double e){
+        return (((a - b) < 0) && ( fabs(a-b) > e));
+    }
+
+    bool doubleMax(const double a,const double b, const double e){
+        return (((a - b) > 0) && ( fabs(a-b) > e));
+    }
+
+    bool compare(const row& r1, const row& r2) {
+
+        const double e = 0.000001;
+        if (doubleMax(r1.fitness,r2.fitness,e)  ) return true;
+        if (absequal(r1.fitness,r2.fitness,e) && r1.tb < r2.tb) return true;
+        if (absequal(r1.fitness,r2.fitness,e) && r1.tb == r2.tb && doubleMax(r1.safetyMargin,r2.safetyMargin,e)) return true;
+        if (absequal(r1.fitness,r2.fitness,e) && r1.tb == r2.tb && absequal(r1.safetyMargin,r2.safetyMargin,e) && doubleMin(r1.firstOrderMomentum,r2.firstOrderMomentum,e))
+            return true;
+        return false;
+    }
+};
 
 /**
     Generational continuator: continues until a number of generations is reached
@@ -40,223 +103,99 @@ public:
         stepToSave = _stepToSave;
     }
 
-    double roundMy(double x, int prec)
-    {
-        double power = 1.0;
-        int i;
-
-        if (prec > 0)
-            for (i = 0; i < prec; i++)
-                power *= 10.0;
-        else if (prec < 0)
-            for (i = 0; i < prec; i++)
-                power /= 10.0;
-
-        if (x > 0)
-            x = floor(x * power + 0.5) / power;
-        else if (x < 0)
-            x = ceil(x * power - 0.5) / power;
-
-        if (x == -0)
-            x = 0;
-
-        return x;
-    }
 
 
-    bool presents(std::vector<std::vector<double>> kernels,EOT _eo,double fitness, double delta,int tb, double momento){
-        //        int equalElements=0;
-        for(int i=0;i<kernels.size();i++ ){
-            //            equalElements=0;
-            //            if(_eo.getSizeConst() == (kernels[i].size()-5)){
-            //                for(int k=0;k < _eo.getSizeConst();k++){
-            //                    if(_eo.getFiConst()[k] == kernels[i][k+5])
-            //                        equalElements++;
-            //                }
-            //                if(equalElements == (_eo.getSizeConst()))
-            double fitnessRoundInput = roundMy(fitness,4);
-            double fitnessRoundKernel = roundMy(kernels[i][0],4);
-            double momentoRoundInput = roundMy(momento,4);
-            double momentoRoundKernel = roundMy(kernels[i][4],4);
-
-            if(fitnessRoundInput == fitnessRoundKernel && (kernels[i][1]/delta)>=0.999 && (kernels[i][1]/delta)<=1.001
-                    && tb == kernels[i][3] && momentoRoundInput == momentoRoundKernel)
-                return true;
-            //            }
-        }
-        return false;
-    }
-
-
-    bool allElementsEqualFitness(std::vector<std::vector<double>> kernels){
-        for (int g = 1; g < kernels.size(); g++) {
-            if(kernels[1][0] != kernels[g][0]){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /** Returns false when a certain number of generations is
-         * reached */
     virtual bool operator() ( const eoPop<EOT>& _vEO ) {
 
 
-            //SALVATAGGIO ULTIMA GENERAZIONE
-            ofstream myfile;
-            myfile.open (savePath.toStdString(),ios::out);
+        //SALVATAGGIO ULTIMA GENERAZIONE
+        ofstream myfile;
+        myfile.open (savePath.toStdString(),ios::out);
 
-            ofstream myfileWithHeader;
-            myfileWithHeader.open (savePathWithHeader.toStdString(),ios::out);
+        ofstream myfileWithHeader;
+        myfileWithHeader.open (savePathWithHeader.toStdString(),ios::out);
 
-            myfileWithHeader <<  "Generations ;";
-            myfileWithHeader <<  "Fitness ;";
-            myfileWithHeader <<  "Safety margin ;";
-            myfileWithHeader <<  "Ym min ;";
-            myfileWithHeader <<  "Base time ;";
-            myfileWithHeader <<  "First-order momentum;";
-            myfileWithHeader <<  "Kernel ;\n";
-
-            for (unsigned int  t = 0; t < _vEO.size(); t++) {
-                double tmp = _vEO[t].fitness();
-
-                int stop =  _vEO[t].getSizeConst();
-                myfile << thisGeneration << " ;";
-                myfile << tmp << " ;";
-                double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
-                myfile << delta << " ;";
-                myfile << _vEO[t].getYmMinConst().getValue() << " ;";
-                myfile << stop << " ;";
-                myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
-                //myfile << " ;";
-                //  myfile << "fitness ; "<<tmp <<" ; ";
-                for (int i = 0; i < stop; i++) {
-                    myfile << _vEO[t].getFiConstIndex(i) << ";";
-                }
-                myfile << "\n";
-
-                myfileWithHeader << thisGeneration << " ;";
-                myfileWithHeader << tmp << " ;";
-                myfileWithHeader << delta << " ;";
-                myfileWithHeader << _vEO[t].getYmMinConst().getValue() << " ;";
-                myfileWithHeader << stop << " ;";
-                myfileWithHeader << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
-                for (int i = 0; i < stop; i++) {
-                    myfileWithHeader << _vEO[t].getFiConstIndex(i) << ";";
-                }
-                myfileWithHeader << "\n";
+        ofstream kernelStream;
+        kernelStream.open (savePathKernels.toStdString(),ios::out);
 
 
 
-// delta_z -- tb -- mu       <<<default>>>
+        myfileWithHeader <<  "Generations ;";
+        myfileWithHeader <<  "Fitness ;";
+        myfileWithHeader <<  "Safety margin ;";
+        myfileWithHeader <<  "Ym min ;";
+        myfileWithHeader <<  "Base time ;";
+        myfileWithHeader <<  "First-order momentum;";
+        myfileWithHeader <<  "Kernel ;\n";
 
-        if(eoCountContinue<EOT>::thisGeneration%stepToSave ==0){
-            ofstream kernelStream;
-            kernelStream.open (savePathKernels.toStdString(),ios::out);
+        for (unsigned int  t = 0; t < _vEO.size(); t++) {
+            double tmp = _vEO[t].fitness();
 
-            bool numElementsEqualFitness=allElementsEqualFitness(kernels);
-
-                if(!presents(kernels,_vEO[t],tmp,delta,stop,_vEO[t].getMomentoDelPrimoOrdineConst())){
-                    if(kernels.size() < numberOfKernelToBeSaved )
-                    {
-                        //                    //myfile << " ;";
-                        //                    //  myfile << "fitness ; "<<tmp <<" ; ";
-                        std::vector<double> tmpKernel;
-                        tmpKernel.push_back(tmp);
-                        tmpKernel.push_back(delta);
-                        tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
-                        tmpKernel.push_back(stop);
-                        tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
-                        for (int i = 0; i < stop; i++) {
-                            //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                            tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
-                        }
-                        //kernelStream << "\n";
-                        kernels.push_back(tmpKernel);
-                    }else
-                    {
-                        if(!numElementsEqualFitness)
-                        {
-                            std::sort(kernels.begin(), kernels.end(),[](const std::vector<double>& a, const std::vector<double>& b) {
-                                return a[0] > b[0];
-                            });
-
-                            for (unsigned int g = 0; g < kernels.size(); g++) {
-                                if(kernels[g][0] < tmp){
-                                    std::vector<double> tmpKernel;
-                                    tmpKernel.push_back(tmp);
-                                    tmpKernel.push_back(delta);
-                                    tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
-                                    tmpKernel.push_back(stop);
-                                    tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
-                                    for (int i = 0; i < stop; i++) {
-                                        //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                                        tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
-                                    }
-                                    //kernelStream << "\n";
-                                    kernels.insert(kernels.begin()+g,tmpKernel);
-                                    kernels.erase(kernels.begin()+numberOfKernelToBeSaved);
-                                    break;
-                                }
-                            }
-
-
-
-                        }else
-                        {
-                            std::sort(kernels.begin(), kernels.end(),[](const std::vector<double>& a, const std::vector<double>& b) {
-                                return a[1] > b[1];
-                            });
-
-                            for (unsigned int g = 0; g < kernels.size(); g++) {
-                                if(kernels[g][1] < delta){
-                                    std::vector<double> tmpKernel;
-                                    tmpKernel.push_back(tmp);
-                                    tmpKernel.push_back(delta);
-                                    tmpKernel.push_back(_vEO[t].getYmMinConst().getValue());
-                                    tmpKernel.push_back(stop);
-                                    tmpKernel.push_back(_vEO[t].getMomentoDelPrimoOrdineConst() );
-                                    for (int i = 0; i < stop; i++) {
-                                        //kernelStream << _vEO[t].getFiConst()[i] << ";";
-                                        tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
-                                    }
-                                    //kernelStream << "\n";
-                                    kernels.insert(kernels.begin()+g,tmpKernel);
-                                    kernels.erase(kernels.begin()+numberOfKernelToBeSaved);
-                                    break;
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                for (unsigned int i = 0; i < kernels.size(); i++) {
-                    for (int j = 0; j < kernels[i][3]+5; j++) {
-                        kernelStream <<kernels[i][j] << ";";
-
-                    }
-                    kernelStream << "\n";
-                }
-
-
-
-
-                kernelStream.close();
+            int stop =  _vEO[t].getSizeConst();
+            myfile << thisGeneration << " ;";
+            myfile << tmp << " ;";
+            double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
+            myfile << delta << " ;";
+            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
+            myfile << stop << " ;";
+            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+            //myfile << " ;";
+            //  myfile << "fitness ; "<<tmp <<" ; ";
+            for (int i = 0; i < stop; i++) {
+                myfile << _vEO[t].getFiConstIndex(i) << ";";
             }
+            myfile << "\n";
+
+            myfileWithHeader << thisGeneration << " ;";
+            myfileWithHeader << tmp << " ;";
+            myfileWithHeader << delta << " ;";
+            myfileWithHeader << _vEO[t].getYmMinConst().getValue() << " ;";
+            myfileWithHeader << stop << " ;";
+            myfileWithHeader << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+            for (int i = 0; i < stop; i++) {
+                myfileWithHeader << _vEO[t].getFiConstIndex(i) << ";";
+            }
+            myfileWithHeader << "\n";
+        }
 
 
+        for (unsigned int  t = 0; t < _vEO.size(); t++) {
+            double cFitness = _vEO[t].fitness();
+            int tb =  _vEO[t].getSizeConst();
+            double safetyMargin =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
+            double firstOrderMomentum = _vEO[t].getMomentoDelPrimoOrdineConst();
 
+            double ymin = _vEO[t].getYmMinConst().getValue();
+            if(eoCountContinue<EOT>::thisGeneration%stepToSave ==0 ){
+                std::vector<double> tmpKernel;
+                for (int i = 0; i < tb; i++) {
+                    tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
+                }
+                row r1 = {cFitness, tb, safetyMargin, firstOrderMomentum,ymin,tmpKernel};
+                kernels.insert(r1);
+            }
+        }
 
+        if(kernels.size() > numberOfKernelToBeSaved){
+            auto del = kernels.begin();
+            advance(del,numberOfKernelToBeSaved);
+            kernels.erase(del,kernels.end() );
+        }
 
-
-
+        for (const auto row : kernels) {
+            kernelStream << setprecision(6) << row.fitness << ";" <<row.safetyMargin << ";"<<row.ymin << ";"<<  row.tb  <<";"<< row.firstOrderMomentum << ";";
+            for(int i = 0; i < row.kernel.size(); i++)
+            {
+                kernelStream  << row.kernel[i]<< ";";
+            }
+            kernelStream << "\n";
 
         }
 
 
-            myfile.close();
-            myfileWithHeader.close();
+
+        myfile.close();
+        myfileWithHeader.close();
 
         thisGeneration++;
         if(stop){
@@ -265,6 +204,7 @@ public:
         }
 
         return true;
+
     }
 
     /** Sets the number of generations to reach
@@ -293,7 +233,8 @@ private:
     QString savePathWithHeader;
     QString savePathKernels;
     QObject *gen;
-    std::vector<std::vector<double>> kernels;
+    //std::vector<std::vector<double>> kernels;
+    set <row, compareRow> kernels;
     int numberOfKernelToBeSaved;
     int stepToSave;
 };

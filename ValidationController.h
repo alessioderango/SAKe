@@ -22,6 +22,8 @@ using boost::posix_time::ptime;
 using namespace boost::gregorian;
 using namespace boost::posix_time;
 
+
+
 class ValidationController : public QThread
 {
     Q_OBJECT
@@ -69,6 +71,8 @@ public:
     MainWindow *getMainwindows() const;
     void setMainwindows(MainWindow *value);
 
+    void setFt(const FitenessType &value);
+
 signals:
     void updateMobPlot(int indexTab,
                        Rain * rain,
@@ -114,6 +118,7 @@ private:
     int activations_size;
     double zCr;
 MainWindow *mainwindows;
+    FitenessType ft;
 
 
 };

@@ -203,10 +203,23 @@ void SAKeController::startAlgorithm()
 
         // The fitness
         //////////////
+
+        //type of fitness strategy
         eoSAKeEvalFunc<Indi> plainEval(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
 
+        eoSAKeEvalFunc<Indi> plainEvalEqualWeights(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
+
         // turn that object into an evaluation counter
-        eoEvalFuncCounter<Indi> eval(plainEval);
+        //eoEvalFuncCounter<Indi> eval(plainEval);
+
+        eoEvalFuncCounter<Indi> *evaltmp;
+        if(ft == FitnessGMD)
+            evaltmp = new eoEvalFuncCounter<Indi>(plainEval);
+        else
+            if(ft == FitnessEqualWeights)
+               evaltmp = new eoEvalFuncCounter<Indi>(plainEvalEqualWeights);
+
+         eoEvalFuncCounter<Indi> & eval = *evaltmp;
 
         // the genotype - through a genotype initializerdo_make_genotype(_parser, _state, _eo);
         eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile,lastGeneration);
@@ -272,6 +285,12 @@ void SAKeController::startAlgorithm()
 
 }
 
+void SAKeController::setFt(const FitenessType &value)
+{
+    ft = value;
+}
+
+
 MainWindow *SAKeController::getMainwindows() const
 {
     return mainwindows;
@@ -304,7 +323,7 @@ void SAKeController::setCsvHandlerstatusRain(int value)
 
 
 void SAKeController::run(){
-    startAlgorithm();
+      startAlgorithm();
 }
 
 void SAKeController::startThread(){
@@ -316,6 +335,7 @@ void SAKeController::stopThread(){
 
     if(stop){
         stop->setStop(true);
+        mainwindows->showLoadingWheel();
     }
 
 }

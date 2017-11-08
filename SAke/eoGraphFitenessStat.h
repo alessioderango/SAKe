@@ -110,6 +110,14 @@ private :
                 firstOccurance = steps;
             }
        }
+       if(AbsoluteAvarageFitness < ( v / _pop.size())){
+            AbsoluteAvarageFitness=( v / _pop.size());
+       }
+
+       if(AbsoluteMaximumFitness < fitness){
+           AbsoluteMaximumFitness=fitness;
+
+       }
 
        QString genString= QString("%1").arg(steps);
            steps++;
@@ -119,7 +127,9 @@ private :
                                              QString("%1").arg((best_element.getYmMinConst().getValue()-best_element.getYmMin2Const().getValue())/best_element.getYmMinConst().getValue()),
                                              QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst()),
                                              (steps*100)/maxGen,
-                                             firstOccurance
+                                             firstOccurance,
+                                             QString("%1").arg(AbsoluteMaximumFitness),
+                                             QString("%1").arg(AbsoluteAvarageFitness)
                                              );
        controller->getMainwindows()->mutex.unlock();
 

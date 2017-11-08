@@ -37,7 +37,46 @@ void Validation::on_pushButton_3_clicked()
     ui->lineEdit_kernel->setText(fileName);
 }
 
+
+
 void Validation::on_buttonBox_accepted()
+{
+
+}
+
+void Validation::on_buttonBox_rejected()
+{
+    close();
+}
+
+MainWindow *Validation::getMainWindow() const
+{
+    return mainWindow;
+}
+
+void Validation::setMainWindow(MainWindow *value)
+{
+    mainWindow = value;
+}
+
+void Validation::setReadOnlyProjName(bool a)
+{
+    ui->lineEditProjName->setReadOnly(a);
+}
+void Validation::setParameters(QVariantList list)
+{
+    ui->lineEditProjName->setText(list[0].toString());
+    ui->lineEdit_rain->setText(list[1].toString());
+    ui->lineEdit_activation->setText(list[2].toString());
+    ui->lineEdit_kernel->setText(list[3].toString());
+}
+
+void Validation::accept()
+{
+
+}
+
+void Validation::on_buttonBox_clicked(QAbstractButton *button)
 {
     Rain * rain;
     int rain_size;
@@ -48,14 +87,57 @@ void Validation::on_buttonBox_accepted()
     double zCr;
     int rowError=0;
     QString e;
-     QString rainPath = ui->lineEdit_rain->text();
+    QString rainPath = ui->lineEdit_rain->text();
+    QString actPath = ui->lineEdit_activation->text();
+
+    if(ui->lineEditProjName->text().isEmpty())
+    {
+        QString error = QString("Projet name cannot be empty \n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
+    if(!SAKeController::fileExists(rainPath)){
+        QString error = QString("Rain File does not exist "+ rainPath+"\n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("File does not exist").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
+    if(!SAKeController::fileExists(actPath)){
+        QString error = QString("Activation file does not exist "+ actPath+"\n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("File does not exist").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
+    if(!SAKeController::fileExists(ui->lineEdit_kernel->text())){
+        QString error = QString("Kernel file does not exist "+ ui->lineEdit_kernel->text()+"\n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("File does not exist").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
     connect(this, SIGNAL(showAlertInputCsv(int,QString,QString)), mainWindow, SLOT(showAlertInputCsv(int,QString,QString))) ;
     int errorRain = HandlerCSV::loadCSVRain(ui->lineEdit_rain->text(), rain, rain_size, rowError, e);
         if(errorRain==0){
             emit showAlertInputCsv(rowError,rainPath, e);
             return;
         }
-        QString actPath = ui->lineEdit_activation->text();
+
     int errorActivation = HandlerCSV::loadCSVActivation(actPath, activation, activation_size, rowError, e);
     if(errorActivation ==0){
         emit showAlertInputCsv(rowError,actPath, e);
@@ -87,6 +169,12 @@ void Validation::on_buttonBox_accepted()
                 size_Fi,
                 zCr
                 );
+    if(ui->comboBoxFitness->currentIndex() == 0)
+        validationController->setFt(FitnessGMD);
+    else
+        if(ui->comboBoxFitness->currentIndex() == 1){
+          validationController->setFt(FitnessEqualWeights);
+        }
     validationController->setMainwindows(mainWindow);
     qRegisterMetaType<tm>("tm");
     qRegisterMetaType<std::vector<Ym>>("std::vector<Ym>");
@@ -150,31 +238,4 @@ void Validation::on_buttonBox_accepted()
     mainWindow->mutex.unlock();
     validationController->startThread();
     this->close();
-}
-
-void Validation::on_buttonBox_rejected()
-{
-    close();
-}
-
-MainWindow *Validation::getMainWindow() const
-{
-    return mainWindow;
-}
-
-void Validation::setMainWindow(MainWindow *value)
-{
-    mainWindow = value;
-}
-
-void Validation::setReadOnlyProjName(bool a)
-{
-    ui->lineEditProjName->setReadOnly(a);
-}
-void Validation::setParameters(QVariantList list)
-{
-    ui->lineEditProjName->setText(list[0].toString());
-    ui->lineEdit_rain->setText(list[1].toString());
-    ui->lineEdit_activation->setText(list[2].toString());
-    ui->lineEdit_kernel->setText(list[3].toString());
 }

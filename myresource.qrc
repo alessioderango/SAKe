@@ -4,5 +4,7 @@
         <file>img/cali.png</file>
         <file>img/red-stop-button-icon-17950.png</file>
         <file>img/check.png</file>
+        <file>img/loader.gif</file>
+        <file>img/regression.png</file>
     </qresource>
 </RCC>

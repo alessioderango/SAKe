@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "dialog.h"
 #include "validation.h"
+#include "Regression.h"
 
 std::vector<QThread *> MainWindow::threads;
 
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget_2->setTabsClosable(true);
     ui->tabWidget_2->removeTab(0);
     ui->tabWidget_2->removeTab(0);
+    //ui->tabWidget_2->setMovable(true);
     signalMapper = new QSignalMapper(this);
     connect (this, SIGNAL(expandTreeViewSignals()), this, SLOT(expandTreeViewSlot())) ;
 
@@ -45,8 +47,8 @@ void MainWindow::makeFitnessPlot(QCustomPlot * customPlot){
     customPlot->graph( 1 )->setData( x1, y1 );
 
     // give the axes some labels:
-    customPlot->xAxis->setLabel( "Generation" );
-    customPlot->yAxis->setLabel( "Fitness" );
+    customPlot->xAxis->setLabel( "generation" );
+    customPlot->yAxis->setLabel( "fitness" );
     // set axes ranges, so we see all data:
     customPlot->xAxis->setRange( 0, 20 );
     customPlot->yAxis->setRange( 0, 1.05 );
@@ -104,7 +106,7 @@ void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, 
     customPlot->xAxis->setTickStep(2628000); // one month in seconds
 
     customPlot->xAxis->setLabel("Date");
-    customPlot->yAxis->setLabel("y");
+    customPlot->yAxis->setLabel("z");
 
 
     ptime rain0 = ptime_from_tm(rain[0].getTime());
@@ -176,19 +178,19 @@ void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, 
     connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestMobilityFunction(QPoint)));
 }
 
-void MainWindow::makeKernelPlot(QCustomPlot *customPlot)
+void MainWindow::makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
 {
     QCPBars* myBars = new QCPBars(customPlot->xAxis, customPlot->yAxis);
     customPlot->addPlottable(myBars);
     // now we can modify properties of myBars:
     myBars->setName("Bars Series 1");
-    customPlot->xAxis->setLabel("kernel");
-    customPlot->yAxis->setLabel("y");
+    customPlot->xAxis->setLabel("tb");
+    customPlot->yAxis->setLabel("h");
     customPlot->xAxis->setRange( 0,180 );
     customPlot->yAxis->setRange( -0.01,0.25 );
     customPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables );
     customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernel(QPoint)));
+    connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), w, SLOT(contextMenuRequestKernel(QPoint)));
 
 }
 
@@ -234,7 +236,9 @@ void MainWindow::updateTexts(int indexTab,
                              QString tb,
                              QString safetyMargin,
                              QString momentum,
-                             int barValue, int firstOccurence)
+                             int barValue, int firstOccurence,
+                             QString abmaxfitness,
+                             QString avmaxfitness)
 {
     mutex.lock();
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
@@ -259,10 +263,19 @@ void MainWindow::updateTexts(int indexTab,
     momentumL->setText(momentum);
 
     QLabel* bestfndatItera = (QLabel*)tabs->findChild<QLabel*>("firstOccurenceText");
-    QString fo = QString("first occurence at %1 iteration").arg(firstOccurence);
+    QString fo = QString("First occurence of AMF at iteration: %1").arg(firstOccurence);
     bestfndatItera->setText(fo);
     QProgressBar* bar = (QProgressBar*)tabs->findChild<QProgressBar*>("bar");
     bar->setValue(barValue);
+
+    QLabel* AbsMaxFitNum = (QLabel*)tabs->findChild<QLabel*>("AbsMaxFitNum");
+    AbsMaxFitNum->setText(abmaxfitness);
+    QLabel* AbsAveFitNum = (QLabel*)tabs->findChild<QLabel*>("AbsAveFitNum");
+    AbsAveFitNum->setText(avmaxfitness);
+//    AbsMaxFitNum
+//            AbsAveFitNum
+
+
     mutex.unlock();
 
 }
@@ -450,7 +463,7 @@ void MainWindow::closeTab(int index)
 {
     //rilasciare lock
     mutex.lock();
-    cout << "chiudere" << index << endl;
+    //cout << "chiudere" << index << endl;
     ui->tabWidget_2->removeTab(index);
     MainWindow::threads.erase(MainWindow::threads.begin()+index);
     mutex.unlock();
@@ -470,112 +483,126 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     //customPlot->setOpenGl(true,64);
     QCustomPlot * mobFunc = new QCustomPlot();
     QCustomPlot * kerFunc = new QCustomPlot();
-    ui->tabWidget_2->addTab(tabwidget, name);
+    int indextab= ui->tabWidget_2->addTab(tabwidget, name);
     QWidget * tab1=ui->tabWidget_2->widget(ui->tabWidget_2->count()-1);
     QVBoxLayout * mainL = new QVBoxLayout();
 
     QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spUp.setVerticalStretch(2);
     QVBoxLayout * vertical = new QVBoxLayout();
+    QSplitter * splitter = new QSplitter();
     MainWindow::makeFitnessPlot(customPlot);
     customPlot->setSizePolicy(spUp);
     customPlot->setObjectName("fitFunc");
-    vertical->addWidget(customPlot);
-    MainWindow::makeKernelPlot(kerFunc);
+    splitter->addWidget(customPlot);
+    MainWindow::makeKernelPlot(kerFunc,this);
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
-    vertical->addWidget(kerFunc);
+    splitter->addWidget(kerFunc);
     MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
     mobFunc->setSizePolicy(spUp);
 
     mobFunc->setObjectName("mobFunc");
     //mobFunc->rescaleAxes();
-    vertical->addWidget(mobFunc);
+    splitter->addWidget(mobFunc);
+
+    splitter->setOrientation(Qt::Vertical);
+
+    vertical->addWidget(splitter);
+    //vertical->addStretch(vertical->sizeConstraint()*2);
 
 
-    vertical->addStretch(vertical->sizeConstraint()*2);
     mainL->addLayout(vertical);
     QGridLayout * grid = new QGridLayout();
-    QLabel * gen = new QLabel();
-    gen->setText("Current Generation:");
-    grid->addWidget(gen,0,0);
-    QLabel * genNum = new QLabel();
-    genNum->setText("0");
-    genNum->setObjectName("GenerationText");
-    grid->addWidget(genNum,0,1);
-
 
 
     QLabel * AbsMaxFit = new QLabel();
-    AbsMaxFit->setText("Absolute Maximum Fitness:");
-    grid->addWidget(AbsMaxFit,1,0);
+    AbsMaxFit->setText("Absolute Maximum Fitness (AMF) :");
+    grid->addWidget(AbsMaxFit,0,0);
     QLabel * AbsMaxFitNum = new QLabel();
     AbsMaxFitNum->setText("0");
     AbsMaxFitNum->setObjectName("AbsMaxFitNum");
-    grid->addWidget(AbsMaxFitNum,1,1);
+    grid->addWidget(AbsMaxFitNum,0,1);
+
+    QLabel * firstOccurenceText = new QLabel();
+    QString fo = QString("First occurence of AMF at iteration: %1").arg(0);
+    firstOccurenceText->setText(fo);
+    firstOccurenceText->setObjectName("firstOccurenceText");
+    grid->addWidget(firstOccurenceText,0,2);
 
 
 
     QLabel * AbsAveFit = new QLabel();
     AbsAveFit->setText("Absolute Average Fitness:");
-    grid->addWidget(AbsAveFit,2,0);
+    grid->addWidget(AbsAveFit,1,0);
     QLabel * AbsAveFitNum = new QLabel();
     AbsAveFitNum->setText("0");
     AbsAveFitNum->setObjectName("AbsAveFitNum");
-    grid->addWidget(AbsAveFitNum,2,1);
+    grid->addWidget(AbsAveFitNum,1,1);
 
-    QLabel * bestIndiv = new QLabel();
-    bestIndiv->setText("Best Individual:");
-    grid->addWidget(bestIndiv,3,0);
+    QLabel * space1 = new QLabel();
+    space1->setText(" ");
+    grid->addWidget(space1,2,0);
 
-    QLabel * curMaxFit = new QLabel();
-    curMaxFit->setText("Maximum Fitness:");
-    grid->addWidget(curMaxFit,4,0);
-    QLabel * curMaxFitNum = new QLabel();
-    curMaxFitNum->setText("0");
-    curMaxFitNum->setObjectName("curMaxFitNum");
-    grid->addWidget(curMaxFitNum,4,1);
+
+    QLabel * gen = new QLabel();
+    gen->setText("Current Generation:");
+    grid->addWidget(gen,3,0);
+    QLabel * genNum = new QLabel();
+    genNum->setText("0");
+    genNum->setObjectName("GenerationText");
+    grid->addWidget(genNum,3,1);
 
     QLabel * curAveFit = new QLabel();
-    curAveFit->setText("Average Fitness:");
-    grid->addWidget(curAveFit,4,2);
+    curAveFit->setText("Current Average Fitness:");
+    grid->addWidget(curAveFit,4,0);
     QLabel * curAveFitNum = new QLabel();
     curAveFitNum->setText("0");
     curAveFitNum->setObjectName("curAveFitNum");
-    grid->addWidget(curAveFitNum,4,3);
+    grid->addWidget(curAveFitNum,4,1);
+
+    QLabel * space = new QLabel();
+    space->setText(" ");
+    grid->addWidget(space,5,0);
+
+    QLabel * bestIndiv = new QLabel();
+    bestIndiv->setText("Best Individual of current generation");
+    grid->addWidget(bestIndiv,6,0);
+
+    QLabel * curMaxFit = new QLabel();
+    curMaxFit->setText("Fitness:");
+    grid->addWidget(curMaxFit,7,0);
+    QLabel * curMaxFitNum = new QLabel();
+    curMaxFitNum->setText("0");
+    curMaxFitNum->setObjectName("curMaxFitNum");
+    grid->addWidget(curMaxFitNum,7,1);
 
     QLabel * tb = new QLabel();
     tb->setText("tb:");
-    grid->addWidget(tb,5,0);
+    grid->addWidget(tb,8,0);
     QLabel * tbNum = new QLabel();
     tbNum->setText("0");
     tbNum->setObjectName("tbNum");
-    grid->addWidget(tbNum,5,1);
+    grid->addWidget(tbNum,8,1);
 
     QLabel * dCritico = new QLabel();
     dCritico->setText("Safety margin:");
-    grid->addWidget(dCritico,5,2);
+    grid->addWidget(dCritico,8,2);
     QLabel * dCriticoNum = new QLabel();
     dCriticoNum->setText("0");
     dCriticoNum->setObjectName("dCriticoNum");
-    grid->addWidget(dCriticoNum,5,3);
+    grid->addWidget(dCriticoNum,8,3);
 
     QLabel * momPrimo = new QLabel();
     momPrimo->setText("First-order momentum:");
-    grid->addWidget(momPrimo,5,4);
+    grid->addWidget(momPrimo,8,4);
     QLabel * momPrimoNum = new QLabel();
     momPrimoNum->setText("0");
     momPrimoNum->setObjectName("momPrimoNum");
-    grid->addWidget(momPrimoNum,5,5);
+    grid->addWidget(momPrimoNum,8,5);
 
 
     // first occurence at N iteration;
-
-    QLabel * firstOccurenceText = new QLabel();
-    QString fo = QString("first occurence at %1 iteration").arg(0);
-    firstOccurenceText->setText(fo);
-    firstOccurenceText->setObjectName("firstOccurenceText");
-    grid->addWidget(firstOccurenceText,6,0);
 
 
     mainL->addLayout(grid);
@@ -592,6 +619,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
 
     mainL->addLayout(buttons);
     tab1->setLayout(mainL);
+    ui->tabWidget_2->setCurrentIndex(indextab);
 }
 
 void MainWindow::addTabValidation(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
@@ -608,7 +636,7 @@ void MainWindow::addTabValidation(QString name, Rain * rain, int rain_size, Acti
     QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
     spUp.setVerticalStretch(2);
     QVBoxLayout * vertical = new QVBoxLayout();
-    MainWindow::makeKernelPlot(kerFunc);
+    MainWindow::makeKernelPlot(kerFunc, this);
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
     vertical->addWidget(kerFunc);
@@ -665,6 +693,7 @@ void MainWindow::addTabValidation(QString name, Rain * rain, int rain_size, Acti
     mainL->addLayout(grid);
 
     tab1->setLayout(mainL);
+    ui->tabWidget_2->setCurrentIndex(ui->tabWidget_2->count()-1);
 }
 
 
@@ -686,7 +715,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
     QVariantList listParameter = xmlmanager->getAllElementsFromProjectName(item->data(0,Qt::UserRole).toString());
     QTreeWidgetItem * p = item->parent();
     int i = ui->treeWidget->indexOfTopLevelItem(item);
-    cout << i << endl;
+    //cout << i << endl;
     if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Calibration", Qt::CaseInsensitive)==0){
         if(listParameter.size() > 5){
             Dialog *dialog = new Dialog();
@@ -943,6 +972,16 @@ void MainWindow::showAlertInputCsv(int row, QString filename, QString e)
 
 }
 
+void MainWindow::showLoadingWheel()
+{
+//    QLabel *lbl = new QLabel;
+//    QMovie *movie = new QMovie(":/img/loader.gif");
+//    lbl->setMovie(movie);
+//    lbl->show();
+//    movie->start();
+
+}
+
 
 
 void MainWindow::deleteProject(int item)
@@ -970,4 +1009,10 @@ XMLManager *MainWindow::getXmlmanager() const
 void MainWindow::setXmlmanager(XMLManager *value)
 {
     xmlmanager = value;
+}
+
+void MainWindow::on_actionNew_Regression_Project_triggered()
+{
+   Regression *r = new Regression(this);
+   r->show();
 }

@@ -3,6 +3,7 @@
 
 #include <utils/eoParallel.h>
 #include "SAke/eoSAKeEvalFunc.h"
+#include "SAke/eoSAKeEvalFuncEqualWeights.h"
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
@@ -40,6 +41,7 @@ void make_help(eoParser & _parser);
 
 #include <QObject>
 #include "SAke/eoGenContinueMy.h"
+
 
 using namespace eo;
 
@@ -95,6 +97,8 @@ public:
     MainWindow *getMainwindows() const;
     void setMainwindows(MainWindow *value);
 
+    void setFt(const FitenessType &value);
+
 signals:
     void finished(int index);
     void updateMobPlot(int indexTab,
@@ -127,7 +131,9 @@ signals:
                      QString safetyMargin,
                      QString momentum,
                      int barValur,
-                     int);
+                     int firstOccurence,
+                     QString abmaxfitness,
+                     QString avmaxfitnes);
 
     void updateAbsMaxFit(int indexTab, QString s);
     void updateAbsAvFit(int indexTab, QString s);
@@ -187,6 +193,10 @@ private:
     int numberOfKernelToBeSaved;
     bool clickCloseTab;
     MainWindow *mainwindows;
+    FitenessType ft;
+
+
+
 };
 
 #endif // SAKCONTROLLER_H

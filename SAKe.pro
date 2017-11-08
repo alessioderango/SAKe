@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 QT += xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -15,6 +15,7 @@ LIBS += -fopenmp
 QT += opengl
 DEFINES += QCUSTOMPLOT_USE_OPENGL
 LIBS += -lOpengl32
+CONFIG += console
 
 
 SOURCES += main.cpp\
@@ -28,7 +29,8 @@ SOURCES += main.cpp\
     SAke/SAKeController.cpp \
     SAke/SAKeEA.cpp \
     validation.cpp \
-    ValidationController.cpp
+    ValidationController.cpp \
+    Regression.cpp
 
 HEADERS  += mainwindow.h \
     dialog.h \
@@ -72,12 +74,15 @@ HEADERS  += mainwindow.h \
     Activation.h \
     validation.h \
     ValidationController.h \
-    myvalidatordouble.h
+    myvalidatordouble.h \
+    Regression.h \
+    SAke/eoSAKeEvalFuncEqualWeights.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \
     fitnessplot.ui \
-    validation.ui
+    validation.ui \
+    regression.ui
 
 DISTFILES +=
 

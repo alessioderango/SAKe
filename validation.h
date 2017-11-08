@@ -9,6 +9,7 @@
 #include <ValidationController.h>
 #include <HandlerCSV.h>
 #include <mainwindow.h>
+#include <SAke/SAKeController.h>
 
 namespace Ui {
 class Validation;
@@ -26,6 +27,7 @@ public:
     void setMainWindow(MainWindow *value);
     void setReadOnlyProjName(bool a);
     void setParameters(QVariantList list);
+    void accept();
 
 private slots:
     void on_pushButton_clicked();
@@ -37,6 +39,8 @@ private slots:
     void on_buttonBox_accepted();
 
     void on_buttonBox_rejected();
+    void on_buttonBox_clicked(QAbstractButton *button);
+
 signals:
     void showAlertInputCsv(int row,QString a, QString e);
 

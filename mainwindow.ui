@@ -90,6 +90,7 @@
    </attribute>
    <addaction name="newCalibrationProject"/>
    <addaction name="actionNewValidationProject"/>
+   <addaction name="actionNew_Regression_Project"/>
    <addaction name="separator"/>
    <addaction name="stopButton"/>
   </widget>
@@ -107,13 +108,10 @@
     <string>New Calibration Project</string>
    </property>
    <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;New Calibration Project&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>New Calibration Project</string>
    </property>
    <property name="font">
     <font/>
-   </property>
-   <property name="shortcut">
-    <string>Shift+C</string>
    </property>
   </action>
   <action name="stopButton">
@@ -122,10 +120,7 @@
      <normaloff>:/img/red-stop-button-icon-17950.png</normaloff>:/img/red-stop-button-icon-17950.png</iconset>
    </property>
    <property name="text">
-    <string>stopButton</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string>Stop Button</string>
    </property>
   </action>
   <action name="actionNewValidationProject">
@@ -134,7 +129,19 @@
      <normaloff>:/img/check.png</normaloff>:/img/check.png</iconset>
    </property>
    <property name="text">
-    <string>new Validation Project</string>
+    <string>New Validation Project</string>
+   </property>
+  </action>
+  <action name="actionNew_Regression_Project">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/img/regression.png</normaloff>:/img/regression.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Regression Project</string>
    </property>
   </action>
  </widget>
