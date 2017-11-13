@@ -59,6 +59,89 @@ void MainWindow::makeFitnessPlot(QCustomPlot * customPlot){
 
 }
 
+void MainWindow::makeAUCROCPlot(QCustomPlot *customPlot)
+{
+    QVector<double> x1( 0 ), y1( 0 );
+    double incr = 0.2;
+    for (int i = 0; i <= 5; ++i) {
+         x1.push_back(incr*i);
+         y1.push_back(incr*i);
+    }
+
+    customPlot->addGraph();
+    QPen pen;
+    pen.setColor(QColor(qSin(1*1+1.2)*80+80, qSin(1*0.3+0)*80+80, qSin(1*0.3+1.5)*80+80));
+    customPlot->graph()->setPen(pen);
+    customPlot->graph()->setName("diagonal");
+    customPlot->graph()->setLineStyle((QCPGraph::LineStyle)1);
+    customPlot->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+    customPlot->graph()->setData(x1, y1);
+    customPlot->graph()->rescaleAxes(true);
+
+    customPlot->addGraph();
+    pen.setColor(QColor(qSin(4*1+1.2)*80+80, qSin(4*0.3+0)*80+80, qSin(4*0.3+1.5)*80+80));
+    customPlot->graph()->setPen(pen);
+    customPlot->graph()->setName("ROC");
+    customPlot->graph()->setLineStyle((QCPGraph::LineStyle)1);
+    customPlot->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+    customPlot->graph()->setData(x1, y1);
+    customPlot->graph()->rescaleAxes(true);
+
+
+    customPlot->xAxis->setRange( 0, 1 );
+    customPlot->yAxis->setRange( 0, 1 );
+
+    customPlot->xAxis->setLabel( "FPR or (1-specificity)" );
+    customPlot->yAxis->setLabel( "TPR or sensitivity" );
+
+    customPlot->legend->setVisible(true);
+    customPlot->legend->setFont(QFont("Helvetica", 9));
+
+    customPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables );
+    customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestAUCROC(QPoint)));
+
+
+}
+
+
+void MainWindow::makeDETPlot(QCustomPlot *customPlot)
+{
+    QVector<double> x1( 0 ), y1( 0 );
+    double incr = 0.2;
+    for (int i = 0; i <= 5; ++i) {
+         x1.push_back(incr*i);
+         y1.push_back(incr*i);
+    }
+
+    customPlot->addGraph();
+    QPen pen;
+    pen.setColor(QColor(qSin(1*1+1.2)*80+80, qSin(1*0.3+0)*80+80, qSin(1*0.3+1.5)*80+80));
+    customPlot->graph()->setPen(pen);
+    customPlot->graph()->setName("DET");
+    customPlot->graph()->setLineStyle((QCPGraph::LineStyle)1);
+    customPlot->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+    customPlot->graph()->setData(x1, y1);
+    customPlot->graph()->rescaleAxes(true);
+
+    customPlot->xAxis->setRange( 0, 1 );
+    customPlot->yAxis->setRange( 0, 1 );
+
+    customPlot->xAxis->setLabel( "False positive rate or false alarms rate" );
+    customPlot->yAxis->setLabel( "False negative rate or missed  detection rate" );
+
+    customPlot->legend->setVisible(true);
+    customPlot->legend->setFont(QFont("Helvetica", 9));
+
+    customPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables );
+    customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    //connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestAUCROC(QPoint)));
+
+
+}
+
 void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, int rain_size, Activation *activation, int activation_size){
 
 
@@ -229,6 +312,50 @@ void MainWindow::updateKernelPlot(int indexTab, QVector<double> Fi, int tb)
 
 }
 
+void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double> TPR, double AUCROC)
+{
+    mutex.lock();
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
+    //PLOT ROC e AUC
+    QCustomPlot *m_CustomPlot = getAUCROCPlot(indexTab);
+    if (m_CustomPlot)
+    {
+        (m_CustomPlot->graph(1))->setData(FPR, TPR);
+
+        m_CustomPlot->replot();
+    }
+
+    m_CustomPlot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("DET");
+    if (m_CustomPlot)
+    {
+//cout << " STAMPOOOOOOOO   DET       " << endl;
+        QVector<double> FNR(TPR.size(),0);
+        for (int i = 0; i < FNR.size(); ++i) {
+                 FNR[i] = (double)(((double)1)-TPR[i]);
+
+
+         //        cout << FNR[i]  << " "<<  FPR[i]<< endl;
+//                 FNR[i] = log10(FNR[i]);
+//                 FPR[i] = log10(FPR[i]);
+        }
+      // cout << " STAMPOOOOOOOO   DET     END  " << endl;
+
+
+
+        (m_CustomPlot->graph(0))->setData(FNR, FPR);
+
+        m_CustomPlot->replot();
+    }
+
+
+    QLabel* text = (QLabel*)tabs->findChild<QLabel*>("AUCValue");
+    text->setText(QString("%1").arg(AUCROC));
+    mutex.unlock();
+
+
+
+}
+
 void MainWindow::updateTexts(int indexTab,
                              QString s,
                              QString fitness,
@@ -357,7 +484,7 @@ void MainWindow::updateMobPlot(int indexTab, Rain * rain, int rain_size, Activat
             time[i] = diff.total_seconds();
             value[i]=Y[i];
             if(value[i] > max)
-                max=value[i];
+               max=value[i];
         }
 
         m_CustomPlot->graph(0)->setData(time, value);
@@ -452,6 +579,13 @@ QCustomPlot* MainWindow::getKernelPlot(int indexTab){
     return tab;
 }
 
+QCustomPlot* MainWindow::getAUCROCPlot(int indexTab){
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
+    QCustomPlot* tab = (QCustomPlot*)tabs->findChild<QCustomPlot*>("AUCROC");
+    // QCustomPlot * m_CustomPlot = (QCustomPlot *) tab->widget(3);
+    return tab;
+}
+
 
 void MainWindow::updateMobilityKernelPlot(QCustomPlot *customPlot)
 {
@@ -513,6 +647,206 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
 
 
     mainL->addLayout(vertical);
+    QGridLayout * grid = new QGridLayout();
+
+
+    QLabel * AbsMaxFit = new QLabel();
+    AbsMaxFit->setText("Absolute Maximum Fitness (AMF) :");
+    grid->addWidget(AbsMaxFit,0,0);
+    QLabel * AbsMaxFitNum = new QLabel();
+    AbsMaxFitNum->setText("0");
+    AbsMaxFitNum->setObjectName("AbsMaxFitNum");
+    grid->addWidget(AbsMaxFitNum,0,1);
+
+    QLabel * firstOccurenceText = new QLabel();
+    QString fo = QString("First occurence of AMF at iteration: %1").arg(0);
+    firstOccurenceText->setText(fo);
+    firstOccurenceText->setObjectName("firstOccurenceText");
+    grid->addWidget(firstOccurenceText,0,2);
+
+
+
+    QLabel * AbsAveFit = new QLabel();
+    AbsAveFit->setText("Absolute Average Fitness:");
+    grid->addWidget(AbsAveFit,1,0);
+    QLabel * AbsAveFitNum = new QLabel();
+    AbsAveFitNum->setText("0");
+    AbsAveFitNum->setObjectName("AbsAveFitNum");
+    grid->addWidget(AbsAveFitNum,1,1);
+
+    QLabel * space1 = new QLabel();
+    space1->setText(" ");
+    grid->addWidget(space1,2,0);
+
+
+    QLabel * gen = new QLabel();
+    gen->setText("Current Generation:");
+    grid->addWidget(gen,3,0);
+    QLabel * genNum = new QLabel();
+    genNum->setText("0");
+    genNum->setObjectName("GenerationText");
+    grid->addWidget(genNum,3,1);
+
+    QLabel * curAveFit = new QLabel();
+    curAveFit->setText("Current Average Fitness:");
+    grid->addWidget(curAveFit,4,0);
+    QLabel * curAveFitNum = new QLabel();
+    curAveFitNum->setText("0");
+    curAveFitNum->setObjectName("curAveFitNum");
+    grid->addWidget(curAveFitNum,4,1);
+
+    QLabel * space = new QLabel();
+    space->setText(" ");
+    grid->addWidget(space,5,0);
+
+    QLabel * bestIndiv = new QLabel();
+    bestIndiv->setText("Best Individual of current generation");
+    grid->addWidget(bestIndiv,6,0);
+
+    QLabel * curMaxFit = new QLabel();
+    curMaxFit->setText("Fitness:");
+    grid->addWidget(curMaxFit,7,0);
+    QLabel * curMaxFitNum = new QLabel();
+    curMaxFitNum->setText("0");
+    curMaxFitNum->setObjectName("curMaxFitNum");
+    grid->addWidget(curMaxFitNum,7,1);
+
+    QLabel * tb = new QLabel();
+    tb->setText("tb:");
+    grid->addWidget(tb,8,0);
+    QLabel * tbNum = new QLabel();
+    tbNum->setText("0");
+    tbNum->setObjectName("tbNum");
+    grid->addWidget(tbNum,8,1);
+
+    QLabel * dCritico = new QLabel();
+    dCritico->setText("Safety margin:");
+    grid->addWidget(dCritico,8,2);
+    QLabel * dCriticoNum = new QLabel();
+    dCriticoNum->setText("0");
+    dCriticoNum->setObjectName("dCriticoNum");
+    grid->addWidget(dCriticoNum,8,3);
+
+    QLabel * momPrimo = new QLabel();
+    momPrimo->setText("First-order momentum:");
+    grid->addWidget(momPrimo,8,4);
+    QLabel * momPrimoNum = new QLabel();
+    momPrimoNum->setText("0");
+    momPrimoNum->setObjectName("momPrimoNum");
+    grid->addWidget(momPrimoNum,8,5);
+
+
+    // first occurence at N iteration;
+
+
+    mainL->addLayout(grid);
+
+    QHBoxLayout * buttons = new QHBoxLayout();
+    QProgressBar* bar = new QProgressBar();
+    bar->setValue(0);
+    bar->setObjectName("bar");
+    buttons->addWidget(bar);
+    //    connect(stop, SIGNAL (clicked()),this, SLOT (clickedStopButton()));
+    ////    QPushButton* pause = new QPushButton();
+    ////    pause->setText("Pause");
+    ////    buttons->addWidget(pause);
+
+    mainL->addLayout(buttons);
+    tab1->setLayout(mainL);
+    ui->tabWidget_2->setCurrentIndex(indextab);
+}
+
+
+void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
+{
+    QTabWidget * tabwidget = new QTabWidget();
+    tabwidget->setObjectName("tabwidget");
+    QCustomPlot * customPlot = new QCustomPlot();
+    //customPlot->setOpenGl(true,64);
+    QCustomPlot * mobFunc = new QCustomPlot();
+    QCustomPlot * kerFunc = new QCustomPlot();
+    int indextab= ui->tabWidget_2->addTab(tabwidget, name);
+    QWidget * tab1=ui->tabWidget_2->widget(ui->tabWidget_2->count()-1);
+    QVBoxLayout * mainL = new QVBoxLayout();
+
+
+    QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spUp.setVerticalStretch(2);
+    QVBoxLayout * vertical = new QVBoxLayout();
+    QSplitter * splitter = new QSplitter();
+    MainWindow::makeFitnessPlot(customPlot);
+    customPlot->setSizePolicy(spUp);
+    customPlot->setObjectName("fitFunc");
+    splitter->addWidget(customPlot);
+    MainWindow::makeKernelPlot(kerFunc,this);
+    kerFunc->setSizePolicy(spUp);
+    kerFunc->setObjectName("kerFunc");
+    splitter->addWidget(kerFunc);
+    MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
+    mobFunc->setSizePolicy(spUp);
+
+    mobFunc->setObjectName("mobFunc");
+    //mobFunc->rescaleAxes();
+    splitter->addWidget(mobFunc);
+
+    splitter->setOrientation(Qt::Vertical);
+
+    QSplitter * splitterHorizontal = new QSplitter();
+    splitterHorizontal->setOrientation(Qt::Horizontal);
+
+    splitterHorizontal->addWidget(splitter);
+    splitterHorizontal->setStretchFactor(0, 4);
+    //PLOT AUC ROC Con scritte
+
+
+    //splitterHorizontal->addWidget();
+    QSizePolicy spHo(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spHo.setHorizontalStretch(0.5);
+
+    QVBoxLayout * rightside = new QVBoxLayout();
+
+
+    QGridLayout * gridAUC = new QGridLayout();
+
+    QCustomPlot * AUCROCPlot = new QCustomPlot();
+    MainWindow::makeAUCROCPlot(AUCROCPlot);
+    AUCROCPlot->setSizePolicy(spHo);
+    AUCROCPlot->setObjectName("AUCROC");
+    rightside->addWidget(AUCROCPlot,1.5);
+    //gridAUC->addWidget(AUCROCPlot,0,0);
+
+
+
+
+    QLabel * AUC = new QLabel();
+    AUC->setText("Area under curve (AUC) :");
+    gridAUC->addWidget(AUC,0,0);
+    QLabel * AUCValue = new QLabel();
+    AUCValue->setText("0");
+    AUCValue->setObjectName("AUCValue");
+    gridAUC->addWidget(AUCValue,0,1);
+    rightside->addLayout(gridAUC);
+
+
+    QCustomPlot * DETPlot = new QCustomPlot();
+    MainWindow::makeDETPlot(DETPlot);
+    DETPlot->setSizePolicy(spHo);
+    DETPlot->setObjectName("DET");
+    rightside->addWidget(DETPlot,1.5);
+
+    auto widget = new QWidget();
+    widget->setLayout(rightside);
+
+
+    splitterHorizontal->addWidget(widget);
+    splitterHorizontal->setStretchFactor(1, 1);
+    vertical->addWidget(splitterHorizontal);
+    vertical->setStretch(0,2);
+    //vertical->addStretch(vertical->sizeConstraint()*2);
+
+
+    mainL->addLayout(vertical);
+
     QGridLayout * grid = new QGridLayout();
 
 
@@ -696,6 +1030,137 @@ void MainWindow::addTabValidation(QString name, Rain * rain, int rain_size, Acti
     ui->tabWidget_2->setCurrentIndex(ui->tabWidget_2->count()-1);
 }
 
+
+void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitness, QVBoxLayout* mainL, Rain* rain, int rain_size, int activation_size, Activation *activation, QCustomPlot* mobFunc)
+{
+    QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spUp.setVerticalStretch(2);
+    QVBoxLayout * vertical = new QVBoxLayout();
+    MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
+    mobFunc->setSizePolicy(spUp);
+
+    mobFunc->setObjectName(nameMobFunc);
+    //mobFunc->rescaleAxes();
+    vertical->addWidget(mobFunc);
+
+
+    vertical->addStretch(vertical->sizeConstraint()*2);
+    mainL->addLayout(vertical);
+    QGridLayout * grid = new QGridLayout();
+
+
+    QLabel * curMaxFit = new QLabel();
+    curMaxFit->setText(fitness);
+    grid->addWidget(curMaxFit,0,0);
+    QLabel * curMaxFitNum = new QLabel();
+    curMaxFitNum->setText("0");
+    curMaxFitNum->setObjectName("curMaxFitNum");
+    grid->addWidget(curMaxFitNum,0,1);
+
+
+    QLabel * tb = new QLabel();
+    tb->setText("tb:");
+    grid->addWidget(tb,1,0);
+    QLabel * tbNum = new QLabel();
+    tbNum->setText("0");
+    tbNum->setObjectName("tbNum");
+    grid->addWidget(tbNum,1,1);
+
+    QLabel * dCritico = new QLabel();
+    dCritico->setText("Safety margin:");
+    grid->addWidget(dCritico,1,2);
+    QLabel * dCriticoNum = new QLabel();
+    dCriticoNum->setText("0");
+    dCriticoNum->setObjectName("dCriticoNum");
+    grid->addWidget(dCriticoNum,1,3);
+
+    QLabel * momPrimo = new QLabel();
+    momPrimo->setText("First-order momentum:");
+    grid->addWidget(momPrimo,1,4);
+    QLabel * momPrimoNum = new QLabel();
+    momPrimoNum->setText("0");
+    momPrimoNum->setObjectName("momPrimoNum");
+    grid->addWidget(momPrimoNum,1,5);
+
+
+    // first occurence at N iteration;
+    // GMD--------------------------
+
+    mainL->addLayout(grid);
+}
+
+QLayout* wrap(QWidget* w){
+    auto layout = new QVBoxLayout();
+    layout->addWidget( w );
+    return layout;
+}
+QWidget* wrap(QLayout* l){
+    auto widget = new QWidget();
+    widget->setLayout( l );
+    return widget;
+}
+
+void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
+{
+    QTabWidget * tabwidget = new QTabWidget();
+    tabwidget->setObjectName("tabwidget");
+    //customPlot->setOpenGl(true,64);
+    QCustomPlot * mobFunc = new QCustomPlot();
+    QCustomPlot * kerFunc = new QCustomPlot();
+    ui->tabWidget_2->addTab(tabwidget, name);
+    QWidget * tab1=ui->tabWidget_2->widget(ui->tabWidget_2->count()-1);
+
+
+    QSplitter* horizontalSplitter = new QSplitter();
+    horizontalSplitter->setOrientation(Qt::Vertical);
+
+    //Kernel plot
+    QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spUp.setVerticalStretch(2);
+    QVBoxLayout * vertical = new QVBoxLayout();
+    MainWindow::makeKernelPlot(kerFunc, this);
+    kerFunc->setSizePolicy(spUp);
+    kerFunc->setObjectName("kerFunc");
+    vertical->addWidget(kerFunc);
+
+    horizontalSplitter->addWidget(wrap(vertical));
+
+
+    QSplitter* verticalSplitterGMDeGMDn = new QSplitter();
+    verticalSplitterGMDeGMDn->setOrientation(Qt::Horizontal);
+    //GMD ------------------------------------
+    QVBoxLayout * mainLGMD = new QVBoxLayout();
+    getGraphs("kerFuncGMD","mobFuncGMD","Fitness GMD :", mainLGMD, rain, rain_size, activation_size, activation, mobFunc);
+
+    verticalSplitterGMDeGMDn->addWidget(wrap(mainLGMD));
+
+    //GMDn ------------------------------------
+    QVBoxLayout * mainLGMDn = new QVBoxLayout();
+    getGraphs("kerFuncGMDn","mobFuncGMDn","Fitness GMDn :", mainLGMDn, rain, rain_size, activation_size, activation, mobFunc);
+
+    verticalSplitterGMDeGMDn->addWidget(wrap(mainLGMD));
+
+    horizontalSplitter->addWidget(verticalSplitterGMDeGMDn);
+
+    QSplitter* verticalSplitterEW = new QSplitter();
+    verticalSplitterEW->setOrientation(Qt::Horizontal);
+
+    //EW ------------------------------------
+    QVBoxLayout * mainLEW = new QVBoxLayout();
+    getGraphs("kerFuncEW","mobFuncEW","Fitness EW :", mainLEW, rain, rain_size, activation_size, activation, mobFunc);
+
+
+    verticalSplitterEW->addWidget(wrap(mainLEW));
+    QVBoxLayout * mainLEW2 = new QVBoxLayout();
+    getGraphs("kerFuncEW","mobFuncEW","Fitness EW :", mainLEW2, rain, rain_size, activation_size, activation, mobFunc);
+
+
+    verticalSplitterEW->addWidget(wrap(mainLEW2));
+
+    horizontalSplitter->addWidget(verticalSplitterEW);
+    tab1->setLayout(wrap(horizontalSplitter));
+    ui->tabWidget_2->setCurrentIndex(ui->tabWidget_2->count()-1);
+}
 
 MainWindow::~MainWindow()
 {
@@ -910,6 +1375,37 @@ void MainWindow::savePdfFitness()
     currentPlot->savePdf(fileName);
 }
 
+
+void MainWindow::resizeAUCROC()
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
+    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("AUCROC");
+    currentPlot->rescaleAxes();
+    currentPlot->replot();
+}
+
+void MainWindow::savePngAUCROC()
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
+    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("AUCROC");
+
+    QString fileName =QFileDialog::getSaveFileName(this,
+                                                   tr("Save png"), "",
+                                                   tr("Png (*.png);;All Files (*)"));
+    currentPlot->savePng(fileName);
+}
+
+void MainWindow::savePdfAUCROC()
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
+    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("AUCROC");
+
+    QString fileName =QFileDialog::getSaveFileName(this,
+                                                   tr("Save pdf"), "",
+                                                   tr("Pdf (*.pdf);;All Files (*)"));
+    currentPlot->savePdf(fileName);
+}
+
 void MainWindow::contextMenuRequestMobilityFunction(QPoint pos)
 {
     QMenu *menu = new QMenu(this);
@@ -949,6 +1445,21 @@ void MainWindow::contextMenuRequestFitness(QPoint pos)
     menu->addAction("Rescale Axes", this, SLOT(resizeFitness()));
     menu->addAction("Save Graph PDF", this, SLOT(savePdfFitness()));
     menu->addAction("Save Graph PNG", this, SLOT(savePngFitness()));
+
+    menu->popup(currentPlot->mapToGlobal(pos));
+
+}
+
+void MainWindow::contextMenuRequestAUCROC(QPoint pos)
+{
+    QMenu *menu = new QMenu(this);
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
+    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("AUCROC");
+
+    menu->addAction("Rescale Axes", this, SLOT(resizeAUCROC()));
+    menu->addAction("Save Graph PDF", this, SLOT(savePdfAUCROC()));
+    menu->addAction("Save Graph PNG", this, SLOT(savePngAUCROC()));
 
     menu->popup(currentPlot->mapToGlobal(pos));
 

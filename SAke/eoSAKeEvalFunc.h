@@ -54,19 +54,7 @@ public:
 	}
 
     std::vector<double> getY(Rain *& P, std::vector<double> Fi, int tb) {
-//        printf("rain_size %d \n",rain_size);
-//        for (int i = 0; i < tb; i++) {
-//               printf("Fi[%d] %f \n",i, Fi[i]);
 
-//        }
-//        printf("tb %d %d  \n",tb,rain_size);
-//        ofstream myfile;
-//        myfile.open ("C:\\Users\\Alessio\\Documents\\workspace\\calibration\\seed1\\calibration.csv",ios::out);
-//                for (int i = 0; i < tb; i++) {
-//                     //  printf("Fi[%d] %f \n",i, Fi[i]);
-//                    myfile << "Fi[ " << i<<"] = " << Fi[i] << "\n";
-//                }
-        //double * Y = new double[rain_size];
         std::vector<double> Y;
         Y.resize(rain_size);
 		for (int t = 0; t < rain_size; t++) {
@@ -75,14 +63,11 @@ public:
 			for (int r = 0; r < t; r++)
 				if ((t - r) < tb){
 					ym += Fi[t - r] * P[r].getRainMm();
-                   // myfile << "Fi[t - r] = " << Fi[t - r] << ", P[r].getRainMm() " << rain[r].getRainMm() << "\n";
+
 				}
-			Y[t] = ym;
-//            myfile << "Y[" << t << "] " << ym << "\n";
-            //printf("Y[%d] %f \n",t, ym);
+            Y[t] = ym;
 
         }
-//        myfile.close();
 
         return Y;
 
@@ -126,6 +111,16 @@ public:
 		return -1;
 	}
 
+    bool diffTimeInterval(tm actStart, tm actEnd, tm pichTime){
+        int result1 = getDifferenceTime(actStart,pichTime);
+        int result2 = getDifferenceTime(pichTime,actEnd);
+         if(result1>=-2 && result2>=-1){
+             return true;
+         }
+         else
+             return false;
+    }
+
 
     double getFitness(std::vector<double> Y,EOT & _eo){
 
@@ -137,25 +132,18 @@ public:
 		for (int t = 1; t < rain_size-1; t++) {
             bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
 			if(cross){
+
 				// trovato un picco deve essere considerato
                 Ym p;
                 p.setValue(Y[t]);
                 p.setTime(rain[t].getTime());
                 ym.push_back(p);
-//				ym[countYm].setValue(Y[t]);
-//				ym[countYm].setTime(rain[t].getTime());
-//				countYm++;
+
 			}
 		}
 
-        //getYmDecr(ym,countYm);
         qsort (&ym[0], ym.size(), sizeof(Ym),compareDouble);
 
-//        for (int i = 0; i < countYm; i++) {
-//               printf("ym[%d] %f \n",i, ym[i].getValue());
-
-//        }
-//        printf("countYm %d \n",countYm);
 
 
         double YsMin = 999999999;
@@ -180,7 +168,7 @@ public:
 //                        int day = ym[i].getTime().tm_mday ;
 //                        std::cout << "year " << year << " mon " << mon << " day " << day << std::endl;
 //                        std::cout << "ym[i] value " << ym[i].getValue() << std::endl;
-                        //printf("+  %f \n",(1 / (double)(i + 1)));
+
                         if(ym[i].getValue() < YsMin){
                             YsMin =ym[i].getValue();
                             iMin=i;

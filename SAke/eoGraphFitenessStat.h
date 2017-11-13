@@ -119,6 +119,9 @@ private :
 
        }
 
+       if(best_element.getFPR().size() != 0)
+       emit controller->updateROCPlot(pos, QVector<double>::fromStdVector(best_element.getFPR()),QVector<double>::fromStdVector(best_element.getTPR()),best_element.getAUC());
+
        QString genString= QString("%1").arg(steps);
            steps++;
        emit controller->updateTexts(pos,genString,QString("%1").arg(fitness),

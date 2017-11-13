@@ -76,7 +76,9 @@ HEADERS  += mainwindow.h \
     ValidationController.h \
     myvalidatordouble.h \
     Regression.h \
-    SAke/eoSAKeEvalFuncEqualWeights.h
+    SAke/eoSAKeEvalFuncEqualWeights.h \
+    SAke/eoSAKeEvalFuncAUCROC.h \
+    SAke/eoSAKeEvalFuncGMDn.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \

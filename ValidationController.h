@@ -65,14 +65,18 @@ public:
 
     void startValidation();
 
+    void startValidationAUCROC();
+
     vector<QCPItemText*> widgetArray;
     vector<QCPItemLine*> arrowArray;
 
     MainWindow *getMainwindows() const;
     void setMainwindows(MainWindow *value);
 
-    void setFt(const FitenessType &value);
+    void setFt(const FitnessType &value);
 
+    void getMobilityFunction(std::vector<double>&  Y, std::vector<Ym> &ym);
+    
 signals:
     void updateMobPlot(int indexTab,
                        Rain * rain,
@@ -118,7 +122,7 @@ private:
     int activations_size;
     double zCr;
 MainWindow *mainwindows;
-    FitenessType ft;
+    FitnessType ft;
 
 
 };

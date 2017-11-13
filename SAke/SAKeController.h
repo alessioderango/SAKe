@@ -4,6 +4,8 @@
 #include <utils/eoParallel.h>
 #include "SAke/eoSAKeEvalFunc.h"
 #include "SAke/eoSAKeEvalFuncEqualWeights.h"
+#include "SAke/eoSAKeEvalFuncAUCROC.h"
+#include "SAke/eoSAKeEvalFuncGMDn.h"
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
@@ -97,7 +99,7 @@ public:
     MainWindow *getMainwindows() const;
     void setMainwindows(MainWindow *value);
 
-    void setFt(const FitenessType &value);
+    void setFt(int value);
 
 signals:
     void finished(int index);
@@ -123,6 +125,10 @@ signals:
     void updateKernelPlot(int indexTab,
                           QVector<double> Fi,
                           int tb);
+    void updateROCPlot(int indexTab,
+                            QVector<double> FPR,
+                            QVector<double> TPR,
+                            double AUCROC);
     void updateTexts(int indexTab,
                      QString s,
                      QString fitness,
@@ -193,7 +199,7 @@ private:
     int numberOfKernelToBeSaved;
     bool clickCloseTab;
     MainWindow *mainwindows;
-    FitenessType ft;
+    FitnessType ft;
 
 
 

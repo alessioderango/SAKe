@@ -27,13 +27,18 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     void makeFitnessPlot(QCustomPlot * customPlot);
 
+    void makeAUCROCPlot(QCustomPlot * customPlot);
+    void makeDETPlot(QCustomPlot * customPlot);
+
     void makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, int rain_size, Activation *activation, int activation_size);
 
     static void makeKernelPlot(QCustomPlot * customPlot, MainWindow *w);
     void updateMobilityKernelPlot(QCustomPlot * customPlot);
     static void pushBackThread(QThread *thread);
     void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
+    void addTabAUCROC(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabValidation(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
+    void addTabValidationNewInterface(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
 
 
     ~MainWindow();
@@ -44,6 +49,7 @@ public:
     QCustomPlot *getPlotMobility(int indexTab);
     QCustomPlot* getFitnessPlot(int indexTab);
     QCustomPlot *getKernelPlot(int indexTab);
+    QCustomPlot* getAUCROCPlot(int indexTab);
     XMLManager *getXmlmanager() const;
     void setXmlmanager(XMLManager *value);
     void showLoadingWheel();
@@ -51,6 +57,8 @@ public:
 
     QMutex mutex;
 
+    void getGraphs(QString nameKerFunc, QString nameMobFunc, QString fitness, QVBoxLayout* mainL, Rain* rain, int rain_size, int activation_size, Activation *activation, QCustomPlot* mobFunc);
+    
 private slots:
     void on_newCalibrationProject_triggered();
 
@@ -79,6 +87,12 @@ private slots:
     void updateKernelPlot(int indexTab,
                            QVector<double> Fi,
                            int tb);
+
+    void updateROCPlot(int indexTab,
+                            QVector<double> FPR,
+                            QVector<double> TPR,
+                            double AUCROC);
+
     void updateTexts(int indexTab,
                      QString s,
                               QString fitness,
@@ -114,9 +128,14 @@ private slots:
     void savePngFitness();
     void savePdfFitness();
 
+    void resizeAUCROC();
+    void savePngAUCROC();
+    void savePdfAUCROC();
+
     void contextMenuRequestMobilityFunction(QPoint pos);
     void contextMenuRequestKernel(QPoint pos);
     void contextMenuRequestFitness(QPoint pos);
+    void contextMenuRequestAUCROC(QPoint pos);
     void openFolderProject();
     void showAlertInputCsv(int row, QString filename , QString e);
 

@@ -82,11 +82,11 @@ SAKeController::SAKeController(MainWindow *_main,
         }
     }
 
-//         for (int i = 0; i < activations_size; ++i) {
-//             cout << "Activation Start = " <<"    "<<"  "<< activations[i].getStart().tm_hour<< ":" << activations[i].getStart().tm_min << ":"<< activations[i].getStart().tm_sec << "   " <<activations[i].getStart().tm_mday << "-"<< activations[i].getStart().tm_mon << "-"<< 1900+activations[i].getStart().tm_year << endl;
-//             cout << "Activation End = " <<"    "<<"  "<< activations[i].getEnd().tm_hour<< ":" << activations[i].getEnd().tm_min << ":"<< activations[i].getEnd().tm_sec << "   " <<activations[i].getEnd().tm_mday << "-"<< activations[i].getEnd().tm_mon << "-"<< 1900+activations[i].getEnd().tm_year << endl;
-//         }
-//         qDebug() << "Activation End = " <<"    "<<"  "<< this->rain[0].getRainMm()<< endl;
+    //         for (int i = 0; i < activations_size; ++i) {
+    //             cout << "Activation Start = " <<"    "<<"  "<< activations[i].getStart().tm_hour<< ":" << activations[i].getStart().tm_min << ":"<< activations[i].getStart().tm_sec << "   " <<activations[i].getStart().tm_mday << "-"<< activations[i].getStart().tm_mon << "-"<< 1900+activations[i].getStart().tm_year << endl;
+    //             cout << "Activation End = " <<"    "<<"  "<< activations[i].getEnd().tm_hour<< ":" << activations[i].getEnd().tm_min << ":"<< activations[i].getEnd().tm_sec << "   " <<activations[i].getEnd().tm_mday << "-"<< activations[i].getEnd().tm_mon << "-"<< 1900+activations[i].getEnd().tm_year << endl;
+    //         }
+    //         qDebug() << "Activation End = " <<"    "<<"  "<< this->rain[0].getRainMm()<< endl;
 
 
     selection        = sselection;
@@ -207,19 +207,59 @@ void SAKeController::startAlgorithm()
         //type of fitness strategy
         eoSAKeEvalFunc<Indi> plainEval(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
 
-        eoSAKeEvalFunc<Indi> plainEvalEqualWeights(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
+        eoSAKeEvalFuncGMDn<Indi> plainEvalGMDn(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
+
+        eoSAKeEvalFuncEqualWeights<Indi> plainEvalEqualWeights(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
+
+        eoSAKeEvalFuncAUCROC<Indi> plainEvalAUCROC(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
+
 
         // turn that object into an evaluation counter
         //eoEvalFuncCounter<Indi> eval(plainEval);
 
         eoEvalFuncCounter<Indi> *evaltmp;
-        if(ft == FitnessGMD)
+        switch (ft) {
+        case FitnessGMD:
             evaltmp = new eoEvalFuncCounter<Indi>(plainEval);
-        else
-            if(ft == FitnessEqualWeights)
-               evaltmp = new eoEvalFuncCounter<Indi>(plainEvalEqualWeights);
+            break;
+        case FitnessGMDn:
+            evaltmp = new eoEvalFuncCounter<Indi>(plainEvalGMDn);
+            break;
 
-         eoEvalFuncCounter<Indi> & eval = *evaltmp;
+        case FitnessEqualWeights:
+            evaltmp = new eoEvalFuncCounter<Indi>(plainEvalEqualWeights);
+            break;
+
+        case FitnessAUCROC:
+            evaltmp = new eoEvalFuncCounter<Indi>(plainEvalAUCROC);
+            break;
+
+        }
+
+//        if(ft == FitnessGMD)
+//            evaltmp = new eoEvalFuncCounter<Indi>(plainEval);
+//        else
+//            if(ft == FitnessEqualWeights)
+//                evaltmp = new eoEvalFuncCounter<Indi>(plainEvalEqualWeights);
+//            else
+//                if(ft == FitnessAUCROC)
+//                    evaltmp = new eoEvalFuncCounter<Indi>(plainEvalAUCROC);
+
+
+
+//        switch (ft) {
+//        case 0:
+//            cout << "ft  :  FitnessGMD" << endl;
+//            break;
+//        case 1:
+//            cout << "ft  :  FitnessEqualWeights " << endl;
+//            break;
+//        case 2:
+//            cout << "ft  :  FitnessAUCROC" << endl;
+//            break;
+//        }
+
+        eoEvalFuncCounter<Indi> & eval = *evaltmp;
 
         // the genotype - through a genotype initializerdo_make_genotype(_parser, _state, _eo);
         eoInit<Indi>& init = do_make_genotype(parser, state, Indi(),tbMin,tbMax,pattern.toStdString(), popFromFile,lastGeneration);
@@ -280,14 +320,14 @@ void SAKeController::startAlgorithm()
     //MainWindow::threads.erase(MainWindow::threads.begin()+pos);
     if(clickCloseTab)
         emit finished(pos);
-     getMainwindows()->mutex.unlock();
+    getMainwindows()->mutex.unlock();
     //MainWindow::closeTab(pos);
 
 }
 
-void SAKeController::setFt(const FitenessType &value)
+void SAKeController::setFt(int value)
 {
-    ft = value;
+    ft = (FitnessType)value;
 }
 
 
@@ -323,7 +363,7 @@ void SAKeController::setCsvHandlerstatusRain(int value)
 
 
 void SAKeController::run(){
-      startAlgorithm();
+    startAlgorithm();
 }
 
 void SAKeController::startThread(){

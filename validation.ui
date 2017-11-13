@@ -108,6 +108,11 @@
          <string>EW</string>
         </property>
        </item>
+       <item>
+        <property name="text">
+         <string>AUC ROC</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>

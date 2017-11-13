@@ -29,6 +29,7 @@ public:
         number =0;
         dYcr=0;
         momentoDelPrimoOrdine=0;
+        AUC =0;
     }
 
     virtual ~eoSAKe() {
@@ -147,6 +148,55 @@ public:
     int number;
 
 
+    std::vector<int> getTP() const{
+        return TP;
+    }
+    void setTP(std::vector<int> &value){
+        TP = value;
+    }
+
+    std::vector<int> getFN() const{
+        return FN;
+    }
+    void setFN(std::vector<int> &value){
+        FN = value;
+    }
+
+    std::vector<int> getFP() const{
+        return FP;
+    }
+    void setFP(std::vector<int> &value){
+        FP = value;
+    }
+
+    std::vector<int> getTN() const{
+        return TN;
+    }
+    void setTN(std::vector<int> &value){
+        TN = value;
+    }
+
+    std::vector<double> getTPR() const{
+        return TPR;
+    }
+    void setTPR(std::vector<double> &value){
+        TPR = value;
+    }
+
+    std::vector<double> getFPR() const{
+        return FPR;
+    }
+    void setFPR(std::vector<double> &value){
+        FPR = value;
+    }
+
+    double getAUC() const{
+        return AUC;
+    }
+    void setAUC(double value){
+        AUC = value;
+    }
+
 private:
 
     //double* Fi;	// kernel function
@@ -158,6 +208,20 @@ private:
     Ym min2;
     double momentoDelPrimoOrdine;
     std::vector<Ym> bests;
+
+    //For ROC Fitness
+    std::vector<int> TP;// true positive
+    std::vector<int> FN;// false negative
+
+    //outside the activation range
+    std::vector<int> FP;// false positive
+    std::vector<int> TN;// true negative
+
+    std::vector<double> TPR;// true positive rate
+    std::vector<double> FPR;// False positive rate
+
+    double AUC;
+
 
 };
 

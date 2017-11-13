@@ -174,7 +174,10 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
     else
         if(ui->comboBoxFitness->currentIndex() == 1){
           validationController->setFt(FitnessEqualWeights);
-        }
+        }else
+            if(ui->comboBoxFitness->currentIndex() ==2){
+                validationController->setFt(FitnessAUCROC);
+            }
     validationController->setMainwindows(mainWindow);
     qRegisterMetaType<tm>("tm");
     qRegisterMetaType<std::vector<Ym>>("std::vector<Ym>");
@@ -216,26 +219,27 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(validationController);
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), validationController));
-    mainWindow->addTabValidation(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+//    mainWindow->addTabValidation(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+    mainWindow->addTabValidationNewInterface(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
 
-    QCustomPlot * m_CustomPlot = (QCustomPlot *) mainWindow->getPlotMobility(pos);
-    for(int i = 0; i < activation_size;i++){
-        QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
-        //m_CustomPlot->addItem(textLabel);
-        textLabel->setPositionAlignment(Qt::AlignTop);
-        textLabel->setText("");
-        textLabel->setPen(QPen(Qt::black)); // show black border around text
-        validationController->widgetArray.push_back(textLabel);
+//    QCustomPlot * m_CustomPlot = (QCustomPlot *) mainWindow->getPlotMobility(pos);
+//    for(int i = 0; i < activation_size;i++){
+//        QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
+//        //m_CustomPlot->addItem(textLabel);
+//        textLabel->setPositionAlignment(Qt::AlignTop);
+//        textLabel->setText("");
+//        textLabel->setPen(QPen(Qt::black)); // show black border around text
+//        validationController->widgetArray.push_back(textLabel);
 
-        QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
-        arrow->start->setParentAnchor(textLabel->bottom);
-        arrow->end->setType(QCPItemPosition::ptPlotCoords);
-        arrow->setHead(QCPLineEnding::esSpikeArrow);
-        validationController->arrowArray.push_back(arrow);
-    }
+//        QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
+//        arrow->start->setParentAnchor(textLabel->bottom);
+//        arrow->end->setType(QCPItemPosition::ptPlotCoords);
+//        arrow->setHead(QCPLineEnding::esSpikeArrow);
+//        validationController->arrowArray.push_back(arrow);
+//    }
 
     //.push_back(validationController);
     mainWindow->mutex.unlock();
-    validationController->startThread();
+    //validationController->startThread();
     this->close();
 }

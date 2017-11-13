@@ -15,10 +15,10 @@ Dialog::Dialog(QWidget *parent) :
 
     // check input
     ui->lineEditPopSize->setValidator(new QIntValidator(1, 5000, this));
-//    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 5000, this));
-//    QDoubleValidator* doubleValidator = new MyValidatorDouble(0.55, 1, 2, ui->lineEditPar1);
-//    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
-//    ui->lineEditPar1->setValidator(doubleValidator);
+    //    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 5000, this));
+    //    QDoubleValidator* doubleValidator = new MyValidatorDouble(0.55, 1, 2, ui->lineEditPar1);
+    //    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
+    //    ui->lineEditPar1->setValidator(doubleValidator);
     //ui->lineEdit
 
     ui->label_21->setVisible(false);
@@ -232,12 +232,12 @@ void Dialog::on_pushButtonStart_clicked()
             if(check) return;
         }
         else
-          if(ui->comboBoxSelection->currentIndex() ==2 ){
-                    check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
-                    if(check) return;
-                    check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
-                    if(check) return;
-           }
+            if(ui->comboBoxSelection->currentIndex() ==2 ){
+                check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
+                if(check) return;
+                check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
+                if(check) return;
+            }
 
     check = checklineEdit(ui->lineEditMutationP->text(), QString("Mutation probability cannot be empty \n"));
     if(check) return;
@@ -324,66 +324,62 @@ void Dialog::on_pushButtonStart_clicked()
                                                      ui->lineEditSeed->text().toInt(),//seed.toInt(),
                                                      ui->lineEditFrequKerSav->text().toInt(),//saveKernels.toInt());
                                                      ui->lineEditNumBestKernelSaved->text().toInt());//lineEditNumBestKernelSaved.toInt());
-    if(ui->comboBoxFitness->currentIndex() == 0)
-        controller->setFt(FitnessGMD);
-    else
-        if(ui->comboBoxFitness->currentIndex() == 1){
-          controller->setFt(FitnessEqualWeights);
-        }
+
+    controller->setFt(ui->comboBoxFitness->currentIndex());
 
     if(ui->lineEditProjName->isReadOnly() )
     {
         mainWindow->getXmlmanager()->SaveXMLFileAlreadyExistCalibrationProject(ui->lineEditProjName->text(),
-                                                              ui->comboBoxSelection->currentText(),
-                                                              ui->lineEditPar1->text(),//ipara1,
-                                                              ui->lineEditPar2->text(),//ipara2,
-                                                              ui->lineEditNumProc->text(),
-                                                              ui->lineEditPopSize->text(),//pop.toString(),
-                                                              ui->lineEditMaxNumIte->text(),//imaxGen,
-                                                              ui->lineEditTbMax->text(),//itbMax,
-                                                              ui->lineEditTbMin->text(),//itbMin,
-                                                              ui->lineEditdHpMax->text(),//idHpMax,
-                                                              ui->lineEditdHpMin->text(),//idHpMin,
-                                                              QString("%1").arg(1),
-                                                              ui->lineEditCrossoverP->text(),//fpropCrossover,
-                                                              ui->lineEditMutationP->text(),//fpropMutation,
-                                                              ui->lineEditPme->text(),//fpme,
-                                                              ui->lineEditPmb->text(),//fpmb,
-                                                              ui->comboBoxInitialPattern->currentText(),
-                                                              rainPath,
-                                                              actPath,
-                                                              QString("%1").arg(x),
-                                                              ui->lineEditNumberElitists->text(),
-                                                              ui->lineEditSeed->text(),
-                                                              ui->lineEditFrequKerSav->text(),
-                                                              ui->lineEditNumBestKernelSaved->text(),
-                                                              ordersSelectionCriterion);
+                                                                               ui->comboBoxSelection->currentText(),
+                                                                               ui->lineEditPar1->text(),//ipara1,
+                                                                               ui->lineEditPar2->text(),//ipara2,
+                                                                               ui->lineEditNumProc->text(),
+                                                                               ui->lineEditPopSize->text(),//pop.toString(),
+                                                                               ui->lineEditMaxNumIte->text(),//imaxGen,
+                                                                               ui->lineEditTbMax->text(),//itbMax,
+                                                                               ui->lineEditTbMin->text(),//itbMin,
+                                                                               ui->lineEditdHpMax->text(),//idHpMax,
+                                                                               ui->lineEditdHpMin->text(),//idHpMin,
+                                                                               QString("%1").arg(1),
+                                                                               ui->lineEditCrossoverP->text(),//fpropCrossover,
+                                                                               ui->lineEditMutationP->text(),//fpropMutation,
+                                                                               ui->lineEditPme->text(),//fpme,
+                                                                               ui->lineEditPmb->text(),//fpmb,
+                                                                               ui->comboBoxInitialPattern->currentText(),
+                                                                               rainPath,
+                                                                               actPath,
+                                                                               QString("%1").arg(x),
+                                                                               ui->lineEditNumberElitists->text(),
+                                                                               ui->lineEditSeed->text(),
+                                                                               ui->lineEditFrequKerSav->text(),
+                                                                               ui->lineEditNumBestKernelSaved->text(),
+                                                                               ordersSelectionCriterion);
     }else{
         mainWindow->getXmlmanager()->SaveXMLFileCalibrationProject(ui->lineEditProjName->text(),
-                                                  ui->comboBoxSelection->currentText(),
-                                                  ui->lineEditPar1->text(),//ipara1,
-                                                  ui->lineEditPar2->text(),//ipara2,
-                                                  ui->lineEditNumProc->text(),
-                                                  ui->lineEditPopSize->text(),//pop.toString(),
-                                                  ui->lineEditMaxNumIte->text(),//imaxGen,
-                                                  ui->lineEditTbMax->text(),//itbMax,
-                                                  ui->lineEditTbMin->text(),//itbMin,
-                                                  ui->lineEditdHpMax->text(),//idHpMax,
-                                                  ui->lineEditdHpMin->text(),//idHpMin,
-                                                  QString("%1").arg(1),
-                                                  ui->lineEditCrossoverP->text(),//fpropCrossover,
-                                                  ui->lineEditMutationP->text(),//fpropMutation,
-                                                  ui->lineEditPme->text(),//fpme,
-                                                  ui->lineEditPmb->text(),//fpmb,
-                                                  ui->comboBoxInitialPattern->currentText(),
-                                                  rainPath,
-                                                  actPath,
-                                                  QString("%1").arg(x),
-                                                  ui->lineEditNumberElitists->text(),
-                                                  ui->lineEditSeed->text(),
-                                                  ui->lineEditFrequKerSav->text(),
-                                                  ui->lineEditNumBestKernelSaved->text(),
-                                                  ordersSelectionCriterion);
+                                                                   ui->comboBoxSelection->currentText(),
+                                                                   ui->lineEditPar1->text(),//ipara1,
+                                                                   ui->lineEditPar2->text(),//ipara2,
+                                                                   ui->lineEditNumProc->text(),
+                                                                   ui->lineEditPopSize->text(),//pop.toString(),
+                                                                   ui->lineEditMaxNumIte->text(),//imaxGen,
+                                                                   ui->lineEditTbMax->text(),//itbMax,
+                                                                   ui->lineEditTbMin->text(),//itbMin,
+                                                                   ui->lineEditdHpMax->text(),//idHpMax,
+                                                                   ui->lineEditdHpMin->text(),//idHpMin,
+                                                                   QString("%1").arg(1),
+                                                                   ui->lineEditCrossoverP->text(),//fpropCrossover,
+                                                                   ui->lineEditMutationP->text(),//fpropMutation,
+                                                                   ui->lineEditPme->text(),//fpme,
+                                                                   ui->lineEditPmb->text(),//fpmb,
+                                                                   ui->comboBoxInitialPattern->currentText(),
+                                                                   rainPath,
+                                                                   actPath,
+                                                                   QString("%1").arg(x),
+                                                                   ui->lineEditNumberElitists->text(),
+                                                                   ui->lineEditSeed->text(),
+                                                                   ui->lineEditFrequKerSav->text(),
+                                                                   ui->lineEditNumBestKernelSaved->text(),
+                                                                   ordersSelectionCriterion);
     }
 
 
@@ -429,25 +425,49 @@ void Dialog::on_pushButtonStart_clicked()
                                            int,
                                            QString ,
                                            QString )), mainWindow, SLOT(updateTexts(int ,
-                                                                               QString,
-                                                                               QString,
-                                                                               QString ,
-                                                                               QString ,
-                                                                               QString ,
-                                                                               QString ,
-                                                                               int,
-                                                                               int,
-                                                                               QString ,
-                                                                               QString )));
+                                                                                    QString,
+                                                                                    QString,
+                                                                                    QString ,
+                                                                                    QString ,
+                                                                                    QString ,
+                                                                                    QString ,
+                                                                                    int,
+                                                                                    int,
+                                                                                    QString ,
+                                                                                    QString )));
     connect(controller, SIGNAL(updateAbsMaxFit(int , QString )), mainWindow, SLOT(updateAbsMaxFit(int , QString )));
 
     connect(controller, SIGNAL(updateAbsAvFit(int , QString )), mainWindow, SLOT(updateAbsAvFit(int , QString )));
+
+    connect(controller, SIGNAL(updateROCPlot(int ,
+                                             QVector<double> ,
+                                             QVector<double> ,
+                                             double )), mainWindow, SLOT(updateROCPlot(int ,
+                                                                                       QVector<double> ,
+                                                                                       QVector<double> ,
+                                                                                       double )));
+
+
 
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(controller);
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
 
-    mainWindow->addTab(QString("Calibration - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+    //Fitness
+    if(ui->comboBoxFitness->currentIndex() == 3)
+        mainWindow->addTabAUCROC(QString("Calibration AUC ROC - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+    else
+        if(ui->comboBoxFitness->currentIndex() == 0)
+            mainWindow->addTab(QString("Calibration - GMD "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+        else
+            if(ui->comboBoxFitness->currentIndex() == 1)
+                mainWindow->addTab(QString("Calibration - GMDn "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+            else
+                if(ui->comboBoxFitness->currentIndex() == 2)
+                    mainWindow->addTab(QString("Calibration - EW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+
+
+
     QCustomPlot * m_CustomPlot = (QCustomPlot *) mainWindow->getPlotMobility(pos);
     for(int i = 0; i < activation_size;i++){
         QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
@@ -468,7 +488,7 @@ void Dialog::on_pushButtonStart_clicked()
         arrow->setHead(QCPLineEnding::esSpikeArrow);
         controller->arrowArray.push_back(arrow);
     }
-     mainWindow->mutex.unlock();
+    mainWindow->mutex.unlock();
 
     controller->startThread();
     this->close();

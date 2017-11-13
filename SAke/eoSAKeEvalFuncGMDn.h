@@ -8,8 +8,8 @@
  ==========================================================================
  */
 
-#ifndef _eoSAKeEvalFuncEqualWeights_h
-#define _eoSAKeEvalFuncEqualWeights_h
+#ifndef _eoSAKeEvalFuncGMDn_h
+#define _eoSAKeEvalFuncGMDn_h
 
 // include whatever general include you need
 #include <stdexcept>
@@ -19,6 +19,7 @@ using namespace std;
 #define DAYS  ((60) (*) (60) (*) (24))
 #define HOURS ((60) (*) (60))
 
+// include the base definition of eoEvalFunc
 #include "eoEvalFunc.h"
 #include "Rain.h"
 #include "Ym.h"
@@ -29,20 +30,27 @@ using namespace std;
 using boost::posix_time::ptime;
 using namespace boost::gregorian;
 using namespace boost::posix_time;
-
-
+/**
+ Always write a comment in this format before class definition
+ if you want the class to be documented by Doxygen
+ */
 template<class EOT>
-class eoSAKeEvalFuncEqualWeights: public eoEvalFunc<EOT> {
+class eoSAKeEvalFuncGMDn: public eoEvalFunc<EOT> {
 public:
-    eoSAKeEvalFuncEqualWeights(Rain * _rain, int _rain_size, Activation* _activation,
-            int _activation_size)
-
+	/// Ctor - no requirement
+// START eventually add or modify the anyVariable argument
+    eoSAKeEvalFuncGMDn(Rain * _rain, int _rain_size, Activation* _activation,
+			int _activation_size)
+			//  eoSAKeEvalFunc( varType  _anyVariable) : anyVariable(_anyVariable)
+// END eventually add or modify the anyVariable argument
 			{
 		rain = _rain;
 		rain_size = _rain_size;
 		activations = _activation;
         activations_size = _activation_size;
         numeroValitazioni=0;
+		// START Code of Ctor of an eoSAKeEvalFunc object
+		// END   Code of Ctor of an eoSAKeEvalFunc object
 	}
 
     std::vector<double> getY(Rain *& P, std::vector<double> Fi, int tb) {
@@ -55,7 +63,7 @@ public:
 			for (int r = 0; r < t; r++)
 				if ((t - r) < tb){
 					ym += Fi[t - r] * P[r].getRainMm();
-                   // myfile << "Fi[t - r] = " << Fi[t - r] << ", P[r].getRainMm() " << rain[r].getRainMm() << "\n";
+
 				}
             Y[t] = ym;
 
@@ -103,7 +111,6 @@ public:
 		return -1;
 	}
 
-
     bool diffTimeInterval(tm actStart, tm actEnd, tm pichTime){
         int result1 = getDifferenceTime(actStart,pichTime);
         int result2 = getDifferenceTime(pichTime,actEnd);
@@ -137,6 +144,8 @@ public:
 
                 if(jump)
                     continue;
+
+                // trovato un picco deve essere considerato
                 Ym p;
                 p.setValue(Y[t]);
                 p.setTime(rain[t].getTime());
@@ -145,7 +154,7 @@ public:
 //				ym[countYm].setTime(rain[t].getTime());
 //				countYm++;
 			}
-		}
+        }
 
         for (int s = 0; s < activations_size; s++) {
             double maxPich = 0;
@@ -190,12 +199,7 @@ public:
                     //if(i<(activations_size)){
 //                       printf("i %d \n",i);
 
-
-                    if(i < activations_size)
-                      f += 1 / (double)activations_size;
-                    else
-                      f += 1 / (double)(i + 1);
-
+                        f += 1 / (double)(i + 1);
 //                        printf("f %f \n",f);
                         ym[i].setI(i+1);
                         bests.push_back(ym[i]);
@@ -234,11 +238,18 @@ public:
         _eo.setYmMin(ymMin);
         _eo.setYmMin2(ymMin2);
 
+
+		double fMax=0;
+//        printf("activations_size %d \n",activations_size);
+        for (int i = 1; i <= activations_size; i++) {
+            fMax +=(double)(1/(double)i);
+		}
+
 //       printf("f %f fMax %f fitness = %f \n",f,fMax,(double) (f/fMax));
 
         //delete []ym;
 
-        return (double) (f);
+        return (double) (f/fMax);
 	}
 
 	/** Actually compute the fitness
