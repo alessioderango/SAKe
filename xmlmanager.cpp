@@ -326,7 +326,7 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                           QString seed,
                                                           QString saveKernels,
                                                           QString numberOfKernelToBeSaved,
-                                                          std::vector<QString> orders)
+                                                          std::vector<QString> orders, QString typeFitness)
 {
 
     QFile inFile( xmlFilePath );
@@ -384,6 +384,7 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
             a.at(i).childNodes().at(23).firstChild().setNodeValue(orders[1]);
             a.at(i).childNodes().at(24).firstChild().setNodeValue(orders[2]);
             a.at(i).childNodes().at(25).firstChild().setNodeValue(orders[3]);
+            a.at(i).childNodes().at(26).firstChild().setNodeValue(typeFitness);
 
         }
 
@@ -431,7 +432,8 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
                                               QString seed,
                                               QString saveKernels,
                                               QString numberOfKernelToBeSaved,
-                                              std::vector<QString> orders)
+                                              std::vector<QString> orders,
+                                              QString typeFitness)
 {
 
     //Controllare se esiste un altro progetto con lo stesso nome
@@ -508,6 +510,8 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomElement order2Dom = document.createElement( "order2Dom" );
     QDomElement order3Dom = document.createElement( "order3Dom" );
 
+    QDomElement typeFitnessDOM = document.createElement( "typeFitness" );
+
     //create TextElement
     QDomText typeText = document.createTextNode( selection );
     QDomText value1Text = document.createTextNode( value1 );
@@ -550,6 +554,10 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     order1Dom.appendChild(order1Text);
     order2Dom.appendChild(order2Text);
     order3Dom.appendChild(order3Text);
+
+    QDomText typeFitnessText = document.createTextNode(typeFitness);
+
+    typeFitnessDOM.appendChild(typeFitnessText);
 
 
     typeElement.appendChild(typeText);
@@ -618,6 +626,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     project.appendChild(order1Dom);
     project.appendChild(order2Dom);
     project.appendChild(order3Dom);
+    project.appendChild(typeFitnessDOM);
 
     id.appendChild(idText);
     project.appendChild(id);
@@ -869,9 +878,7 @@ int XMLManager::SaveXMLFileAlreadyExistValidationProject(const QString &name,
         inFile.close();
         return 0;
     }
-
     inFile.close();
-    return 0;
     QDomElement documentElement = document.documentElement();
     QDomNodeList a = documentElement.elementsByTagName("ValidationProject");
 //    qDebug() << a.length();

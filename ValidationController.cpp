@@ -194,6 +194,16 @@ void ValidationController::run(){
 
 }
 
+QString ValidationController::getProjectName() const
+{
+    return projectName;
+}
+
+void ValidationController::setProjectName(const QString &value)
+{
+    projectName = value;
+}
+
 void ValidationController::setFt(const FitnessType &value)
 {
     ft = value;
@@ -244,7 +254,7 @@ void ValidationController::getMobilityFunction(std::vector<double>&  Y, std::vec
             // trovato un picco deve essere considerato
             for (int a = 0; a < activations_size; a++) {
                  if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                     cout << "salto un pico all'interno di un intervallo " << endl;
+                 //    cout << "salto un pico all'interno di un intervallo " << endl;
                      jump = true;
                  }
             }
@@ -279,6 +289,7 @@ void ValidationController::getMobilityFunction(std::vector<double>&  Y, std::vec
     }
 }
 
+
 void ValidationController::startValidationAUCROC(QString namePlot){
 
     std::vector<double>  Y;
@@ -293,8 +304,8 @@ void ValidationController::startValidationAUCROC(QString namePlot){
 
     double line = ymMax.getValue()/10;
 
-    cout << ymMax.getValue() << endl;
-    cout << line << endl;
+   // cout << ymMax.getValue() << endl;
+   // cout << line << endl;
 
     vector<double> lines;
     for (int i = 10; i >= 1; i--) {
@@ -313,6 +324,7 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     for (int i = 0; i < lines.size(); ++i) {
 
         for(int t = 0; t < rain_size; t++) {
+            bool jump = false;
 
             //controllo TP e FN
             for (int s = 0; s < activations_size; s++) {
@@ -321,10 +333,12 @@ void ValidationController::startValidationAUCROC(QString namePlot){
                 int result2 = getDifferenceTime(rain[t].getTime(),activations[s].getEnd());
 
                 if(result1>=-2 && result2>=-1){
-                    break;
+                   jump = true;
                 }
             }
 
+            if(jump)
+                continue;
 
             //controllo FP e TN
             if(Y[t] < lines[i])
@@ -378,7 +392,7 @@ void ValidationController::startValidationAUCROC(QString namePlot){
         double TNR =  (double)TN[i] / (double)(TN[i]+FP[i]);
         FPR[i] = (double) (1-((double) TNR));
 
-        cout << TPR[i] << ";" << FPR[i] << ";"<< endl;
+      //  cout << TPR[i] << ";" << FPR[i] << ";"<< endl;
     }
 
     double AUC=0; // Area under the curve
@@ -443,6 +457,36 @@ void ValidationController::startValidationAUCROC(QString namePlot){
                                      QString("%1").arg(momentoDelPrimoOrdine)
                                      );
    // emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
+
+    QString pathValidation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/validation/";
+    QDir dirVal(pathValidation);
+    if (!dirVal.exists()){
+        dirVal.mkdir(".");
+    }
+
+    QString savePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/validation/"+projectName;
+
+    QDir dir3(savePath);
+    if (!dir3.exists()){
+        dir3.mkdir(".");
+    }
+
+    savePath+="/metrics.csv";
+
+    ofstream myfile;
+    myfile.open (savePath.toStdString(),ios::out);
+
+    myfile <<  "z ;";
+    myfile <<  "TP ;";
+    myfile <<  "FN ;";
+    myfile <<  "FP ;";
+    myfile <<  "TN ; \n";
+
+    for (int i = 0; i < 10; i++) {
+        myfile << lines[i] <<";"<< TP[i] <<";"<< FN[i] <<";"<<FP[i] <<";"<< TN[i]<<";" << endl;
+    }
+
+    myfile.close();
 
 
 }

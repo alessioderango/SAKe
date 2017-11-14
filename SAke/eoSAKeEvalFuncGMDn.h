@@ -137,7 +137,7 @@ public:
 
                 for (int a = 0; a < activations_size; a++) {
                      if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                         cout << "salto un pico all'interno di un intervallo " << endl;
+//                         cout << "salto un pico all'interno di un intervallo " << endl;
                          jump = true;
                      }
                 }

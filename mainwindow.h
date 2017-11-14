@@ -24,6 +24,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
+    QTabWidget* getTabbyPos(int pos);
     explicit MainWindow(QWidget *parent = 0);
     void makeFitnessPlot(QCustomPlot * customPlot);
 
@@ -129,6 +131,8 @@ private slots:
                                QString momentum);
     void updateAbsMaxFit(int indexTab, QString s);
     void updateAbsAvFit(int indexTab, QString s);
+
+    void getMoreInfoROC();
 
     void on_stopButton_triggered();
 

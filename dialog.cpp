@@ -83,6 +83,7 @@ void Dialog::setParameters(QVariantList list)
     ui->lineEditNumBestKernelSaved->setText(list[23].toString());
     ui->selectOrder1->setCurrentText(list[25].toString());
     ui->selectOrder2->setCurrentText(list[26].toString());
+    ui->comboBoxFitness->setCurrentIndex(list[28].toString().toInt());
 }
 
 void Dialog::setReadOnlyProjName(bool a)
@@ -353,7 +354,8 @@ void Dialog::on_pushButtonStart_clicked()
                                                                                ui->lineEditSeed->text(),
                                                                                ui->lineEditFrequKerSav->text(),
                                                                                ui->lineEditNumBestKernelSaved->text(),
-                                                                               ordersSelectionCriterion);
+                                                                               ordersSelectionCriterion,
+                                                                               QString("%1").arg(ui->comboBoxFitness->currentIndex()));
     }else{
         mainWindow->getXmlmanager()->SaveXMLFileCalibrationProject(ui->lineEditProjName->text(),
                                                                    ui->comboBoxSelection->currentText(),
@@ -379,7 +381,8 @@ void Dialog::on_pushButtonStart_clicked()
                                                                    ui->lineEditSeed->text(),
                                                                    ui->lineEditFrequKerSav->text(),
                                                                    ui->lineEditNumBestKernelSaved->text(),
-                                                                   ordersSelectionCriterion);
+                                                                   ordersSelectionCriterion,
+                                                                   QString("%1").arg(ui->comboBoxFitness->currentIndex()));
     }
 
 

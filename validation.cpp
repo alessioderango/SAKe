@@ -73,50 +73,6 @@ void Validation::setParameters(QVariantList list)
 
 void Validation::accept()
 {
-
-}
-
-int Validation::getRightPlotFromName(QString name)
-{
-
-    if(name == "mobFuncGMD")
-        return 0;
-    else
-        if(name =="mobFuncGMDn")
-            return 1;
-        else
-            if(name =="mobFuncEW")
-                return 2;
-            else
-                if(name =="mobFuncAUCROC")
-                    return 3;
-
-}
-
-QCustomPlot * Validation::getRightPlotFromIndex(int index, int pos){
-    QString name;
-    switch (index) {
-    case 0:
-        name = "GMD";
-        break;
-    case 1:
-        name = "GMDn";
-        break;
-    case 2:
-        name = "EW";
-        break;
-    case 3:
-        name = "AUCROC";
-        break;
-    }
-
-    return (QCustomPlot *) mainWindow->getPlotMobility(pos,name);
-
-}
-
-
-void Validation::on_buttonBox_clicked(QAbstractButton *button)
-{
     Rain * rain;
     int rain_size;
     Activation * activation;
@@ -280,11 +236,13 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
                                                                                        QVector<double> ,
                                                                                        QVector<double> ,
                                                                                        double )));
+validationController->setProjectName(ui->lineEditProjName->text());
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(validationController);
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), validationController));
     //    mainWindow->addTabValidation(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
     mainWindow->addTabValidationNewInterface(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+
 
     int number_of_mobPlots = 4;
     for(int i = 0; i < number_of_mobPlots;i++){
@@ -315,4 +273,48 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
     mainWindow->mutex.unlock();
     validationController->startThread();
     this->close();
+}
+
+int Validation::getRightPlotFromName(QString name)
+{
+
+    if(name == "mobFuncGMD")
+        return 0;
+    else
+        if(name =="mobFuncGMDn")
+            return 1;
+        else
+            if(name =="mobFuncEW")
+                return 2;
+            else
+                if(name =="mobFuncAUCROC")
+                    return 3;
+
+}
+
+QCustomPlot * Validation::getRightPlotFromIndex(int index, int pos){
+    QString name;
+    switch (index) {
+    case 0:
+        name = "GMD";
+        break;
+    case 1:
+        name = "GMDn";
+        break;
+    case 2:
+        name = "EW";
+        break;
+    case 3:
+        name = "AUCROC";
+        break;
+    }
+
+    return (QCustomPlot *) mainWindow->getPlotMobility(pos,name);
+
+}
+
+
+void Validation::on_buttonBox_clicked(QAbstractButton *button)
+{
+
 }

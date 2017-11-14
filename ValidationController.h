@@ -79,6 +79,9 @@ public:
 
     void getMobilityFunction(std::vector<double>&  Y, std::vector<Ym> &ym);
     
+    QString getProjectName() const;
+    void setProjectName(const QString &value);
+
 signals:
     void updateMobPlot(int indexTab,
                        Rain * rain,
@@ -147,8 +150,9 @@ private:
     Activation * activations;
     int activations_size;
     double zCr;
-MainWindow *mainwindows;
+    MainWindow *mainwindows;
     FitnessType ft;
+    QString projectName;
 
 
 };

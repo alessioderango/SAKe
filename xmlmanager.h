@@ -34,7 +34,7 @@ public:
                                       QString seed,
                                       QString saveKernels,
                                       QString numberOfKernelToBeSaved,
-                                      std::vector<QString> orders);
+                                      std::vector<QString> orders, QString typeFitness);
     int SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                   QString selection,
                                                   QString value1,
@@ -59,7 +59,7 @@ public:
                                                   QString seed,
                                                   QString saveKernels,
                                                   QString numberOfKernelToBeSaved,
-                                                  std::vector<QString> orders);
+                                                  std::vector<QString> orders, QString typeFitness);
     int SaveXMLFileValidationProject(const QString &_projectName,
                                      const QString &filenameRainPath,
                                      const QString &filenameActivaionPath,

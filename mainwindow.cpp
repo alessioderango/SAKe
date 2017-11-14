@@ -6,6 +6,11 @@
 
 std::vector<QThread *> MainWindow::threads;
 
+QTabWidget *MainWindow::getTabbyPos(int pos)
+{
+    return (QTabWidget*)ui->tabWidget_2->widget(pos);
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -441,6 +446,11 @@ void MainWindow::updateAbsAvFit(int indexTab, QString s)
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
     QLabel* absAvFit = (QLabel*)tabs->findChild<QLabel*>("AbsAveFitNum");
     absAvFit->setText(s);
+}
+
+void MainWindow::getMoreInfoROC()
+{
+
 }
 
 void MainWindow::updateMobPlot(int indexTab, Rain * rain, int rain_size, Activation *activation, int activation_size, std::vector<double> Y, double YmMinVal, tm YmMinTime, double YmMinVal2, tm  YmMinTime2, std::vector<Ym> bests, std::vector<QCPItemText*> widgetArray,
@@ -1309,15 +1319,6 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
     AUCValue->setText("0");
     AUCValue->setObjectName("AUCValue");
     gridAUC->addWidget(AUCValue,1,1);
-
-    QPushButton *getMoreInfo = new QPushButton();
-    getMoreInfo->setText("More Info");
-//    const QSize BUTTON_SIZE = QSize(22, 22);
-//    getMoreInfo->setMaximumSize(BUTTON_SIZE);
-    gridAUC->addWidget(getMoreInfo,2,0);
-    QDialog* moreInfo = new QDialog();
-    moreInfo->setVisible(true);
-    //connect(button, &QPushButton::clicked,this, setvis(){moreInfo->setVisible(true);});
 
     gridAUC->setRowStretch(0,1.5);
 //rightside->setStretchFactor(0,2);

@@ -149,8 +149,8 @@ public:
 
         double line = ymMax.getValue()/10;
 
-        cout << ymMax.getValue() << endl;
-        cout << line << endl;
+//        cout << ymMax.getValue() << endl;
+//        cout << line << endl;
 
         vector<double> lines;
         for (int i = 10; i >= 1; i--) {
@@ -170,6 +170,7 @@ public:
 
             for(int t = 0; t < rain_size; t++) {
 
+                bool jump = false;
                 //controllo TP e FN
                 for (int s = 0; s < activations_size; s++) {
                     //TODO inserire variabili intervallo giorni
@@ -177,9 +178,12 @@ public:
                     int result2 = getDifferenceTime(rain[t].getTime(),activations[s].getEnd());
 
                     if(result1>=-2 && result2>=-1){
-                        break;
+                        jump = true;
                     }
                 }
+
+                if(jump)
+                    continue;
 
 
                 //controllo FP e TN
