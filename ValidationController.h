@@ -64,11 +64,13 @@ public:
     void setFitness(QObject *value);
 
     void startValidation();
+    void startValidationAllinOne(QString namePlot);
 
-    void startValidationAUCROC();
 
-    vector<QCPItemText*> widgetArray;
-    vector<QCPItemLine*> arrowArray;
+    void startValidationAUCROC(QString AUCROC);
+
+    vector<vector<QCPItemText*>> widgetArray;
+    vector<vector<QCPItemLine*>> arrowArray;
 
     MainWindow *getMainwindows() const;
     void setMainwindows(MainWindow *value);
@@ -79,6 +81,20 @@ public:
     
 signals:
     void updateMobPlot(int indexTab,
+                       Rain * rain,
+                       int rain_size,
+                       Activation * a,
+                       int act_size,
+                       std::vector<double> Y,
+                       double,
+                       tm,
+                       double,
+                       tm,
+                       std::vector<Ym> bests,
+                       std::vector<QCPItemText*> widgetArray,
+                       std::vector<QCPItemLine*> arrowArray);
+    void updateMobPlotAllInOne(int indexTab,
+                       QString namePlot,
                        Rain * rain,
                        int rain_size,
                        Activation * a,
@@ -105,6 +121,16 @@ signals:
                               QString tb,
                               QString safetyMargin,
                               QString momentum);
+    void updateTextsValidationAllInOne(int indexTab,
+                                       QString name,
+                               QString fitness,
+                               QString tb,
+                               QString safetyMargin,
+                               QString momentum);
+    void updateROCPlot(int indexTab,
+                            QVector<double> FPR,
+                            QVector<double> TPR,
+                            double AUCROC);
 
 private:
     void run();

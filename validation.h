@@ -27,6 +27,8 @@ public:
     void setMainWindow(MainWindow *value);
     void setReadOnlyProjName(bool a);
     void setParameters(QVariantList list);
+    QCustomPlot * getRightPlotFromIndex(int index, int pos);
+    int getRightPlotFromName(QString name);
     void accept();
 
 private slots:

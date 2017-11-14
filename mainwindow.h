@@ -46,7 +46,7 @@ public:
     Ui::MainWindow *getUi() const;
     static std::vector<QThread *> threads;
 
-    QCustomPlot *getPlotMobility(int indexTab);
+    QCustomPlot *getPlotMobility(int indexTab, QString objName);
     QCustomPlot* getFitnessPlot(int indexTab);
     QCustomPlot *getKernelPlot(int indexTab);
     QCustomPlot* getAUCROCPlot(int indexTab);
@@ -57,7 +57,7 @@ public:
 
     QMutex mutex;
 
-    void getGraphs(QString nameKerFunc, QString nameMobFunc, QString fitness, QVBoxLayout* mainL, Rain* rain, int rain_size, int activation_size, Activation *activation, QCustomPlot* mobFunc);
+    void getGraphs(QString nameKerFunc, QString nameMobFunc, QString fitness,auto* mainL, Rain* rain, int rain_size, int activation_size, Activation *activation, QCustomPlot* mobFunc);
     
 private slots:
     void on_newCalibrationProject_triggered();
@@ -79,6 +79,20 @@ private slots:
                                     std::vector<Ym> bests,
                                     std::vector<QCPItemText*> widgetArray,
                                     std::vector<QCPItemLine*> arrowArray);
+    void updateMobPlotAllInOne(int indexTab,
+                       QString name,
+                       Rain * rain,
+                       int rain_size,
+                       Activation *,
+                       int,
+                       std::vector<double> Y,
+                       double,
+                       tm,
+                       double,
+                       tm,
+                       std::vector<Ym> bests,
+                       std::vector<QCPItemText*> widgetArray,
+                       std::vector<QCPItemLine*> arrowArray);
     void updateFitnessPlot(int indexTab,
                            QVector<double> x,
                            QVector<double> y,
@@ -107,6 +121,12 @@ private slots:
                               QString tb,
                               QString safetyMargin,
                               QString momentum);
+    void updateTextsValidationAllInOne(int indexTab,
+                                      QString name,
+                               QString fitness,
+                               QString tb,
+                               QString safetyMargin,
+                               QString momentum);
     void updateAbsMaxFit(int indexTab, QString s);
     void updateAbsAvFit(int indexTab, QString s);
 

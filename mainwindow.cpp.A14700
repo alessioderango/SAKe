@@ -328,10 +328,20 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
     m_CustomPlot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("DET");
     if (m_CustomPlot)
     {
+//cout << " STAMPOOOOOOOO   DET       " << endl;
         QVector<double> FNR(TPR.size(),0);
         for (int i = 0; i < FNR.size(); ++i) {
                  FNR[i] = (double)(((double)1)-TPR[i]);
+
+
+         //        cout << FNR[i]  << " "<<  FPR[i]<< endl;
+//                 FNR[i] = log10(FNR[i]);
+//                 FPR[i] = log10(FPR[i]);
         }
+      // cout << " STAMPOOOOOOOO   DET     END  " << endl;
+
+
+
         (m_CustomPlot->graph(0))->setData(FNR, FPR);
 
         m_CustomPlot->replot();
@@ -341,6 +351,9 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
     QLabel* text = (QLabel*)tabs->findChild<QLabel*>("AUCValue");
     text->setText(QString("%1").arg(AUCROC));
     mutex.unlock();
+
+
+
 }
 
 void MainWindow::updateTexts(int indexTab,
@@ -1155,21 +1168,10 @@ void MainWindow::addTabValidation(QString name, Rain * rain, int rain_size, Acti
 }
 
 
-QLayout* wrap(QWidget* w){
-    auto layout = new QVBoxLayout();
-    layout->addWidget( w );
-    return layout;
-}
-QWidget* wrap(QLayout* l){
-    auto widget = new QWidget();
-    widget->setLayout( l );
-    return widget;
-}
-
-void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitness, auto* mainL, Rain* rain, int rain_size, int activation_size, Activation *activation, QCustomPlot* mobFunc)
+void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitness, QVBoxLayout* mainL, Rain* rain, int rain_size, int activation_size, Activation *activation, QCustomPlot* mobFunc)
 {
     QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    spUp.setVerticalStretch(4);
+    spUp.setVerticalStretch(2);
     QVBoxLayout * vertical = new QVBoxLayout();
     MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
     mobFunc->setSizePolicy(spUp);
@@ -1178,12 +1180,9 @@ void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitne
     //mobFunc->rescaleAxes();
     vertical->addWidget(mobFunc);
 
-    //vertical->setStretch(0,2);
-//    vertical->addStretch(vertical->sizeConstraint()*8);
-   // mainL->addStretch(mainL->sizeConstraint()*8);
-    mainL->addWidget(wrap(vertical));
 
-    mainL->setStretch(0,5);
+    vertical->addStretch(vertical->sizeConstraint()*2);
+    mainL->addLayout(vertical);
     QGridLayout * grid = new QGridLayout();
 
 
@@ -1220,10 +1219,22 @@ void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitne
     momPrimoNum->setObjectName("momPrimoNum"+nameMobFunc);
     grid->addWidget(momPrimoNum,1,5);
 
+
     // first occurence at N iteration;
     // GMD--------------------------
 
-    mainL->addWidget(wrap(grid));
+    mainL->addLayout(grid);
+}
+
+QLayout* wrap(QWidget* w){
+    auto layout = new QVBoxLayout();
+    layout->addWidget( w );
+    return layout;
+}
+QWidget* wrap(QLayout* l){
+    auto widget = new QWidget();
+    widget->setLayout( l );
+    return widget;
 }
 
 void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
@@ -1280,56 +1291,15 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
 
 
     verticalSplitterEW->addWidget(wrap(mainLEW));
+    QVBoxLayout * mainLEW2 = new QVBoxLayout();
+    getGraphs("kerFunc","AUCROC","Fitness AUCROC :", mainLEW2, rain, rain_size, activation_size, activation, mobFuncAUCROC);
 
-    QSplitter * rightside = new QSplitter();
-    QVBoxLayout * mainLAUCROC = new QVBoxLayout();
-    rightside->setOrientation(Qt::Vertical);
-    getGraphs("kerFunc","AUCROC","Fitness AUCROC :", mainLAUCROC, rain, rain_size, activation_size, activation, mobFuncAUCROC);
-    rightside->addWidget(wrap(mainLAUCROC));
 
-    QGridLayout * gridAUC = new QGridLayout();
-
-    QCustomPlot * AUCROCPlot = new QCustomPlot();
-    MainWindow::makeAUCROCPlot(AUCROCPlot);
-    //AUCROCPlot->setSizePolicy(spHo);
-    AUCROCPlot->setObjectName("AUCROC");
-    gridAUC->addWidget(AUCROCPlot,0,0);
-    //gridAUC->addWidget(AUCROCPlot,0,0);
-
-    QCustomPlot * DETPlot = new QCustomPlot();
-    MainWindow::makeDETPlot(DETPlot);
-    //DETPlot->setSizePolicy(spHo);
-    DETPlot->setObjectName("DET");
-    gridAUC->addWidget(DETPlot,0,1);
-
-    QLabel * AUC = new QLabel();
-    AUC->setText("Area under curve (AUC) :");
-    gridAUC->addWidget(AUC,1,0);
-    QLabel * AUCValue = new QLabel();
-    AUCValue->setText("0");
-    AUCValue->setObjectName("AUCValue");
-    gridAUC->addWidget(AUCValue,1,1);
-
-    QPushButton *getMoreInfo = new QPushButton();
-    getMoreInfo->setText("More Info");
-//    const QSize BUTTON_SIZE = QSize(22, 22);
-//    getMoreInfo->setMaximumSize(BUTTON_SIZE);
-    gridAUC->addWidget(getMoreInfo,2,0);
-    QDialog* moreInfo = new QDialog();
-    moreInfo->setVisible(true);
-    //connect(button, &QPushButton::clicked,this, setvis(){moreInfo->setVisible(true);});
-
-    gridAUC->setRowStretch(0,1.5);
-//rightside->setStretchFactor(0,2);
-
-    rightside->addWidget(wrap(gridAUC));
-
-    verticalSplitterEW->addWidget(rightside);
+    verticalSplitterEW->addWidget(wrap(mainLEW2));
 
     horizontalSplitter->addWidget(verticalSplitterEW);
     tab1->setLayout(wrap(horizontalSplitter));
     ui->tabWidget_2->setCurrentIndex(ui->tabWidget_2->count()-1);
-
 }
 
 MainWindow::~MainWindow()

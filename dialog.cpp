@@ -468,7 +468,7 @@ void Dialog::on_pushButtonStart_clicked()
 
 
 
-    QCustomPlot * m_CustomPlot = (QCustomPlot *) mainWindow->getPlotMobility(pos);
+    QCustomPlot * m_CustomPlot = (QCustomPlot *) mainWindow->getPlotMobility(pos,"");
     for(int i = 0; i < activation_size;i++){
         QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
         //m_CustomPlot->addItem(textLabel);

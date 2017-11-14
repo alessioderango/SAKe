@@ -76,6 +76,45 @@ void Validation::accept()
 
 }
 
+int Validation::getRightPlotFromName(QString name)
+{
+
+    if(name == "mobFuncGMD")
+        return 0;
+    else
+        if(name =="mobFuncGMDn")
+            return 1;
+        else
+            if(name =="mobFuncEW")
+                return 2;
+            else
+                if(name =="mobFuncAUCROC")
+                    return 3;
+
+}
+
+QCustomPlot * Validation::getRightPlotFromIndex(int index, int pos){
+    QString name;
+    switch (index) {
+    case 0:
+        name = "GMD";
+        break;
+    case 1:
+        name = "GMDn";
+        break;
+    case 2:
+        name = "EW";
+        break;
+    case 3:
+        name = "AUCROC";
+        break;
+    }
+
+    return (QCustomPlot *) mainWindow->getPlotMobility(pos,name);
+
+}
+
+
 void Validation::on_buttonBox_clicked(QAbstractButton *button)
 {
     Rain * rain;
@@ -133,10 +172,10 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
 
     connect(this, SIGNAL(showAlertInputCsv(int,QString,QString)), mainWindow, SLOT(showAlertInputCsv(int,QString,QString))) ;
     int errorRain = HandlerCSV::loadCSVRain(ui->lineEdit_rain->text(), rain, rain_size, rowError, e);
-        if(errorRain==0){
-            emit showAlertInputCsv(rowError,rainPath, e);
-            return;
-        }
+    if(errorRain==0){
+        emit showAlertInputCsv(rowError,rainPath, e);
+        return;
+    }
 
     int errorActivation = HandlerCSV::loadCSVActivation(actPath, activation, activation_size, rowError, e);
     if(errorActivation ==0){
@@ -162,22 +201,22 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
     }
 
     ValidationController * validationController=new ValidationController(rain,
-                rain_size,
-                activation,
-                activation_size,
-                Fi,
-                size_Fi,
-                zCr
-                );
-    if(ui->comboBoxFitness->currentIndex() == 0)
-        validationController->setFt(FitnessGMD);
-    else
-        if(ui->comboBoxFitness->currentIndex() == 1){
-          validationController->setFt(FitnessEqualWeights);
-        }else
-            if(ui->comboBoxFitness->currentIndex() ==2){
-                validationController->setFt(FitnessAUCROC);
-            }
+                                                                         rain_size,
+                                                                         activation,
+                                                                         activation_size,
+                                                                         Fi,
+                                                                         size_Fi,
+                                                                         zCr
+                                                                         );
+//    if(ui->comboBoxFitness->currentIndex() == 0)
+//        validationController->setFt(FitnessGMD);
+//    else
+//        if(ui->comboBoxFitness->currentIndex() == 1){
+//            validationController->setFt(FitnessEqualWeights);
+//        }else
+//            if(ui->comboBoxFitness->currentIndex() ==2){
+//                validationController->setFt(FitnessAUCROC);
+//            }
     validationController->setMainwindows(mainWindow);
     qRegisterMetaType<tm>("tm");
     qRegisterMetaType<std::vector<Ym>>("std::vector<Ym>");
@@ -188,6 +227,10 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
     connect(validationController, SIGNAL(updateMobPlot(int,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
                                                        std::vector<QCPItemLine*> )), mainWindow, SLOT(updateMobPlot(int,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
                                                                                                                     std::vector<QCPItemLine*> )));
+    connect(validationController, SIGNAL(updateMobPlotAllInOne(int,QString, Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
+                                                       std::vector<QCPItemLine*> )), mainWindow, SLOT(updateMobPlotAllInOne(int,QString,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
+                                                                                                                    std::vector<QCPItemLine*> )));
+
 
 
     connect(validationController, SIGNAL(updateFitnessPlot(int ,
@@ -208,38 +251,68 @@ void Validation::on_buttonBox_clicked(QAbstractButton *button)
                                                                                                      int  )));
 
     connect(validationController, SIGNAL(updateTextsValidation(int ,
-                                                     QString,
-                                                     QString,
-                                                     QString ,
-                                                     QString)), mainWindow, SLOT(updateTextsValidation(int ,
-                                                                                             QString,
-                                                                                             QString,
-                                                                                             QString ,
-                                                                                             QString)));
+                                                               QString,
+                                                               QString,
+                                                               QString ,
+                                                               QString)), mainWindow, SLOT(updateTextsValidation(int ,
+                                                                                                                 QString,
+                                                                                                                 QString,
+                                                                                                                 QString ,
+                                                                                                                 QString)));
+
+    connect(validationController, SIGNAL(updateTextsValidationAllInOne(int ,
+                                                               QString,
+                                                               QString,
+                                                               QString,
+                                                               QString ,
+                                                               QString)), mainWindow, SLOT(updateTextsValidationAllInOne(int ,
+                                                                                                                 QString,
+                                                                                                                 QString,
+                                                                                                                 QString,
+                                                                                                                 QString ,
+                                                                                                                 QString)));
+
+
+    connect(validationController, SIGNAL(updateROCPlot(int ,
+                                             QVector<double> ,
+                                             QVector<double> ,
+                                             double )), mainWindow, SLOT(updateROCPlot(int ,
+                                                                                       QVector<double> ,
+                                                                                       QVector<double> ,
+                                                                                       double )));
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(validationController);
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), validationController));
-//    mainWindow->addTabValidation(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+    //    mainWindow->addTabValidation(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
     mainWindow->addTabValidationNewInterface(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
 
-//    QCustomPlot * m_CustomPlot = (QCustomPlot *) mainWindow->getPlotMobility(pos);
-//    for(int i = 0; i < activation_size;i++){
-//        QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
-//        //m_CustomPlot->addItem(textLabel);
-//        textLabel->setPositionAlignment(Qt::AlignTop);
-//        textLabel->setText("");
-//        textLabel->setPen(QPen(Qt::black)); // show black border around text
-//        validationController->widgetArray.push_back(textLabel);
+    int number_of_mobPlots = 4;
+    for(int i = 0; i < number_of_mobPlots;i++){
 
-//        QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
-//        arrow->start->setParentAnchor(textLabel->bottom);
-//        arrow->end->setType(QCPItemPosition::ptPlotCoords);
-//        arrow->setHead(QCPLineEnding::esSpikeArrow);
-//        validationController->arrowArray.push_back(arrow);
-//    }
+        QCustomPlot * m_CustomPlot = getRightPlotFromIndex(i,pos);
+
+        std::vector<QCPItemText *> vectorTmpWidgetArray;
+        std::vector<QCPItemLine *> vectorTmpArrow;
+        for(int i = 0; i < activation_size;i++){
+            QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
+            //m_CustomPlot->addItem(textLabel);
+            textLabel->setPositionAlignment(Qt::AlignTop);
+            textLabel->setText("");
+            textLabel->setPen(QPen(Qt::black)); // show black border around text
+            vectorTmpWidgetArray.push_back(textLabel);
+
+            QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
+            arrow->start->setParentAnchor(textLabel->bottom);
+            arrow->end->setType(QCPItemPosition::ptPlotCoords);
+            arrow->setHead(QCPLineEnding::esSpikeArrow);
+            vectorTmpArrow.push_back(arrow);
+        }
+        validationController->widgetArray.push_back(vectorTmpWidgetArray);
+        validationController->arrowArray.push_back(vectorTmpArrow);
+    }
 
     //.push_back(validationController);
     mainWindow->mutex.unlock();
-    //validationController->startThread();
+    validationController->startThread();
     this->close();
 }

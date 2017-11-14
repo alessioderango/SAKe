@@ -16,6 +16,7 @@ QT += opengl
 DEFINES += QCUSTOMPLOT_USE_OPENGL
 LIBS += -lOpengl32
 CONFIG += console
+CONFIG += c++14
 
 
 SOURCES += main.cpp\
