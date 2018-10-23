@@ -36,6 +36,8 @@ public:
 
     static void makeKernelPlot(QCustomPlot * customPlot, MainWindow *w);
     void updateMobilityKernelPlot(QCustomPlot * customPlot);
+    void updateKernelPlotRegression(QCustomPlot *m_CustomPlot, QVector<double> xKernel,QVector<double> yKernel,QVector<double> xControlpoints,QVector<double> yControlpoints );
+    void updateKernelPlotRegressionWithControlPoints(QCustomPlot *m_CustomPlot,QVector<double> xControlpoints,QVector<double> yControlpoints );
     static void pushBackThread(QThread *thread);
     void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabAUCROC(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);

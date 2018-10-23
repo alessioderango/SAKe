@@ -326,7 +326,9 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                           QString seed,
                                                           QString saveKernels,
                                                           QString numberOfKernelToBeSaved,
-                                                          std::vector<QString> orders, QString typeFitness)
+                                                          std::vector<QString> orders,
+                                                          QString typeFitness,
+                                                          QString numberOfLines)
 {
 
     QFile inFile( xmlFilePath );
@@ -385,6 +387,7 @@ int XMLManager::SaveXMLFileAlreadyExistCalibrationProject(QString name,
             a.at(i).childNodes().at(24).firstChild().setNodeValue(orders[2]);
             a.at(i).childNodes().at(25).firstChild().setNodeValue(orders[3]);
             a.at(i).childNodes().at(26).firstChild().setNodeValue(typeFitness);
+            a.at(i).childNodes().at(27).firstChild().setNodeValue(numberOfLines);
 
         }
 
@@ -433,7 +436,8 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
                                               QString saveKernels,
                                               QString numberOfKernelToBeSaved,
                                               std::vector<QString> orders,
-                                              QString typeFitness)
+                                              QString typeFitness,
+                                              QString numberOfLines)
 {
 
     //Controllare se esiste un altro progetto con lo stesso nome
@@ -511,6 +515,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomElement order3Dom = document.createElement( "order3Dom" );
 
     QDomElement typeFitnessDOM = document.createElement( "typeFitness" );
+    QDomElement numberOfLinesDOM = document.createElement( "numberOfLines" );
 
     //create TextElement
     QDomText typeText = document.createTextNode( selection );
@@ -558,6 +563,8 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     QDomText typeFitnessText = document.createTextNode(typeFitness);
 
     typeFitnessDOM.appendChild(typeFitnessText);
+    QDomText numberOfLinesText = document.createTextNode(numberOfLines);
+    numberOfLinesDOM.appendChild(numberOfLinesText);
 
 
     typeElement.appendChild(typeText);
@@ -627,6 +634,7 @@ int XMLManager::SaveXMLFileCalibrationProject(QString name,
     project.appendChild(order2Dom);
     project.appendChild(order3Dom);
     project.appendChild(typeFitnessDOM);
+    project.appendChild(numberOfLinesDOM);
 
     id.appendChild(idText);
     project.appendChild(id);
@@ -772,7 +780,8 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
                                              const QString &filenameRainPath,
                                              const QString &filenameActivationPath,
                                              const QString &filenameKernelPath,
-                                             const QString &_folderSave){
+                                             const QString &_folderSave,
+                                             const QString &_numberOfLinesForAUC){
     QString filename = QString(xmlFilePath);
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
@@ -818,6 +827,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     QDomElement fileNameActivationPath = document.createElement( "FileNameActivationPath" );
     QDomElement fileNameKernelPath = document.createElement( "FileNameKernelPath" );
     QDomElement folderSave = document.createElement( "FolderSave" );
+    QDomElement numberOfLinesForAUCDOM = document.createElement( "numberOfLinesForAUC" );
 
 
     //create TextElement
@@ -826,6 +836,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     QDomText filenameActivationPathText = document.createTextNode( filenameActivationPath );
     QDomText filenameKernelPathText = document.createTextNode( filenameKernelPath );
     QDomText folderSaveText = document.createTextNode( _folderSave );
+    QDomText numberOfLinesForAUCText = document.createTextNode( _numberOfLinesForAUC );
 
 
     nameElement.appendChild(nameText);
@@ -833,6 +844,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     fileNameActivationPath.appendChild(filenameActivationPathText);
     fileNameKernelPath.appendChild(filenameKernelPathText);
     folderSave.appendChild(folderSaveText);
+    numberOfLinesForAUCDOM.appendChild(numberOfLinesForAUCText);
 
 
     project.appendChild(nameElement);
@@ -840,6 +852,7 @@ int XMLManager::SaveXMLFileValidationProject(const QString &_projectName,
     project.appendChild(fileNameActivationPath);
     project.appendChild(fileNameKernelPath);
     project.appendChild(folderSave);
+    project.appendChild(numberOfLinesForAUCDOM);
     id.appendChild(idText);
     project.appendChild(id);
 
@@ -863,7 +876,8 @@ int XMLManager::SaveXMLFileAlreadyExistValidationProject(const QString &name,
                                                          const QString &filenameRainPath,
                                                          const QString &filenameActivaionPath,
                                                          const QString &filenameKernelPath,
-                                                         const QString &folderSave){
+                                                         const QString &folderSave,
+                                                         const QString &numberOfLinesForAUC){
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -892,6 +906,7 @@ int XMLManager::SaveXMLFileAlreadyExistValidationProject(const QString &name,
             a.at(i).childNodes().at(2).firstChild().setNodeValue(filenameActivaionPath);
             a.at(i).childNodes().at(3).firstChild().setNodeValue(filenameKernelPath);
             a.at(i).childNodes().at(4).firstChild().setNodeValue(folderSave);
+            a.at(i).childNodes().at(5).firstChild().setNodeValue(numberOfLinesForAUC);
         }
 
     }
@@ -1071,8 +1086,8 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
                                               std::vector<std::vector<double> > matrixGamma1,
                                               std::vector<std::vector<double> > matrixGamma2,
                                               std::vector<std::vector<double> > matrixLinear,
-                                              const QVariant &checkControlPointsWithN,
-                                              const QVariant &textN,
+                                              const QString &checkControlPointsWithN,
+                                              const QString &textN,
                                               const QString typeExecution
                                               , QString typeReplacement, QString numberElitist){
     QString filename = QString(xmlFilePath);
@@ -1124,9 +1139,9 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     QDomElement maximumNumberOfGenerationsElement = document.createElement( "MaximumNumberOfGenerations" );
     QDomElement fileKernel = document.createElement( "FileKernel" );
     QDomElement checkControlPointsWithNElement = document.createElement( "CheckN" );
-    checkControlPointsWithNElement.appendChild(document.createTextNode(checkControlPointsWithN.toString()));
+    checkControlPointsWithNElement.appendChild(document.createTextNode(checkControlPointsWithN));
     QDomElement textNElement = document.createElement( "N" );
-    textNElement.appendChild(document.createTextNode(textN.toString()));
+    textNElement.appendChild(document.createTextNode(textN));
     QDomElement typeExcecution = document.createElement( "typeExcecution" );
     typeExcecution.appendChild(document.createTextNode(typeExecution));
     QDomElement typeReplacementDom = document.createElement( "typeReplacement" );
@@ -1234,8 +1249,8 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
                                                          std::vector<std::vector<double> > matrixGamma1,
                                                          std::vector<std::vector<double> > matrixGamma2,
                                                          std::vector<std::vector<double> > matrixLinear,
-                                                         const QVariant &checkControlPointsWithN,
-                                                         const QVariant &textN,
+                                                         const QString &checkControlPointsWithN,
+                                                         const QString &textN,
                                                          const QString &typeExecution,
                                                          QString typeReplacement,
                                                          QString numberElitist){
@@ -1272,8 +1287,8 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
             project.at(i).childNodes().at(5).firstChild().setNodeValue(percentageMutation);
             project.at(i).childNodes().at(6).firstChild().setNodeValue(maxGeneration);
             project.at(i).childNodes().at(7).firstChild().setNodeValue(_fileKernel);
-            project.at(i).childNodes().at(8).firstChild().setNodeValue(checkControlPointsWithN.toString());
-            project.at(i).childNodes().at(9).firstChild().setNodeValue(textN.toString());
+            project.at(i).childNodes().at(8).firstChild().setNodeValue(checkControlPointsWithN);
+            project.at(i).childNodes().at(9).firstChild().setNodeValue(textN);
             project.at(i).childNodes().at(10).firstChild().setNodeValue(typeExecution);
             project.at(i).childNodes().at(11).firstChild().setNodeValue(typeReplacement);
             project.at(i).childNodes().at(12).firstChild().setNodeValue(numberElitist);

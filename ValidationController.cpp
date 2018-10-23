@@ -177,11 +177,11 @@ void ValidationController::setFitness(QObject *value)
 //}
 
 void ValidationController::run(){
-//    if(ft == FitnessGMD || ft == FitnessEqualWeights)
-//        startValidation();
-//    else
-//        if(ft == FitnessAUCROC)
-//            startValidationAUCROC();
+    //    if(ft == FitnessGMD || ft == FitnessEqualWeights)
+    //        startValidation();
+    //    else
+    //        if(ft == FitnessAUCROC)
+    //            startValidationAUCROC();
     ft = FitnessGMD;
     startValidationAllinOne("GMD");
     ft = FitnessGMDn;
@@ -192,6 +192,16 @@ void ValidationController::run(){
     startValidationAUCROC("AUCROC");
 
 
+}
+
+int ValidationController::getNumberOfLines() const
+{
+    return numberOfLines;
+}
+
+void ValidationController::setNumberOfLines(int value)
+{
+    numberOfLines = value;
 }
 
 QString ValidationController::getProjectName() const
@@ -222,103 +232,127 @@ void ValidationController::setMainwindows(MainWindow *value)
 bool diffTimeInterval(tm actStart, tm actEnd, tm pichTime){
     int result1 = getDifferenceTime(actStart,pichTime);
     int result2 = getDifferenceTime(pichTime,actEnd);
-     if(result1>=-2 && result2>=-1){
-         return true;
-     }
-     else
-         return false;
+    if(result1>=-2 && result2>=-1){
+        return true;
+    }
+    else
+        return false;
 }
 
-void ValidationController::getMobilityFunction(std::vector<double>&  Y, std::vector<Ym>& ym)
+double ValidationController::getAUCROC(std::vector<double>&  Y,
+                                    std::vector<Ym>& ymSorted,
+                                    std::vector<double> Fi,
+                                    Rain *& rain,
+                                    int rain_size,
+                                    Activation * activations,
+                                    int activations_size,
+                                    int tb,
+                                    double &dYcr,
+                                    Ym &ymMin,
+                                    Ym &ymMin2,
+                                    std::vector<int>& TP,
+                                    std::vector<int>& FN,
+                                    std::vector<int>& FP,
+                                    std::vector<int>& TN,
+                                    std::vector<double>& TPR,
+                                    std::vector<double>& FPR,
+                                    double& momentoDelPrimoOrdine,
+                                    std::vector<Ym>& bests,
+                                    vector<double>& lines,
+                                    int numberOfLines)
 {
-    Y.resize(rain_size);
-    for (int t = 0; t < rain_size; t++) {
-        double ym = 0;
-        Y[t] = 0;
-        for (int r = 0; r < t; r++)
-            if ((t - r) < size){
-                ym += Fi[t - r] * rain[r].getRainMm();
-            }
-        Y[t] = ym;
-
-
-    }
-
-    double f=0;
-    int countYm=0;
-
-    for (int t = 1; t < rain_size-1; t++) {
-        bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
-        bool jump = false;
-        if(cross){
-            // trovato un picco deve essere considerato
-            for (int a = 0; a < activations_size; a++) {
-                 if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                 //    cout << "salto un pico all'interno di un intervallo " << endl;
-                     jump = true;
-                 }
-            }
-            if(jump)
-                continue;
-            Ym p;
-            p.setValue(Y[t]);
-            p.setTime(rain[t].getTime());
-            ym.push_back(p);
-            countYm++;
-        }
-    }
-
+    double YsMin = 999999999;
+    double YsAbsMinInsideTheActivationInterval = 999999999;
+    int iMin =-1;
     for (int s = 0; s < activations_size; s++) {
-        double maxPich = 0;
-        int tMax =0;
-        for (int t = 1; t < rain_size-1; t++) {
+        for (int i = 0; i < ymSorted.size(); i++) {
+            //TODO inserire variabili intervallo giorni
+            int result1 = getDifferenceTime(activations[s].getStart(),ymSorted[i].getTime());
+            int result2 = getDifferenceTime(ymSorted[i].getTime(),activations[s].getEnd());
+            if(result1>=-2 && result2>=-1){
+                ymSorted[i].setI(i+1);
+                bests.push_back(ymSorted[i]);
+                if(ymSorted[i].getValue() < YsMin){
+                    YsMin =ymSorted[i].getValue();
+                    iMin=i;
+                }//if
+                break;
+                //}
+                // calcolo valori per calcolare dYcr per risparmiare calcoli
 
-            if(diffTimeInterval(activations[s].getStart(), activations[s].getEnd(),rain[t].getTime())){
-                if(Y[t] > maxPich)
-                {
-                    maxPich = Y[t];
-                    tMax = t;
-                }
-            }
-        }
-        Ym p;
-        p.setValue(Y[tMax]);
-        p.setTime(rain[tMax].getTime());
-        ym.push_back(p);
+            }//if
+        }//for
 
+
+        for (int i = 0; i < rain_size-1; i++) {
+            //TODO inserire variabili intervallo giorni
+            int result1 = getDifferenceTime(activations[s].getStart(),rain[i].getTime());
+            int result2 = getDifferenceTime(rain[i].getTime(),activations[s].getEnd());
+            if(result1>=-2 && result2>=-1){
+                //ymSorted[i].setI(i+1);
+                //bests.push_back(ymSorted[i]);
+                if(Y[i] < YsAbsMinInsideTheActivationInterval){
+                    YsAbsMinInsideTheActivationInterval =Y[i];
+                    //iMin=i;
+                }//if
+                break;
+                //}
+                // calcolo valori per calcolare dYcr per risparmiare calcoli
+
+            }//if
+        }//for
+
+    }//for
+    //std::cout << std::endl;
+
+    if(iMin < 0)  iMin = 0;
+    if(iMin > ymSorted.size()-1)  iMin = ymSorted.size()-1;
+    int index=(iMin+1);
+    dYcr = (YsMin-ymSorted[index].getValue())/YsMin;
+    ymMin= ymSorted[iMin];
+    ymMin2 = ymSorted[iMin+1];
+    momentoDelPrimoOrdine = 0;
+    for (int i = 0; i < tb; i++) {
+        momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
     }
-}
-
-
-void ValidationController::startValidationAUCROC(QString namePlot){
-
-    std::vector<double>  Y;
-    std::vector<Ym> ymSorted;
-    //calcolo mobility function
-    getMobilityFunction(Y, ymSorted);
-
-    qsort (&ymSorted[0], ymSorted.size(), sizeof(Ym),compareDouble);
-
 
     Ym ymMax = ymSorted[0];
 
-    double line = ymMax.getValue()/10;
+    if(activations_size >= 2){
+        double dz = (ymMax.getValue()-YsAbsMinInsideTheActivationInterval)/((double)numberOfLines);
 
-   // cout << ymMax.getValue() << endl;
-   // cout << line << endl;
+        int prec =0;
+        lines.push_back(ymMax.getValue());
+        for (int i = numberOfLines-1; i >= 1; i--) {
+            lines.push_back(lines[prec]-dz);
+            prec++;
+        }
 
-    vector<double> lines;
-    for (int i = 10; i >= 1; i--) {
-        lines.push_back(line*i);
+        lines.push_back(lines[prec-1]/2);
+
+        if(lines[prec-1]/2 != 0)
+            lines.push_back(0);
+    }else
+    {
+        double line = ymMax.getValue()/numberOfLines;
+        for (int i = numberOfLines; i >= 1; i--)
+        {
+            lines.push_back(line*i);
+        }
+        lines.push_back(0);
     }
 
     //inside the activation range
-    vector<int> TP(10,0);// true positive
-    vector<int> FN(10,0);// false negative
+//    vector<int> TP(lines.size(),0);// true positive
+//    vector<int> FN(lines.size(),0);// false negative
+    TP.resize(lines.size(),0);
+    FN.resize(lines.size(),0);
 
     //outside the activation range
-    vector<int> FP(10,0);// false positive
-    vector<int> TN(10,0);// true negative
+//    vector<int> FP(lines.size(),0);// false positive
+    FP.resize(lines.size(),0);
+//    vector<int> TN(lines.size(),0);// true negative
+    TN.resize(lines.size(),0);
 
 
     for (int i = 0; i < lines.size(); ++i) {
@@ -333,18 +367,25 @@ void ValidationController::startValidationAUCROC(QString namePlot){
                 int result2 = getDifferenceTime(rain[t].getTime(),activations[s].getEnd());
 
                 if(result1>=-2 && result2>=-1){
-                   jump = true;
+                    jump = true;
                 }
             }
 
             if(jump)
+            {
+                //               if(Y[t] >= lines[i]){
+                //                  TP[i]++;
+                //                  FN[i]--;
+                //                  break;
+                //               }
                 continue;
+            }
 
             //controllo FP e TN
             if(Y[t] < lines[i])
-               TN[i]++;
+                TN[i]++;
             else
-               FP[i]++;
+                FP[i]++;
         }
     }
 
@@ -383,67 +424,154 @@ void ValidationController::startValidationAUCROC(QString namePlot){
 
 
 
-    vector<double> TPR(10,0);// true positive rate
-    vector<double> FPR(10,0);// False positive rate
+//    vector<double> TPR(lines.size(),0);// true positive rate
+    TPR.resize(lines.size(),0);
+//    vector<double> FPR(lines.size(),0);// False positive rate
+    FPR.resize(lines.size(),0);
 
-
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < lines.size(); ++i) {
         TPR[i] = (double) (TP[i]/((double) (TP[i]+FN[i])));
         double TNR =  (double)TN[i] / (double)(TN[i]+FP[i]);
         FPR[i] = (double) (1-((double) TNR));
 
-      //  cout << TPR[i] << ";" << FPR[i] << ";"<< endl;
+        //  cout << TPR[i] << ";" << FPR[i] << ";"<< endl;
     }
 
     double AUC=0; // Area under the curve
     // primo trapezio
     AUC += FPR[0]*TPR[0]*((double)(0.5));
-    for (int i = 0; i < 9; ++i) {
+    for (int i = 0; i < lines.size()-1; ++i) {
         double h = FPR[i+1]-FPR[i];
         double base = TPR[i]+TPR[i+1];
         double tmp = (((double)(0.5))*(h))*(base);
         //cout << "area trapezio "<<i<< " base --> " << base  <<" h --> " << h  <<"  = " << tmp <<endl;
         AUC += tmp;
     }
-    AUC += (1-FPR[9])*((double)(0.5))*(1+TPR[9]);
+    AUC += (1-FPR[lines.size()-1])*((double)(0.5))*(1+TPR[lines.size()-1]);
+
+    return AUC;
+}
+
+void ValidationController::getMobilityFunction(std::vector<double>&  Y,
+                                               std::vector<Ym>& ym,
+                                               std::vector<double> Fi,
+                                               Rain *& rain,
+                                               int rain_size,
+                                               Activation * activations,
+                                               int activations_size,
+                                               int tb)
+{
+    Y.resize(rain_size);
+    for (int t = 0; t < rain_size; t++) {
+        double ym = 0;
+        Y[t] = 0;
+        for (int r = 0; r < t; r++)
+            if ((t - r) < tb){
+                ym += Fi[t - r] * rain[r].getRainMm();
+            }
+        Y[t] = ym;
 
 
-
-    double YsMin = 999999999;
-    int iMin =-1;
-    std::vector<Ym> bests;
-    for (int s = 0; s < activations_size; s++) {
-        for (int i = 0; i < ymSorted.size(); i++) {
-            //TODO inserire variabili intervallo giorni
-            int result1 = getDifferenceTime(activations[s].getStart(),ymSorted[i].getTime());
-            int result2 = getDifferenceTime(ymSorted[i].getTime(),activations[s].getEnd());
-            if(result1>=-2 && result2>=-1){
-                ymSorted[i].setI(i+1);
-                bests.push_back(ymSorted[i]);
-                if(ymSorted[i].getValue() < YsMin){
-                    YsMin =ymSorted[i].getValue();
-                    iMin=i;
-                }//if
-                break;
-                //}
-                // calcolo valori per calcolare dYcr per risparmiare calcoli
-
-            }//if
-        }//for
-    }//for
-    //std::cout << std::endl;
-
-    if(iMin < 0)  iMin = 0;
-    if(iMin > ymSorted.size()-1)  iMin = ymSorted.size()-1;
-    int index=(iMin+1);
-    double dYcr = (YsMin-ymSorted[index].getValue())/YsMin;
-    Ym ymMin= ymSorted[iMin];
-    Ym ymMin2 = ymSorted[iMin+1];
-    double momentoDelPrimoOrdine = 0;
-    for (int i = 0; i < size; i++) {
-        momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
     }
-   // cout << "AUC "<<AUC<<endl;
+
+    double f=0;
+    int countYm=0;
+
+    for (int t = 1; t < rain_size-1; t++) {
+        bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
+        bool jump = false;
+        if(cross){
+            // trovato un picco deve essere considerato
+            for (int a = 0; a < activations_size; a++) {
+                if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
+                    //    cout << "salto un pico all'interno di un intervallo " << endl;
+                    jump = true;
+                }
+            }
+            if(jump)
+                continue;
+            Ym p;
+            p.setValue(Y[t]);
+            p.setTime(rain[t].getTime());
+            ym.push_back(p);
+            countYm++;
+        }
+    }
+
+    for (int s = 0; s < activations_size; s++) {
+        double maxPich = 0;
+        int tMax =0;
+        for (int t = 1; t < rain_size-1; t++) {
+
+            if(diffTimeInterval(activations[s].getStart(), activations[s].getEnd(),rain[t].getTime())){
+                if(Y[t] > maxPich)
+                {
+                    maxPich = Y[t];
+                    tMax = t;
+                }
+            }
+        }
+        Ym p;
+        p.setValue(Y[tMax]);
+        p.setTime(rain[tMax].getTime());
+        ym.push_back(p);
+
+    }
+}
+
+
+void ValidationController::startValidationAUCROC(QString namePlot){
+
+    std::vector<double>  Y;
+    std::vector<Ym> ymSorted;
+    std::vector<Ym> bests;
+    vector<double> lines;
+    //calcolo mobility function
+    getMobilityFunction(Y,
+                        ymSorted,
+                        Fi,
+                        rain,
+                        rain_size,
+                        activations,
+                        activations_size,
+                        size);
+
+    qsort (&ymSorted[0], ymSorted.size(), sizeof(Ym),compareDouble);
+    vector<int> TP;
+    vector<int> FN;
+    vector<int> FP;
+    vector<int> TN;
+
+    vector<double> TPR;
+    vector<double> FPR;
+
+    double dYcr;
+    Ym ymMin;
+    Ym ymMin2;
+    double momentoDelPrimoOrdine;
+    double AUC=getAUCROC(Y,
+                         ymSorted,
+                         Fi,
+                         rain,
+                         rain_size,
+                         activations,
+                         activations_size,
+                         size,
+                         dYcr,
+                         ymMin,
+                         ymMin2,
+                         TP,
+                         FN,
+                         FP,
+                         TN,
+                         TPR,
+                         FPR,
+                         momentoDelPrimoOrdine,
+                         bests,
+                         lines,
+                         numberOfLines); // Area under the curve
+
+
 
     ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
 
@@ -452,11 +580,11 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     emit this->updateMobPlotAllInOne(pos,namePlot,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(),ymMin2.getTime(),bests,widgetArray[indexPlot],arrowArray[indexPlot]);
 
     emit this->updateTextsValidationAllInOne(pos,namePlot,QString("%1").arg(AUC),
-                                     QString("%1").arg(this->size),
-                                     QString("%1").arg(dYcr),
-                                     QString("%1").arg(momentoDelPrimoOrdine)
-                                     );
-   // emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
+                                             QString("%1").arg(this->size),
+                                             QString("%1").arg(dYcr),
+                                             QString("%1").arg(momentoDelPrimoOrdine)
+                                             );
+    // emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 
     QString pathValidation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/validation/";
     QDir dirVal(pathValidation);
@@ -482,7 +610,7 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     myfile <<  "FP ;";
     myfile <<  "TN ; \n";
 
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < lines.size(); i++) {
         myfile << lines[i] <<";"<< TP[i] <<";"<< FN[i] <<";"<<FP[i] <<";"<< TN[i]<<";" << endl;
     }
 
@@ -531,12 +659,12 @@ void ValidationController::startValidation(){
 
             //------------------ GMDn --------------------------------------------
             if(ft == FitnessGMDn)
-            for (int a = 0; a < activations_size; a++) {
-                 if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                     cout << "salto un pico all'interno di un intervallo " << endl;
-                     jump = true;
-                 }
-            }
+                for (int a = 0; a < activations_size; a++) {
+                    if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
+                        cout << "salto un pico all'interno di un intervallo " << endl;
+                        jump = true;
+                    }
+                }
             //------------------ GMDn --------------------------------------------
 
             if(jump)
@@ -553,25 +681,25 @@ void ValidationController::startValidation(){
     //------------------ GMDn --------------------------------------------
     //trovo il picco massimo nell'intervallo
     if(ft == FitnessGMDn)
-    for (int s = 0; s < activations_size; s++) {
-        double maxPich = 0;
-        int tMax =0;
-        for (int t = 1; t < rain_size-1; t++) {
+        for (int s = 0; s < activations_size; s++) {
+            double maxPich = 0;
+            int tMax =0;
+            for (int t = 1; t < rain_size-1; t++) {
 
-            if(diffTimeInterval(activations[s].getStart(), activations[s].getEnd(),rain[t].getTime())){
-                if(Y[t] > maxPich)
-                {
-                    maxPich = Y[t];
-                    tMax = t;
+                if(diffTimeInterval(activations[s].getStart(), activations[s].getEnd(),rain[t].getTime())){
+                    if(Y[t] > maxPich)
+                    {
+                        maxPich = Y[t];
+                        tMax = t;
+                    }
                 }
             }
-        }
-        Ym p;
-        p.setValue(Y[tMax]);
-        p.setTime(rain[tMax].getTime());
-        ym.push_back(p);
+            Ym p;
+            p.setValue(Y[tMax]);
+            p.setTime(rain[tMax].getTime());
+            ym.push_back(p);
 
-    }
+        }
     //------------------ GMDn --------------------------------------------
 
 
@@ -713,12 +841,12 @@ void ValidationController::startValidationAllinOne(QString namePlot){
 
             //------------------ GMDn --------------------------------------------
             if(ft == FitnessGMDn || ft == FitnessEqualWeights)
-            for (int a = 0; a < activations_size; a++) {
-                 if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-//                     cout << "salto un pico all'interno di un intervallo " << endl;
-                     jump = true;
-                 }
-            }
+                for (int a = 0; a < activations_size; a++) {
+                    if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
+                        //                     cout << "salto un pico all'interno di un intervallo " << endl;
+                        jump = true;
+                    }
+                }
             //------------------ GMDn --------------------------------------------
 
             if(jump)
@@ -735,25 +863,25 @@ void ValidationController::startValidationAllinOne(QString namePlot){
     //------------------ GMDn --------------------------------------------
     //trovo il picco massimo nell'intervallo
     if(ft == FitnessGMDn || ft == FitnessEqualWeights)
-    for (int s = 0; s < activations_size; s++) {
-        double maxPich = 0;
-        int tMax =0;
-        for (int t = 1; t < rain_size-1; t++) {
+        for (int s = 0; s < activations_size; s++) {
+            double maxPich = 0;
+            int tMax =0;
+            for (int t = 1; t < rain_size-1; t++) {
 
-            if(diffTimeInterval(activations[s].getStart(), activations[s].getEnd(),rain[t].getTime())){
-                if(Y[t] > maxPich)
-                {
-                    maxPich = Y[t];
-                    tMax = t;
+                if(diffTimeInterval(activations[s].getStart(), activations[s].getEnd(),rain[t].getTime())){
+                    if(Y[t] > maxPich)
+                    {
+                        maxPich = Y[t];
+                        tMax = t;
+                    }
                 }
             }
-        }
-        Ym p;
-        p.setValue(Y[tMax]);
-        p.setTime(rain[tMax].getTime());
-        ym.push_back(p);
+            Ym p;
+            p.setValue(Y[tMax]);
+            p.setTime(rain[tMax].getTime());
+            ym.push_back(p);
 
-    }
+        }
     //------------------ GMDn --------------------------------------------
 
 
@@ -834,6 +962,49 @@ void ValidationController::startValidationAllinOne(QString namePlot){
     int indexPlot = getRightPlotFromName(namePlot);
     emit this->updateMobPlotAllInOne(pos,namePlot,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray[indexPlot],arrowArray[indexPlot]);
 
+    QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/validation/"+projectName;
+    QDir dir3(tmp2);
+    if (!dir3.exists()){
+        dir3.mkdir(".");
+    }
+
+    tmp2 += "/mobilityFunction.csv";
+    ofstream myfile;
+    myfile.open (tmp2.toStdString(),ios::out);
+    myfile << " x " << "; y " << endl;
+
+    for (unsigned int  t = 0; t < rain_size; t++) {
+        tm x = rain[t].getTime();
+        double y = Y[t];
+        int year = 1900 + x.tm_year;
+        QString month;
+        QString min;
+        QString sec;
+        QString hour;
+        if(x.tm_mon < 10){
+           month = QString("0%1").arg(x.tm_mon);
+        }
+        if(x.tm_mday < 10){
+           month = QString("0%1").arg(x.tm_mday);
+        }
+        if(x.tm_min == 0){
+           min = QString("00");
+        }
+        if(x.tm_sec == 0){
+           sec = QString("00");
+        }
+        if(x.tm_hour == 0){
+           hour = QString("00");
+        }
+        //cout << year << endl;
+
+        myfile << year << "-" << month.toStdString() << "-" << x.tm_mday <<" " << hour.toStdString() << ":" << min.toStdString() << ":" << sec.toStdString()<< "."<<"000" << ";" << y<<endl;
+    }
+
+    myfile.close();
+
+
+
     emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 
     QString finalFitness;
@@ -843,10 +1014,10 @@ void ValidationController::startValidationAllinOne(QString namePlot){
         finalFitness = QString("%1").arg((double) (f));
 
     emit this->updateTextsValidationAllInOne(pos,namePlot,finalFitness,
-                                     QString("%1").arg(this->size),
-                                     QString("%1").arg(dYcr),
-                                     QString("%1").arg(momentoDelPrimoOrdine)
-                                     );
+                                             QString("%1").arg(this->size),
+                                             QString("%1").arg(dYcr),
+                                             QString("%1").arg(momentoDelPrimoOrdine)
+                                             );
     mainwindows->mutex.unlock();
     // mutex->unlock();
     //delete ym;

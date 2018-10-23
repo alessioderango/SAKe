@@ -55,6 +55,8 @@ private slots:
     void on_lineEditPopSize_textChanged(const QString &arg1);
 
 
+    void on_comboBoxFitness_currentIndexChanged(int index);
+
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);
 

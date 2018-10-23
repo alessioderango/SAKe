@@ -29,13 +29,13 @@ class ValidationController : public QThread
     Q_OBJECT
 public:
     ValidationController(Rain *  rain,
-            int  rain_size,
-            Activation *  activations,
-            int  activations_size,
-            std::vector<double> &Fi,
-            int size,
-            double zCr
-            );
+                         int  rain_size,
+                         Activation *  activations,
+                         int  activations_size,
+                         std::vector<double> &Fi,
+                         int size,
+                         double zCr
+                         );
 
     void startThread();
     Rain *getRain() const;
@@ -77,10 +77,39 @@ public:
 
     void setFt(const FitnessType &value);
 
-    void getMobilityFunction(std::vector<double>&  Y, std::vector<Ym> &ym);
+    static void getMobilityFunction(std::vector<double>&  Y,
+                                    std::vector<Ym>& ym,
+                                    std::vector<double> Fi,
+                                    Rain *& rain,
+                                    int rain_size,
+                                    Activation * activations,
+                                    int activations_size, int tb);
+
+    static double getAUCROC(std::vector<double>&  Y,
+                         std::vector<Ym>& ymSorted,
+                         std::vector<double> Fi,
+                         Rain *& rain,
+                         int rain_size,
+                         Activation * activations,
+                         int activations_size,
+                         int tb,
+                         double &dYcr,
+                         Ym &ymMin,
+                         Ym &ymMin2,
+                         std::vector<int>& TP,
+                         std::vector<int>& FN,
+                         std::vector<int>& FP,
+                         std::vector<int>& TN,
+                         std::vector<double>& TPR,
+                         std::vector<double>& FPR,
+                         double &momentoDelPrimoOrdine,
+                         std::vector<Ym> &bests, vector<double> &lines, int numberOfLines);
     
     QString getProjectName() const;
     void setProjectName(const QString &value);
+
+    int getNumberOfLines() const;
+    void setNumberOfLines(int value);
 
 signals:
     void updateMobPlot(int indexTab,
@@ -97,19 +126,19 @@ signals:
                        std::vector<QCPItemText*> widgetArray,
                        std::vector<QCPItemLine*> arrowArray);
     void updateMobPlotAllInOne(int indexTab,
-                       QString namePlot,
-                       Rain * rain,
-                       int rain_size,
-                       Activation * a,
-                       int act_size,
-                       std::vector<double> Y,
-                       double,
-                       tm,
-                       double,
-                       tm,
-                       std::vector<Ym> bests,
-                       std::vector<QCPItemText*> widgetArray,
-                       std::vector<QCPItemLine*> arrowArray);
+                               QString namePlot,
+                               Rain * rain,
+                               int rain_size,
+                               Activation * a,
+                               int act_size,
+                               std::vector<double> Y,
+                               double,
+                               tm,
+                               double,
+                               tm,
+                               std::vector<Ym> bests,
+                               std::vector<QCPItemText*> widgetArray,
+                               std::vector<QCPItemLine*> arrowArray);
     void updateFitnessPlot(int indexTab,
                            QVector<double> x,
                            QVector<double> y,
@@ -120,20 +149,20 @@ signals:
                           QVector<double> Fi,
                           int tb);
     void updateTextsValidation(int indexTab,
-                              QString fitness,
-                              QString tb,
-                              QString safetyMargin,
-                              QString momentum);
-    void updateTextsValidationAllInOne(int indexTab,
-                                       QString name,
                                QString fitness,
                                QString tb,
                                QString safetyMargin,
                                QString momentum);
+    void updateTextsValidationAllInOne(int indexTab,
+                                       QString name,
+                                       QString fitness,
+                                       QString tb,
+                                       QString safetyMargin,
+                                       QString momentum);
     void updateROCPlot(int indexTab,
-                            QVector<double> FPR,
-                            QVector<double> TPR,
-                            double AUCROC);
+                       QVector<double> FPR,
+                       QVector<double> TPR,
+                       double AUCROC);
 
 private:
     void run();
@@ -153,6 +182,7 @@ private:
     MainWindow *mainwindows;
     FitnessType ft;
     QString projectName;
+    int numberOfLines;
 
 
 };

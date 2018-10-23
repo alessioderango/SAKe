@@ -36,6 +36,72 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
+// painting function preview kernel regression ----------------------------------------------------------------
+
+void getSubdividePointsFromKernel( double *kernel,int size_kernel,int n,QVector<double> &x, QVector<double> &y){
+
+    double sumx=0;
+    double sumy=0;
+    int end = ((size_kernel%n)==0) ? size_kernel : (size_kernel-n);
+    for (int i = 0; i < end; i+=n) {
+        sumx=0;
+        sumy=0;
+        for (int j = 0; j < n; j++) {
+            sumx+=j+(i+1);
+            sumy+=kernel[j+i];
+        }
+        x.push_back(sumx/n);
+        y.push_back(sumy/n);
+    }
+    if(size_kernel%n !=0){
+        sumx=0;
+        sumy=0;
+        int count=0;
+        for (int i = (size_kernel-(n-1)); i < size_kernel; i++) {
+            sumx+=(i+1);
+            sumy+=kernel[i];
+             count++;
+        }
+        x.push_back(sumx/count);
+        y.push_back(sumy/count);
+    }
+}
+
+void getSubdividePointsFromControlPoints(std::vector< double> x,std::vector< double> y,int n,QVector<double> &xOutput, QVector<double> &yOutput){
+    double sumx=0;
+    double sumy=0;
+    int end = ((y.size()%n)==0) ? y.size() : (y.size()-n);
+    for (int i = 0; i < end; i+=n) {
+        sumx=0;
+        sumy=0;
+        for (int j = 0; j < n; j++) {
+            sumx+=x[j+i];
+            sumy+=y[j+i];
+        }
+        xOutput.push_back(sumx/n);
+        yOutput.push_back(sumy/n);
+    }
+
+    if(y.size()%n !=0){
+        sumx=0;
+        sumy=0;
+        int count=0;
+        for (int i = (y.size()-(n-1)); i < y.size(); i++) {
+            sumx+=x[i];
+            sumy+=y[i];
+            count++;
+        }
+        xOutput.push_back(sumx/count);
+        yOutput.push_back(sumy/count);
+    }
+
+
+}
+
+
+// painting function preview kernel regression ----------------------------------------------------------------
+
+
 
 void MainWindow::makeFitnessPlot(QCustomPlot * customPlot){
 
@@ -274,10 +340,21 @@ void MainWindow::makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
     myBars->setName("Bars Series 1");
     customPlot->xAxis->setLabel("tb");
     customPlot->yAxis->setLabel("h");
-    customPlot->xAxis->setRange( 0,180 );
+    customPlot->xAxis->setRange( 1,180 );
     customPlot->yAxis->setRange( -0.01,0.25 );
     customPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables );
     customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    //add graph for preview kernel control points
+    customPlot->addGraph();
+
+    //add graph for preview kernel
+    customPlot->addGraph();
+    customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
+    customPlot->graph(1)->setPen( QPen( Qt::green ) );
+    customPlot->addGraph();
+
+
     connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), w, SLOT(contextMenuRequestKernel(QPoint)));
 
 }
@@ -312,6 +389,31 @@ void MainWindow::updateKernelPlot(int indexTab, QVector<double> Fi, int tb)
         //myBars->setData(keyData, Fi);
         // m_CustomPlot->xAxis->setRange( 0,tb );
         //m_CustomPlot->rescaleAxes();
+        m_CustomPlot->replot();
+    }
+
+}
+
+
+void MainWindow::updateKernelPlotRegression(QCustomPlot *m_CustomPlot, QVector<double> xKernel,QVector<double> yKernel,QVector<double> xControlpoints,QVector<double> yControlpoints )
+{
+    if (m_CustomPlot)
+    {
+        ((QCPBars*)m_CustomPlot->plottable(0))->setData(xKernel, yKernel);
+
+        m_CustomPlot->graph(1)->setData(xControlpoints, yControlpoints);
+        m_CustomPlot->replot();
+    }
+
+}
+
+void MainWindow::updateKernelPlotRegressionWithControlPoints(QCustomPlot *m_CustomPlot,QVector<double> xControlpoints,QVector<double> yControlpoints )
+{
+    if (m_CustomPlot)
+    {
+        m_CustomPlot->graph(2)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
+        m_CustomPlot->graph(2)->setPen( QPen( Qt::red ) );
+        m_CustomPlot->graph(2)->setData(xControlpoints, yControlpoints);
         m_CustomPlot->replot();
     }
 

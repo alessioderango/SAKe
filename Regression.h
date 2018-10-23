@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QMessageBox>
+#include <controlpoints.h>
+#include <Regression/regressioncontroller.h>
 #include "mainwindow.h"
 
 namespace Ui {
@@ -29,9 +31,39 @@ private slots:
 
     void on_lineEdit_9_textChanged(const QString &arg1);
 
+    void on_pushButton_3_clicked();
+
+    void on_checkBox_3_stateChanged(int arg1);
+
+    void on_checkBox_2_stateChanged(int arg1);
+
+    void on_checkBox_4_stateChanged(int arg1);
+
+    void on_comboBox_currentIndexChanged(int index);
+
+    void on_pushButton_clicked();
+
+    void on_lineEdit_7_textChanged(const QString &arg1);
+
+    void on_checkBox_clicked();
+
+    void on_comboBox_2_currentIndexChanged(int index);
+
+    void on_pushButton_2_clicked();
+
+    bool checklineEdit(QString l, QString s);
 private:
     Ui::Regression *ui;
     MainWindow *w;
+
+    std::vector<double> kernel;
+    int size_kernel;
+    double Delta_cr;
+
+    ControlPoints * controlPoints;
+    std::vector< double> xControlpoints;
+    std::vector< double> yControlpoints;
+
 };
 
 #endif // REGRESSION_H

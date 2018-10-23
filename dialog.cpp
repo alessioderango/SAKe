@@ -84,11 +84,13 @@ void Dialog::setParameters(QVariantList list)
     ui->selectOrder1->setCurrentText(list[25].toString());
     ui->selectOrder2->setCurrentText(list[26].toString());
     ui->comboBoxFitness->setCurrentIndex(list[28].toString().toInt());
+    ui->lineEditNumberOfLines->setText(list[29].toString());
 }
 
 void Dialog::setReadOnlyProjName(bool a)
 {
     ui->lineEditProjName->setReadOnly(a);
+    ui->comboBoxReplacement->setCurrentIndex(1);
 }
 
 void Dialog::on_pushButton_clicked()
@@ -324,7 +326,8 @@ void Dialog::on_pushButtonStart_clicked()
                                                      ui->lineEditNumberElitists->text().toInt(),//numberElitist.toInt(),
                                                      ui->lineEditSeed->text().toInt(),//seed.toInt(),
                                                      ui->lineEditFrequKerSav->text().toInt(),//saveKernels.toInt());
-                                                     ui->lineEditNumBestKernelSaved->text().toInt());//lineEditNumBestKernelSaved.toInt());
+                                                     ui->lineEditNumBestKernelSaved->text().toInt(),
+                                                     ui->lineEditNumberOfLines->text().toInt());//lineEditNumBestKernelSaved.toInt());
 
     controller->setFt(ui->comboBoxFitness->currentIndex());
 
@@ -355,7 +358,8 @@ void Dialog::on_pushButtonStart_clicked()
                                                                                ui->lineEditFrequKerSav->text(),
                                                                                ui->lineEditNumBestKernelSaved->text(),
                                                                                ordersSelectionCriterion,
-                                                                               QString("%1").arg(ui->comboBoxFitness->currentIndex()));
+                                                                               QString("%1").arg(ui->comboBoxFitness->currentIndex()),
+                                                                               ui->lineEditNumberOfLines->text());
     }else{
         mainWindow->getXmlmanager()->SaveXMLFileCalibrationProject(ui->lineEditProjName->text(),
                                                                    ui->comboBoxSelection->currentText(),
@@ -382,7 +386,8 @@ void Dialog::on_pushButtonStart_clicked()
                                                                    ui->lineEditFrequKerSav->text(),
                                                                    ui->lineEditNumBestKernelSaved->text(),
                                                                    ordersSelectionCriterion,
-                                                                   QString("%1").arg(ui->comboBoxFitness->currentIndex()));
+                                                                   QString("%1").arg(ui->comboBoxFitness->currentIndex()),
+                                                                   ui->lineEditNumberOfLines->text());
     }
 
 
@@ -595,4 +600,19 @@ QString Dialog::getProjectName()
 void Dialog::on_lineEditPopSize_textChanged(const QString &arg1)
 {
     ui->lineEditNumberElitists->setValidator(new QIntValidator(1, ui->lineEditPopSize->text().toInt(), this));
+}
+
+void Dialog::on_comboBoxFitness_currentIndexChanged(int index)
+{
+
+    if(index == 0 || index == 1 || index == 2){
+        ui->labelNumberOfLines->hide();
+        ui->lineEditNumberOfLines->hide();
+    }
+    else
+        if(index == 3)
+        {
+            ui->labelNumberOfLines->show();
+            ui->lineEditNumberOfLines->show();
+        }
 }

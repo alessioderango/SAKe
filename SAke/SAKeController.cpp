@@ -42,7 +42,8 @@ SAKeController::SAKeController(MainWindow *_main,
                                int numberElitist,
                                int _seed,
                                int _saveKernels,
-                               int _numberOfKernelToBeSaved)
+                               int _numberOfKernelToBeSaved,
+                               int _numberOfLines)
 
 {
     mainwindows = _main;
@@ -54,6 +55,7 @@ SAKeController::SAKeController(MainWindow *_main,
     this->start=false;
     this->finish=true;
     this->replacement=replacement;
+    numberOfLines = _numberOfLines;
 
     seed =_seed;
     saveKernels = _saveKernels;
@@ -211,7 +213,7 @@ void SAKeController::startAlgorithm()
 
         eoSAKeEvalFuncEqualWeights<Indi> plainEvalEqualWeights(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
 
-        eoSAKeEvalFuncAUCROC<Indi> plainEvalAUCROC(rain,rain_size,activations,activations_size)/* (varType  _anyVariable) */;
+        eoSAKeEvalFuncAUCROC<Indi> plainEvalAUCROC(rain,rain_size,activations,activations_size,numberOfLines)/* (varType  _anyVariable) */;
 
 
         // turn that object into an evaluation counter

@@ -31,7 +31,15 @@ SOURCES += main.cpp\
     SAke/SAKeEA.cpp \
     validation.cpp \
     ValidationController.cpp \
-    Regression.cpp
+    Regression.cpp \
+    Regression/funtciontype.cpp \
+    Regression/make_OneMax.cpp \
+    Regression/OneMaxEA.cpp \
+    Regression/parameters.cpp \
+    Regression/regressioncontroller.cpp \
+    CustomPlotRegression.cpp \
+    CustomPlotRegressionPreviewKernel.cpp \
+    controlpoints.cpp
 
 HEADERS  += mainwindow.h \
     dialog.h \
@@ -79,7 +87,28 @@ HEADERS  += mainwindow.h \
     Regression.h \
     SAke/eoSAKeEvalFuncEqualWeights.h \
     SAke/eoSAKeEvalFuncAUCROC.h \
-    SAke/eoSAKeEvalFuncGMDn.h
+    SAke/eoSAKeEvalFuncGMDn.h \
+    Regression/eoGenContinueMy.h \
+    Regression/eoGraphFitenessStat.h \
+    Regression/eoMySGA.h \
+    Regression/eoOneMax.h \
+    Regression/eoOneMaxEvalFunc.h \
+    Regression/eoOneMaxInit.h \
+    Regression/eoOneMaxMutation.h \
+    Regression/eoOneMaxQuadCrossover.h \
+    Regression/eoSGAGenerational.h \
+    Regression/eoSGASteadyState.h \
+    Regression/funtciontype.h \
+    Regression/make_algo_scalar_my.h \
+    Regression/make_checkpoint_my.h \
+    Regression/make_continue_my.h \
+    Regression/make_genotype_OneMax.h \
+    Regression/make_op_OneMax.h \
+    Regression/parameters.h \
+    Regression/regressioncontroller.h \
+    CustomPlotRegression.h \
+    CustomPlotRegressionPreviewKernel.h \
+    controlpoints.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \

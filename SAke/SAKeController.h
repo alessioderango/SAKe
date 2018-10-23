@@ -79,7 +79,7 @@ public:
                    int itypeAlgorithm,
                    int numberElitist,
                    int seed,
-                   int saveKernels, int numberOfKernelToBeSaved);
+                   int saveKernels, int numberOfKernelToBeSaved, int numberOfLines);
     static bool fileExists(QString path);
     SAKeController();
     bool finish;
@@ -200,6 +200,7 @@ private:
     bool clickCloseTab;
     MainWindow *mainwindows;
     FitnessType ft;
+    int numberOfLines;
 
 
 

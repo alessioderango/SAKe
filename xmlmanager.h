@@ -34,7 +34,7 @@ public:
                                       QString seed,
                                       QString saveKernels,
                                       QString numberOfKernelToBeSaved,
-                                      std::vector<QString> orders, QString typeFitness);
+                                      std::vector<QString> orders, QString typeFitness, QString numberOfLines);
     int SaveXMLFileAlreadyExistCalibrationProject(QString name,
                                                   QString selection,
                                                   QString value1,
@@ -59,17 +59,18 @@ public:
                                                   QString seed,
                                                   QString saveKernels,
                                                   QString numberOfKernelToBeSaved,
-                                                  std::vector<QString> orders, QString typeFitness);
+                                                  std::vector<QString> orders, QString typeFitness, QString numberOfLines);
     int SaveXMLFileValidationProject(const QString &_projectName,
                                      const QString &filenameRainPath,
                                      const QString &filenameActivaionPath,
                                      const QString &filenameKernelPath,
-                                     const QString &folderSave);
+                                     const QString &folderSave, const QString &_numberOfLinesForAUC);
     int SaveXMLFileAlreadyExistValidationProject(const QString &_projectName,
                                                  const QString &filenameRainPath,
                                                  const QString &filenameActivaionPath,
                                                  const QString &filenameKernelPath,
-                                                 const QString &folderSave);
+                                                 const QString &folderSave,
+                                                 const QString &);
 
     int SaveXMLFileRegressionProject(const QString &_projectName,
                                      const QString &selection,
@@ -84,8 +85,8 @@ public:
                                      std::vector<std::vector<double> > matrixGamma1,
                                      std::vector<std::vector<double> > matrixGamma2,
                                      std::vector<std::vector<double> > matrixLinear,
-                                     const QVariant &checkControlPointsWithN,
-                                     const QVariant &textN,
+                                     const QString &checkControlPointsWithN,
+                                     const QString &textN,
                                      const QString typeExecution,
                                      QString typeReplacement,
                                      QString numberElitist);
@@ -103,8 +104,8 @@ public:
                                                  std::vector<std::vector<double> > matrixGamma1,
                                                  std::vector<std::vector<double> > matrixGamma2,
                                                  std::vector<std::vector<double> > matrixLinear,
-                                                 const QVariant &checkControlPointsWithN,
-                                                 const QVariant &textN,
+                                                 const QString &checkControlPointsWithN,
+                                                 const QString &textN,
                                                  const QString &typeExecution,
                                                  QString typeReplacement,
                                                  QString numberElitist);

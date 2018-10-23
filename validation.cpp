@@ -69,6 +69,7 @@ void Validation::setParameters(QVariantList list)
     ui->lineEdit_rain->setText(list[1].toString());
     ui->lineEdit_activation->setText(list[2].toString());
     ui->lineEdit_kernel->setText(list[3].toString());
+    ui->lineEditNumberOfLines->setText(list[5].toString());
 }
 
 void Validation::accept()
@@ -146,14 +147,15 @@ void Validation::accept()
                                                                               ui->lineEdit_rain->text(),
                                                                               ui->lineEdit_activation->text(),
                                                                               ui->lineEdit_kernel->text(),
-                                                                              ""
-                                                                              );
+                                                                              "",
+                                                                              ui->lineEditNumberOfLines->text());
     }else{
         mainWindow->getXmlmanager()->SaveXMLFileValidationProject(ui->lineEditProjName->text(),
                                                                   ui->lineEdit_rain->text(),
                                                                   ui->lineEdit_activation->text(),
                                                                   ui->lineEdit_kernel->text(),
-                                                                  "");
+                                                                  "",
+                                                                  ui->lineEditNumberOfLines->text());
     }
 
     ValidationController * validationController=new ValidationController(rain,
@@ -164,6 +166,7 @@ void Validation::accept()
                                                                          size_Fi,
                                                                          zCr
                                                                          );
+        validationController->setNumberOfLines( ui->lineEditNumberOfLines->text().toInt());
 //    if(ui->comboBoxFitness->currentIndex() == 0)
 //        validationController->setFt(FitnessGMD);
 //    else
@@ -236,7 +239,7 @@ void Validation::accept()
                                                                                        QVector<double> ,
                                                                                        QVector<double> ,
                                                                                        double )));
-validationController->setProjectName(ui->lineEditProjName->text());
+    validationController->setProjectName(ui->lineEditProjName->text());
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(validationController);
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), validationController));

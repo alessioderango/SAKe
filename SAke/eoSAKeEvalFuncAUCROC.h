@@ -27,6 +27,8 @@ using namespace std;
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/local_time_adjustor.hpp"
 #include "boost/date_time/c_local_time_adjustor.hpp"
+#include "ValidationController.h"
+
 using boost::posix_time::ptime;
 using namespace boost::gregorian;
 using namespace boost::posix_time;
@@ -37,20 +39,14 @@ using namespace boost::posix_time;
 template<class EOT>
 class eoSAKeEvalFuncAUCROC: public eoEvalFunc<EOT> {
 public:
-    /// Ctor - no requirement
-    // START eventually add or modify the anyVariable argument
     eoSAKeEvalFuncAUCROC(Rain * _rain, int _rain_size, Activation* _activation,
-                         int _activation_size)
-    //  eoSAKeEvalFunc( varType  _anyVariable) : anyVariable(_anyVariable)
-    // END eventually add or modify the anyVariable argument
+                         int _activation_size, int _numberOfLines)
     {
         rain = _rain;
         rain_size = _rain_size;
         activations = _activation;
         activations_size = _activation_size;
-        numeroValitazioni=0;
-        // START Code of Ctor of an eoSAKeEvalFunc object
-        // END   Code of Ctor of an eoSAKeEvalFunc object
+        numberOfLines = _numberOfLines;
     }
 
     std::vector<double> getY(Rain *& P, std::vector<double> Fi, int tb) {
@@ -127,150 +123,68 @@ public:
     }
 
 
-    double getFitness(std::vector<double> Y,EOT & _eo){
-//        cout << "Start Fitness AUC ROC" << endl;
-        std::vector<Ym> ym;
+    double getFitness(EOT & _eo){
 
-        for (int t = 1; t < rain_size-1; t++) {
-            bool cross = (((Y[t] - Y[t - 1]) * (Y[t + 1] - Y[t])) < 0) && (Y[t] > Y[t - 1]);
-            if(cross){
-                // trovato un picco deve essere considerato
-                Ym p;
-                p.setValue(Y[t]);
-                p.setTime(rain[t].getTime());
-                ym.push_back(p);
+        std::vector<double> Y;
+        std::vector<Ym> ym;
+        std::vector<Ym> bests;
+        int tb = _eo.getSize();
+//        std::vector<double> Fi = _eo.getFi();
+        ValidationController::getMobilityFunction(Y,
+                                                  ym,
+                                                   _eo.getFi(),
+                                                  rain,
+                                                  rain_size,
+                                                  activations,
+                                                  activations_size,
+                                                  tb);
+        bool allzero=true;
+        for (int i = 0; i < Y.size(); ++i) {
+            if(Y[i] != 0){
+                allzero=false;
             }
+        }
+
+        if(allzero){
+            return 0;
         }
 
         qsort (&ym[0], ym.size(), sizeof(Ym),compareDouble);
 
+        vector<int> TP;
+        vector<int> FN;
+        vector<int> FP;
+        vector<int> TN;
 
-        Ym ymMax = ym[0];
+        vector<double> TPR;
+        vector<double> FPR;
 
-        double line = ymMax.getValue()/10;
-
-//        cout << ymMax.getValue() << endl;
-//        cout << line << endl;
-
+        double dYcr;
+        Ym ymMin;
+        Ym ymMin2;
+        double momentoDelPrimoOrdine;
         vector<double> lines;
-        for (int i = 10; i >= 1; i--) {
-            lines.push_back(line*i);
-        }
-
-        //inside the activation range
-        vector<int> TP(10,0);// true positive
-        vector<int> FN(10,0);// false negative
-
-        //outside the activation range
-        vector<int> FP(10,0);// false positive
-        vector<int> TN(10,0);// true negative
-
-
-        for (int i = 0; i < lines.size(); ++i) {
-
-            for(int t = 0; t < rain_size; t++) {
-
-                bool jump = false;
-                //controllo TP e FN
-                for (int s = 0; s < activations_size; s++) {
-                    //TODO inserire variabili intervallo giorni
-                    int result1 = getDifferenceTime(activations[s].getStart(),rain[t].getTime());
-                    int result2 = getDifferenceTime(rain[t].getTime(),activations[s].getEnd());
-
-                    if(result1>=-2 && result2>=-1){
-                        jump = true;
-                    }
-                }
-
-                if(jump)
-                    continue;
-
-
-                //controllo FP e TN
-                if(Y[t] < lines[i])
-                   TN[i]++;
-                else
-                   FP[i]++;
-            }
-        }
-
-        for (int i = 0; i < lines.size(); ++i) {
-            FN[i] = activations_size;
-            for (int s = 0; s < activations_size; s++) {
-
-                //controllo TP e FN
-
-                for(int t = 0; t < rain_size; t++) {
-                    //TODO inserire variabili intervallo giorni
-                    int result1 = getDifferenceTime(activations[s].getStart(),rain[t].getTime());
-                    int result2 = getDifferenceTime(rain[t].getTime(),activations[s].getEnd());
-
-                    if(result1>=-2 && result2>=-1){
-                        if(Y[t] >= lines[i]){
-                            TP[i]++;
-                            FN[i]--;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-
-
-
-        vector<double> TPR(10,0);// true positive rate
-        vector<double> FPR(10,0);// False positive rate
-
-        for (int i = 0; i < 10; ++i) {
-            TPR[i] = (double) (TP[i]/((double) (TP[i]+FN[i])));
-            double TNR =  (double)TN[i] / (double)(TN[i]+FP[i]);
-            FPR[i] = (double) (1-((double) TNR));
-
-
-
-            //cout << TPR[i] << ";" << FPR[i] << ";"<< endl;
-        }
-
-        double AUC=0; // Area under the curve
-        // primo trapezio
-        AUC += FPR[0]*TPR[0]*((double)(0.5));
-        for (int i = 0; i < 9; ++i) {
-            double h = FPR[i+1]-FPR[i];
-            double base = TPR[i]+TPR[i+1];
-            double tmp = (((double)(0.5))*(h))*(base);
-            //scout << "area trapezio "<<i<< " base --> " << base  <<" h --> " << h  <<"  = " << tmp <<endl;
-            AUC += tmp;
-        }
-        AUC += (1-FPR[9])*((double)(0.5))*(1+TPR[9]);
-
-        //cout << "AUC "<<AUC<<endl;
-
-        double YsMin = 999999999;
-        int iMin =-1;
-        std::vector<Ym> bests;
-        for (int s = 0; s < activations_size; s++) {
-            for (int i = 0; i < ym.size(); i++) {
-                //TODO inserire variabili intervallo giorni
-                int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
-                int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
-                if(result1>=-2 && result2>=-1){
-                    ym[i].setI(i+1);
-                    bests.push_back(ym[i]);
-                    if(ym[i].getValue() < YsMin){
-                        YsMin =ym[i].getValue();
-                        iMin=i;
-                    }//if
-                    break;
-                    //}
-                    // calcolo valori per calcolare dYcr per risparmiare calcoli
-
-                }//if
-            }//for
-        }//for
-        //std::cout << std::endl;
+        double AUC = ValidationController::getAUCROC(Y,
+                                        ym,
+                                        _eo.getFi(),
+                                        rain,
+                                        rain_size,
+                                        activations,
+                                        activations_size,
+                                        tb,
+                                        dYcr,
+                                        ymMin,
+                                        ymMin2,
+                                        TP,
+                                        FN,
+                                        FP,
+                                        TN,
+                                        TPR,
+                                        FPR,
+                                        momentoDelPrimoOrdine,
+                                        bests,
+                                        lines,
+                                        numberOfLines);
 
         _eo.setTP(TP);
         _eo.setFN(FN);
@@ -282,20 +196,11 @@ public:
 
         _eo.setAUC(AUC);
 
-
-
         _eo.setBests(bests);
-        if(iMin < 0)  iMin = 0;
-        if(iMin > ym.size()-1)  iMin = ym.size()-1;
-        int index=(iMin+1);
-        double dYcr = (YsMin-ym[index].getValue())/YsMin;
-
         _eo.setdYcr(dYcr);
-
-        Ym ymMin= ym[iMin];
-        Ym ymMin2 = ym[index];
         _eo.setYmMin(ymMin);
         _eo.setYmMin2(ymMin2);
+        _eo.setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
 
 
 
@@ -311,34 +216,36 @@ public:
      *                  with any fitness type
      */
     void operator()(EOT & _eo) {
-        numeroValitazioni++;
 
-        int tb = _eo.getSize();
+        //int tb = _eo.getSize();
 
         //Calcolo funzione di mobilità
-        std::vector<double> Y = getY(rain, _eo.getFi(), tb);
+        //        std::vector<double> Y = getY(rain, _eo.getFi(), tb);
 
-        bool allzero=true;
+        //        bool allzero=true;
 
-        for (int i = 0; i < Y.size(); ++i) {
-            if(Y[i] != 0){
-                allzero=false;
-            }
-        }
+        //        for (int i = 0; i < Y.size(); ++i) {
+        //            if(Y[i] != 0){
+        //                allzero=false;
+        //            }
+        //        }
 
-        double f;
-        if(allzero){
-            f=0;
-        }
-        else{
-            f = getFitness(Y,_eo);
 
-            double momentoDelPrimoOrdine = 0;
-            for (int i = 0; i < tb; i++) {
-                momentoDelPrimoOrdine += _eo.getFi()[i]*((i+1)-0.5);
-            }
-            _eo.setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
-        }
+        //        if(allzero){
+        //            f=0;
+        //        }
+        //        else{
+        //            f = getFitness(Y,_eo);
+
+        //            double momentoDelPrimoOrdine = 0;
+        //            for (int i = 0; i < tb; i++) {
+        //                momentoDelPrimoOrdine += _eo.getFi()[i]*((i+1)-0.5);
+        //            }
+        //            _eo.setMomentoDelPrimoOrdine(momentoDelPrimoOrdine);
+        //        }
+
+
+        double f =getFitness(_eo);
         //delete []Y;
         _eo.fitness(f);
         //}
@@ -351,7 +258,7 @@ private:
     int rain_size;
     Activation * activations;
     int activations_size;
-    int numeroValitazioni;
+    int numberOfLines;
     // END   Private data of an eoSAKeEvalFunc object
 };
 
