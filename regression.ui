@@ -50,6 +50,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="text">
+            <string>aaa</string>
+           </property>
           </widget>
          </item>
          <item row="0" column="0">
@@ -240,6 +243,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="text">
+            <string>1</string>
+           </property>
           </widget>
          </item>
          <item row="6" column="1">
@@ -315,6 +321,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="text">
+            <string>10</string>
+           </property>
           </widget>
          </item>
          <item row="3" column="0">
@@ -337,6 +346,9 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="text">
+            <string>0.55</string>
            </property>
           </widget>
          </item>
@@ -483,20 +495,10 @@
        </item>
        <item>
         <layout class="QGridLayout" name="gridLayout_6">
-         <item row="1" column="1">
-          <widget class="QCheckBox" name="checkBox_2">
+         <item row="2" column="2">
+          <widget class="QCheckBox" name="checkBox_4">
            <property name="text">
-            <string>Use Kernel</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="checkBox_3">
-           <property name="text">
-            <string>Use Control Points</string>
+            <string>Use N</string>
            </property>
           </widget>
          </item>
@@ -517,13 +519,6 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QCheckBox" name="checkBox_4">
-           <property name="text">
-            <string>Use N</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="2">
           <widget class="QPushButton" name="pushButton_3">
            <property name="sizePolicy">
@@ -534,6 +529,23 @@
            </property>
            <property name="text">
             <string>Load</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="checkBox_3">
+           <property name="text">
+            <string>Use Control Points</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="checkBox_2">
+           <property name="text">
+            <string>Use Kernel</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

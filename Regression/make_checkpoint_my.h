@@ -32,7 +32,6 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
 #include "Regression/eoGraphFitenessStat.h"
 #include <climits>
 
@@ -58,13 +57,10 @@ eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser,
                                          eoState& _state,
                                          eoValueParam<unsigned long>& _eval,
                                          eoContinue<EOT>& _continue,
-                                         QObject *progressbar,
                                          int maxGen,
-                                         QObject *_currentMaximumFitness,
-                                         QObject *_absoluteMaximumFitness,
-                                         QObject *_currentAverageFitness,
-                                         QObject *_absoluteAverageFitness,
-                                         std::vector< double> _xRegression)
+                                         std::vector< double> _xRegression,
+                                         std::vector< double> _y,
+                                         RegressionController * controller)
 {
     // first, create a checkpoint from the eoContinue
     eoCheckPoint<EOT> *checkpoint = new eoCheckPoint<EOT>(_continue);
@@ -143,12 +139,9 @@ eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser,
     // we need the bestStat for at least one of the 3 above
     {
         bestStat = new eoGraphFitnessStat<EOT>(maxGen,
-                                               progressbar,
-                                               _currentMaximumFitness,
-                                               _absoluteMaximumFitness,
-                                               _currentAverageFitness,
-                                               _absoluteAverageFitness,
-                                               _xRegression);
+                                               _xRegression,
+                                               _y,
+                                               controller);
         // store it
         _state.storeFunctor(bestStat);
         // add it to the checkpoint

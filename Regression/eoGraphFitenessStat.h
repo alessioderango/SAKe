@@ -10,9 +10,9 @@
 //#include <utils/eoCheckPoint.h>
 #include <utils/eoLogger.h>
 #include <utils/eoStat.h>
-#include "CustomPlotRegression.h"
+//#include "CustomPlotRegression.h"
 #include <QtConcurrent/QtConcurrent>
-
+#include "Regression/regressioncontroller.h"
 
 template <class EOT>
 class eoGraphFitnessStat : public eoStat<EOT,  typename EOT::Fitness>
@@ -25,26 +25,26 @@ public:
     typedef typename EOT::Fitness Fitness;
 
     eoGraphFitnessStat(int _maxGen,
-                       QObject *_progressBar,
-                       QObject *_currentMaximumFitness,
-                       QObject *_absoluteMaximumFitness,
-                       QObject *_currentAverageFitness,
-                       QObject *_absoluteAverageFitness,
                        std::vector< double> _xRegression,
+                       std::vector< double> _y,
+                       RegressionController *controller,
                        std::string _description = "Best ")
         : eoStat<EOT, Fitness>(Fitness(), _description)
     {
         xRegression = _xRegression;
-        progressBar = _progressBar;
+//        progressBar = _progressBar;
         count=0;
         steps= 1;
         maxGen = _maxGen;
-        currentMaximumFitness=_currentMaximumFitness;
-        absoluteMaximumFitness=_absoluteMaximumFitness;
-        currentAverageFitness= _currentAverageFitness;
-        absoluteAverageFitness=_absoluteAverageFitness;
+//        currentMaximumFitness=_currentMaximumFitness;
+//        absoluteMaximumFitness=_absoluteMaximumFitness;
+//        currentAverageFitness= _currentAverageFitness;
+//        absoluteAverageFitness=_absoluteAverageFitness;
         AbsoluteMaximumFitness= - 1000000;
         AbsoluteAvarageFitness=-DBL_MIN;
+        this->controller = controller;
+        this->_y = _y;
+
         //dsakecontroller =_sakecontroller;
     }
 
@@ -97,7 +97,9 @@ private :
 
 
 
-        if(_pop.size() < 200 && steps%50 ==0){
+
+
+        if(_pop.size() < 200 && steps%5 ==0){
 //            p.waitForFinished();
             //qCustomPlotRegression->drawGammaFunctions(xRegretmp,functiontype,parameter);
 //            p = QtConcurrent::run(qCustomPlotRegression,qCustomPlotRegression->updateGraph1,xRegretmp,yRegretmp);
@@ -155,8 +157,33 @@ private :
             //Q_EMIT update->valueAbsoluteMaximumFitnessRegression(tmpAvarage);
             AbsoluteMaximumFitness=fitness;
         }
+        if(steps ==1){
+            firstOccurance = 1;
+            bestfitness = 0;
+        }
+        else{
+             if(fitness > bestfitness){
+                 bestfitness = fitness;
+                 firstOccurance = steps;
+             }
+        }
 
         steps++;
+
+        controller->getMainwindows()->mutex.lock();
+        ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
+        if( steps%5 ==0)
+        emit controller->updateRegression(pos,xRegretmp, yRegretmp, xRegretmp, QVector<double>::fromStdVector(_y),steps);
+
+        emit controller->updateTextsRegression(pos,genString,
+                                               QString("%1").arg(fitness),
+                                               QString("%1").arg(v / _pop.size()),
+                                               (steps*100)/maxGen,
+                                               firstOccurance,
+                                               QString("%1").arg(AbsoluteMaximumFitness),
+                                               QString("%1").arg(AbsoluteAvarageFitness));
+        controller->getMainwindows()->mutex.unlock();
+
         //       cout << (steps*100)/maxGen << endl;
         //progressBar->setProperty("value",((steps*100)/maxGen));
 //        p=QtConcurrent::run(update,update->valueProgressBar,QString("%1").arg((steps*100)/maxGen));
@@ -164,6 +191,7 @@ private :
     }
     int count;
     QVector<double> x;
+     std::vector< double> _y;
     QVector<double> yBest;
     QVector<double> yAverage;
 
@@ -173,10 +201,14 @@ private :
     QObject *currentAverageFitness;
     QObject *absoluteAverageFitness;
 
+    int firstOccurance;
+    double bestfitness;
+
     int steps ;
     int maxGen;
     double AbsoluteMaximumFitness;
     double AbsoluteAvarageFitness;
     std::vector< double> xRegression;
+    RegressionController *controller;
 };
 #endif // EOGRAPHFITENESSSTAT_H

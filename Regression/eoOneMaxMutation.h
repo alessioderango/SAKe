@@ -260,32 +260,30 @@ public:
 //                    std::cout << _genotype.getTranslationConst(i) << std::endl;
                     if(_genotype.getTranslationConst(i) != 0)
                     {
-                        double percentageTranslation = _genotype.getPar(i).getParameters(2);
-                        double tmpTranslation= fRand(-(percentageTranslation*_genotype.getTranslation(i)),percentageTranslation*_genotype.getTranslation(i));
+                        //valore attuale della traslazione
+                        double translationValue = _genotype.getPar(i).getParameters(2);
+                        double coefficienteMolt = _genotype.getTranslation(i);
+
+                        double tmpTranslation= fRand(-(translationValue*coefficienteMolt),translationValue*coefficienteMolt);
 
 //                        std::cout <<" ************************** " << std::endl;
 //                        std::cout << _genotype.getTranslation(i) << std::endl;
 
-                        if(tmpTranslation < 0){
-                            tmpTranslation=0;
-                        }
-                        if(tmpTranslation > _genotype.getYCombinataConst().size()){
-                            tmpTranslation=_genotype.getYCombinataConst().size();
-                        }
+//                        if(tmpTranslation < 0){
+//                            tmpTranslation=0;
+//                        }
+                        if(translationValue+tmpTranslation > (_genotype.getYCombinataConst().size())){
+                            _genotype.setParameters(i,2,_genotype.getYCombinataConst().size());
+                            //tmpTranslation = _genotype.getYCombinataConst().size()/2;
+                        }else
+                             _genotype.setParameters(i,2,_genotype.getPar(i).getParameters(2)+tmpTranslation);
 //                        std::cout << (_genotype.getTranslation(i)+tmpTranslation) << std::endl;
 //                        std::cout << std::endl;
 
-                        _genotype.setParameters(i,2,_genotype.getPar(i).getParameters(2)+tmpTranslation);
+
                     }
 
-
-
-
-
         }
-
-
-
 
         return isModified;
         // END code for mutation of the _genotype object

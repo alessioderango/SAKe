@@ -58,8 +58,9 @@ public:
             else
                 myfile <<  "gamma" << " ; ";
             myfile <<  _vEO.best_element().getWConst(t) << " ;";
-            myfile <<  _vEO.best_element().getParConst(t).getParameters(0) << " ;";
-            myfile <<  _vEO.best_element().getParConst(t).getParameters(1) << " ;";
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(0) << " ;";//alfa
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(1) << " ;";//beta
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(2) << " ;";//translation
             myfile << "\n";
 
         }
@@ -73,6 +74,7 @@ public:
             myfile <<  _vEO.best_element().getWConst(t) << " ;";
             myfile <<  _vEO.best_element().getParConst(t).getParameters(0) << " ;";
             myfile <<  _vEO.best_element().getParConst(t).getParameters(1) << " ;";
+            myfile <<  _vEO.best_element().getParConst(t).getParameters(2) << " ;";
             myfile << "\n";
 
         }

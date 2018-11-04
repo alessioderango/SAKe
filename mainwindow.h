@@ -40,6 +40,7 @@ public:
     void updateKernelPlotRegressionWithControlPoints(QCustomPlot *m_CustomPlot,QVector<double> xControlpoints,QVector<double> yControlpoints );
     static void pushBackThread(QThread *thread);
     void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
+    void addTabRegression(QString name);
     void addTabAUCROC(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabValidation(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabValidationNewInterface(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
@@ -100,7 +101,7 @@ private slots:
     void updateFitnessPlot(int indexTab,
                            QVector<double> x,
                            QVector<double> y,
-                          QVector<double> x1,
+                           QVector<double> x1,
                            QVector<double> y1);
     void updateKernelPlot(int indexTab,
                            QVector<double> Fi,
@@ -112,7 +113,7 @@ private slots:
                             double AUCROC);
 
     void updateTexts(int indexTab,
-                     QString s,
+                              QString s,
                               QString fitness,
                               QString cuavfitness,
                               QString tb,
@@ -120,6 +121,22 @@ private slots:
                               QString momentum,
                               int barValur,
                               int firstOccurence, QString abmaxfitness, QString avmaxfitness);
+
+    void updateTextsRegression(int indexTab,
+                              QString s,
+                              QString fitness,
+                              QString cuavfitness,
+                              int barValur,
+                              int firstOccurence, QString abmaxfitness, QString avmaxfitness);
+
+    void updateRegression(int indexTab,
+                           QVector<double> x,
+                           QVector<double> y,
+                           QVector<double> xReal,
+                           QVector<double> yReal,
+                           int steps);
+
+
     void updateTextsValidation(int indexTab,
                               QString fitness,
                               QString tb,

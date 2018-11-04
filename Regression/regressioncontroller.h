@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QThread>
 #include "parameters.h"
-#include "CustomPlotRegression.h"
+//#include "CustomPlotRegression.h"
 using namespace std;
 
 
@@ -63,7 +63,7 @@ typedef eoOneMax<MyFitT> Individual;      // ***MUST*** derive from EO
 #include <Regression/make_continue_my.h>
 
 // outputs (stats, population dumps, ...)
-#include <Regression/make_checkpoint_my.h>
+
 
 #include <Regression/make_algo_scalar_my.h>
 
@@ -75,13 +75,16 @@ typedef eoOneMax<MyFitT> Individual;      // ***MUST*** derive from EO
 
 // checks for help demand, and writes the status file
 // and make_help; in libutils
+
+#include "mainwindow.h"
 void make_help(eoParser & _parser);
 
 class RegressionController: public QThread
 {
     Q_OBJECT
 public:
-    RegressionController(QString projectName,
+    RegressionController(MainWindow *main,
+                         QString projectName,
                              double* percentualePeso,
                              double* percentualeLineareA,
                              double* percentualeLineareB,
@@ -103,8 +106,8 @@ public:
                              int inumberProcessor,
                              double * percantageTranslation,
                              int propSelection,
-                             int para1,
-                             int para2,
+                             double para1,
+                             double para2,
                              int itypeAlgorithm,
                              QString sselection);
     RegressionController();
@@ -134,10 +137,34 @@ public:
     std::vector<double> getY();
     void setY(std::vector<double> &value);
 
+    bool getClickCloseTab() const;
+    void setClickCloseTab(bool value);
+
+    MainWindow *getMainwindows() const;
+    void setMainwindows(MainWindow *value);
+
+    bool getStop();
+
+signals:
+    void finished(int index);
+    void updateTextsRegression(int indexTab,
+                              QString s,
+                              QString fitness,
+                              QString cuavfitness,
+                              int barValur,
+                              int firstOccurence, QString abmaxfitness, QString avmaxfitness);
+
+    void updateRegression(int indexTab,
+                           QVector<double> x,
+                           QVector<double> y,
+                           QVector<double> xReal,
+                           QVector<double> yReal,
+                           int steps);
+
 public slots:
     void startThread();
     void startAlgorithm();
-     void stopThread();
+    void stopThread();
 private:
     void run();
     bool start;
@@ -188,6 +215,9 @@ private:
     QString  selection;
 
     QString savePath;
+
+    bool clickCloseTab;
+    MainWindow *mainwindows;
 
 };
 

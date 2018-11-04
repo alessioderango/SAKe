@@ -187,6 +187,13 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                     listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(7).firstChild().nodeValue());
                                     //pw
                                     listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
+                                    //tmax
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(9).firstChild().nodeValue());
+                                    //tmin
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(10).firstChild().nodeValue());
+                                    //pt
+                                    listGamma1.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(11).firstChild().nodeValue());
+
                                 }
                             }else
                                 if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "GammaFunction2", Qt::CaseInsensitive)==0){
@@ -213,6 +220,13 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                         listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(7).firstChild().nodeValue());
                                         //pw
                                         listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
+
+                                        //tmax
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(9).firstChild().nodeValue());
+                                        //tmin
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(10).firstChild().nodeValue());
+                                        //pt
+                                        listGamma2.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(11).firstChild().nodeValue());
                                     }
                                 }else
                                     if(QString::compare(a.at(i).parentNode().childNodes().at(j).nodeName(), "LinearFunction", Qt::CaseInsensitive)==0){
@@ -239,6 +253,13 @@ QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
                                             listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(7).firstChild().nodeValue());
                                             //pw
                                             listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(8).firstChild().nodeValue());
+                                            //tmax
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(9).firstChild().nodeValue());
+                                            //tmin
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(10).firstChild().nodeValue());
+                                            //pt
+                                            listLinear.append(a.at(i).parentNode().childNodes().at(j).childNodes().at(k).childNodes().at(11).firstChild().nodeValue());
+
                                         }
                                     }else{
 
@@ -747,7 +768,7 @@ void XMLManager::ReadCalibrationProjectXML()
     QTreeWidgetItem * regre = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Regression")));
 
     treeview->insertTopLevelItem(0, vali);
-//    treeview->insertTopLevelItem(0, regre);
+    treeview->insertTopLevelItem(0, regre);
     treeview->insertTopLevelItem(0, cali);
 
     for (int i = 0; i < calibrationProject.length(); i++) {
@@ -756,19 +777,19 @@ void XMLManager::ReadCalibrationProjectXML()
         cali->addChild(tmp);
      }
 
-//    QDomNodeList regressionProject = documentElement.elementsByTagName("RegressionProject");
-
-//    for (int i = 0; i < regressionProject.length(); i++) {
-//        QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue()));
-//        tmp->setData(0, Qt::UserRole,regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue());
-//        regre->addChild(tmp);
-//     }
-
     QDomNodeList validationProject = documentElement.elementsByTagName("ValidationProject");
     for (int i = 0; i < validationProject.length(); i++) {
         QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(validationProject.at(i).childNodes().at(0).firstChild().nodeValue()));
         tmp->setData(0, Qt::UserRole,validationProject.at(i).childNodes().at(validationProject.at(i).childNodes().length()-1).firstChild().nodeValue());
         vali->addChild(tmp);
+     }
+
+     QDomNodeList regressionProject = documentElement.elementsByTagName("RegressionProject");
+
+     for (int i = 0; i < regressionProject.length(); i++) {
+           QTreeWidgetItem * tmp = new QTreeWidgetItem((QTreeWidget*)0, QStringList(regressionProject.at(i).childNodes().at(0).firstChild().nodeValue()));
+           tmp->setData(0, Qt::UserRole,regressionProject.at(i).childNodes().at(regressionProject.at(i).childNodes().length()-1).firstChild().nodeValue());
+           regre->addChild(tmp);
      }
 
 
@@ -967,6 +988,18 @@ QDomElement XMLManager::getGamma1ElementXML(std::vector<std::vector<double> > ma
         QDomElement pwGammaFunction1 =document.createElement( "pw" );
         pwGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][8])));
         gammaParameters.appendChild(pwGammaFunction1);
+
+        QDomElement maxtransGammaFunction1 =document.createElement( "tmax" );
+        maxtransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][9])));
+        gammaParameters.appendChild(maxtransGammaFunction1);
+
+        QDomElement mintransGammaFunction1 =document.createElement( "tmin" );
+        mintransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][10])));
+        gammaParameters.appendChild(mintransGammaFunction1);
+
+        QDomElement perctransGammaFunction1 =document.createElement( "pt" );
+        perctransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma1[i][11])));
+        gammaParameters.appendChild(perctransGammaFunction1);
         gammaFunction1.appendChild(gammaParameters);
     }
 
@@ -1017,6 +1050,19 @@ QDomElement XMLManager::getGamma2ElementXML(std::vector<std::vector<double> > ma
         QDomElement pwGammaFunction2 =document.createElement( "pw" );
         pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixGamma2[i][8])));
         gammaParameters2.appendChild(pwGammaFunction2);
+
+        QDomElement maxtransGammaFunction1 =document.createElement( "tmax" );
+        maxtransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma2[i][9])));
+        gammaParameters2.appendChild(maxtransGammaFunction1);
+
+        QDomElement mintransGammaFunction1 =document.createElement( "tmin" );
+        mintransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma2[i][10])));
+        gammaParameters2.appendChild(mintransGammaFunction1);
+
+        QDomElement perctransGammaFunction1 =document.createElement( "pt" );
+        perctransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixGamma2[i][11])));
+        gammaParameters2.appendChild(perctransGammaFunction1);
+
         gammaFunction2.appendChild(gammaParameters2);
     }
 
@@ -1067,6 +1113,20 @@ QDomElement XMLManager::getLinearElementXML(std::vector<std::vector<double> > ma
         QDomElement pwGammaFunction2 =document.createElement( "pw" );
         pwGammaFunction2.appendChild(document.createTextNode(QString::number(matrixLinear[i][8])));
         linearParameters.appendChild(pwGammaFunction2);
+
+        QDomElement maxtransGammaFunction1 =document.createElement( "tmax" );
+        maxtransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixLinear[i][9])));
+        linearParameters.appendChild(maxtransGammaFunction1);
+
+        QDomElement mintransGammaFunction1 =document.createElement( "tmin" );
+        mintransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixLinear[i][10])));
+        linearParameters.appendChild(mintransGammaFunction1);
+
+        QDomElement perctransGammaFunction1 =document.createElement( "pt" );
+        perctransGammaFunction1.appendChild(document.createTextNode(QString::number(matrixLinear[i][11])));
+        linearParameters.appendChild(perctransGammaFunction1);
+
+
         linearFunction.appendChild(linearParameters);
     }
 

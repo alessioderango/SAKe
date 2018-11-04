@@ -1,11 +1,13 @@
 #include "regressioncontroller.h"
+#include "make_checkpoint_my.h"
+
 
 RegressionController::RegressionController()
 {
 
 }
 
-RegressionController::RegressionController(QString projectName,
+RegressionController::RegressionController(MainWindow *main, QString projectName,
                                            double* _percentualePeso,
                                            double* _percentualeLineareA,
                                            double* _percentualeLineareB,
@@ -27,8 +29,8 @@ RegressionController::RegressionController(QString projectName,
                                            int inumberProcessor,
                                            double *translation,
                                            int propSelection,
-                                           int para1,
-                                           int para2,
+                                           double para1,
+                                           double para2,
                                            int itypeAlgorithm,
                                            QString  sselection){
 
@@ -104,6 +106,9 @@ RegressionController::RegressionController(QString projectName,
                         //std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
                     }
 
+     clickCloseTab=false;
+     mainwindows = main;
+
 }
 
 
@@ -143,7 +148,8 @@ void RegressionController::startAlgorithm(){
         //        parser.setORcreateParam(0.8, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
         //        parser.setORcreateParam(0.3, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
 
-
+        uint32_t t32 =  (uint32_t) 10;
+        parser.setORcreateParam(t32, "seed", "Random number seed", 'S');
         eoState state;    // keeps all things allocated
 
         // The fitness
@@ -200,13 +206,10 @@ void RegressionController::startAlgorithm(){
                                                                       state,
                                                                       eval,
                                                                       term,
-                                                                      progressBar,
                                                                       maxGeneration,
-                                                                      currentMaximumFitness,
-                                                                      absoluteMaximumFitness,
-                                                                      currentAverageFitness,
-                                                                      absoluteAverageFitness,
-                                                                      x);
+                                                                      x,
+                                                                      y,
+                                                                      this);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);
         eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,elitist,typeReplacement,propSelection);
@@ -240,6 +243,12 @@ void RegressionController::startAlgorithm(){
 //            cout << pop.best_element().getYCombinataConst(i) << endl;
 //        }
 
+        mainwindows->mutex.lock();
+        ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
+        //MainWindow::threads.erase(MainWindow::threads.begin()+pos);
+        if(clickCloseTab)
+            emit finished(pos);
+        mainwindows->mutex.unlock();
 
     }
     catch(exception& e)
@@ -250,6 +259,33 @@ void RegressionController::startAlgorithm(){
 
 void RegressionController::run(){
     startAlgorithm();
+}
+
+bool RegressionController::getStop()
+{
+    if(stop){
+        return stop->getStop();
+    }
+}
+
+MainWindow *RegressionController::getMainwindows() const
+{
+    return mainwindows;
+}
+
+void RegressionController::setMainwindows(MainWindow *value)
+{
+    mainwindows = value;
+}
+
+bool RegressionController::getClickCloseTab() const
+{
+    return clickCloseTab;
+}
+
+void RegressionController::setClickCloseTab(bool value)
+{
+    clickCloseTab = value;
 }
 
 std::vector<double> RegressionController::getY()

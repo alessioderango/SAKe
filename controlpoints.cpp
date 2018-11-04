@@ -97,6 +97,8 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
 
  void ControlPoints::calculateControlPoints(double * kernel, int size_kernel){
 
+     x.clear();
+     y.clear();
      double hmed= getHMed(kernel,size_kernel);
      double hmax = getHMax(kernel,size_kernel);
      double hmed2= hmed/2;

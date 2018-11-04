@@ -85,7 +85,7 @@ public:
 
             for (int i = 0; i < _eo.getWConst().size(); ++i) {
 
-                double translationTmp=_eo.getPar(i).getParameters(2);
+
 //                cout << "translation  " << translationTmp << endl;
                 for (int j = 0; j < x.size(); j++) {
                     double yTmp=0;
@@ -109,12 +109,18 @@ public:
                                 //yTmp =(pow(x[j],_eo.getPar(i).getParameters(0)-1)*exp(-(x[j]/_eo.getPar(i).getParameters(1)))) / (pow(_eo.getPar(i).getParameters(1),_eo.getPar(i).getParameters(0))*tgamma(_eo.getPar(i).getParameters(0)));
 
 //                                  cout << "translation  " << translation << endl;
-                                if(translation != 0 && j < translation )
-                                    yTmp = 0;
-                                else{
+//                                if(translation != 0 && j < translation )
+//                                    yTmp = 0;
+//                               else{
 //                                    yTmp = gamma_pdf(alfa,beta,x[j-(translation-1)]);
                                     yTmp = gamma_pdf(alfa,beta,x[j]);
-                                }
+
+//                                    if(yTmp == 0){
+//                                        cout << "alfa = "  << alfa <<endl;
+//                                        cout << "beta = "  << beta <<endl;
+//                                        cout << "x["<<j<<"] = "  << x[j] <<endl;
+//                                    }
+//                                }
 //                                    cout << x[j]+translation << ";" << yTmp << endl;
 //                                    yTmp = gamma_pdf(alfa,beta,x[j]);
 
@@ -203,7 +209,58 @@ public:
 //                        }
 //                        vector<double> yCombinata;
 
+
+
+
+
             //Swift translazione
+            for (int i = 0; i < _eo.getWConst().size(); ++i) {
+               //  for (int j = 0; j < x.size(); j++) {
+                     std::vector<double> Yswifted;
+                     int s = (int)_eo.getPar(i).getParameters(2);
+                     int xsize = x.size();
+//                     if(s > xsize)
+//                     {
+//                         cout <<" x = "  <<x.size() << " --  s =" << s << endl;
+//                     }
+
+
+                     if(s >= 0)
+                     {
+                         for (int k = 0; k < s; ++k) {
+                             Yswifted.push_back(0);
+                         }
+//                         cout <<" xsize = "  <<xsize << " --  s =" << s << endl;
+//                         cout << " x.size()-s = " << xsize-s << endl;
+                         for (int k = 0; k < xsize-s; ++k) {
+//                             if(s > x.size())
+//                             cout << "i = " << i << "k = " << k <<endl;
+                             Yswifted.push_back(matrixY[i][k]);
+                         }
+                     }
+                     else
+                     {
+                         s=abs(s);
+//                         cout <<" xsize = "  <<xsize << " --  s =" << s << endl;
+//                         cout << " x.size()-s = " << xsize-s << endl;
+                         for (int k = s; k < xsize; ++k) {
+//                             if(s > x.size())
+//                             cout << "i = " << i << " k = " << k <<endl;
+                             Yswifted.push_back(matrixY[i][k]);
+                         }
+                         for (int k = 0; k < s; ++k) {
+                             Yswifted.push_back(0);
+                         }
+
+                     }
+
+                     for (int k = 0; k < x.size(); ++k) {
+                        matrixY[i][k] =  Yswifted[k];
+                     }
+
+               //  }
+
+            }
 
 
             for (int i = 0; i < x.size(); i++) {
@@ -240,7 +297,7 @@ public:
             //            cout << "fitness/sommaMedia " << fitness/sommaMedia << endl;
 
             double fitFinale = (100*(1-(fitness/sommaMedia)));
-            //            cout << "fitness finale " << fitFinale << endl;
+            //cout << "fitness finale " << fitFinale << endl;
 
             //            cout << "Stampo valutazione" << endl;
             //            cout << "Pesi " << endl;

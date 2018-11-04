@@ -2,9 +2,13 @@
 #include "ui_mainwindow.h"
 #include "dialog.h"
 #include "validation.h"
+#include "Regression/regressioncontroller.h"
 #include "Regression.h"
 
+#include <algorithm>
+
 std::vector<QThread *> MainWindow::threads;
+
 
 QTabWidget *MainWindow::getTabbyPos(int pos)
 {
@@ -346,12 +350,12 @@ void MainWindow::makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
     customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
 
     //add graph for preview kernel control points
-    customPlot->addGraph();
+    //customPlot->addGraph();
 
     //add graph for preview kernel
     customPlot->addGraph();
-    customPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
-    customPlot->graph(1)->setPen( QPen( Qt::green ) );
+    customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
+    customPlot->graph(0)->setPen( QPen( Qt::green ) );
     customPlot->addGraph();
 
 
@@ -399,9 +403,8 @@ void MainWindow::updateKernelPlotRegression(QCustomPlot *m_CustomPlot, QVector<d
 {
     if (m_CustomPlot)
     {
+        m_CustomPlot->graph(0)->setData(xControlpoints, yControlpoints);
         ((QCPBars*)m_CustomPlot->plottable(0))->setData(xKernel, yKernel);
-
-        m_CustomPlot->graph(1)->setData(xControlpoints, yControlpoints);
         m_CustomPlot->replot();
     }
 
@@ -411,9 +414,10 @@ void MainWindow::updateKernelPlotRegressionWithControlPoints(QCustomPlot *m_Cust
 {
     if (m_CustomPlot)
     {
-        m_CustomPlot->graph(2)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
-        m_CustomPlot->graph(2)->setPen( QPen( Qt::red ) );
-        m_CustomPlot->graph(2)->setData(xControlpoints, yControlpoints);
+        m_CustomPlot->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
+        m_CustomPlot->graph(1)->setPen( QPen( Qt::red ) );
+
+        m_CustomPlot->graph(1)->setData(xControlpoints, yControlpoints);
         m_CustomPlot->replot();
     }
 
@@ -448,6 +452,54 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
     QLabel* text = (QLabel*)tabs->findChild<QLabel*>("AUCValue");
     text->setText(QString("%1").arg(AUCROC));
     mutex.unlock();
+}
+
+
+void MainWindow::updateTextsRegression(int indexTab, QString s, QString fitness, QString cuavfitness, int barValue, int firstOccurence, QString abmaxfitness, QString avmaxfitness)
+{
+    mutex.lock();
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
+    QLabel* text = (QLabel*)tabs->findChild<QLabel*>("GenerationText");
+    text->setText(s);
+
+    QLabel* curMaxFit = (QLabel*)tabs->findChild<QLabel*>("curMaxFitNum");
+    curMaxFit->setText(fitness);
+    QLabel* curAvFit = (QLabel*)tabs->findChild<QLabel*>("curAveFitNum");
+    curAvFit->setText(cuavfitness);
+
+    QLabel* bestfndatItera = (QLabel*)tabs->findChild<QLabel*>("firstOccurenceText");
+    QString fo = QString("First occurence of AMF at iteration: %1").arg(firstOccurence);
+    bestfndatItera->setText(fo);
+    QProgressBar* bar = (QProgressBar*)tabs->findChild<QProgressBar*>("bar");
+    bar->setValue(barValue);
+
+    QLabel* AbsMaxFitNum = (QLabel*)tabs->findChild<QLabel*>("AbsMaxFitNum");
+    AbsMaxFitNum->setText(abmaxfitness);
+    QLabel* AbsAveFitNum = (QLabel*)tabs->findChild<QLabel*>("AbsAveFitNum");
+    AbsAveFitNum->setText(avmaxfitness);
+
+    mutex.unlock();
+}
+
+void MainWindow::updateRegression(int indexTab,
+                       QVector<double> x,
+                       QVector<double> y,
+                       QVector<double> xReal,
+                       QVector<double> yReal,
+                                  int steps){
+
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
+    QCustomPlot* plot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
+
+    plot->graph(0)->setData(x, y);
+    plot->graph(1)->setData(xReal, yReal);
+
+    plot->replot();
+    plot->rescaleAxes(true);
+//    if(steps==1){
+//       plot->xAxis2->setRange(*std::min_element(xReal.constBegin(), xReal.constEnd()),*std::max_element(xReal.constBegin(), xReal.constEnd()));
+//    }
+
 }
 
 void MainWindow::updateTexts(int indexTab,
@@ -833,7 +885,7 @@ void MainWindow::closeTab(int index)
 {
     //rilasciare lock
     mutex.lock();
-    //cout << "chiudere" << index << endl;
+    cout << "chiudere" << index << endl;
     ui->tabWidget_2->removeTab(index);
     MainWindow::threads.erase(MainWindow::threads.begin()+index);
     mutex.unlock();
@@ -1192,6 +1244,162 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     ui->tabWidget_2->setCurrentIndex(indextab);
 }
 
+void MainWindow::addTabRegression(QString name)
+{
+    QTabWidget * tabwidget = new QTabWidget();
+    tabwidget->setObjectName("tabRegression");
+    //QCustomPlot * customPlot = new QCustomPlot();
+    //customPlot->setOpenGl(true,64);
+
+    QCustomPlot * kerFunc = new QCustomPlot();
+    int indextab= ui->tabWidget_2->addTab(tabwidget, name);
+    QWidget * tab1=ui->tabWidget_2->widget(ui->tabWidget_2->count()-1);
+    QVBoxLayout * mainL = new QVBoxLayout();
+
+    QSizePolicy spUp(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    spUp.setVerticalStretch(2);
+    QVBoxLayout * vertical = new QVBoxLayout();
+//    QSplitter * splitter = new QSplitter();
+    //MainWindow::makeFitnessPlot(customPlot);
+    //customPlot->setSizePolicy(spUp);
+    //customPlot->setObjectName("fitFunc");
+    //splitter->addWidget(customPlot);
+
+
+
+
+   // MainWindow::makeKernelPlot(kerFunc,this);
+    kerFunc ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom);
+    kerFunc->addGraph();
+    kerFunc->graph(0)->setPen( QPen( Qt::red ) );
+    kerFunc->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
+    kerFunc->addGraph();
+    kerFunc->graph(1)->setPen( QPen( Qt::green ) );
+    kerFunc->graph(1)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 10));
+
+    kerFunc->setSizePolicy(spUp);
+    kerFunc->setObjectName("FuncPlot");
+
+//    splitter->addWidget(kerFunc);
+
+
+//    splitter->setOrientation(Qt::Vertical);
+
+    vertical->addWidget(kerFunc);
+    //vertical->addStretch(vertical->sizeConstraint()*2);
+
+
+    mainL->addLayout(vertical);
+    QGridLayout * grid = new QGridLayout();
+
+
+    QLabel * AbsMaxFit = new QLabel();
+    AbsMaxFit->setText("Absolute Maximum Fitness (AMF) :");
+    grid->addWidget(AbsMaxFit,0,0);
+    QLabel * AbsMaxFitNum = new QLabel();
+    AbsMaxFitNum->setText("0");
+    AbsMaxFitNum->setObjectName("AbsMaxFitNum");
+    grid->addWidget(AbsMaxFitNum,0,1);
+
+    QLabel * firstOccurenceText = new QLabel();
+    QString fo = QString("First occurence of AMF at iteration: %1").arg(0);
+    firstOccurenceText->setText(fo);
+    firstOccurenceText->setObjectName("firstOccurenceText");
+    grid->addWidget(firstOccurenceText,0,2);
+
+
+
+    QLabel * AbsAveFit = new QLabel();
+    AbsAveFit->setText("Absolute Average Fitness:");
+    grid->addWidget(AbsAveFit,1,0);
+    QLabel * AbsAveFitNum = new QLabel();
+    AbsAveFitNum->setText("0");
+    AbsAveFitNum->setObjectName("AbsAveFitNum");
+    grid->addWidget(AbsAveFitNum,1,1);
+
+    QLabel * space1 = new QLabel();
+    space1->setText(" ");
+    grid->addWidget(space1,2,0);
+
+
+    QLabel * gen = new QLabel();
+    gen->setText("Current Generation:");
+    grid->addWidget(gen,3,0);
+    QLabel * genNum = new QLabel();
+    genNum->setText("0");
+    genNum->setObjectName("GenerationText");
+    grid->addWidget(genNum,3,1);
+
+    QLabel * curAveFit = new QLabel();
+    curAveFit->setText("Current Average Fitness:");
+    grid->addWidget(curAveFit,4,0);
+    QLabel * curAveFitNum = new QLabel();
+    curAveFitNum->setText("0");
+    curAveFitNum->setObjectName("curAveFitNum");
+    grid->addWidget(curAveFitNum,4,1);
+
+    QLabel * space = new QLabel();
+    space->setText(" ");
+    grid->addWidget(space,5,0);
+
+    QLabel * bestIndiv = new QLabel();
+    bestIndiv->setText("Best Individual of current generation");
+    grid->addWidget(bestIndiv,6,0);
+
+    QLabel * curMaxFit = new QLabel();
+    curMaxFit->setText("Fitness:");
+    grid->addWidget(curMaxFit,7,0);
+    QLabel * curMaxFitNum = new QLabel();
+    curMaxFitNum->setText("0");
+    curMaxFitNum->setObjectName("curMaxFitNum");
+    grid->addWidget(curMaxFitNum,7,1);
+
+//    QLabel * tb = new QLabel();
+//    tb->setText("tb:");
+//    grid->addWidget(tb,8,0);
+//    QLabel * tbNum = new QLabel();
+//    tbNum->setText("0");
+//    tbNum->setObjectName("tbNum");
+//    grid->addWidget(tbNum,8,1);
+
+//    QLabel * dCritico = new QLabel();
+//    dCritico->setText("Safety margin:");
+//    grid->addWidget(dCritico,8,2);
+//    QLabel * dCriticoNum = new QLabel();
+//    dCriticoNum->setText("0");
+//    dCriticoNum->setObjectName("dCriticoNum");
+//    grid->addWidget(dCriticoNum,8,3);
+
+//    QLabel * momPrimo = new QLabel();
+//    momPrimo->setText("First-order momentum:");
+//    grid->addWidget(momPrimo,8,4);
+//    QLabel * momPrimoNum = new QLabel();
+//    momPrimoNum->setText("0");
+//    momPrimoNum->setObjectName("momPrimoNum");
+//    grid->addWidget(momPrimoNum,8,5);
+
+
+//    // first occurence at N iteration;
+
+
+    mainL->addLayout(grid);
+
+    QHBoxLayout * buttons = new QHBoxLayout();
+    QProgressBar* bar = new QProgressBar();
+    bar->setValue(0);
+    bar->setObjectName("bar");
+    buttons->addWidget(bar);
+    //    connect(stop, SIGNAL (clicked()),this, SLOT (clickedStopButton()));
+    ////    QPushButton* pause = new QPushButton();
+    ////    pause->setText("Pause");
+    ////    buttons->addWidget(pause);
+
+    mainL->addLayout(buttons);
+    tab1->setLayout(mainL);
+    ui->tabWidget_2->setCurrentIndex(indextab);
+}
+
+
 void MainWindow::addTabValidation(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
 {
     QTabWidget * tabwidget = new QTabWidget();
@@ -1472,6 +1680,17 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
                 validation->show();
             }
         }
+        else
+                if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Regression", Qt::CaseInsensitive)==0){
+                    if(listParameter.size() > 5){
+                        Regression *regression = new Regression();
+//                        regression->setReadOnlyProjName(true);
+                        regression->setW(this);
+                        regression->setParameters(listParameter);
+//                        regression->setMainWindow(this);
+                        regression->show();
+                    }
+                }
 }
 
 void MainWindow::on_tabWidget_2_tabCloseRequested(int index)
@@ -1499,7 +1718,19 @@ void MainWindow::on_tabWidget_2_tabCloseRequested(int index)
                 ui->tabWidget_2->removeTab(index);
                 mutex.unlock();
             }
-        }
+        }else
+            if(dynamic_cast< RegressionController* >( (MainWindow::threads[index]))){
+                if(!((RegressionController*) MainWindow::threads[index])->isRunning()){
+                    mutex.lock();
+                    MainWindow::threads.erase(MainWindow::threads.begin()+index);
+                    ui->tabWidget_2->removeTab(index);
+                    mutex.unlock();
+                }else
+                    if(!(((RegressionController*) MainWindow::threads[index])->getStop())){
+                        ((RegressionController*) MainWindow::threads[index])->setClickCloseTab(true);
+                        ((RegressionController*) MainWindow::threads[index])->stopThread();
+                    }
+            }
 }
 
 Ui::MainWindow *MainWindow::getUi() const
@@ -1511,6 +1742,8 @@ void MainWindow::on_stopButton_triggered()
 {
     if(ui->tabWidget_2->count()>0){
         int index = ((QTabWidget*)ui->tabWidget_2)->currentIndex();
+
+        //if(ui->tabWidget_2->)
 
         if( dynamic_cast< SAKeController* >( MainWindow::threads[index] ) ){
 

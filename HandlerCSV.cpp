@@ -163,7 +163,7 @@ int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & si
     return 0;
 }
 
-int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double & zCr, QObject* errorHandler){
+int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double & zCr){
     fileurl.remove(0,8);
     std::ifstream in(fileurl.toStdString());
 

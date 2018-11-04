@@ -17,9 +17,13 @@ class Regression : public QDialog
 
 public:
     explicit Regression(MainWindow * _w,QWidget *parent = 0);
+    Regression(QWidget *parent =0);
     ~Regression();
     MainWindow *getW() const;
     void setW(MainWindow *value);
+    void setParameters(QVariantList );
+
+
 
 private slots:
 
@@ -52,6 +56,10 @@ private slots:
     void on_pushButton_2_clicked();
 
     bool checklineEdit(QString l, QString s);
+    void on_comboBoxReplacement_currentIndexChanged(int index);
+
+    void on_lineEditN_textChanged(const QString &arg1);
+
 private:
     Ui::Regression *ui;
     MainWindow *w;
@@ -61,8 +69,12 @@ private:
     double Delta_cr;
 
     ControlPoints * controlPoints;
-    std::vector< double> xControlpoints;
-    std::vector< double> yControlpoints;
+    std::vector<double> xControlpoints;
+    std::vector<double> yControlpoints;
+
+    std::vector< double> xControlpointsbyN;
+    std::vector< double> yControlpointsbyN;
+
 
 };
 

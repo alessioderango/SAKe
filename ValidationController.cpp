@@ -264,24 +264,28 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
     double YsMin = 999999999;
     double YsAbsMinInsideTheActivationInterval = 999999999;
     int iMin =-1;
+    double Maxtmp = -999999999;
+    Ym zMax;
     for (int s = 0; s < activations_size; s++) {
         for (int i = 0; i < ymSorted.size(); i++) {
             //TODO inserire variabili intervallo giorni
             int result1 = getDifferenceTime(activations[s].getStart(),ymSorted[i].getTime());
             int result2 = getDifferenceTime(ymSorted[i].getTime(),activations[s].getEnd());
             if(result1>=-2 && result2>=-1){
+                cout << "considero intervallo con ymSorted" << endl;
                 ymSorted[i].setI(i+1);
                 bests.push_back(ymSorted[i]);
                 if(ymSorted[i].getValue() < YsMin){
                     YsMin =ymSorted[i].getValue();
                     iMin=i;
                 }//if
-                break;
+                //break;
                 //}
                 // calcolo valori per calcolare dYcr per risparmiare calcoli
 
             }//if
         }//for
+
 
 
         for (int i = 0; i < rain_size-1; i++) {
@@ -295,11 +299,23 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
                     YsAbsMinInsideTheActivationInterval =Y[i];
                     //iMin=i;
                 }//if
-                break;
+                //break;
                 //}
                 // calcolo valori per calcolare dYcr per risparmiare calcoli
 
             }//if
+
+            if(Y[i] > Maxtmp){
+                Maxtmp = Y[i];
+                zMax.setI(i);
+                zMax.setTime(rain[i].getTime());
+                zMax.setValue(Maxtmp);
+
+            }
+
+
+
+
         }//for
 
     }//for
@@ -316,31 +332,48 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
         momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
     }
 
+    // prima consideravamo il massimo assoluto all'interno delle date di attivazione
     Ym ymMax = ymSorted[0];
 
-    if(activations_size >= 2){
-        double dz = (ymMax.getValue()-YsAbsMinInsideTheActivationInterval)/((double)numberOfLines);
+    //ma ora consideriamo il massimo assoluto della funzione (anche fuori dalle date di attivazione)
 
-        int prec =0;
-        lines.push_back(ymMax.getValue());
-        for (int i = numberOfLines-1; i >= 1; i--) {
-            lines.push_back(lines[prec]-dz);
-            prec++;
-        }
+    //NOTE
+    // Dettagliamo in N fascie (da input) l'altezza compresa da ymMax(il picco massimo all'interno delle date di attivazione)
+    // e zMin(YsAbsMinInsideTheActivationInterval che sarebbe il minimo più basso all'interno delle date di attivazione).
+    // La restante parte del grafico viene suddivisa in due fascie al di sotto di zMin e in due eventuali fascie al sopra di
+    // ymMax ( se zMax > ymMax con zMax il massimo assoluto delle funzione anche al di fuori delle date dittivazione)
 
-        lines.push_back(lines[prec-1]/2);
+//    if(activations_size >= 2){
+//        double dz = (ymMax.getValue()-YsAbsMinInsideTheActivationInterval)/((double)numberOfLines);
 
-        if(lines[prec-1]/2 != 0)
-            lines.push_back(0);
-    }else
-    {
-        double line = ymMax.getValue()/numberOfLines;
+//        int prec =0;
+
+//        if(zMax.getValue() > ymMax.getValue())
+//        {
+//            lines.push_back(zMax.getValue());
+//            lines.push_back((zMax.getValue()-ymMax.getValue())/2);
+//        }
+
+//        lines.push_back(ymMax.getValue());
+//        for (int i = numberOfLines-1; i >= 0; i--) {
+//            lines.push_back(lines[prec]-dz);
+//            prec++;
+//        }
+
+
+//        lines.push_back(lines[prec]/2);
+
+//        if(lines[prec]/2 != 0)
+//            lines.push_back(0);
+//    }else
+//    {
+        double line = zMax.getValue()/numberOfLines;
         for (int i = numberOfLines; i >= 1; i--)
         {
             lines.push_back(line*i);
         }
         lines.push_back(0);
-    }
+//    }
 
     //inside the activation range
 //    vector<int> TP(lines.size(),0);// true positive
@@ -439,7 +472,7 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
 
     double AUC=0; // Area under the curve
     // primo trapezio
-    AUC += FPR[0]*TPR[0]*((double)(0.5));
+    AUC += (FPR[0]+FPR[1])*TPR[0]*((double)(0.5));
     for (int i = 0; i < lines.size()-1; ++i) {
         double h = FPR[i+1]-FPR[i];
         double base = TPR[i]+TPR[i+1];
@@ -484,7 +517,7 @@ void ValidationController::getMobilityFunction(std::vector<double>&  Y,
             // trovato un picco deve essere considerato
             for (int a = 0; a < activations_size; a++) {
                 if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                    //    cout << "salto un pico all'interno di un intervallo " << endl;
+                    cout << "salto un pico all'interno di un intervallo " << endl;
                     jump = true;
                 }
             }
