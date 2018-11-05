@@ -37,12 +37,6 @@ private slots:
 
     void on_pushButton_3_clicked();
 
-    void on_checkBox_3_stateChanged(int arg1);
-
-    void on_checkBox_2_stateChanged(int arg1);
-
-    void on_checkBox_4_stateChanged(int arg1);
-
     void on_comboBox_currentIndexChanged(int index);
 
     void on_pushButton_clicked();
@@ -60,6 +54,12 @@ private slots:
 
     void on_lineEditN_textChanged(const QString &arg1);
 
+    void on_checkBox_kernel_stateChanged(int arg1);
+
+    void on_checkBox_controlpoints_stateChanged(int arg1);
+
+    void on_checkBox_N_stateChanged(int arg1);
+
 private:
     Ui::Regression *ui;
     MainWindow *w;
@@ -74,6 +74,7 @@ private:
 
     std::vector< double> xControlpointsbyN;
     std::vector< double> yControlpointsbyN;
+
 
 
 };

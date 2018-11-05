@@ -28,13 +28,12 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
                                            double dpercentageMutation,
                                            int inumberProcessor,
                                            double *translation,
-                                           int propSelection,
                                            double para1,
                                            double para2,
-                                           int itypeAlgorithm,
-                                           QString  sselection){
+                                           int itypeReplacement,
+                                           QString  sselection, int _seed){
 
-    typeReplacement =itypeAlgorithm;
+    typeReplacement =itypeReplacement;
     selection        = sselection;
     this->percentualePesoSize = weightsSize;
     percentualePeso=_percentualePeso;
@@ -108,6 +107,7 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
 
      clickCloseTab=false;
      mainwindows = main;
+     seed=_seed;
 
 }
 
@@ -212,7 +212,7 @@ void RegressionController::startAlgorithm(){
                                                                       this);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);
-        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,elitist,typeReplacement,propSelection);
+        eoAlgo<Individual>& ga = do_make_algo_scalar_my(parser, state, eval, checkpoint, *cross,percentageCrossover,*mut,percentageMutation,elitist,typeReplacement);
 
         ///// End of construction of the algorithm
 

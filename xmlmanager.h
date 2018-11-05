@@ -89,7 +89,7 @@ public:
                                      const QString &textN,
                                      const QString typeExecution,
                                      QString typeReplacement,
-                                     QString numberElitist);
+                                     QString numberElitist, QString seed, QString lastGeneration);
 
     int SaveXMLFileAlreadyExistRegressionProject(const QString &_projectName,
                                                  const QString &selection,
@@ -108,7 +108,9 @@ public:
                                                  const QString &textN,
                                                  const QString &typeExecution,
                                                  QString typeReplacement,
-                                                 QString numberElitist);
+                                                 QString numberElitist,
+                                                 QString seed,
+                                                 QString lastGeneration);
 
 
     int findProjectName(QString nameProject);

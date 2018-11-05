@@ -64,7 +64,6 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
                                      float _mrate,
                                      int numberElitist,
                                      unsigned int typeAlgorithm,
-                                     float _propSelection,
                                      eoDistance<EOT> * _dist = NULL
                                      )
 {
@@ -293,8 +292,8 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
 
   eoAlgo<EOT> *algo;
   if(typeAlgorithm==0)
-  {
-      algo = new eoSGAGenerational<EOT>(*select,_propSelection,_cross,_crate,_mutate,_mrate,_eval,_continue,numberElitist);
+  {   //1 is for selectRate
+      algo = new eoSGAGenerational<EOT>(*select,1,_cross,_crate,_mutate,_mrate,_eval,_continue,numberElitist);
   }else
       if(typeAlgorithm==1)
       {

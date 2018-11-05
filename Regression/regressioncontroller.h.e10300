@@ -105,6 +105,7 @@ public:
                              double dpercentageMutation,
                              int inumberProcessor,
                              double * percantageTranslation,
+                             int propSelection,
                              double para1,
                              double para2,
                              int itypeReplacement,

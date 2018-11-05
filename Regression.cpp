@@ -245,18 +245,47 @@ void Regression::setParameters(QVariantList list)
     if(qvlist[1]=="StochTour(t)"){
         ui->comboBoxSelection->setCurrentIndex(0);
         ui->lineEditPar1->setText(qvlist[2].toString());
+
+        ui->label_15->show();
+        ui->lineEditPar1->setValidator(new QDoubleValidator(0.55, 1,2, this));
+        ui->lineEditPar1->show();
+
+        ui->label_15->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
+        ui->label_16->hide();
+        ui->lineEditPar2->hide();
     }else
         if(qvlist[1]=="DetTour(T)"){
             ui->comboBoxSelection->setCurrentIndex(1);
             ui->lineEditPar1->setText(qvlist[2].toString());
+            ui->label_15->show();
+            ui->lineEditPar1->show();
+            //ui->lineEditPar1->setText("2");
+            ui->lineEditPar1->setValidator(new QIntValidator(2, ui->lineEditPopSize->text().toInt(), this));
+            ui->label_15->setText(" Ts (tournament size 2 <= Ts <=N))");
+            ui->label_16->hide();
+            ui->lineEditPar2->hide();
         }else
             if(qvlist[1]=="Ranking(p,e)"){
                 ui->comboBoxSelection->setCurrentIndex(2);
                 ui->lineEditPar1->setText(qvlist[2].toString());
                 ui->lineEditPar2->setText(qvlist[3].toString());
+                ui->label_15->show();
+                ui->label_15->setText("p (selective pressure 1 < p <= 2)");
+                //ui->lineEditPar1->setText("2");
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                ui->label_16->show();
+                ui->label_16->setText("e (exponent 1=linear)");
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                //ui->lineEditPar2->setText("1");
+                ui->lineEditPar2->show();
+                ui->lineEditPar2->show();
             }else
                 if(qvlist[1]=="Roulette"){
                     ui->comboBoxSelection->setCurrentIndex(3);
+                    ui->label_15->hide();
+                    ui->lineEditPar1->hide();
+                    ui->label_16->hide();
+                    ui->lineEditPar2->hide();
                 }
     ui->lineEditPopSize->setText(qvlist[4].toString());
     ui->lineEditNumProc->setText(qvlist[5].toString());
@@ -267,11 +296,38 @@ void Regression::setParameters(QVariantList list)
     //9  file kernel
     ui->lineEditLoadKernel->setText(filename);
     //10 control points
+    bool UseControlPointsChecked = qvlist[10].toInt();
+    ui->checkBox->setChecked(UseControlPointsChecked);
     //11 number control points
-    //12 typeexecution
+
+    ui->lineEditN->setText(qvlist[11].toString());
+    //12 typeexecution means kernel / controls points / N
+    int typekernel = qvlist[12].toInt();
+    switch (typekernel) {
+    case 0:
+        ui->checkBox_kernel->setChecked(true);
+        break;
+    case 1:
+        ui->checkBox_controlpoints->setChecked(true);
+        break;
+    case 2:
+        ui->checkBox_N->setChecked(true);
+        break;
+    default:
+        break;
+    }
+
 
     ui->comboBoxReplacement->setCurrentIndex(qvlist[13].toInt());
+    if(qvlist[13].toInt() == 0)
+    {
+      ui->label_14->hide();
+      ui->lineEditNumberElitists->hide();
+    }
     ui->lineEditNumberElitists->setText(QString("%1").arg(qvlist[14].toInt()));
+    ui->lineEdit_seed->setText(QString("%1").arg(qvlist[15].toInt()));
+    bool lastgen = qvlist[16].toInt();
+    ui->checkBox_lastgeneration->setChecked(lastgen);
 
     int second = qvlist.indexOf("-",first+1);
 
@@ -567,34 +623,8 @@ void Regression::on_pushButton_3_clicked()
 
 }
 
-void Regression::on_checkBox_3_stateChanged(int arg1)
-{
-    if(arg1 == Qt::Checked)
-    {
-        ui->checkBox_2->setChecked(false);
-        ui->checkBox_4->setChecked(false);
-    }
 
-}
 
-void Regression::on_checkBox_2_stateChanged(int arg1)
-{
-    if(arg1 == Qt::Checked)
-    {
-        ui->checkBox_3->setChecked(false);
-        ui->checkBox_4->setChecked(false);
-    }
-
-}
-
-void Regression::on_checkBox_4_stateChanged(int arg1)
-{
-    if(arg1 == Qt::Checked)
-    {
-        ui->checkBox_3->setChecked(false);
-        ui->checkBox_2->setChecked(false);
-    }
-}
 
 void Regression::on_comboBox_currentIndexChanged(int index)
 {
@@ -835,9 +865,35 @@ void Regression::on_pushButton_clicked()
 
     //    RegressionController * controller = RegressionController(ui->lineEditProjName,
     //                                                             );
-    int x = QString::compare(ui->comboBoxReplacement->currentText(), "generational", Qt::CaseInsensitive);
-    if(x !=0){
-        x=1;
+    int typeReplacement = QString::compare(ui->comboBoxReplacement->currentText(), "generational", Qt::CaseInsensitive);
+    if(typeReplacement !=0){
+        typeReplacement=1;
+    }
+
+
+    double * kerneltmp;
+    int size;
+    int checked;
+
+    if(ui->checkBox_kernel->isChecked())
+    {   //use kernel
+        kerneltmp = &kernel[0];
+        size = kernel.size();
+        checked = 0;
+    }
+    if(ui->checkBox_controlpoints->isChecked())
+    {
+        //use control points
+        kerneltmp = &yControlpoints[0];
+        size = kernel.size();
+        checked = 1;
+    }
+    if(ui->checkBox_N->isChecked())
+    {
+        //use N
+        kerneltmp = &yControlpointsbyN[0];
+        size = kernel.size();
+        checked = 2;
     }
     if(ui->lineEditProjName->isReadOnly())
     {
@@ -856,9 +912,11 @@ void Regression::on_pushButton_clicked()
                                                                      matrixLinear,
                                                                      QString::number(ui->checkBox->isChecked()),
                                                                      ui->lineEditN->text(),
-                                                                     QString("%1").arg(1),
-                                                                     ui->comboBoxReplacement->currentText(),
-                                                                     ui->lineEditNumberElitists->text());
+                                                                     QString("%1").arg(checked),
+                                                                     QString("%1").arg(ui->comboBoxReplacement->currentIndex()),
+                                                                     ui->lineEditNumberElitists->text(),
+                                                                     ui->lineEdit_seed->text(),
+                                                                     QString::number(ui->checkBox_lastgeneration->isChecked()));
 
 
     }else{
@@ -877,9 +935,11 @@ void Regression::on_pushButton_clicked()
                                                          matrixLinear,
                                                          QString::number(ui->checkBox->isChecked()),
                                                          ui->lineEditN->text(),
-                                                         QString("%1").arg(0),
-                                                         ui->comboBoxReplacement->currentText(),
-                                                         ui->lineEditNumberElitists->text());
+                                                         QString("%1").arg(checked),
+                                                         QString("%1").arg(ui->comboBoxReplacement->currentIndex()),
+                                                         ui->lineEditNumberElitists->text(),
+                                                         ui->lineEdit_seed->text(),
+                                                         QString::number(ui->checkBox_lastgeneration->isChecked()));
     }
 
     int dimension=matrixGamma1.size()+matrixGamma2.size()+matrixLinear.size();
@@ -1026,8 +1086,8 @@ void Regression::on_pushButton_clicked()
                                                                  dimension,
                                                                  parameters,
                                                                  dimension,
-                                                                 size_kernel,
-                                                                 &kernel[0],
+                                                                 size,
+                                                                 &kerneltmp[0],
                                                                  ui->lineEditNumberElitists->text().toInt(),
                                                                  ui->lineEditPopSize->text().toInt(),
                                                                  ui->lineEditMaxNumIte->text().toInt(),
@@ -1035,11 +1095,11 @@ void Regression::on_pushButton_clicked()
                                                                  ui->lineEditMutationP->text().toDouble(),//fpropMutation,
                                                                  ui->lineEditNumProc->text().toInt(),
                                                                  translation,
-                                                                 x,
                                                                  ui->lineEditPar1->text().toDouble(),//ipara1,
                                                                  ui->lineEditPar2->text().toDouble(),//ipara2,
-                                                                 x,
-                                                                 ui->comboBoxSelection->currentText()
+                                                                 typeReplacement,
+                                                                 ui->comboBoxSelection->currentText(),
+                                                                 ui->lineEdit_seed->text().toInt()
                                                                  );
     std::vector<double> x1;
     for (int i = 0; i < size_kernel; i++) {
@@ -1134,5 +1194,33 @@ void Regression::on_lineEditN_textChanged(const QString &n)
         }
 
 
+    }
+}
+
+
+void Regression::on_checkBox_kernel_stateChanged(int arg1)
+{
+    if(arg1 == Qt::Checked)
+    {
+        ui->checkBox_controlpoints->setChecked(false);
+        ui->checkBox_N->setChecked(false);
+    }
+}
+
+void Regression::on_checkBox_controlpoints_stateChanged(int arg1)
+{
+    if(arg1 == Qt::Checked)
+    {
+        ui->checkBox_kernel->setChecked(false);
+        ui->checkBox_N->setChecked(false);
+    }
+}
+
+void Regression::on_checkBox_N_stateChanged(int arg1)
+{
+    if(arg1 == Qt::Checked)
+    {
+        ui->checkBox_controlpoints->setChecked(false);
+        ui->checkBox_kernel->setChecked(false);
     }
 }

@@ -1148,8 +1148,11 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
                                               std::vector<std::vector<double> > matrixLinear,
                                               const QString &checkControlPointsWithN,
                                               const QString &textN,
-                                              const QString typeExecution
-                                              , QString typeReplacement, QString numberElitist){
+                                              const QString typeExecution,
+                                              QString typeReplacement,
+                                              QString numberElitist,
+                                              QString seed,
+                                              QString lastGeneration){
     QString filename = QString(xmlFilePath);
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
@@ -1206,6 +1209,8 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     typeExcecution.appendChild(document.createTextNode(typeExecution));
     QDomElement typeReplacementDom = document.createElement( "typeReplacement" );
     QDomElement numberElitistDom = document.createElement( "numberElitist" );
+    QDomElement seedDom = document.createElement( "seed" );
+    QDomElement lastGenerationDom = document.createElement( "lastGeneration" );
 
     //create TextElement
     QDomText nameText = document.createTextNode(_projectName);
@@ -1217,6 +1222,8 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     QDomText probabilityOfMutationElementText = document.createTextNode( percentageMutation );
     QDomText maximumNumberOfGenerationsElementText = document.createTextNode( maxGeneration );
     QDomText fileKernelText = document.createTextNode( _fileKernel );
+     QDomText seedText = document.createTextNode( seed );
+      QDomText lastgenerationText = document.createTextNode( lastGeneration );
 
     QDomElement id = document.createElement( "ID" );
     numProjectInt++;
@@ -1259,8 +1266,13 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     QDomText numberElitistText = document.createTextNode( numberElitist );
     typeReplacementDom.appendChild(typeReplacementText);
     numberElitistDom.appendChild(numberElitistText);
+    seedDom.appendChild(seedText);
+    lastGenerationDom.appendChild(lastgenerationText);
+
     project.appendChild(typeReplacementDom);
     project.appendChild(numberElitistDom);
+    project.appendChild(seedDom);
+    project.appendChild(lastGenerationDom);
 
     QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
 
@@ -1313,7 +1325,8 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
                                                          const QString &textN,
                                                          const QString &typeExecution,
                                                          QString typeReplacement,
-                                                         QString numberElitist){
+                                                         QString numberElitist,
+                                                         QString seed, QString lastGeneration){
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -1352,12 +1365,14 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
             project.at(i).childNodes().at(10).firstChild().setNodeValue(typeExecution);
             project.at(i).childNodes().at(11).firstChild().setNodeValue(typeReplacement);
             project.at(i).childNodes().at(12).firstChild().setNodeValue(numberElitist);
+            project.at(i).childNodes().at(13).firstChild().setNodeValue(seed);
+            project.at(i).childNodes().at(14).firstChild().setNodeValue(lastGeneration);
 
             int tmpID = project.at(i).childNodes().at(16).firstChild().nodeValue().toInt();
+            project.at(i).removeChild(project.at(i).childNodes().at(18));
+            project.at(i).removeChild(project.at(i).childNodes().at(17));
             project.at(i).removeChild(project.at(i).childNodes().at(16));
             project.at(i).removeChild(project.at(i).childNodes().at(15));
-            project.at(i).removeChild(project.at(i).childNodes().at(14));
-            project.at(i).removeChild(project.at(i).childNodes().at(13));
 
             QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
             project.at(i).appendChild(gammaFunction1);
