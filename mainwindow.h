@@ -40,7 +40,7 @@ public:
     void updateKernelPlotRegressionWithControlPoints(QCustomPlot *m_CustomPlot,QVector<double> xControlpoints,QVector<double> yControlpoints );
     static void pushBackThread(QThread *thread);
     void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
-    void addTabRegression(QString name);
+    void addTabRegression(QString name, int numberofFunction);
     void addTabAUCROC(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabValidation(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabValidationNewInterface(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
@@ -55,6 +55,7 @@ public:
     QCustomPlot* getFitnessPlot(int indexTab);
     QCustomPlot *getKernelPlot(int indexTab);
     QCustomPlot* getAUCROCPlot(int indexTab);
+    QCustomPlot* getKernelPlotRegression(int indexTab);
     XMLManager *getXmlmanager() const;
     void setXmlmanager(XMLManager *value);
     void showLoadingWheel();
@@ -130,11 +131,16 @@ private slots:
                               int firstOccurence, QString abmaxfitness, QString avmaxfitness);
 
     void updateRegression(int indexTab,
-                           QVector<double> x,
-                           QVector<double> y,
-                           QVector<double> xReal,
-                           QVector<double> yReal,
-                           int steps);
+                          QVector<double> x,
+                          QVector<double> y,
+                          QVector<double> xReal,
+                          QVector<double> yReal,
+                          int numberofFunction,
+                          std::vector< std::vector<double> > matrixY,
+                          int steps,
+                          std::vector<QCPItemText*> widgetArray,
+                          std::vector<QCPItemLine*> arrowArray,
+                          std::vector< std::vector<double> > matrixParameters);
 
 
     void updateTextsValidation(int indexTab,
@@ -164,6 +170,7 @@ private slots:
     void savePdfMobilityFunction();
 
     void resizeKernel();
+    void resizeKernelRegression();
     void savePngKernel();
     void savePdfKernel();
 
@@ -177,6 +184,7 @@ private slots:
 
     void contextMenuRequestMobilityFunction(QPoint pos);
     void contextMenuRequestKernel(QPoint pos);
+    void contextMenuRequestKernelRegression(QPoint pos);
     void contextMenuRequestFitness(QPoint pos);
     void contextMenuRequestAUCROC(QPoint pos);
     void openFolderProject();

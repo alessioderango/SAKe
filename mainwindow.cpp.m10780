@@ -336,7 +336,7 @@ void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, 
     connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestMobilityFunction(QPoint)));
 }
 
-void MainWindow:: makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
+void MainWindow::makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
 {
     QCPBars* myBars = new QCPBars(customPlot->xAxis, customPlot->yAxis);
     customPlot->addPlottable(myBars);
@@ -496,21 +496,11 @@ void MainWindow::updateRegression(int indexTab,
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
     QCustomPlot* plot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
 
-   //
+    plot->graph(0)->setData(x, y);
     plot->graph(1)->setData(xReal, yReal);
 
 
    // int shift = x.size()/numberofFunction;
-
-    if(steps==5)
-    {
-      //plot->graph(0)->setVisible(false);
-      //plot->graph(1)->rescaleAxes();
-      plot->rescaleAxes(true);
-      //plot->graph(0)->setVisible(true);
-
-    }
-    plot->graph(0)->setData(x, y);
     for (int i = 0; i < numberofFunction; ++i) {
        QVector<double> yFunction = QVector<double>::fromStdVector(matrixY[i]);
         plot->graph(i+2)->setData(x, yFunction);
@@ -522,7 +512,21 @@ void MainWindow::updateRegression(int indexTab,
         widgetArray[i]->setText(a);
         arrowArray[i]->end->setCoords(x[xDistance],yFunction[xDistance]);
     }
+
+
+
+
+    if(steps==5)
+    {
+//      plot->xAxis->setRange(0,*max_element(xReal.begin(),xReal.end()));
+//      plot->yAxis->setRange(0,*max_element(yReal.begin(),yReal.end()));
+      //plot->graph(1)->rescaleAxes(true);
+      plot->rescaleAxes(true);
+    }
     plot->replot();
+//    if(steps==1){
+//       plot->xAxis2->setRange(*std::min_element(xReal.constBegin(), xReal.constEnd()),*std::max_element(xReal.constBegin(), xReal.constEnd()));
+//    }
 
 }
 
@@ -1314,9 +1318,6 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("FuncPlot");
-    kerFunc->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(kerFunc, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernel(QPoint)));
-
 
 //    splitter->addWidget(kerFunc);
 
@@ -1324,7 +1325,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 //    splitter->setOrientation(Qt::Vertical);
 
     vertical->addWidget(kerFunc);
-    vertical->addStretch(vertical->sizeConstraint()*2);
+    //vertical->addStretch(vertical->sizeConstraint()*2);
 
 
     mainL->addLayout(vertical);
@@ -1867,14 +1868,6 @@ void MainWindow::resizeKernel()
     currentPlot->replot();
 }
 
-void MainWindow::resizeKernelRegression()
-{
-    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
-    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
-    currentPlot->rescaleAxes();
-    currentPlot->replot();
-}
-
 void MainWindow::savePngKernel()
 {
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
@@ -1982,21 +1975,6 @@ void MainWindow::contextMenuRequestKernel(QPoint pos)
     menu->addAction("Rescale Axes", this, SLOT(resizeKernel()));
     menu->addAction("Save Graph PDF", this, SLOT(savePdfKernel()));
     menu->addAction("Save Graph PNG", this, SLOT(savePngKernel()));
-
-    menu->popup(currentPlot->mapToGlobal(pos));
-
-}
-
-void MainWindow::contextMenuRequestKernelRegression(QPoint pos)
-{
-    QMenu *menu = new QMenu(this);
-    menu->setAttribute(Qt::WA_DeleteOnClose);
-    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
-    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
-
-    menu->addAction("Rescale Axes", this, SLOT(resizeKernel()));
-//    menu->addAction("Save Graph PDF", this, SLOT(savePdfKernel()));
-//    menu->addAction("Save Graph PNG", this, SLOT(savePngKernel()));
 
     menu->popup(currentPlot->mapToGlobal(pos));
 

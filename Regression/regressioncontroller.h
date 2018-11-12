@@ -64,6 +64,8 @@ typedef eoOneMax<MyFitT> Individual;      // ***MUST*** derive from EO
 
 // outputs (stats, population dumps, ...)
 
+#include "mainwindow.h"
+
 
 #include <Regression/make_algo_scalar_my.h>
 
@@ -76,7 +78,7 @@ typedef eoOneMax<MyFitT> Individual;      // ***MUST*** derive from EO
 // checks for help demand, and writes the status file
 // and make_help; in libutils
 
-#include "mainwindow.h"
+
 void make_help(eoParser & _parser);
 
 class RegressionController: public QThread
@@ -96,8 +98,8 @@ public:
                              int functionTypesSize,
                              Parameters *parameters,
                              int parametersSize,
-                             int sizeKernel,
-                             double *kernel,
+                         std::vector<double> _xkernel,
+                         std::vector<double> _ykernel,
                              int ielitist,
                              int ipopulationSize,
                              int imaxGeneration,
@@ -145,6 +147,9 @@ public:
 
     bool getStop();
 
+    vector<QCPItemText*> widgetArray;
+    vector<QCPItemLine*> arrowArray;
+
 signals:
     void finished(int index);
     void updateTextsRegression(int indexTab,
@@ -155,11 +160,16 @@ signals:
                               int firstOccurence, QString abmaxfitness, QString avmaxfitness);
 
     void updateRegression(int indexTab,
-                           QVector<double> x,
-                           QVector<double> y,
-                           QVector<double> xReal,
-                           QVector<double> yReal,
-                           int steps);
+                          QVector<double> x,
+                          QVector<double> y,
+                          QVector<double> xReal,
+                          QVector<double> yReal,
+                          int numberofFunction,
+                          std::vector< std::vector<double> > matrixY,
+                          int steps,
+                          std::vector<QCPItemText*> widgetArray,
+                          std::vector<QCPItemLine*> arrowArray,
+                          std::vector< std::vector<double> > matrixParameters);
 
 public slots:
     void startThread();

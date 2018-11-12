@@ -4,8 +4,8 @@
 #include <QDialog>
 #include <QMessageBox>
 #include <controlpoints.h>
-#include <Regression/regressioncontroller.h>
 #include "mainwindow.h"
+
 
 namespace Ui {
 class Regression;

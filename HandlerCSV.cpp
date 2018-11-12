@@ -132,6 +132,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
 }
 
 int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & size, double & zCr){
+
     std::ifstream in(fileurl.toStdString());
 
     std::string line;

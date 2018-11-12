@@ -60,6 +60,7 @@ eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser,
                                          int maxGen,
                                          std::vector< double> _xRegression,
                                          std::vector< double> _y,
+                                         int numberoffunctions,
                                          RegressionController * controller)
 {
     // first, create a checkpoint from the eoContinue
@@ -141,6 +142,7 @@ eoCheckPoint<EOT>& do_make_checkpoint_my(eoParser& _parser,
         bestStat = new eoGraphFitnessStat<EOT>(maxGen,
                                                _xRegression,
                                                _y,
+                                               numberoffunctions,
                                                controller);
         // store it
         _state.storeFunctor(bestStat);

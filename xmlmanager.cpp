@@ -1368,7 +1368,7 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
             project.at(i).childNodes().at(13).firstChild().setNodeValue(seed);
             project.at(i).childNodes().at(14).firstChild().setNodeValue(lastGeneration);
 
-            int tmpID = project.at(i).childNodes().at(16).firstChild().nodeValue().toInt();
+            int tmpID = project.at(i).childNodes().at(18).firstChild().nodeValue().toInt();
             project.at(i).removeChild(project.at(i).childNodes().at(18));
             project.at(i).removeChild(project.at(i).childNodes().at(17));
             project.at(i).removeChild(project.at(i).childNodes().at(16));

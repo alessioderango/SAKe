@@ -95,6 +95,13 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
 
 }
 
+double getYfromline(double x2,double y2,double x1,double y1,int xris){
+
+    double ris;
+    ris =((y2-y1)/(x2-x1))*(xris-x1)+y1;
+    return ris;
+}
+
  void ControlPoints::calculateControlPoints(double * kernel, int size_kernel){
 
      x.clear();
@@ -176,6 +183,76 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
          }
      }
 
+     cout << " x y " << endl;
+     for (int i  = 0; i < x.size(); i++)
+     {
+         cout << x[i] << " ";
+         cout << y[i] << endl;
+     }
+
+     std::vector<double> xTrasformed,yTrasformed;
+
+//     xTrasformed.push_back(x[0]);
+//     yTrasformed.push_back(y[0]);
+
+     for (int i  = 0; i < x.size()-1; i++)
+     {
+         if((x[i+1]-x[i]) != 1.0)
+         {
+             double x1 = x[i];
+             double y1 = y[i];
+
+             double x2 = x[i+1];
+             double y2 = y[i+1];
+
+             int diff = abs((((int)x2)-((int)x1)));
+
+             for (int j = 0; j < diff; ++j) {
+                 int xris;
+                 xris = (int)(x1+j);
+
+                // cout <<"minValuex+j+0.5 " << (int)(xris)<< endl;
+                 double yfromline=getYfromline(x2,y2,x1,y1,xris);
+                 if(yfromline < 0 )
+                     yfromline =0;
+                 xTrasformed.push_back((int) (xris));
+                 yTrasformed.push_back(yfromline);
+             }
+
+         }else
+         {
+             xTrasformed.push_back(x[i]);
+             yTrasformed.push_back(y[i]);
+         }
+     }
+
+     double x1 = xTrasformed[xTrasformed.size()-1];
+     double y1 = yTrasformed[yTrasformed.size()-1];
+
+     double x2 = size_kernel;
+     double y2 = kernel[size_kernel-1];
+
+     int diff = abs((((int)x2)-((int)x1)));
+
+     for (int j = 0; j < diff; ++j) {
+         int xris;
+         xris = (int)(x1+j+1);
+
+        // cout <<"minValuex+j+0.5 " << (int)(xris)<< endl;
+         double yfromline=getYfromline(x2,y2,x1,y1,xris);
+         if(yfromline < 0 )
+             yfromline =0;
+         xTrasformed.push_back((int) (xris));
+         yTrasformed.push_back(yfromline);
+     }
+
+
+
+     x=xTrasformed;
+     y=yTrasformed;
+
+
+
      delete [] alreadyConsideredHMax;
      delete [] alreadyConsideredHMedMax;
      delete [] alreadyConsideredHMed;
@@ -212,7 +289,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
      double sumx=0;
      double sumy=0;
      int end = ((size_kernel%n)==0) ? size_kernel : (size_kernel-n);
-     for (int i = 0; i < end; i+=n) {
+     for (int i = 0; i < end; i++) {
          sumx=0;
          sumy=0;
          for (int j = 0; j < n; j++) {
@@ -222,6 +299,7 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
          x.push_back(sumx/n);
          y.push_back(sumy/n);
      }
+
      if(size_kernel%n !=0){
          sumx=0;
          sumy=0;
@@ -234,13 +312,16 @@ void getPoints(double *&a,std::vector< double> &xVec,std::vector< double> &yVec,
          x.push_back(sumx/count);
          y.push_back(sumy/count);
      }
+     cout << "end =  " <<end << endl;
+     cout << "xn =  " <<n << endl;
+     cout << "x  =  " <<x.size() << endl;
  }
 
  void ControlPoints::getSubdividePointsFromControlPoints(std::vector< double> x, std::vector< double> y, int n, std::vector<double> &xOutput, std::vector<double> &yOutput){
      double sumx=0;
      double sumy=0;
      int end = ((y.size()%n)==0) ? y.size() : (y.size()-n);
-     for (int i = 0; i < end; i+=n) {
+     for (int i = 0; i < end; i++) {
          sumx=0;
          sumy=0;
          for (int j = 0; j < n; j++) {

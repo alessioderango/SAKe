@@ -108,7 +108,8 @@ HEADERS  += mainwindow.h \
     Regression/regressioncontroller.h \
     CustomPlotRegression.h \
     CustomPlotRegressionPreviewKernel.h \
-    controlpoints.h
+    controlpoints.h \
+    utilis.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \

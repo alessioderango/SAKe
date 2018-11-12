@@ -13,6 +13,7 @@
 //#include "CustomPlotRegression.h"
 #include <QtConcurrent/QtConcurrent>
 #include "Regression/regressioncontroller.h"
+#include <boost/math/distributions/gamma.hpp>
 
 template <class EOT>
 class eoGraphFitnessStat : public eoStat<EOT,  typename EOT::Fitness>
@@ -27,6 +28,7 @@ public:
     eoGraphFitnessStat(int _maxGen,
                        std::vector< double> _xRegression,
                        std::vector< double> _y,
+                       int numberoffunctions,
                        RegressionController *controller,
                        std::string _description = "Best ")
         : eoStat<EOT, Fitness>(Fitness(), _description)
@@ -44,6 +46,20 @@ public:
         AbsoluteAvarageFitness=-DBL_MIN;
         this->controller = controller;
         this->_y = _y;
+        this->numberoffunctions=numberoffunctions;
+
+        matrixY.resize(numberoffunctions);
+        for (int i = 0; i < numberoffunctions; ++i) {
+            matrixY[i].resize(_xRegression.size());
+
+        }
+        numParameters=4;
+
+        matrixParameters.resize(numberoffunctions);
+        for (int i = 0; i < numberoffunctions; ++i) {
+            matrixParameters[i].resize(numParameters);
+
+        }
 
         //dsakecontroller =_sakecontroller;
     }
@@ -62,6 +78,12 @@ public:
 
 
 private :
+
+
+    double gamma_pdf(double alfa, double beta, double x) {
+        return boost::math::gamma_p_derivative(alfa, x / beta)/beta;
+    }
+
     // default
     template<class T>
     void doit(const eoPop<EOT>& _pop, T)
@@ -168,12 +190,111 @@ private :
              }
         }
 
-        steps++;
+
 
         controller->getMainwindows()->mutex.lock();
         ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
-        if( steps%5 ==0)
-        emit controller->updateRegression(pos,xRegretmp, yRegretmp, xRegretmp, QVector<double>::fromStdVector(_y),steps);
+
+        if( steps%5 ==0){
+
+            for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
+
+
+//                cout << "translation  " << translationTmp << endl;
+                for (int j = 0; j < xRegretmp.size(); j++) {
+                    double yTmp=0;
+
+
+                    if(_pop.best_element().getFunctionTypeConst(i) == 0){
+                        yTmp =(_pop.best_element().getParConst(i).getParameters(0)*xRegretmp[j])+_pop.best_element().getParConst(i).getParameters(1);
+                        // cout << "yTmp 1 " << yTmp << endl;
+                        if(yTmp <0)
+                            yTmp=0;
+
+                    }else
+                         if(_pop.best_element().getFunctionTypeConst(i) == 2 || _pop.best_element().getFunctionTypeConst(i) == 1){
+                                double alfa=_pop.best_element().getParConst(i).getParameters(0);
+                                double beta=_pop.best_element().getParConst(i).getParameters(1);
+                                    yTmp = gamma_pdf(alfa,beta,xRegretmp[j]);
+                            }
+
+                      matrixY[i][j]=(_pop.best_element().getWConst(i)*yTmp);
+                      //matrixY[i][j]=(yTmp);
+                }
+                //cout << "*********************************************** FINE" << endl;
+            }
+
+            for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
+               //  for (int j = 0; j < x.size(); j++) {
+                     std::vector<double> Yswifted;
+                     int s = (int)_pop.best_element().getParConst(i).getParameters(2);
+                     int xsize = xRegretmp.size();
+//                     if(s > xsize)
+//                     {
+//                         cout <<" x = "  <<x.size() << " --  s =" << s << endl;
+//                     }
+
+
+                     if(s >= 0)
+                     {
+                         for (int k = 0; k < s; ++k) {
+                             Yswifted.push_back(0);
+                         }
+//                         cout <<" xsize = "  <<xsize << " --  s =" << s << endl;
+//                         cout << " x.size()-s = " << xsize-s << endl;
+                         for (int k = 0; k < xsize-s; ++k) {
+//                             if(s > x.size())
+//                             cout << "i = " << i << "k = " << k <<endl;
+                             Yswifted.push_back(matrixY[i][k]);
+                         }
+                     }
+                     else
+                     {
+                         s=abs(s);
+//                         cout <<" xsize = "  <<xsize << " --  s =" << s << endl;
+//                         cout << " x.size()-s = " << xsize-s << endl;
+                         for (int k = s; k < xsize; ++k) {
+//                             if(s > x.size())
+//                             cout << "i = " << i << " k = " << k <<endl;
+                             Yswifted.push_back(matrixY[i][k]);
+                         }
+                         for (int k = 0; k < s; ++k) {
+                             Yswifted.push_back(0);
+                         }
+
+                     }
+
+                     for (int k = 0; k < xsize; ++k) {
+                        matrixY[i][k] =  Yswifted[k];
+                     }
+
+               //  }
+
+            }
+
+            for (int i = 0; i < numberoffunctions; ++i) {
+
+                      matrixParameters[i][0] =  _pop.best_element().getWConst(i);
+                      matrixParameters[i][1] =  _pop.best_element().getParConst(i).getParameters(0);
+                      matrixParameters[i][2] =  _pop.best_element().getParConst(i).getParameters(1);
+                      matrixParameters[i][3] =  _pop.best_element().getParConst(i).getParameters(2);
+
+
+            }
+
+
+                   emit controller->updateRegression(pos,
+                                                     xRegretmp,
+                                                     yRegretmp,
+                                                     xRegretmp,
+                                                     QVector<double>::fromStdVector(_y),
+                                                     _pop.best_element().getWConst().size(),
+                                                     matrixY,
+                                                     steps,
+                                                     controller->widgetArray,
+                                                     controller->arrowArray,
+                                                     matrixParameters);
+        }
 
         emit controller->updateTextsRegression(pos,genString,
                                                QString("%1").arg(fitness),
@@ -184,6 +305,7 @@ private :
                                                QString("%1").arg(AbsoluteAvarageFitness));
         controller->getMainwindows()->mutex.unlock();
 
+        steps++;
         //       cout << (steps*100)/maxGen << endl;
         //progressBar->setProperty("value",((steps*100)/maxGen));
 //        p=QtConcurrent::run(update,update->valueProgressBar,QString("%1").arg((steps*100)/maxGen));
@@ -210,5 +332,11 @@ private :
     double AbsoluteAvarageFitness;
     std::vector< double> xRegression;
     RegressionController *controller;
+    int numberoffunctions;
+    std::vector< std::vector<double> > matrixY;
+    std::vector< std::vector<double> > matrixParameters;
+    int numParameters;
+
+
 };
 #endif // EOGRAPHFITENESSSTAT_H

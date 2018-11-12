@@ -19,8 +19,8 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
                                            int functionTypesSize,
                                            Parameters *parameters,
                                            int parametersSize,
-                                           int _sizeKernel,
-                                           double *_kernel,
+                                           std::vector<double> _xkernel,
+                                           std::vector<double> _ykernel,
                                            int ielitist,
                                            int ipopulationSize,
                                            int imaxGeneration,
@@ -50,15 +50,15 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
     this->percentualeGammaBSize = weightsSize;
     percentualeGammaB= _percentualeGammaB;
 
+    this->x = _xkernel;
+    this->y = _ykernel;
+
     this->weights = weights;
     this->weightsSize =weightsSize;
     this->functionTypes = functionTypes;
     this->functionTypesSize = functionTypesSize;
     this->parameters = parameters;
     this->parametersSize = parametersSize;
-
-    this->sizeKernel=_sizeKernel;
-    this->kernel = _kernel;
     this->numberProcessor=inumberProcessor;
 
 
@@ -209,6 +209,7 @@ void RegressionController::startAlgorithm(){
                                                                       maxGeneration,
                                                                       x,
                                                                       y,
+                                                                      functionTypesSize,
                                                                       this);
         // algorithm (need the operator!)
         //  eoAlgo<Individual>& ga = make_algo_scalar_my(parser, state, eval, checkpoint, op);

@@ -1,5 +1,7 @@
 #include "Regression.h"
 #include "ui_regression.h"
+#include <Regression/regressioncontroller.h>
+
 
 void addRow(QTableWidget * tw, int row,
             QString aMaxs,
@@ -211,6 +213,7 @@ Regression::Regression(MainWindow * _w,QWidget *parent) :
     ui->label_15->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
     ui->label_16->hide();
     ui->lineEditPar2->hide();
+    size_kernel=0;
 
 }
 
@@ -237,6 +240,7 @@ void Regression::setW(MainWindow *value)
 void Regression::setParameters(QVariantList list)
 {
 
+    size_kernel=0;
     QVector<QVariant> qvlist = list.toVector();
     int first = qvlist.indexOf("-");
     //Setting GA paramenters
@@ -439,7 +443,7 @@ void Regression::setParameters(QVariantList list)
      //ui->kernelPlot->setSizePolicy(spUp);
      ui->kernelPlot->setObjectName("kerFunc");
      controlPoints = new ControlPoints();
-     HandlerCSV::loadCSVKernel(filename,this->kernel,this->size_kernel,this->Delta_cr);
+     HandlerCSV::loadCSVKernel(ui->lineEditLoadKernel->text(),this->kernel,this->size_kernel,this->Delta_cr);
 
      //MainWindow::updateKernelPlot();
 
@@ -458,13 +462,16 @@ void Regression::setParameters(QVariantList list)
      }
 
      //updateGraph(kernel,size_kernel);
+     xControlpointsbyN.clear();
+     yControlpointsbyN.clear();
+
      if(ui->checkBox->isChecked()){
-         controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, ui->lineEditN->text().toInt(), x, y);
-         xControlpointsbyN = x;
-         yControlpointsbyN = y;
+         controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
+
      }else{
-         controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), x, y);
+         controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
      }
+      w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
 
 
      QCustomPlot *m_CustomPlot = ui->kernelPlot;
@@ -651,16 +658,28 @@ void Regression::on_lineEdit_7_textChanged(const QString &n)
         std::vector< double> y;
         int nInt =  n.toInt();
 
-        if(ui->checkBox->isChecked()){
-            xControlpointsbyN.clear();
-            yControlpointsbyN.clear();
-            controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, nInt, xControlpointsbyN, yControlpointsbyN);
-            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
-        }else{
-            controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, nInt,x, y);
-            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(x), QVector<double>::fromStdVector(y));
+//        if(ui->checkBox->isChecked()){
+//            xControlpointsbyN.clear();
+//            yControlpointsbyN.clear();
+//            controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, nInt, xControlpointsbyN, yControlpointsbyN);
+//            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
+//        }else{
+//            controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, nInt,x, y);
+//            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(x), QVector<double>::fromStdVector(y));
 
+//        }
+
+        xControlpointsbyN.clear();
+        yControlpointsbyN.clear();
+
+        if(ui->checkBox->isChecked()){
+            controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
+
+        }else{
+            controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
         }
+         w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
+
 
 
     }
@@ -676,16 +695,30 @@ void Regression::on_checkBox_clicked()
         std::vector< double> x;
         std::vector< double> y;
         int nInt =  ui->lineEditN->text().toInt();
-        if(ui->checkBox->isChecked()){
-            xControlpointsbyN.clear();
-            yControlpointsbyN.clear();
-            controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, nInt, xControlpointsbyN, yControlpointsbyN);
-            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
-        }else{
-            controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, nInt,x, y);
-            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(x), QVector<double>::fromStdVector(y));
+//        if(ui->checkBox->isChecked()){
+//            xControlpointsbyN.clear();
+//            yControlpointsbyN.clear();
+//            controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, nInt, xControlpointsbyN, yControlpointsbyN);
+//            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
+//        }else{
+//            controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, nInt,x, y);
+//            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(x), QVector<double>::fromStdVector(y));
 
+//        }
+        xControlpointsbyN.clear();
+        yControlpointsbyN.clear();
+
+        if(ui->checkBox->isChecked()){
+            if(xControlpoints.size() !=0)
+                controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
+
+        }else{
+            if(size_kernel !=0)
+               controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
         }
+         if(xControlpointsbyN.size() !=0)
+         w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
+
 
     }
 }
@@ -871,28 +904,36 @@ void Regression::on_pushButton_clicked()
     }
 
 
-    double * kerneltmp;
+    std::vector<double>  ykerneltmp;
+    std::vector<double>  xkerneltmp;
+    std::vector<double> x1;
+    for (int i = 0; i < size_kernel; i++) {
+        x1.push_back(i+1);
+    }
     int size;
     int checked;
 
     if(ui->checkBox_kernel->isChecked())
     {   //use kernel
-        kerneltmp = &kernel[0];
+        ykerneltmp = kernel;
+        xkerneltmp = x1;
         size = kernel.size();
         checked = 0;
     }
     if(ui->checkBox_controlpoints->isChecked())
     {
         //use control points
-        kerneltmp = &yControlpoints[0];
-        size = kernel.size();
+        ykerneltmp = yControlpoints;
+        xkerneltmp = xControlpoints;
+        size = yControlpoints.size();
         checked = 1;
     }
     if(ui->checkBox_N->isChecked())
     {
         //use N
-        kerneltmp = &yControlpointsbyN[0];
-        size = kernel.size();
+        ykerneltmp = yControlpointsbyN;
+        xkerneltmp = xControlpointsbyN;
+        size = yControlpointsbyN.size();
         checked = 2;
     }
     if(ui->lineEditProjName->isReadOnly())
@@ -1086,8 +1127,8 @@ void Regression::on_pushButton_clicked()
                                                                  dimension,
                                                                  parameters,
                                                                  dimension,
-                                                                 size,
-                                                                 &kerneltmp[0],
+                                                                 xkerneltmp,
+                                                                 ykerneltmp,
                                                                  ui->lineEditNumberElitists->text().toInt(),
                                                                  ui->lineEditPopSize->text().toInt(),
                                                                  ui->lineEditMaxNumIte->text().toInt(),
@@ -1101,17 +1142,15 @@ void Regression::on_pushButton_clicked()
                                                                  ui->comboBoxSelection->currentText(),
                                                                  ui->lineEdit_seed->text().toInt()
                                                                  );
-    std::vector<double> x1;
-    for (int i = 0; i < size_kernel; i++) {
-        x1.push_back(i+1);
-    }
-    controller->setX(x1);
-    controller->setY(kernel);
+
+//    controller->setX(x1);
+//    controller->setY(kernel);
 
 
     connect(controller, SIGNAL(finished(int)), w, SLOT(closeTab(int)));
     qRegisterMetaType<QVector<double>>("QVector<double>");
-
+    qRegisterMetaType<std::vector<QCPItemLine*>>("std::vector<QCPItemLine*>");
+    qRegisterMetaType<std::vector<QCPItemText*>>("std::vector<QCPItemText*>");
 
     connect(controller, SIGNAL(updateTextsRegression(int ,
                                                 QString,
@@ -1128,18 +1167,28 @@ void Regression::on_pushButton_clicked()
                                                                                      int,
                                                                                      QString,
                                                                                      QString )));
-
+    qRegisterMetaType< std::vector< std::vector<double> >>(" std::vector< std::vector<double> >");
     connect(controller, SIGNAL(updateRegression(int ,
-                                                QVector<double> ,
-                                                QVector<double> ,
-                                                QVector<double> ,
-                                                QVector<double> ,
-                                                int)), w, SLOT(updateRegression(int ,
-                                                                                             QVector<double> ,
-                                                                                             QVector<double> ,
-                                                                                             QVector<double> ,
-                                                                                             QVector<double> ,
-                                                                                             int)));
+                               QVector<double> ,
+                               QVector<double> ,
+                               QVector<double> ,
+                               QVector<double> ,
+                               int ,
+                               std::vector< std::vector<double> > ,
+                               int ,
+                               std::vector<QCPItemText*> ,
+                               std::vector<QCPItemLine*> ,
+                               std::vector< std::vector<double> >  )), w, SLOT(updateRegression(int ,
+                                                                               QVector<double> ,
+                                                                               QVector<double> ,
+                                                                               QVector<double> ,
+                                                                               QVector<double> ,
+                                                                               int ,
+                                                                               std::vector< std::vector<double> > ,
+                                                                               int ,
+                                                                               std::vector<QCPItemText*> ,
+                                                                               std::vector<QCPItemLine*> ,
+                                                                               std::vector< std::vector<double> >  )));
 
 
 
@@ -1148,8 +1197,31 @@ void Regression::on_pushButton_clicked()
     MainWindow::pushBackThread(controller);
     //ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
 
-    w->addTabRegression("Regression - " + ui->lineEditProjName->text());
+    w->addTabRegression("Regression - " + ui->lineEditProjName->text(),dimension );
 
+    ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
+
+    QCustomPlot * m_CustomPlot = (QCustomPlot *) w->getKernelPlotRegression(pos);
+
+    for(int i = 0; i < dimension;i++){
+        QCPItemText *textLabel = new QCPItemText(m_CustomPlot);
+        //m_CustomPlot->addItem(textLabel);
+        textLabel->setPositionAlignment(Qt::AlignTop);
+        //textLabel->position->setType(QCPItemPosition::ptPlotCoords);
+        //textLabel->position->setCoords(15, 18); // place position at center/top of axis rect
+        textLabel->setText("");
+        //textLabel->setFont(QFont(font().family(), 16)); // make font a bit larger
+        textLabel->setPen(QPen(Qt::black)); // show black border around text
+        controller->widgetArray.push_back(textLabel);
+
+        QCPItemLine *arrow = new QCPItemLine(m_CustomPlot);
+        //m_CustomPlot->addItem(arrow);
+        arrow->start->setParentAnchor(textLabel->bottom);
+        arrow->end->setType(QCPItemPosition::ptPlotCoords);
+        //arrow->end->setCoords(0.23, 1.6); // point to (4, 1.6) in x-y-plot coordinates
+        arrow->setHead(QCPLineEnding::esSpikeArrow);
+        controller->arrowArray.push_back(arrow);
+    }
     w->mutex.unlock();
 
     controller->startThread();
@@ -1182,16 +1254,20 @@ void Regression::on_lineEditN_textChanged(const QString &n)
         std::vector< double> y;
         int nInt =  n.toInt();
 
+        xControlpointsbyN.clear();
+        yControlpointsbyN.clear();
+
         if(ui->checkBox->isChecked()){
-            xControlpointsbyN.clear();
-            yControlpointsbyN.clear();
+            if(xControlpoints.size() != 0 )
             controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, nInt, xControlpointsbyN, yControlpointsbyN);
-            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
+
         }else{
-            controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, nInt,x, y);
-            w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(x), QVector<double>::fromStdVector(y));
+            if(size_kernel !=0)
+                controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, nInt,xControlpointsbyN, yControlpointsbyN);
 
         }
+         if(xControlpointsbyN.size() != 0 )
+         w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
 
 
     }

@@ -146,6 +146,7 @@ public:
             std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
             _genotype.addTranslation(this->translation[i]);
         }
+
         //std::cout <<  std::endl;
 //        _genotype.setPercentageVariationWeight(percentageWeight);
 //        _genotype.setPercentageVariationLinearA(percentageLineareA);

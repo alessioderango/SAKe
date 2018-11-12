@@ -110,6 +110,7 @@ public:
       par[i].setParameters(j,value);
   }
 
+
   void  setPar(int i,Parameters value){
       par[i]=value;
   }
@@ -328,7 +329,7 @@ public:
    }
 
 private:			   // put all data here
-    // START Private data of an eoOneMax object
+
     std::vector<double> w;
     std::vector<Parameters> par;
     std::vector<int> functionType;
@@ -339,7 +340,6 @@ private:			   // put all data here
     std::vector<double> percentageVariationGammaB;
     std::vector<double> translation;
     QVector<double> yCombinata;
-    // END   Private data of an eoOneMax object
 };
 
 #endif
