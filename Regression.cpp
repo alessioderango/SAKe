@@ -245,7 +245,6 @@ void Regression::setParameters(QVariantList list)
     int first = qvlist.indexOf("-");
     //Setting GA paramenters
     ui->lineEditProjName->setText(qvlist[0].toString());
-    ui->lineEditProjName->setReadOnly(true);
     if(qvlist[1]=="StochTour(t)"){
         ui->comboBoxSelection->setCurrentIndex(0);
         ui->lineEditPar1->setText(qvlist[2].toString());
@@ -320,6 +319,10 @@ void Regression::setParameters(QVariantList list)
     default:
         break;
     }
+    //hide first matrix
+    ui->label_10->hide();
+    ui->lineEdit_8->hide();
+    ui->tableWidgetMin1->hide();
 
 
     ui->comboBoxReplacement->setCurrentIndex(qvlist[13].toInt());
@@ -800,7 +803,18 @@ void Regression::on_pushButton_clicked()
 
     if(ui->lineEditProjName->text().isEmpty())
     {
-        QString error = QString("Projet name cannot be empty \n");
+        QString error = QString("Project name cannot be empty \n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
+    if(!ui->lineEditProjName->isReadOnly() && w->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
+    {
+        QString error = QString("Anotehr Project with the same name already exists \n");
 
         QMessageBox::information(
                     this,
@@ -836,6 +850,7 @@ void Regression::on_pushButton_clicked()
                 check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
                 if(check) return;
             }
+
 
     check = checklineEdit(ui->lineEditMutationP->text(), QString("Mutation probability cannot be empty \n"));
     if(check) return;
@@ -1025,6 +1040,14 @@ void Regression::on_pushButton_clicked()
         translation[count] = matrixLinear[i][11];
         count++;
     }
+//new
+    for (int i = matrixLinear.size(); i <  matrixGamma1.size()+matrixGamma2.size(); ++i) {
+        percantageLinearA[i]=0;
+        percantageLinearB[i]=0;
+        percantageW[i]=0;
+        translation[i]=0;
+    }
+
     for (int i = 0; i < matrixGamma1.size(); ++i) {
         functionType[count]=1;
         percantageGammaA[count]=(matrixGamma1[i][6]);
@@ -1033,6 +1056,8 @@ void Regression::on_pushButton_clicked()
         translation[count] =matrixGamma1[i][11];
         count++;
     }
+
+
     for (int i =  0; i <  matrixGamma2.size(); ++i) {
         functionType[count]=2;
         percantageGammaA[count]=(matrixGamma2[i][6]);
@@ -1041,6 +1066,15 @@ void Regression::on_pushButton_clicked()
         translation[count] =matrixGamma2[i][11];
         count++;
     }
+
+    //new
+    for (int i = 0; i < matrixLinear.size(); ++i) {
+        percantageGammaA[i]=0;
+        percantageGammaB[i]=0;
+        percantageW[i]=0;
+        translation[i]=0;
+    }
+
 
     for (int i =  0; i <  matrixLinear.size(); ++i) {
         cout << functionType[i] << endl;
@@ -1113,7 +1147,23 @@ void Regression::on_pushButton_clicked()
     //QObject *errorHandler = rootObject->findChild<QObject*>("errorcsvHandler");
     //int errorRain = HandlerCSV::loadCSVKernel(ui->lineEditLoadKernel->text(),kernel,size_kernel,Delta_cr);
 
+    QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/regression/"+ui->lineEditProjName->text();
+    QDir dir3(tmp2);
+    if (!dir3.exists()){
+        dir3.mkdir(".");
 
+
+    }
+
+    std::vector<Genotype> g;
+    if(ui->checkBox_lastgeneration->isChecked()){
+        HandlerCSV::loadCSVPopFromFileRegression(tmp2+"/population.csv",
+                                             g,
+                                             dimension
+                                             );
+
+
+    }
     RegressionController * controller = new RegressionController(w,
                                                                  ui->lineEditProjName->text(),
                                                                  percantageW,
@@ -1140,7 +1190,9 @@ void Regression::on_pushButton_clicked()
                                                                  ui->lineEditPar2->text().toDouble(),//ipara2,
                                                                  typeReplacement,
                                                                  ui->comboBoxSelection->currentText(),
-                                                                 ui->lineEdit_seed->text().toInt()
+                                                                 ui->lineEdit_seed->text().toInt(),
+                                                                 g,
+                                                                 ui->checkBox_lastgeneration->isChecked()
                                                                  );
 
 //    controller->setX(x1);
@@ -1299,4 +1351,9 @@ void Regression::on_checkBox_N_stateChanged(int arg1)
         ui->checkBox_controlpoints->setChecked(false);
         ui->checkBox_kernel->setChecked(false);
     }
+}
+
+void Regression::setReadOnlyProjName(bool a)
+{
+    ui->lineEditProjName->setReadOnly(a);
 }

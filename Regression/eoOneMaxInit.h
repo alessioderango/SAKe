@@ -14,6 +14,7 @@ Template for EO objects initialization in EO
 // include the base definition of eoInit
 #include <eoInit.h>
 #include <Regression/parameters.h>
+#include "Regression/Genotype.h"
 
 /**
  *  Always write a comment in this format before class definition
@@ -46,7 +47,9 @@ public:
                   int _percentualeGammaASize,
                   double* _percentualeGammaB,
                   int _percentualeGammaBSize,
-                  double* translation
+                  double* translation,
+                  std::vector<Genotype> &_g,
+                  bool _lastgeneration
                   ) : vecSize(_vecSize)
       // END eventually add or modify the anyVariable argument
     {
@@ -70,6 +73,9 @@ public:
         this->translation = translation;
         translationSize=functionTypesSize;
 
+        g = _g;
+        lastgeneration = _lastgeneration;
+        count=0;
         // END   Code of Ctor of an eoOneMaxInit object
     }
 
@@ -89,70 +95,109 @@ public:
    */
     void operator()(GenotypeT & _genotype)
     {
-        // START Code of random initialization of an eoOneMax object
-        //    vector<bool> b(vecSize);
-        //    for (unsigned i=0; i<vecSize; i++)
-        //      b[i]=rng.flip();
-        //    _genotype.setB(b);
-        //    // END   Code of random initialization of an eoOneMax object
-        //    _genotype.invalidate();	   // IMPORTANT in case the _genotype is old
+        if(lastgeneration){
 
-        //        linear
-        //              _genotype.addW(0.0171199623121444);
+            for (int i = 0; i < weightsSize; i++) {
+                //            std::cout << " weights - ["<< i <<"] = "<< weights[i] << std::endl;
+                _genotype.addW(g[count].getWeight()[i]);
+            }
 
-        for (int i = 0; i < weightsSize; i++) {
-//            std::cout << " weights - ["<< i <<"] = "<< weights[i] << std::endl;
-            _genotype.addW(this->weights[i]);
-        }
+            for (int i = 0; i < functionTypesSize; i++) {
+                //            std::cout << " functionTypes - ["<< i <<"] = "<< functionTypes[i] << std::endl;
+                _genotype.addFunctionType(g[count].getFunctionType()[i]);
+            }
 
-        for (int i = 0; i < functionTypesSize; i++) {
-//            std::cout << " functionTypes - ["<< i <<"] = "<< functionTypes[i] << std::endl;
-            _genotype.addFunctionType(this->functionTypes[i]);
-        }
+            for (int i = 0; i < parametersSize; i++) {
+                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(0) << std::endl;
+                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(1) << std::endl;
+                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(2) << std::endl;
+                _genotype.addPar(g[count].getParameters()[i]);
+            }
 
-        for (int i = 0; i < parametersSize; i++) {
-//            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(0) << std::endl;
-//            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(1) << std::endl;
-//            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(2) << std::endl;
-            _genotype.addPar(this->parameters[i]);
-        }
+            for (int i = 0; i < percentualePesoSize; i++) {
+                //            std::cout << " percentualePeso - ["<< i <<"] = "<< percentualePeso[i] << std::endl;
+                _genotype.addPercentageVariationWeight(g[count].getPercantageW()[i]);
+            }
+            for (int i = 0; i < percentualeLineareASize; i++) {
+                //            std::cout << " percentualeLineareA - ["<< i <<"] = "<< percentualeLineareA[i] << std::endl;
+                _genotype.addPercentageVariationLinearA(g[count].getPercantageLinearA()[i]);
+            }
+            for (int i = 0; i <  percentualeLineareBSize; i++) {
+                //             std::cout << " percentualeLineareB - ["<< i <<"] = "<< percentualeLineareB[i] << std::endl;
+                _genotype.addPercentageVariationLinearB(g[count].getPercantageLinearB()[i]);
+            }
+            for (int i = 0; i < percentualeGammaASize; i++) {
+                //             std::cout << " percentualeGammaA - ["<< i <<"] = "<< percentualeGammaA[i] << std::endl;
+                _genotype.addPercentageVariationGammaA(g[count].getPercantageGammaA()[i]);
+            }
+            for (int i = 0; i < percentualeGammaBSize; i++) {
+                //             std::cout << " percentualeGammaB - ["<< i <<"] = "<< percentualeGammaB[i] << std::endl;
+                _genotype.addPercentageVariationGammaB(g[count].getPercantageGammaB()[i]);
+            }
 
-        for (int i = 0; i < percentualePesoSize; i++) {
-//            std::cout << " percentualePeso - ["<< i <<"] = "<< percentualePeso[i] << std::endl;
-            _genotype.addPercentageVariationWeight(percentualePeso[i]);
-        }
-        for (int i = 0; i < percentualeLineareASize; i++) {
-//            std::cout << " percentualeLineareA - ["<< i <<"] = "<< percentualeLineareA[i] << std::endl;
-            _genotype.addPercentageVariationLinearA(this->percentualeLineareA[i]);
-        }
-        for (int i = 0; i <  percentualeLineareBSize; i++) {
-//             std::cout << " percentualeLineareB - ["<< i <<"] = "<< percentualeLineareB[i] << std::endl;
-            _genotype.addPercentageVariationLinearB(this->percentualeLineareB[i]);
-        }
-        for (int i = 0; i < percentualeGammaASize; i++) {
-//             std::cout << " percentualeGammaA - ["<< i <<"] = "<< percentualeGammaA[i] << std::endl;
-            _genotype.addPercentageVariationGammaA(this->percentualeGammaA[i]);
-        }
-        for (int i = 0; i < percentualeGammaBSize; i++) {
-//             std::cout << " percentualeGammaB - ["<< i <<"] = "<< percentualeGammaB[i] << std::endl;
-            _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
-        }
-        for (int i = 0; i < percentualeGammaBSize; i++) {
-//             std::cout << " percentualeGammaB - ["<< i <<"] = "<< percentualeGammaB[i] << std::endl;
-            _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
-        }
+            for (int i = 0; i < translationSize; i++) {
+                std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
+                _genotype.addTranslation(g[count].getTranslation()[i]);
+            }
 
-        for (int i = 0; i < translationSize; i++) {
-            std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
-            _genotype.addTranslation(this->translation[i]);
-        }
 
+
+            count++;
+        }else{
+
+            for (int i = 0; i < weightsSize; i++) {
+                //            std::cout << " weights - ["<< i <<"] = "<< weights[i] << std::endl;
+                _genotype.addW(this->weights[i]);
+            }
+
+            for (int i = 0; i < functionTypesSize; i++) {
+                //            std::cout << " functionTypes - ["<< i <<"] = "<< functionTypes[i] << std::endl;
+                _genotype.addFunctionType(this->functionTypes[i]);
+            }
+
+            for (int i = 0; i < parametersSize; i++) {
+                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(0) << std::endl;
+                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(1) << std::endl;
+                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(2) << std::endl;
+                _genotype.addPar(this->parameters[i]);
+            }
+
+            for (int i = 0; i < percentualePesoSize; i++) {
+                //            std::cout << " percentualePeso - ["<< i <<"] = "<< percentualePeso[i] << std::endl;
+                _genotype.addPercentageVariationWeight(percentualePeso[i]);
+            }
+            for (int i = 0; i < percentualeLineareASize; i++) {
+                //            std::cout << " percentualeLineareA - ["<< i <<"] = "<< percentualeLineareA[i] << std::endl;
+                _genotype.addPercentageVariationLinearA(this->percentualeLineareA[i]);
+            }
+            for (int i = 0; i <  percentualeLineareBSize; i++) {
+                //             std::cout << " percentualeLineareB - ["<< i <<"] = "<< percentualeLineareB[i] << std::endl;
+                _genotype.addPercentageVariationLinearB(this->percentualeLineareB[i]);
+            }
+            for (int i = 0; i < percentualeGammaASize; i++) {
+                //             std::cout << " percentualeGammaA - ["<< i <<"] = "<< percentualeGammaA[i] << std::endl;
+                _genotype.addPercentageVariationGammaA(this->percentualeGammaA[i]);
+            }
+            for (int i = 0; i < percentualeGammaBSize; i++) {
+                //             std::cout << " percentualeGammaB - ["<< i <<"] = "<< percentualeGammaB[i] << std::endl;
+                _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
+            }
+            for (int i = 0; i < percentualeGammaBSize; i++) {
+                //             std::cout << " percentualeGammaB - ["<< i <<"] = "<< percentualeGammaB[i] << std::endl;
+                _genotype.addPercentageVariationGammaB(this->percentualeGammaB[i]);
+            }
+
+            for (int i = 0; i < translationSize; i++) {
+                std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
+                _genotype.addTranslation(this->translation[i]);
+            }
+        }
         //std::cout <<  std::endl;
-//        _genotype.setPercentageVariationWeight(percentageWeight);
-//        _genotype.setPercentageVariationLinearA(percentageLineareA);
-//        _genotype.setPercentageVariationLinearB(percentageLineareB);
-//        _genotype.setPercentageVariationGammaA(percentageGammaA);
-//        _genotype.setPercentageVariationGammaB(percentageGammaB);
+        //        _genotype.setPercentageVariationWeight(percentageWeight);
+        //        _genotype.setPercentageVariationLinearA(percentageLineareA);
+        //        _genotype.setPercentageVariationLinearB(percentageLineareB);
+        //        _genotype.setPercentageVariationGammaA(percentageGammaA);
+        //        _genotype.setPercentageVariationGammaB(percentageGammaB);
 
     }
 
@@ -179,6 +224,9 @@ private:
     int percentualeGammaBSize;
     double* translation;
     int translationSize;
+    std::vector<Genotype> g;
+    bool lastgeneration;
+    int count;
 
     //  varType anyVariable;		   // for example ...
     // END   Private data of an eoOneMaxInit object

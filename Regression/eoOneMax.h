@@ -254,6 +254,22 @@ public:
        return percentageVariationGammaB[i];
    }
 
+   double getPercentageVariationWeightConst(int i) const{
+       return percentageVariationWeight[i];
+   }
+   double getPercentageVariationLinearAConst(int i) const{
+       return percentageVariationLinearA[i];
+   }
+   double getPercentageVariationLinearBConst(int i) const{
+       return percentageVariationLinearB[i];
+   }
+   double getPercentageVariationGammaAConst(int i) const{
+       return percentageVariationGammaA[i];
+   }
+   double getPercentageVariationGammaBConst(int i) const{
+       return percentageVariationGammaB[i];
+   }
+
    void setPercentageVariationWeight(int i,double a){
        percentageVariationWeight[i] = a;
    }

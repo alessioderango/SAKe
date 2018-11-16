@@ -111,7 +111,9 @@ public:
                              double para2,
                              int itypeReplacement,
                              QString sselection,
-                         int seed);
+                         int seed,
+                         std::vector<Genotype> &,
+                          bool lastgeneration);
     RegressionController();
 
 
@@ -230,6 +232,8 @@ private:
     MainWindow *mainwindows;
 
     int seed;
+    std::vector<Genotype> g;
+    bool lastgeneration;
 
 };
 

@@ -31,7 +31,10 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
                                            double para1,
                                            double para2,
                                            int itypeReplacement,
-                                           QString  sselection, int _seed){
+                                           QString  sselection,
+                                           int _seed,
+                                           std::vector<Genotype> &_g,
+                                           bool _lastgeneration){
 
     typeReplacement =itypeReplacement;
     selection        = sselection;
@@ -109,6 +112,9 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
      mainwindows = main;
      seed=_seed;
 
+     g = _g;
+     lastgeneration = _lastgeneration;
+
 }
 
 
@@ -148,7 +154,7 @@ void RegressionController::startAlgorithm(){
         //        parser.setORcreateParam(0.8, "pCross", "Probability of Crossover", 'C', "Variation Operators" );
         //        parser.setORcreateParam(0.3, "pMut", "Probability of Mutation", 'M', "Variation Operators" );
 
-        uint32_t t32 =  (uint32_t) 10;
+        uint32_t t32 =  (uint32_t) seed;
         parser.setORcreateParam(t32, "seed", "Random number seed", 'S');
         eoState state;    // keeps all things allocated
 
@@ -178,6 +184,8 @@ void RegressionController::startAlgorithm(){
                                                     percentualeGammaB,
                                                     percentualeGammaBSize,
                                                     translation,
+                                                    g,
+                                                    lastgeneration,
                                                     Individual());
 
         // Build the variation operator (any seq/prop construct)

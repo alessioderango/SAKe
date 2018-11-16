@@ -22,6 +22,7 @@ public:
     MainWindow *getW() const;
     void setW(MainWindow *value);
     void setParameters(QVariantList );
+    void setReadOnlyProjName(bool );
 
 
 

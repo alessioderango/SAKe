@@ -91,15 +91,15 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
     std::string line;
     std::vector< std::vector<std::string>> rows;
 
-//    clock_t start=clock();
+    //    clock_t start=clock();
     while (std::getline(in, line)){
         activation_size++;
         std::vector<std::string> x;
         x = split(line, ';');
         rows.push_back(x);
-//        cout << line << endl;
+        //        cout << line << endl;
     }
-//    clock_t stop=clock();
+    //    clock_t stop=clock();
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
     //           qDebug() << activation_size;
     activation = new Activation[activation_size];
@@ -109,22 +109,22 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
         string dateStart =  rows[i].at(0);
         string dateEnd =  rows[i].at(1);
 
-    try{
-        cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
+        try{
+            cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
 
-        ptime activationStart = time_from_string(dateStart);
-        ptime activationEnd = time_from_string(dateEnd);
-        activation[activation_size]= Activation(to_tm(activationStart),to_tm(activationEnd));
-        activation_size++;
+            ptime activationStart = time_from_string(dateStart);
+            ptime activationEnd = time_from_string(dateEnd);
+            activation[activation_size]= Activation(to_tm(activationStart),to_tm(activationEnd));
+            activation_size++;
 
-    }catch(std::exception& e){
-        //std::cout << "  Exception: " <<  e.what() << std::endl;
+        }catch(std::exception& e){
+            //std::cout << "  Exception: " <<  e.what() << std::endl;
             std::cout << "act row = " << i << std::endl;
             _e.append(e.what());
             row = i;
 
-        return 0;
-    }
+            return 0;
+        }
     }
 
     return 1;
@@ -154,12 +154,12 @@ int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & si
 
     }
 
-//    for (int i = 0; i < x.size(); ++i) {
-//        cout << Fi[i] <<  endl;
-//    }
-//    cout << "zCr = " << zCr << endl;
-//    cout << "size = " << size << endl;
-//    cout << "x.size() = " << x.size() << endl;
+    //    for (int i = 0; i < x.size(); ++i) {
+    //        cout << Fi[i] <<  endl;
+    //    }
+    //    cout << "zCr = " << zCr << endl;
+    //    cout << "size = " << size << endl;
+    //    cout << "x.size() = " << x.size() << endl;
 
     return 0;
 }
@@ -175,7 +175,7 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
     x = split(line, ';');
     zCr = std::stod(x[3]);
     x.erase(x.begin(),x.begin()+6);
-//    cout << line << endl;
+    //    cout << line << endl;
 
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";
     //           qDebug() << activation_size;
@@ -185,20 +185,20 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
     for(unsigned int i =0; i < x.size();i++){
         double tmp = std::stod(x[i]);
         //cout << " tmp " << tmp <<  endl;
-    try{
-        Fi[i]= tmp;
-    }catch(std::exception& e){
-        std::cout << "  Exception: " <<  e.what() << std::endl;
-        return 0;
-    }
+        try{
+            Fi[i]= tmp;
+        }catch(std::exception& e){
+            std::cout << "  Exception: " <<  e.what() << std::endl;
+            return 0;
+        }
     }
 
-//    for (int i = 0; i < x.size(); ++i) {
-//        cout << Fi[i] <<  endl;
-//    }
-//    cout << "zCr = " << zCr << endl;
-//    cout << "size = " << size << endl;
-//    cout << "x.size() = " << x.size() << endl;
+    //    for (int i = 0; i < x.size(); ++i) {
+    //        cout << Fi[i] <<  endl;
+    //    }
+    //    cout << "zCr = " << zCr << endl;
+    //    cout << "size = " << size << endl;
+    //    cout << "x.size() = " << x.size() << endl;
 
     return 0;
 }
@@ -217,12 +217,45 @@ int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFr
             tmp.push_back(std::stod(x[i]));
         }
         popFromFile.push_back(tmp);
-//        cout << line << endl;
+        //        cout << line << endl;
     }
-//    cout << popFromFile.size()<< endl;
-//    for(int i=0;i <popFromFile.size();i++){
-//        cout << popFromFile[i].size() << endl;
-//    }
-//    cout << numberGen << endl;
+    //    cout << popFromFile.size()<< endl;
+    //    for(int i=0;i <popFromFile.size();i++){
+    //        cout << popFromFile[i].size() << endl;
+    //    }
+    //    cout << numberGen << endl;
     return 0;
 }
+
+int HandlerCSV::loadCSVPopFromFileRegression(QString fileurl,
+                                             std::vector<Genotype> &g,
+                                             int& numberGen){
+    std::ifstream in(fileurl.toStdString());
+    std::string line;
+
+    cout << "leggo popolazione regressione" << endl;
+    cout << fileurl.toStdString() << endl;
+
+    while (std::getline(in, line)){
+        std::vector<string> x;
+        x = split(line, ';');
+        Genotype tmp(numberGen);
+
+        tmp.setWeight(x[0]);
+        tmp.setParameters(x[1]);
+        tmp.setFunctionType(x[2]);
+        tmp.setPercantageW(x[3]);
+        tmp.setPercantageLinearA(x[4]);
+        tmp.setPercantageLinearB(x[5]);
+        tmp.setPercantageGammaA(x[6]);
+        tmp.setPercantageGammaB(x[7]);
+        tmp.setTranslation(x[8]);
+
+        g.push_back(tmp);
+
+    }
+
+    return 0;
+}
+
+

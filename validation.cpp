@@ -97,6 +97,17 @@ void Validation::accept()
         return;
     }
 
+    if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
+    {
+        QString error = QString("Anotehr Project with the same name already exists \n");
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return;
+    }
+
     if(!SAKeController::fileExists(rainPath)){
         QString error = QString("Rain File does not exist "+ rainPath+"\n");
 

@@ -76,11 +76,11 @@ int findAllElementsByProject(QString xmlFilePath,QString nameProject){
     inFile.close();
 
     QDomElement documentElement = document.documentElement();
-    QDomNodeList a = documentElement.elementsByTagName("Projects");
+    QDomNodeList a = documentElement.elementsByTagName("Name");
 //    qDebug() << a.length();
     for (int i = 0; i < a.length(); i++) {
-//        qDebug() << a.at(i).childNodes().at(0).firstChild().nodeValue();
-        if(QString::compare(a.at(i).childNodes().at(0).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0)
+        qDebug() << a.at(i).firstChild().nodeValue();
+        if(QString::compare(a.at(i).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0)
             return 1;
     }
     // Load document
@@ -318,8 +318,8 @@ void XMLManager::setTreeview(QTreeWidget *value)
 
 
 int XMLManager::findProjectName(QString nameProject){
-    int result = findAllElementsByProject(xmlFilePath,nameProject);
-//    qDebug() << result << endl;
+    bool result = findAllElementsByProject(xmlFilePath,nameProject);
+    qDebug() << "Project name = " << result << endl;
     return result;
 }
 

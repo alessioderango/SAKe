@@ -289,7 +289,7 @@ double getYfromline(double x2,double y2,double x1,double y1,int xris){
      double sumx=0;
      double sumy=0;
      int end = ((size_kernel%n)==0) ? size_kernel : (size_kernel-n);
-     for (int i = 0; i < end; i++) {
+     for (int i = 0; i < end-n; i++) {
          sumx=0;
          sumy=0;
          for (int j = 0; j < n; j++) {
@@ -321,7 +321,7 @@ double getYfromline(double x2,double y2,double x1,double y1,int xris){
      double sumx=0;
      double sumy=0;
      int end = ((y.size()%n)==0) ? y.size() : (y.size()-n);
-     for (int i = 0; i < end; i++) {
+     for (int i = 0; i < end-n; i++) {
          sumx=0;
          sumy=0;
          for (int j = 0; j < n; j++) {

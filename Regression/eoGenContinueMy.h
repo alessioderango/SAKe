@@ -31,6 +31,7 @@ public:
     {
         //_savePath.remove(0,8);
         savePath=_savePath+"/kernel.csv";
+        savePopulation=_savePath+"/population.csv";
     }
 
 
@@ -83,6 +84,118 @@ public:
 
         myfile.close();
 
+        myfile.open (savePopulation.toStdString(),ios::out);
+
+        for (int gen = 0; gen < _vEO.size(); ++gen) {
+
+
+
+            // Weight
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getPercentageVariationWeightConst(t) ;
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+
+            }
+            myfile << ";";
+            // Parameters
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getParConst(t).getParameters(0) << " ,";//alfa
+                myfile <<  _vEO[gen].getParConst(t).getParameters(1) << " ,";//beta
+                myfile <<  _vEO[gen].getParConst(t).getParameters(2);//translation
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+            // FunctionType
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getFunctionTypeConst(t);
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // PercentageWeigh
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getPercentageVariationWeightConst(t) ;
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // PercentageLinearA
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getPercentageVariationLinearAConst(t) ;
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // PercentageLinearB
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getPercentageVariationLinearBConst(t);
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // PercentageGammaA
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getPercentageVariationGammaAConst(t);
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // PercentageGammaB
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getPercentageVariationGammaBConst(t) ;
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // PercentageTranslation
+            for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getTranslationConst(t) ;
+                if(t !=  _vEO[gen].getWConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";";
+
+            // YCombinata
+            for (int t = 0; t < _vEO[gen].getYCombinataConst().size(); t++) {
+
+                myfile <<  _vEO[gen].getYCombinataConst(t);
+                if(t !=  _vEO[gen].getYCombinataConst().size() -1)
+                    myfile << ",";
+
+            }
+            myfile << ";" << endl;
+
+        }
+
+        myfile.close();
+
+
         thisGeneration++;
         if(stop){
             eo::log << eo::logging << "STOP in eoGenContinue: stop execution \n";
@@ -114,6 +227,7 @@ public:
 private:
     bool stop;
     QString savePath;
+    QString savePopulation;
     QObject *gen;
 };
 

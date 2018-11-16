@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     Regression/regressioncontroller.cpp \
     CustomPlotRegression.cpp \
     CustomPlotRegressionPreviewKernel.cpp \
-    controlpoints.cpp
+    controlpoints.cpp \
+    Regression/Genotype.cpp
 
 HEADERS  += mainwindow.h \
     dialog.h \
@@ -109,7 +110,8 @@ HEADERS  += mainwindow.h \
     CustomPlotRegression.h \
     CustomPlotRegressionPreviewKernel.h \
     controlpoints.h \
-    utilis.h
+    utilis.h \
+    Regression/Genotype.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \

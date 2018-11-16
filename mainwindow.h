@@ -164,6 +164,7 @@ private slots:
     void on_actionNewValidationProject_triggered();
     void prepareMenu( const QPoint & pos );
     void deleteProject(int item);
+    void createProjectFromOneAlreadyExist(QObject *t);
     void expandTreeViewSlot();
     void resizeMobilityFunction();
     void savePngMobilityFunction();
@@ -200,6 +201,7 @@ private:
     Ui::MainWindow *ui;
     XMLManager * xmlmanager;
     QSignalMapper *signalMapper;
+    QSignalMapper *signalMapperCopy;
     QMenu menu;
 
 

@@ -496,7 +496,6 @@ void MainWindow::updateRegression(int indexTab,
 
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
     QCustomPlot* plot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
-    QTableWidget * tableResult= (QTableWidget*)tabs->findChild<QTableWidget*>("tableResult");
 
    //
     plot->graph(1)->setData(xReal, yReal);
@@ -510,8 +509,6 @@ void MainWindow::updateRegression(int indexTab,
       //plot->graph(1)->rescaleAxes();
       plot->rescaleAxes(true);
       //plot->graph(0)->setVisible(true);
-      tableResult->setRowCount(numberofFunction);
-
 
     }
     plot->graph(0)->setData(x, y);
@@ -525,39 +522,8 @@ void MainWindow::updateRegression(int indexTab,
         QString a = QString("w, a, b, t\n %1, %2, %3, %4").arg(matrixParameters[i][0]).arg(matrixParameters[i][1]).arg(matrixParameters[i][2]).arg(matrixParameters[i][3]);
         widgetArray[i]->setText(a);
         arrowArray[i]->end->setCoords(x[xDistance],yFunction[xDistance]);
-        QLabel* nrow = new QLabel();
-        QString s= QString("%1").arg(i+1);
-        nrow->setText(s);
-        tableResult->setCellWidget(i, 0, nrow);
-
-        s= QString("%1").arg(matrixParameters[i][0]);
-
-        nrow = new QLabel();
-        nrow->setText(s);
-        tableResult->setCellWidget(i, 1, nrow);
-        s= QString("%1").arg(matrixParameters[i][1]);
-        nrow = new QLabel();
-        nrow->setText(s);
-        tableResult->setCellWidget(i, 2, nrow);
-
-        s= QString("%1").arg(matrixParameters[i][2]);
-        nrow = new QLabel();
-        nrow->setText(s);
-        tableResult->setCellWidget(i, 3, nrow);
-
-        s= QString("%1").arg(matrixParameters[i][3]);
-        nrow = new QLabel();
-        nrow->setText(s);
-        tableResult->setCellWidget(i, 4, nrow);
     }
     plot->replot();
-
-
-
-
-
-
-
 
 }
 
@@ -1380,42 +1346,6 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
     firstOccurenceText->setObjectName("firstOccurenceText");
     grid->addWidget(firstOccurenceText,0,2);
 
-    QVBoxLayout * vertical2 = new QVBoxLayout();
-
-    QTableWidget *tableResult = new QTableWidget();
-    tableResult->setColumnCount(5);
-    QStringList m_TableHeader;
-    m_TableHeader<<"N."<<" w "<<" a "<< " b " << " t ";
-    tableResult->setHorizontalHeaderLabels(m_TableHeader);
-    tableResult->verticalHeader()->setVisible(false);
-    tableResult->setRowCount(4);
-    tableResult->setObjectName("tableResult");
-
-//    tableResult->resizeColumnsToContents();
-//    tableResult->setLayout(vertical2);
-//    vertical2->addWidget(tableResult);
-//    addRow(tableResult,
-//           0,
-//           "8",
-//           "1",
-//           "200 ",
-//           "200");
-    cout << "tableResult->horizontalHeader()->width() = " << tableResult->horizontalHeader()->width()<< endl;
-    tableResult->setMinimumWidth(530);
-    tableResult->setMaximumWidth(530);
-    QLabel * t1 = new QLabel();
-    t1->setText("Best Functions Parameters:");
-    t1->setMinimumWidth(300);
-    t1->setVisible(true);
-    grid->addWidget(t1,0,3);
-    grid->addWidget(tableResult,1,3,6,1);
-
-    grid->addWidget(tableResult,1,3,6,1);
-    QLabel * t = new QLabel();
-    t->setText("");
-    t->setMinimumWidth(300);
-    t->setVisible(true);
-    grid->addWidget(t,0,4);
 
 
     QLabel * AbsAveFit = new QLabel();
@@ -1462,25 +1392,6 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
     curMaxFitNum->setText("0");
     curMaxFitNum->setObjectName("curMaxFitNum");
     grid->addWidget(curMaxFitNum,7,1);
-
-
-
-//    QHBoxLayout * horizontal = new QHBoxLayout();
-//    horizontal->addLayout(grid);
-//    horizontal->addStretch(horizontal->sizeConstraint()*2);
-
-
-
-//    QHBoxLayout * horizontal2 = new QHBoxLayout();
-//    horizontal2->addWidget(tableResult);
-//    horizontal2->addStretch(0.2);
-
-//    horizontal->addLayout(horizontal2);
-
-//    QVBoxLayout * vertical2 = new QVBoxLayout();
-//    vertical2->addLayout(horizontal);
-
-
 
 //    QLabel * tb = new QLabel();
 //    tb->setText("tb:");
@@ -1815,7 +1726,6 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
                         Regression *regression = new Regression();
 //                        regression->setReadOnlyProjName(true);
                         regression->setW(this);
-                        regression->setReadOnlyProjName(true);
                         regression->setParameters(listParameter);
 //                        regression->setMainWindow(this);
                         regression->show();
