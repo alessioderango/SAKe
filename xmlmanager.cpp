@@ -1152,7 +1152,7 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
                                               QString typeReplacement,
                                               QString numberElitist,
                                               QString seed,
-                                              QString lastGeneration){
+                                              QString lastGeneration, QString frequencySavePop){
     QString filename = QString(xmlFilePath);
     QFile* filetmp = new QFile(xmlFilePath);
     if( !filetmp->exists()){
@@ -1211,6 +1211,7 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     QDomElement numberElitistDom = document.createElement( "numberElitist" );
     QDomElement seedDom = document.createElement( "seed" );
     QDomElement lastGenerationDom = document.createElement( "lastGeneration" );
+     QDomElement frequencySavePopDom = document.createElement( "frequencySavePop" );
 
     //create TextElement
     QDomText nameText = document.createTextNode(_projectName);
@@ -1224,6 +1225,7 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     QDomText fileKernelText = document.createTextNode( _fileKernel );
      QDomText seedText = document.createTextNode( seed );
       QDomText lastgenerationText = document.createTextNode( lastGeneration );
+        QDomText frequencySavePopText = document.createTextNode( frequencySavePop );
 
     QDomElement id = document.createElement( "ID" );
     numProjectInt++;
@@ -1269,10 +1271,13 @@ int XMLManager::SaveXMLFileRegressionProject(const QString &_projectName,
     seedDom.appendChild(seedText);
     lastGenerationDom.appendChild(lastgenerationText);
 
+    frequencySavePopDom.appendChild(frequencySavePopText);
+
     project.appendChild(typeReplacementDom);
     project.appendChild(numberElitistDom);
     project.appendChild(seedDom);
     project.appendChild(lastGenerationDom);
+    project.appendChild(frequencySavePopDom);
 
     QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
 
@@ -1326,7 +1331,8 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
                                                          const QString &typeExecution,
                                                          QString typeReplacement,
                                                          QString numberElitist,
-                                                         QString seed, QString lastGeneration){
+                                                         QString seed, QString lastGeneration,
+                                                         QString frequencySavePop){
     QFile inFile( xmlFilePath );
     if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
     {
@@ -1367,12 +1373,13 @@ int XMLManager::SaveXMLFileAlreadyExistRegressionProject(const QString &name,
             project.at(i).childNodes().at(12).firstChild().setNodeValue(numberElitist);
             project.at(i).childNodes().at(13).firstChild().setNodeValue(seed);
             project.at(i).childNodes().at(14).firstChild().setNodeValue(lastGeneration);
+            project.at(i).childNodes().at(15).firstChild().setNodeValue(frequencySavePop);
 
-            int tmpID = project.at(i).childNodes().at(18).firstChild().nodeValue().toInt();
+            int tmpID = project.at(i).childNodes().at(19).firstChild().nodeValue().toInt();
+            project.at(i).removeChild(project.at(i).childNodes().at(19));
             project.at(i).removeChild(project.at(i).childNodes().at(18));
             project.at(i).removeChild(project.at(i).childNodes().at(17));
             project.at(i).removeChild(project.at(i).childNodes().at(16));
-            project.at(i).removeChild(project.at(i).childNodes().at(15));
 
             QDomElement gammaFunction1 = getGamma1ElementXML(matrixGamma1, document);
             project.at(i).appendChild(gammaFunction1);

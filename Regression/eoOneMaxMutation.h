@@ -93,6 +93,11 @@ public:
 
         double maxBetaGammaMinus1 = 250;
         double minBetaGammaMinus1 = 0.0001;
+        int numberofGammaFunction =0;
+        for (int i = 0; i < _genotype.getFunctionTypeConst().size(); ++i) {
+            if(_genotype.getFunctionType(i) != 0)
+                numberofGammaFunction++;
+        }
 
         for (int j = 0; j < rndMaxMut; j++) {
             int i =  rand() %  (_genotype.getParConst().size());
@@ -273,7 +278,7 @@ public:
 //                            tmpTranslation=0;
 //                        }
                         if(translationValue+tmpTranslation > (_genotype.getYCombinataConst().size())){
-                            _genotype.setParameters(i,2,_genotype.getYCombinataConst().size());
+                            _genotype.setParameters(i,2,_genotype.getYCombinataConst().size()/numberofGammaFunction);
                             //tmpTranslation = _genotype.getYCombinataConst().size()/2;
                         }else
                              _genotype.setParameters(i,2,_genotype.getPar(i).getParameters(2)+tmpTranslation);

@@ -113,7 +113,8 @@ public:
                              QString sselection,
                          int seed,
                          std::vector<Genotype> &,
-                          bool lastgeneration);
+                          bool lastgeneration,
+                         int frequencySavePop);
     RegressionController();
 
 
@@ -234,6 +235,8 @@ private:
     int seed;
     std::vector<Genotype> g;
     bool lastgeneration;
+
+    int frequencySavePop;
 
 };
 

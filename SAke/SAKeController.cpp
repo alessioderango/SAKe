@@ -143,6 +143,13 @@ SAKeController::SAKeController(MainWindow *_main,
     }else
         lastGeneration = false;
 
+    if(!_lastGeneration){
+        QString stmp = savePath+"/fitnessGenerations.csv";
+        ofstream myfile;
+        myfile.open (stmp.toStdString(),ios::out);
+        myfile.close();
+    }
+
 
     qDebug() << "selection arrivato " << selection << "\n";
     qDebug() << "pattern arrivato " << pattern << "\n";
@@ -325,6 +332,11 @@ void SAKeController::startAlgorithm()
     getMainwindows()->mutex.unlock();
     //MainWindow::closeTab(pos);
 
+}
+
+QString SAKeController::getSavePath() const
+{
+    return savePath;
 }
 
 void SAKeController::setFt(int value)

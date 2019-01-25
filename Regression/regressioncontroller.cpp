@@ -34,7 +34,7 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
                                            QString  sselection,
                                            int _seed,
                                            std::vector<Genotype> &_g,
-                                           bool _lastgeneration){
+                                           bool _lastgeneration, int _frequencySavePop){
 
     typeReplacement =itypeReplacement;
     selection        = sselection;
@@ -114,6 +114,7 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
 
      g = _g;
      lastgeneration = _lastgeneration;
+     frequencySavePop = _frequencySavePop;
 
 }
 
@@ -206,7 +207,7 @@ void RegressionController::startAlgorithm(){
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Individual>& pop   = do_make_pop(parser, state, init);
 
-        this->stop = new eoGenContinueMy<Individual>(savePath);
+        this->stop = new eoGenContinueMy<Individual>(savePath, frequencySavePop);
         // stopping criteria
         eoContinue<Individual> & term = do_make_continue_my(parser, state, eval, this->stop);
         // output

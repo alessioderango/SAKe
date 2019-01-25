@@ -143,7 +143,8 @@ signals:
                            QVector<double> x,
                            QVector<double> y,
                            QVector<double> x1,
-                           QVector<double> y1);
+                           QVector<double> y1,int numGenerations,
+                           bool b);
 
     void updateKernelPlot(int indexTab,
                           QVector<double> Fi,

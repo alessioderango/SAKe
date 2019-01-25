@@ -12,6 +12,7 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <time.h>
 #include "Regression/Genotype.h"
+#include <QVector>
 using namespace std;
 using namespace boost::posix_time;
 using namespace boost::gregorian;
@@ -32,6 +33,7 @@ public:
     static int loadCSVPopFromFileRegression(QString fileurl,
                                        std::vector<Genotype> &g,
                                        int& numberGen);
+    static int loadCSVGenationsFromFile(QString fileurl,QVector<double> &generationsX, QVector<double> &generationsBest, QVector<double> &generationsAvg);
 
 
 };

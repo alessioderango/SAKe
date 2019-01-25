@@ -227,6 +227,26 @@ int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFr
     return 0;
 }
 
+int HandlerCSV::loadCSVGenationsFromFile(QString fileurl, QVector<double> &generationsX, QVector<double> &generationsBest, QVector<double> &generationsAvg){
+    std::ifstream in(fileurl.toStdString());
+    std::string line;
+
+    if (in.is_open()) {
+        while (std::getline(in, line)){
+            std::vector<string> x;
+            x = split(line, ';');
+            //numberGen = std::stod(x[0]);
+            generationsX.push_back(std::stod(x[0]));
+            generationsBest.push_back(std::stod(x[1]));
+            generationsAvg.push_back(std::stod(x[2]));
+            //        cout << line << endl;
+        }
+    }else
+        return 0;
+
+    return 1;
+}
+
 int HandlerCSV::loadCSVPopFromFileRegression(QString fileurl,
                                              std::vector<Genotype> &g,
                                              int& numberGen){

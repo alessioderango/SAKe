@@ -335,6 +335,7 @@ void Regression::setParameters(QVariantList list)
     ui->lineEdit_seed->setText(QString("%1").arg(qvlist[15].toInt()));
     bool lastgen = qvlist[16].toInt();
     ui->checkBox_lastgeneration->setChecked(lastgen);
+    ui->lineEdit_frequencyPop->setText(QString("%1").arg(qvlist[17].toInt()));
 
     int second = qvlist.indexOf("-",first+1);
 
@@ -972,7 +973,8 @@ void Regression::on_pushButton_clicked()
                                                                      QString("%1").arg(ui->comboBoxReplacement->currentIndex()),
                                                                      ui->lineEditNumberElitists->text(),
                                                                      ui->lineEdit_seed->text(),
-                                                                     QString::number(ui->checkBox_lastgeneration->isChecked()));
+                                                                     QString::number(ui->checkBox_lastgeneration->isChecked()),
+                                                                     ui->lineEdit_frequencyPop->text());
 
 
     }else{
@@ -995,7 +997,8 @@ void Regression::on_pushButton_clicked()
                                                          QString("%1").arg(ui->comboBoxReplacement->currentIndex()),
                                                          ui->lineEditNumberElitists->text(),
                                                          ui->lineEdit_seed->text(),
-                                                         QString::number(ui->checkBox_lastgeneration->isChecked()));
+                                                         QString::number(ui->checkBox_lastgeneration->isChecked()),
+                                                         ui->lineEdit_frequencyPop->text());
     }
 
     int dimension=matrixGamma1.size()+matrixGamma2.size()+matrixLinear.size();
@@ -1192,7 +1195,8 @@ void Regression::on_pushButton_clicked()
                                                                  ui->comboBoxSelection->currentText(),
                                                                  ui->lineEdit_seed->text().toInt(),
                                                                  g,
-                                                                 ui->checkBox_lastgeneration->isChecked()
+                                                                 ui->checkBox_lastgeneration->isChecked(),
+                                                                 ui->lineEdit_frequencyPop->text().toInt()
                                                                  );
 
 //    controller->setX(x1);

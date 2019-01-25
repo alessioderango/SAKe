@@ -364,7 +364,7 @@ void MainWindow:: makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
 
 }
 
-void MainWindow::updateFitnessPlot(int indexTab, QVector<double> x, QVector<double> y, QVector<double> x1, QVector<double> y1)
+void MainWindow::updateFitnessPlot(int indexTab, QVector<double> x, QVector<double> y, QVector<double> x1, QVector<double> y1, int numberofGenerations, bool b)
 {
     QCustomPlot *m_CustomPlot = getFitnessPlot(indexTab);
     if (m_CustomPlot)
@@ -377,6 +377,31 @@ void MainWindow::updateFitnessPlot(int indexTab, QVector<double> x, QVector<doub
         m_CustomPlot->graph( 1 )->setData( x1, y1);
         m_CustomPlot->replot();
 
+        if(numberofGenerations != 0 && b){
+            m_CustomPlot->addGraph();
+            m_CustomPlot->graph(2)->setBrush(QBrush(QColor(169,169,169, 20)));
+            QVector<double > tmpx;
+                    for (int i = 0; i <= numberofGenerations; ++i)
+                            tmpx.push_back(x[i]);
+            QVector<double > tmpy;
+                          for (int i = 0; i <= numberofGenerations; ++i)
+                                    tmpy.push_back(y[i]);
+            m_CustomPlot->graph(2)->setData(tmpx,tmpy);
+
+
+            m_CustomPlot->addGraph();
+
+
+            m_CustomPlot->graph(3)->setBrush(QBrush(QColor(169,169,169, 20)));
+            QVector<double > tmpx1;
+                    for (int i = 0; i <= numberofGenerations; ++i)
+                            tmpx1.push_back(x1[i]);
+            QVector<double > tmpy1;
+                          for (int i = 0; i <= numberofGenerations; ++i)
+                                    tmpy1.push_back(y1[i]);
+            m_CustomPlot->graph(3)->setData( tmpx1,tmpy1);
+
+        }
     }
 
 }
@@ -386,6 +411,8 @@ void MainWindow::updateKernelPlot(int indexTab, QVector<double> Fi, int tb)
     QCustomPlot *m_CustomPlot = getKernelPlot(indexTab);
     if (m_CustomPlot)
     {
+
+
         QVector<double> keyData;
         for (int i = 0; i < tb; i++) {
             keyData.push_back(i);
@@ -395,6 +422,8 @@ void MainWindow::updateKernelPlot(int indexTab, QVector<double> Fi, int tb)
         // m_CustomPlot->xAxis->setRange( 0,tb );
         //m_CustomPlot->rescaleAxes();
         m_CustomPlot->replot();
+
+
     }
 
 }
@@ -1789,7 +1818,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
     QVariantList listParameter = xmlmanager->getAllElementsFromProjectName(item->data(0,Qt::UserRole).toString());
     QTreeWidgetItem * p = item->parent();
 //    int i = ui->treeWidget->indexOfTopLevelItem(item);
-    cout << column << endl;
+   // cout << column << endl;
 //    cout << item->parent()->text(column).toStdString() << endl;
     if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Calibration", Qt::CaseInsensitive)==0){
         if(listParameter.size() > 5){

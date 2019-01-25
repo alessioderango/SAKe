@@ -9,6 +9,8 @@
 #include <algorithm>    // std::sort
 #include <set>
 #include <iomanip>
+#include <QVector>
+#include "HandlerCSV.h"
 using namespace std;
 
 struct row {
@@ -85,6 +87,8 @@ public:
     using eoCountContinue<EOT>::thisGeneration;
     using eoCountContinue<EOT>::thisGenerationPlaceholder;
 
+    typedef typename EOT::Fitness Fitness;
+
     /// Ctor for setting a
     eoGenContinueMy( QString _savePath, int _stepToSave, int _numberOfKernelToBeSaved)
         : eoCountContinue<EOT>( ),
@@ -97,16 +101,38 @@ public:
         savePathWithHeader=_savePath;
         //SALVATAGGIO ULTIMA GENERAZIONE
         savePathKernels=savePath+"/kernels.csv";
+        saveFitnessGenerations=savePath+"/fitnessGenerations.csv";
         savePath+="/currentGeneration.csv";
         savePathWithHeader+= "/currentGenerationWithHeader.csv";
         numberOfKernelToBeSaved=_numberOfKernelToBeSaved;
         stepToSave = _stepToSave;
+
+//        ofstream myfile;
+//        myfile.open (saveFitnessGenerations.toStdString(),ios::out);
+//        myfile.close();
+
+
+    }
+
+    static Fitness sumFitness(double _sum, const EOT& _eot){
+        _sum += _eot.fitness();
+        return _sum;
     }
 
 
 
     virtual bool operator() ( const eoPop<EOT>& _vEO ) {
 
+
+
+        if(thisGeneration == 0){ // first step
+            QVector<double> x;
+            QVector<double> yBest;
+            QVector<double> yAverage;
+            HandlerCSV::loadCSVGenationsFromFile(saveFitnessGenerations, x, yBest, yAverage);
+            numGenerations = x.size();
+
+        }
 
         //SALVATAGGIO ULTIMA GENERAZIONE
         ofstream myfile;
@@ -132,7 +158,7 @@ public:
             double tmp = _vEO[t].fitness();
 
             int stop =  _vEO[t].getSizeConst();
-            myfile << thisGeneration << " ;";
+            myfile << thisGeneration+numGenerations << " ;";
             myfile << tmp << " ;";
             double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
             myfile << delta << " ;";
@@ -146,7 +172,7 @@ public:
             }
             myfile << "\n";
 
-            myfileWithHeader << thisGeneration << " ;";
+            myfileWithHeader << thisGeneration+numGenerations << " ;";
             myfileWithHeader << tmp << " ;";
             myfileWithHeader << delta << " ;";
             myfileWithHeader << _vEO[t].getYmMinConst().getValue() << " ;";
@@ -197,6 +223,15 @@ public:
         myfile.close();
         myfileWithHeader.close();
 
+        ofstream fitnessGenerator;
+        fitnessGenerator.open (saveFitnessGenerations.toStdString(),ios::app);
+
+        Fitness v = std::accumulate(_vEO.begin(), _vEO.end(), Fitness(0.0), eoGenContinueMy::sumFitness);
+
+        fitnessGenerator << thisGeneration+numGenerations << ";" << _vEO.best_element().fitness() << ";" << v/_vEO.size() << endl;
+
+        fitnessGenerator.close();
+
         thisGeneration++;
         if(stop){
             eo::log << eo::logging << "STOP in eoGenContinue: stop execution \n";
@@ -214,7 +249,7 @@ public:
     */
     virtual void setStop( bool _stop ) {
         stop = _stop;
-        eoCountContinue<EOT>::reset();
+        //eoCountContinue<EOT>::reset();
     }
 
     /** Returns the number of generations to reach*/
@@ -232,11 +267,14 @@ private:
     QString savePath;
     QString savePathWithHeader;
     QString savePathKernels;
+     QString saveFitnessGenerations;
     QObject *gen;
     //std::vector<std::vector<double>> kernels;
     set <row, compareRow> kernels;
     int numberOfKernelToBeSaved;
     int stepToSave;
+
+    int numGenerations;
 };
 
 

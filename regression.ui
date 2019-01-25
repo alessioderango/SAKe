@@ -958,7 +958,7 @@ spacing:100px;
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="lineEdit_frequencyPop">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -968,7 +968,12 @@ spacing:100px;
               <property name="font">
                <font>
                 <pointsize>8</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>100</string>
               </property>
              </widget>
             </item>

@@ -419,11 +419,11 @@ void Dialog::on_pushButtonStart_clicked()
                                                  QVector<double> ,
                                                  QVector<double> ,
                                                  QVector<double> ,
-                                                 QVector<double> )), mainWindow, SLOT(updateFitnessPlot(int ,
+                                                 QVector<double> ,int, bool)), mainWindow, SLOT(updateFitnessPlot(int ,
                                                                                                         QVector<double> ,
                                                                                                         QVector<double> ,
                                                                                                         QVector<double> ,
-                                                                                                        QVector<double> )));
+                                                                                                        QVector<double> ,int ,bool)));
 
 
     connect(controller, SIGNAL(updateKernelPlot(int ,
