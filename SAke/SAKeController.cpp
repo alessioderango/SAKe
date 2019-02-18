@@ -126,7 +126,13 @@ SAKeController::SAKeController(MainWindow *_main,
             if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
                 parameter1=para1;
                 parameter2=para2;
-                selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+                QString tmp = QString("Ranking(");
+                tmp.append(QString::number(parameter1));
+                tmp.append(",");
+                tmp.append(QString::number(parameter2));
+                tmp.append(")");
+                //cout << tmp.toStdString() << endl;
+                selection = tmp;//QString("Ranking(%1,%1)").arg(parameter1,parameter2);
             }else
                 if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
                     parameter1=para1;

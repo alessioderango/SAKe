@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>965</height>
+    <height>1060</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -978,12 +978,12 @@
             </property>
             <item>
              <property name="text">
-              <string>GMD</string>
+              <string>HW</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>GMDn</string>
+              <string>HWn</string>
              </property>
             </item>
             <item>

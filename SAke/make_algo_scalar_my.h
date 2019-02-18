@@ -78,9 +78,9 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
   // the selection : help and comment depend on whether or not a distance is passed
   std::string comment;
   if (_dist == NULL)
-    comment = "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)";
+    comment = "Selection: DetTour(T), StochTour(t), Roulette, Ranking( p, e) or Sequential(ordered/unordered)";
       else
-        comment = "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e), Sharing(sigma_share) or Sequential(ordered/unordered)";
+        comment = "Selection: DetTour(T), StochTour(t), Roulette, Ranking( p, e), Sharing(sigma_share) or Sequential(ordered/unordered)";
 
   eoValueParam<eoParamParamType>& selectionParam = _parser.createParam(eoParamParamType("DetTour(2)"), "selection", comment, 'S', "Evolution Engine");
 
