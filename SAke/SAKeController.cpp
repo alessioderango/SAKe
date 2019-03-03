@@ -112,18 +112,18 @@ SAKeController::SAKeController(MainWindow *_main,
 
     savePath = tmp2;
 
-    if(QString::compare(selection, "StochTour(t)", Qt::CaseInsensitive)==0)
+    if(QString::compare(selection, "Stochastic Tournament (Tr)", Qt::CaseInsensitive)==0)
     {
         parameter1=para1;
         parameter2=para2;
         selection = QString("StochTour(%1)").arg(parameter1);
     }else
-        if( QString::compare(selection, "DetTour(T)", Qt::CaseInsensitive)==0){
+        if( QString::compare(selection, "Deterministic Tournament (Ts)", Qt::CaseInsensitive)==0){
             parameter1=para1;
             parameter2=para2;
             selection = QString("DetTour(%1)").arg(parameter1);
         }else
-            if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
+            if( QString::compare(selection, "Ranking (s)", Qt::CaseInsensitive)==0){
                 parameter1=para1;
                 parameter2=para2;
                 QString tmp = QString("Ranking(");
@@ -205,8 +205,9 @@ void SAKeController::startAlgorithm()
         vector<vector<double>> popFromFile;
         if(lastGeneration){
             int numGen;
-            HandlerCSV::loadCSVPopFromFile(savePath+"/currentGeneration.csv",popFromFile,numGen);
+            HandlerCSV::loadCSVPopFromFile(savePath+"/currentGenerationWithHeader.csv",popFromFile,numGen);
         }
+
 
         parser.setORcreateParam(eoParamParamType(selection.toStdString()), "selection", "Selection: DetTour(T), StochTour(t), Roulette, Ranking(p,e) or Sequential(ordered/unordered)", 'S', "Evolution Engine");
         parser.setORcreateParam(unsigned(this->pop), "popSize", "Population Size", 'P', "Evolution Engine");
@@ -237,6 +238,7 @@ void SAKeController::startAlgorithm()
         case FitnessGMD:
             evaltmp = new eoEvalFuncCounter<Indi>(plainEval);
             break;
+
         case FitnessGMDn:
             evaltmp = new eoEvalFuncCounter<Indi>(plainEvalGMDn);
             break;

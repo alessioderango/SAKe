@@ -80,18 +80,18 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
 
     savePath = tmp2;
 
-    if(QString::compare(selection, "StochTour(t)", Qt::CaseInsensitive)==0)
+    if(QString::compare(selection, "Stochastic Tournament (Tr)", Qt::CaseInsensitive)==0)
     {
         parameter1=para1;
         parameter2=para2;
         selection = QString("StochTour(%1)").arg(parameter1);
     }else
-        if( QString::compare(selection, "DetTour(T)", Qt::CaseInsensitive)==0){
+        if( QString::compare(selection, "Deterministic Tournament (Ts)", Qt::CaseInsensitive)==0){
             parameter1=para1;
             parameter2=para2;
             selection = QString("DetTour(%1)").arg(parameter1);
         }else
-            if( QString::compare(selection, "Ranking(p,e)", Qt::CaseInsensitive)==0){
+            if( QString::compare(selection, "Ranking (s)", Qt::CaseInsensitive)==0){
                 parameter1=para1;
                 parameter2=para2;
                 selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);

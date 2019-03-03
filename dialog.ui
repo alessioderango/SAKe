@@ -9,12 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>590</width>
-    <height>1060</height>
+    <width>552</width>
+    <height>741</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+   <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -234,7 +234,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Initial pattern</string>
+             <string>Initial shape</string>
             </property>
            </widget>
           </item>
@@ -415,17 +415,17 @@
             </property>
             <item>
              <property name="text">
-              <string>StochTour(t)</string>
+              <string>Stochastic Tournament (Tr)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>DetTour(T)</string>
+              <string>Deterministic Tournament (Ts)</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Ranking(p,e)</string>
+              <string>Ranking (s)</string>
              </property>
             </item>
             <item>
@@ -983,11 +983,6 @@
             </item>
             <item>
              <property name="text">
-              <string>HWn</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>EW</string>
              </property>
             </item>
@@ -1042,7 +1037,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Number of lines</string>
+             <string>ROC AUC Number of Thresholds (ntr)</string>
             </property>
            </widget>
           </item>
@@ -1179,7 +1174,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Number of best kernels to be saved</string>
+             <string>Number of best kernels to be saved (Nbk)</string>
             </property>
            </widget>
           </item>

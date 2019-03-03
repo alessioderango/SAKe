@@ -206,7 +206,7 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
 int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFromFile,int& numberGen){
     std::ifstream in(fileurl.toStdString());
     std::string line;
-
+    std::getline(in, line);// jump header line
     while (std::getline(in, line)){
         std::vector<string> x;
         x = split(line, ';');
@@ -217,7 +217,7 @@ int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFr
             tmp.push_back(std::stod(x[i]));
         }
         popFromFile.push_back(tmp);
-        //        cout << line << endl;
+        cout << line << endl;
     }
     //    cout << popFromFile.size()<< endl;
     //    for(int i=0;i <popFromFile.size();i++){

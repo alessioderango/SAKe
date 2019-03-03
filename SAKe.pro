@@ -111,7 +111,8 @@ HEADERS  += mainwindow.h \
     CustomPlotRegressionPreviewKernel.h \
     controlpoints.h \
     utilis.h \
-    Regression/Genotype.h
+    Regression/Genotype.h \
+    SAke/eoMyRanking.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \

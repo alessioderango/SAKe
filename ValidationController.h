@@ -160,6 +160,8 @@ signals:
                                        QString tb,
                                        QString safetyMargin,
                                        QString momentum);
+    void updateTextsValidationAllInOneFitness(int indexTab,QString name, QString fitness);
+
     void updateROCPlot(int indexTab,
                        QVector<double> FPR,
                        QVector<double> TPR,

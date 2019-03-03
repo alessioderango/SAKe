@@ -29,7 +29,7 @@ ValidationController::ValidationController(
 int getRightPlotFromName(QString name)
 {
 
-    if(name == "GMD")
+    if(name == "AUCROC")
         return 0;
     else
         if(name =="GMDn")
@@ -38,7 +38,7 @@ int getRightPlotFromName(QString name)
             if(name =="EW")
                 return 2;
             else
-                if(name =="AUCROC")
+                if(name =="GMD")
                     return 3;
 
 }
@@ -182,8 +182,8 @@ void ValidationController::run(){
     //    else
     //        if(ft == FitnessAUCROC)
     //            startValidationAUCROC();
-    ft = FitnessGMD;
-    startValidationAllinOne("GMD");
+//    ft = FitnessGMD;
+//    startValidationAllinOne("GMD");
     ft = FitnessGMDn;
     startValidationAllinOne("GMDn");
     ft=FitnessEqualWeights;
@@ -617,7 +617,7 @@ void ValidationController::startValidationAUCROC(QString namePlot){
                                              QString("%1").arg(dYcr),
                                              QString("%1").arg(momentoDelPrimoOrdine)
                                              );
-    // emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
+     emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 
     QString pathValidation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/validation/";
     QDir dirVal(pathValidation);
@@ -993,7 +993,7 @@ void ValidationController::startValidationAllinOne(QString namePlot){
     ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
 
     int indexPlot = getRightPlotFromName(namePlot);
-    emit this->updateMobPlotAllInOne(pos,namePlot,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray[indexPlot],arrowArray[indexPlot]);
+//    emit this->updateMobPlotAllInOne(pos,namePlot,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(), ymMin2.getTime(),bests,widgetArray[indexPlot],arrowArray[indexPlot]);
 
     QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/validation/"+projectName;
     QDir dir3(tmp2);
@@ -1038,7 +1038,7 @@ void ValidationController::startValidationAllinOne(QString namePlot){
 
 
 
-    emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
+   // emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 
     QString finalFitness;
     if(ft == FitnessGMD || ft == FitnessGMDn)
@@ -1046,11 +1046,12 @@ void ValidationController::startValidationAllinOne(QString namePlot){
     if(ft == FitnessEqualWeights)
         finalFitness = QString("%1").arg((double) (f));
 
-    emit this->updateTextsValidationAllInOne(pos,namePlot,finalFitness,
-                                             QString("%1").arg(this->size),
-                                             QString("%1").arg(dYcr),
-                                             QString("%1").arg(momentoDelPrimoOrdine)
-                                             );
+//    emit this->updateTextsValidationAllInOne(pos,namePlot,finalFitness,
+//                                             QString("%1").arg(this->size),
+//                                             QString("%1").arg(dYcr),
+//                                             QString("%1").arg(momentoDelPrimoOrdine)
+//                                             );
+    emit this->updateTextsValidationAllInOneFitness(pos,namePlot,finalFitness);
     mainwindows->mutex.unlock();
     // mutex->unlock();
     //delete ym;

@@ -131,9 +131,13 @@ private :
 
         QString genString= QString("%1").arg(steps+numGenerations);
         steps++;
+        QString ZjMin = QString("%1").arg((best_element.getYmMinConst().getValue()));
+        QString Zcr = QString("%1").arg((best_element.getYmMin2Const().getValue()));
         emit controller->updateTexts(pos,genString,QString("%1").arg(fitness),
                                      QString("%1").arg(v / _pop.size()),
                                      QString("%1").arg(_pop.best_element().getSizeConst()),
+                                     ZjMin,
+                                     Zcr,
                                      QString("%1").arg((best_element.getYmMinConst().getValue()-best_element.getYmMin2Const().getValue())/best_element.getYmMinConst().getValue()),
                                      QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst()),
                                      (steps*100)/maxGen,

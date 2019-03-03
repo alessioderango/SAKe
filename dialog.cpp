@@ -439,12 +439,16 @@ void Dialog::on_pushButtonStart_clicked()
                                            QString ,
                                            QString ,
                                            QString ,
+                                           QString ,
+                                           QString ,
                                            int ,
                                            int,
                                            QString ,
                                            QString )), mainWindow, SLOT(updateTexts(int ,
                                                                                     QString,
                                                                                     QString,
+                                                                                    QString ,
+                                                                                    QString ,
                                                                                     QString ,
                                                                                     QString ,
                                                                                     QString ,
@@ -472,16 +476,16 @@ void Dialog::on_pushButtonStart_clicked()
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
 
     //Fitness
-    if(ui->comboBoxFitness->currentIndex() == 3)
+    if(ui->comboBoxFitness->currentIndex() == FitnessAUCROC)
         mainWindow->addTabAUCROC(QString("Calibration AUC ROC - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
     else
-        if(ui->comboBoxFitness->currentIndex() == 0)
+        if(ui->comboBoxFitness->currentIndex() == FitnessGMD)
             mainWindow->addTab(QString("Calibration - GMD "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
         else
-            if(ui->comboBoxFitness->currentIndex() == 1)
+            if(ui->comboBoxFitness->currentIndex() == FitnessGMDn)
                 mainWindow->addTab(QString("Calibration - GMDn "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
             else
-                if(ui->comboBoxFitness->currentIndex() == 2)
+                if(ui->comboBoxFitness->currentIndex() == FitnessEqualWeights)
                     mainWindow->addTab(QString("Calibration - EW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
 
 
@@ -615,12 +619,12 @@ void Dialog::on_lineEditPopSize_textChanged(const QString &arg1)
 void Dialog::on_comboBoxFitness_currentIndexChanged(int index)
 {
 
-    if(index == 0 || index == 1 || index == 2){
+    if(index == FitnessGMD || index == FitnessGMDn || index == FitnessEqualWeights){
         ui->labelNumberOfLines->hide();
         ui->lineEditNumberOfLines->hide();
     }
     else
-        if(index == 3)
+        if(index == FitnessAUCROC)
         {
             ui->labelNumberOfLines->show();
             ui->lineEditNumberOfLines->show();

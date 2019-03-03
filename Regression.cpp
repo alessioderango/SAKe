@@ -319,6 +319,9 @@ void Regression::setParameters(QVariantList list)
     default:
         break;
     }
+    ui->checkBox_kernel->hide();
+    ui->checkBox_controlpoints->hide();
+    ui->checkBox_N->hide();
     //hide first matrix
     ui->label_10->hide();
     ui->lineEdit_8->hide();

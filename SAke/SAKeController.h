@@ -138,6 +138,8 @@ signals:
                      QString fitness,
                      QString cuavfitness,
                      QString tb,
+                     QString Zjmin,
+                     QString Zcr,
                      QString safetyMargin,
                      QString momentum,
                      int barValur,

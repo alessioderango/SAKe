@@ -244,6 +244,11 @@ void Validation::accept()
                                                                                                                  QString ,
                                                                                                                  QString)));
 
+    connect(validationController,
+            SIGNAL(updateTextsValidationAllInOneFitness(int ,QString , QString )),
+            mainWindow,
+            SLOT(updateTextsValidationAllInOneFitness(int ,QString , QString )));
+
 
     connect(validationController, SIGNAL(updateROCPlot(int ,
                                              QVector<double> ,
@@ -260,7 +265,7 @@ void Validation::accept()
     mainWindow->addTabValidationNewInterface(QString("Validation - " + ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
 
 
-    int number_of_mobPlots = 4;
+    int number_of_mobPlots = 1;
     for(int i = 0; i < number_of_mobPlots;i++){
 
         QCustomPlot * m_CustomPlot = getRightPlotFromIndex(i,pos);
@@ -312,7 +317,7 @@ QCustomPlot * Validation::getRightPlotFromIndex(int index, int pos){
     QString name;
     switch (index) {
     case 0:
-        name = "GMD";
+        name = "AUCROC";//"GMD";
         break;
     case 1:
         name = "GMDn";
@@ -321,7 +326,7 @@ QCustomPlot * Validation::getRightPlotFromIndex(int index, int pos){
         name = "EW";
         break;
     case 3:
-        name = "AUCROC";
+        name = "GMD";
         break;
     }
 

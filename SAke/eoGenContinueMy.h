@@ -135,8 +135,8 @@ public:
         }
 
         //SALVATAGGIO ULTIMA GENERAZIONE
-        ofstream myfile;
-        myfile.open (savePath.toStdString(),ios::out);
+//        ofstream myfile;
+//        myfile.open (savePath.toStdString(),ios::out);
 
         ofstream myfileWithHeader;
         myfileWithHeader.open (savePathWithHeader.toStdString(),ios::out);
@@ -158,19 +158,19 @@ public:
             double tmp = _vEO[t].fitness();
 
             int stop =  _vEO[t].getSizeConst();
-            myfile << thisGeneration+numGenerations << " ;";
-            myfile << tmp << " ;";
+//            myfile << thisGeneration+numGenerations << " ;";
+//            myfile << tmp << " ;";
             double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
-            myfile << delta << " ;";
-            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
-            myfile << stop << " ;";
-            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+//            myfile << delta << " ;";
+//            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
+//            myfile << stop << " ;";
+//            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
             //myfile << " ;";
             //  myfile << "fitness ; "<<tmp <<" ; ";
-            for (int i = 0; i < stop; i++) {
-                myfile << _vEO[t].getFiConstIndex(i) << ";";
-            }
-            myfile << "\n";
+//            for (int i = 0; i < stop; i++) {
+//                myfile << _vEO[t].getFiConstIndex(i) << ";";
+//            }
+//            myfile << "\n";
 
             myfileWithHeader << thisGeneration+numGenerations << " ;";
             myfileWithHeader << tmp << " ;";
@@ -220,7 +220,7 @@ public:
 
 
 
-        myfile.close();
+//        myfile.close();
         myfileWithHeader.close();
 
         ofstream fitnessGenerator;
@@ -267,7 +267,7 @@ private:
     QString savePath;
     QString savePathWithHeader;
     QString savePathKernels;
-     QString saveFitnessGenerations;
+    QString saveFitnessGenerations;
     QObject *gen;
     //std::vector<std::vector<double>> kernels;
     set <row, compareRow> kernels;

@@ -119,6 +119,8 @@ private slots:
                               QString fitness,
                               QString cuavfitness,
                               QString tb,
+                              QString Zjmin,
+                              QString Zcr,
                               QString safetyMargin,
                               QString momentum,
                               int barValur,
@@ -155,6 +157,9 @@ private slots:
                                QString tb,
                                QString safetyMargin,
                                QString momentum);
+
+    void updateTextsValidationAllInOneFitness(int indexTab,QString name, QString fitness);
+
     void updateAbsMaxFit(int indexTab, QString s);
     void updateAbsAvFit(int indexTab, QString s);
 

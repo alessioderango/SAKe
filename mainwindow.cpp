@@ -498,7 +498,7 @@ void MainWindow::updateTextsRegression(int indexTab, QString s, QString fitness,
     curAvFit->setText(cuavfitness);
 
     QLabel* bestfndatItera = (QLabel*)tabs->findChild<QLabel*>("firstOccurenceText");
-    QString fo = QString("First occurence of AMF at iteration: %1").arg(firstOccurence);
+    QString fo = QString("Iteration of first occurence of AMF : %1").arg(firstOccurence);
     bestfndatItera->setText(fo);
     QProgressBar* bar = (QProgressBar*)tabs->findChild<QProgressBar*>("bar");
     bar->setValue(barValue);
@@ -595,6 +595,8 @@ void MainWindow::updateTexts(int indexTab,
                              QString fitness,
                              QString cuavfitness,
                              QString tb,
+                             QString Zjmin,
+                             QString Zcr,
                              QString safetyMargin,
                              QString momentum,
                              int barValue, int firstOccurence,
@@ -617,6 +619,12 @@ void MainWindow::updateTexts(int indexTab,
     curAvFit->setText(cuavfitness);
     QLabel* tbL = (QLabel*)tabs->findChild<QLabel*>("tbNum");
     tbL->setText(tb);
+
+    QLabel* ZjminL = (QLabel*)tabs->findChild<QLabel*>("ZjminNum");
+    ZjminL->setText(Zjmin);
+    QLabel* ZcrL = (QLabel*)tabs->findChild<QLabel*>("ZcrNum");
+    ZcrL->setText(Zcr);
+
     QLabel* safetyMArginL = (QLabel*)tabs->findChild<QLabel*>("dCriticoNum");
     safetyMArginL->setText(safetyMargin);
 
@@ -624,7 +632,7 @@ void MainWindow::updateTexts(int indexTab,
     momentumL->setText(momentum);
 
     QLabel* bestfndatItera = (QLabel*)tabs->findChild<QLabel*>("firstOccurenceText");
-    QString fo = QString("First occurence of AMF at iteration: %1").arg(firstOccurence);
+    QString fo = QString("Iteration of first occurence of AMF : %1").arg(firstOccurence);
     bestfndatItera->setText(fo);
     QProgressBar* bar = (QProgressBar*)tabs->findChild<QProgressBar*>("bar");
     bar->setValue(barValue);
@@ -672,6 +680,14 @@ void MainWindow::updateTextsValidationAllInOne(int indexTab,QString name, QStrin
 
     QLabel* momentumL = (QLabel*)tabs->findChild<QLabel*>("momPrimoNum"+name);
     momentumL->setText(momentum);
+
+}
+void MainWindow::updateTextsValidationAllInOneFitness(int indexTab,QString name, QString fitness)
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
+
+    QLabel* curMaxFit = (QLabel*)tabs->findChild<QLabel*>("curMaxFitNum"+name);
+    curMaxFit->setText(fitness);
 
 }
 
@@ -1042,7 +1058,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     grid->addWidget(AbsMaxFitNum,0,1);
 
     QLabel * firstOccurenceText = new QLabel();
-    QString fo = QString("First occurence of AMF at iteration: %1").arg(0);
+    QString fo = QString("Iteration of first occurence of AMF : %1").arg(0);
     firstOccurenceText->setText(fo);
     firstOccurenceText->setObjectName("firstOccurenceText");
     grid->addWidget(firstOccurenceText,0,2);
@@ -1118,6 +1134,21 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     momPrimoNum->setObjectName("momPrimoNum");
     grid->addWidget(momPrimoNum,8,5);
 
+    QLabel * Zjmin = new QLabel();
+    Zjmin->setText("Zj-min");
+    grid->addWidget(Zjmin,8,6);
+    QLabel * ZjminNum = new QLabel();
+    ZjminNum->setText("0");
+    ZjminNum->setObjectName("ZjminNum");
+    grid->addWidget(ZjminNum,8,7);
+
+    QLabel * Zcr = new QLabel();
+    Zcr->setText("Zcr");
+    grid->addWidget(Zcr,8,8);
+    QLabel * ZcrNum = new QLabel();
+    ZcrNum->setText("0");
+    ZcrNum->setObjectName("ZcrNum");
+    grid->addWidget(ZcrNum,8,9);
 
     // first occurence at N iteration;
 
@@ -1242,7 +1273,7 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     grid->addWidget(AbsMaxFitNum,0,1);
 
     QLabel * firstOccurenceText = new QLabel();
-    QString fo = QString("First occurence of AMF at iteration: %1").arg(0);
+    QString fo = QString("Iteration of first occurence of AMF : %1").arg(0);
     firstOccurenceText->setText(fo);
     firstOccurenceText->setObjectName("firstOccurenceText");
     grid->addWidget(firstOccurenceText,0,2);
@@ -1317,6 +1348,23 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     momPrimoNum->setText("0");
     momPrimoNum->setObjectName("momPrimoNum");
     grid->addWidget(momPrimoNum,8,5);
+
+    QLabel * Zjmin = new QLabel();
+    Zjmin->setText("Zj-min");
+    grid->addWidget(Zjmin,8,6);
+    QLabel * ZjminNum = new QLabel();
+    ZjminNum->setText("0");
+    ZjminNum->setObjectName("ZjminNum");
+    grid->addWidget(ZjminNum,8,7);
+
+    QLabel * Zcr = new QLabel();
+    Zcr->setText("Zcr");
+    grid->addWidget(Zcr,8,8);
+    QLabel * ZcrNum = new QLabel();
+    ZcrNum->setText("0");
+    ZcrNum->setObjectName("ZcrNum");
+    grid->addWidget(ZcrNum,8,9);
+
 
 
     // first occurence at N iteration;
@@ -1404,7 +1452,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
     grid->addWidget(AbsMaxFitNum,0,1);
 
     QLabel * firstOccurenceText = new QLabel();
-    QString fo = QString("First occurence of AMF at iteration: %1").arg(0);
+    QString fo = QString("Iteration of first occurence of AMF : %1").arg(0);
     firstOccurenceText->setText(fo);
     firstOccurenceText->setObjectName("firstOccurenceText");
     grid->addWidget(firstOccurenceText,0,2);
@@ -1663,39 +1711,64 @@ void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitne
     mainL->setStretch(0,5);
     QGridLayout * grid = new QGridLayout();
 
+    QLabel * curMaxFitGMDn = new QLabel();
+    curMaxFitGMDn->setText("Fitness HW");
+    grid->addWidget(curMaxFitGMDn,1,0);
+    QLabel * curMaxFitNumGMDn = new QLabel();
+    curMaxFitNumGMDn->setText("0");
+    curMaxFitNumGMDn->setObjectName("curMaxFitNumGMDn");
+    grid->addWidget(curMaxFitNumGMDn,1,1);
+
+    QLabel * curMaxFitEW = new QLabel();
+    curMaxFitEW->setText("Fitness EW");
+    grid->addWidget(curMaxFitEW,2,0);
+    QLabel * curMaxFitNumEW = new QLabel();
+    curMaxFitNumEW->setText("0");
+    curMaxFitNumEW->setObjectName("curMaxFitNumEW");
+    grid->addWidget(curMaxFitNumEW,2,1);
 
     QLabel * curMaxFit = new QLabel();
     curMaxFit->setText(fitness);
-    grid->addWidget(curMaxFit,0,0);
+    grid->addWidget(curMaxFit,3,0);
     QLabel * curMaxFitNum = new QLabel();
     curMaxFitNum->setText("0");
     curMaxFitNum->setObjectName("curMaxFitNum"+nameMobFunc);
-    grid->addWidget(curMaxFitNum,0,1);
+    grid->addWidget(curMaxFitNum,3,1);
+
+//    QLabel * curMaxFitGMD = new QLabel();
+//    curMaxFitGMD->setText("Fitness GMD");
+//    grid->addWidget(curMaxFitGMD,1,0);
+//    QLabel * curMaxFitNumGMD = new QLabel();
+//    curMaxFitNumGMD->setText("0");
+//    curMaxFitNumGMD->setObjectName("curMaxFitNumGMD");
+//    grid->addWidget(curMaxFitNumGMD,1,1);
+
+
 
 
     QLabel * tb = new QLabel();
     tb->setText("tb:");
-    grid->addWidget(tb,1,0);
+    grid->addWidget(tb,4,0);
     QLabel * tbNum = new QLabel();
     tbNum->setText("0");
     tbNum->setObjectName("tbNum"+nameMobFunc);
-    grid->addWidget(tbNum,1,1);
+    grid->addWidget(tbNum,4,1);
 
     QLabel * dCritico = new QLabel();
     dCritico->setText("Safety margin:");
-    grid->addWidget(dCritico,1,2);
+    grid->addWidget(dCritico,4,2);
     QLabel * dCriticoNum = new QLabel();
     dCriticoNum->setText("0");
     dCriticoNum->setObjectName("dCriticoNum"+nameMobFunc);
-    grid->addWidget(dCriticoNum,1,3);
+    grid->addWidget(dCriticoNum,4,3);
 
     QLabel * momPrimo = new QLabel();
     momPrimo->setText("First-order momentum:");
-    grid->addWidget(momPrimo,1,4);
+    grid->addWidget(momPrimo,4,4);
     QLabel * momPrimoNum = new QLabel();
     momPrimoNum->setText("0");
     momPrimoNum->setObjectName("momPrimoNum"+nameMobFunc);
-    grid->addWidget(momPrimoNum,1,5);
+    grid->addWidget(momPrimoNum,4,5);
 
     // first occurence at N iteration;
     // GMD--------------------------
@@ -1732,31 +1805,31 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
     horizontalSplitter->addWidget(wrap(vertical));
 
 
-    QSplitter* verticalSplitterGMDeGMDn = new QSplitter();
-    verticalSplitterGMDeGMDn->setOrientation(Qt::Horizontal);
-    //GMD ------------------------------------
-    QVBoxLayout * mainLGMD = new QVBoxLayout();
-    getGraphs("kerFunc","GMD","Fitness GMD :", mainLGMD, rain, rain_size, activation_size, activation, mobFuncGMD);
+//    QSplitter* verticalSplitterGMDeGMDn = new QSplitter();
+//    verticalSplitterGMDeGMDn->setOrientation(Qt::Horizontal);
+//    //GMD ------------------------------------
+//    QVBoxLayout * mainLGMD = new QVBoxLayout();
+//    getGraphs("kerFunc","GMD","Fitness GMD :", mainLGMD, rain, rain_size, activation_size, activation, mobFuncGMD);
 
-    verticalSplitterGMDeGMDn->addWidget(wrap(mainLGMD));
+//    verticalSplitterGMDeGMDn->addWidget(wrap(mainLGMD));
 
     //GMDn ------------------------------------
-    QVBoxLayout * mainLGMDn = new QVBoxLayout();
-    getGraphs("kerFunc","GMDn","Fitness GMDn :", mainLGMDn, rain, rain_size, activation_size, activation, mobFuncGMDn);
+//    QVBoxLayout * mainLGMDn = new QVBoxLayout();
+//    getGraphs("kerFunc","GMDn","Fitness GMDn :", mainLGMDn, rain, rain_size, activation_size, activation, mobFuncGMDn);
 
-    verticalSplitterGMDeGMDn->addWidget(wrap(mainLGMDn));
+//    verticalSplitterGMDeGMDn->addWidget(wrap(mainLGMDn));
 
-    horizontalSplitter->addWidget(verticalSplitterGMDeGMDn);
+//    horizontalSplitter->addWidget(verticalSplitterGMDeGMDn);
 
-    QSplitter* verticalSplitterEW = new QSplitter();
-    verticalSplitterEW->setOrientation(Qt::Horizontal);
+//    QSplitter* verticalSplitterEW = new QSplitter();
+//    verticalSplitterEW->setOrientation(Qt::Horizontal);
 
     //EW ------------------------------------
-    QVBoxLayout * mainLEW = new QVBoxLayout();
-    getGraphs("kerFunc","EW","Fitness EW :", mainLEW, rain, rain_size, activation_size, activation, mobFuncEW);
+//    QVBoxLayout * mainLEW = new QVBoxLayout();
+//    getGraphs("kerFunc","EW","Fitness EW :", mainLEW, rain, rain_size, activation_size, activation, mobFuncEW);
 
 
-    verticalSplitterEW->addWidget(wrap(mainLEW));
+//    verticalSplitterEW->addWidget(wrap(mainLEW));
 
     QSplitter * rightside = new QSplitter();
     QVBoxLayout * mainLAUCROC = new QVBoxLayout();
@@ -1792,9 +1865,10 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
 
     rightside->addWidget(wrap(gridAUC));
 
-    verticalSplitterEW->addWidget(rightside);
+//    verticalSplitterEW->addWidget(rightside);
 
-    horizontalSplitter->addWidget(verticalSplitterEW);
+//    horizontalSplitter->addWidget(verticalSplitterEW);
+    horizontalSplitter->addWidget(rightside);
     tab1->setLayout(wrap(horizontalSplitter));
     ui->tabWidget_2->setCurrentIndex(ui->tabWidget_2->count()-1);
 
@@ -1846,6 +1920,8 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
                         regression->setW(this);
                         regression->setReadOnlyProjName(true);
                         regression->setParameters(listParameter);
+                        regression->setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint
+                                                   );
 //                        regression->setMainWindow(this);
                         regression->show();
                     }

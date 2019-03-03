@@ -2,16 +2,37 @@
 <ui version="4.0">
  <class>Regression</class>
  <widget class="QDialog" name="Regression">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1074</width>
-    <height>930</height>
+    <width>1064</width>
+    <height>1223</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1</width>
+    <height>1</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -105,7 +126,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Load Kernel</string>
+               <string>Load starting Kernel</string>
               </property>
              </widget>
             </item>
@@ -429,17 +450,17 @@
               </property>
               <item>
                <property name="text">
-                <string>StochTour(t)</string>
+                <string>Stochastic Tournament (Tr)</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>DetTour(T)</string>
+                <string>Deterministic Tournament (Ts)</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Ranking(p,e)</string>
+                <string>Ranking (s)</string>
                </property>
               </item>
               <item>
@@ -664,8 +685,6 @@
            </layout>
           </item>
          </layout>
-         <zorder>label_7</zorder>
-         <zorder>gridLayoutWidget_5</zorder>
         </widget>
        </item>
        <item>
@@ -763,6 +782,12 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_6">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="font">
           <font>
            <pointsize>12</pointsize>
@@ -778,6 +803,9 @@
            <layout class="QGridLayout" name="gridLayout_12">
             <item row="4" column="0">
              <widget class="QCheckBox" name="checkBox_kernel">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>8</pointsize>
@@ -795,6 +823,9 @@
             </item>
             <item row="4" column="1">
              <widget class="QCheckBox" name="checkBox_controlpoints">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>8</pointsize>
@@ -809,6 +840,9 @@
             </item>
             <item row="4" column="2">
              <widget class="QCheckBox" name="checkBox_N">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="font">
                <font>
                 <pointsize>8</pointsize>
