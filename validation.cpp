@@ -237,12 +237,16 @@ void Validation::accept()
                                                                QString,
                                                                QString,
                                                                QString ,
-                                                               QString)), mainWindow, SLOT(updateTextsValidationAllInOne(int ,
+                                                               QString,
+                                                                       QString ,
+                                                                       QString)), mainWindow, SLOT(updateTextsValidationAllInOne(int ,
                                                                                                                  QString,
                                                                                                                  QString,
                                                                                                                  QString,
                                                                                                                  QString ,
-                                                                                                                 QString)));
+                                                                                                                 QString,
+                                                                                                                                 QString ,
+                                                                                                                                 QString)));
 
     connect(validationController,
             SIGNAL(updateTextsValidationAllInOneFitness(int ,QString , QString )),

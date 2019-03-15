@@ -90,7 +90,7 @@ public:
     typedef typename EOT::Fitness Fitness;
 
     /// Ctor for setting a
-    eoGenContinueMy( QString _savePath, int _stepToSave, int _numberOfKernelToBeSaved)
+    eoGenContinueMy( QString _savePath, int _stepToSave, int _numberOfKernelToBeSaved, QString _fitnessFile)
         : eoCountContinue<EOT>( ),
           eoValueParam<unsigned>(0, "Generations", "Generations"),
           stop( false )
@@ -101,15 +101,16 @@ public:
         savePathWithHeader=_savePath;
         //SALVATAGGIO ULTIMA GENERAZIONE
         savePathKernels=savePath+"/kernels.csv";
-        saveFitnessGenerations=savePath+"/fitnessGenerations.csv";
+        saveFitnessGenerations=savePath+"/fitnessHistory.csv";
         savePath+="/currentGeneration.csv";
-        savePathWithHeader+= "/currentGenerationWithHeader.csv";
+        savePathWithHeader+= "/currentGAiteration.csv";
         numberOfKernelToBeSaved=_numberOfKernelToBeSaved;
         stepToSave = _stepToSave;
 
 //        ofstream myfile;
 //        myfile.open (saveFitnessGenerations.toStdString(),ios::out);
 //        myfile.close();
+        fitnessFile=_fitnessFile;
 
 
     }
@@ -146,10 +147,10 @@ public:
 
 
 
-        myfileWithHeader <<  "Generations ;";
-        myfileWithHeader <<  "Fitness ;";
+        myfileWithHeader <<  "Iteration ;";
+        myfileWithHeader <<  "Fitness " << fitnessFile.toStdString() << ";";
         myfileWithHeader <<  "Safety margin ;";
-        myfileWithHeader <<  "Ym min ;";
+        myfileWithHeader <<  "zj-min ;";
         myfileWithHeader <<  "Base time ;";
         myfileWithHeader <<  "First-order momentum;";
         myfileWithHeader <<  "Kernel ;\n";
@@ -275,6 +276,7 @@ private:
     int stepToSave;
 
     int numGenerations;
+    QString fitnessFile;
 };
 
 

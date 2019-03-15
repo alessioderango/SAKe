@@ -71,7 +71,7 @@ private :
         double fitness =_pop.best_element().fitness();
 
         if(steps == 1){ // first step
-            QString stmp = controller->getSavePath()+"/fitnessGenerations.csv";
+            QString stmp = controller->getSavePath()+"/fitnessHistory.csv";
             HandlerCSV::loadCSVGenationsFromFile(stmp, x, yBest, yAverage);
             numGenerations = x.size();
 

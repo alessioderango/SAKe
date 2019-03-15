@@ -324,9 +324,10 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
     if(iMin < 0)  iMin = 0;
     if(iMin > ymSorted.size()-1)  iMin = ymSorted.size()-1;
     int index=(iMin+1);
-    dYcr = (YsMin-ymSorted[index].getValue())/YsMin;
     ymMin= ymSorted[iMin];
     ymMin2 = ymSorted[iMin+1];
+    dYcr = (ymMin.getValue()-ymMin2.getValue())/ymMin.getValue();
+
     momentoDelPrimoOrdine = 0;
     for (int i = 0; i < tb; i++) {
         momentoDelPrimoOrdine += Fi[i]*((i+1)-0.5);
@@ -472,7 +473,7 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
 
     double AUC=0; // Area under the curve
     // primo trapezio
-    AUC += (FPR[0]+FPR[1])*TPR[0]*((double)(0.5));
+    //AUC += (FPR[0]+FPR[1])*(TPR[0]+TPR[1])*((double)(0.5));
     for (int i = 0; i < lines.size()-1; ++i) {
         double h = FPR[i+1]-FPR[i];
         double base = TPR[i]+TPR[i+1];
@@ -615,7 +616,9 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     emit this->updateTextsValidationAllInOne(pos,namePlot,QString("%1").arg(AUC),
                                              QString("%1").arg(this->size),
                                              QString("%1").arg(dYcr),
-                                             QString("%1").arg(momentoDelPrimoOrdine)
+                                             QString("%1").arg(momentoDelPrimoOrdine),
+                                             QString("%1").arg(ymMin.getValue()),
+                                             QString("%1").arg(ymMin2.getValue())
                                              );
      emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 
@@ -637,7 +640,7 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     ofstream myfile;
     myfile.open (savePath.toStdString(),ios::out);
 
-    myfile <<  "z ;";
+    myfile <<  "ztr ;";
     myfile <<  "TP ;";
     myfile <<  "FN ;";
     myfile <<  "FP ;";

@@ -116,11 +116,13 @@ void MainWindow::makeFitnessPlot(QCustomPlot * customPlot){
     customPlot->graph( 0 )->setPen( QPen( Qt::red ) );
     //customPlot->graph( 0 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->graph( 0 )->setData( x1, y1 );
+    customPlot->graph( 0 )->setName("Maximum Fitness");
 
     customPlot->addGraph();
     customPlot->graph( 1 )->setPen( QPen( Qt::green ) );
     //customPlot->graph( 1 )->setSelectedPen( QPen( Qt::blue, 2 ) );
     customPlot->graph( 1 )->setData( x1, y1 );
+    customPlot->graph( 1 )->setName("Average Fitness");
 
     // give the axes some labels:
     customPlot->xAxis->setLabel( "generation" );
@@ -132,6 +134,12 @@ void MainWindow::makeFitnessPlot(QCustomPlot * customPlot){
     customPlot ->setInteractions( QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables );
     customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestFitness(QPoint)));
+
+
+    customPlot->plotLayout()->insertRow(0);
+    customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(customPlot, "Fitness history"));
+    customPlot->legend->setVisible(true);
+    customPlot->legend->setFont(QFont("Helvetica", 9));
 
 }
 
@@ -203,6 +211,28 @@ void MainWindow::makeDETPlot(QCustomPlot *customPlot)
 
     customPlot->xAxis->setRange( 0, 1 );
     customPlot->yAxis->setRange( 0, 1 );
+
+    customPlot->xAxis->setScaleType(QCPAxis::stLogarithmic);
+    customPlot->yAxis->setScaleType(QCPAxis::stLogarithmic);
+
+
+    QVector<double> TickValues;
+    QVector<QString> TickLabels;
+    // you can safely change the values according to the output
+    TickValues << 0 <<0.1  <<0.2  <<0.3  <<0.4  <<0.5  <<0.6  <<0.7 <<0.8  <<0.9 <<1  <<2  <<3  <<4  <<5  <<6  <<7 <<8  <<9<< 10 << 20 << 30 << 40 << 50 << 60 << 70 << 80<< 90 << 100;
+    TickLabels << "0" <<"0.1%"  <<"0.2%"  <<"0.3%"  <<"0.4%"  <<"0.5%"  <<"0.6%"  <<"0.7%" <<"0.8%"  <<"0.9%" <<"1%"  <<"2%"  <<"3%"  <<"4%"  <<"5%"  <<"6%"  <<"7%" <<"8%"  <<"9%"<< "10%" << "20%"<< "30%" << "40%"<< "50%" << "60%"<< "70%" << "80%"<< "90%" << "100%";
+    // disable default ticks and their labels
+    customPlot->yAxis->setAutoTicks(false);
+    customPlot->yAxis->setAutoTickLabels(false);
+    // add your custom values and labels
+    customPlot->yAxis->setTickVector(TickValues);
+    customPlot->yAxis->setTickVectorLabels(TickLabels);
+
+    customPlot->xAxis->setAutoTicks(false);
+    customPlot->xAxis->setAutoTickLabels(false);
+    // add your custom values and labels
+    customPlot->xAxis->setTickVector(TickValues);
+    customPlot->xAxis->setTickVectorLabels(TickLabels);
 
     customPlot->xAxis->setLabel( "False positive rate or false alarms rate" );
     customPlot->yAxis->setLabel( "False negative rate or missed  detection rate" );
@@ -335,6 +365,9 @@ void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, 
     }
     customPlot->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestMobilityFunction(QPoint)));
+
+    customPlot->plotLayout()->insertRow(0);
+    customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(customPlot, "Mobility function related to Bkci"));
 }
 
 void MainWindow:: makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
@@ -469,15 +502,25 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
     m_CustomPlot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("DET");
     if (m_CustomPlot)
     {
-        QVector<double> FNR(TPR.size(),0);
-        for (int i = 0; i < FNR.size(); ++i) {
-                 FNR[i] = (double)(((double)1)-TPR[i]);
+
+        for (int i = 0; i < FPR.size(); ++i) {
+            QVector<double> FNRPerc(2,0);
+            QVector<double> FPRPerc(2,0);
+            FPRPerc[0]=0;
+            FNRPerc[1] = (double)(((double)1)-TPR[i])*100;
+
+            FPRPerc[0] = FPR[i]*100;
+            FPRPerc[1] = 0;
+            m_CustomPlot->addGraph();
+            (m_CustomPlot->graph(i))->setData(FPRPerc,FNRPerc);
+            cout << FPRPerc[0] << "   " <<FNRPerc[0] << endl;
+            cout << FPRPerc[1] << "   " <<FNRPerc[1] << endl;
+
         }
-        (m_CustomPlot->graph(0))->setData(FNR, FPR);
+
 
         m_CustomPlot->replot();
     }
-
 
     QLabel* text = (QLabel*)tabs->findChild<QLabel*>("AUCValue");
     text->setText(QString("%1").arg(AUCROC));
@@ -666,7 +709,7 @@ void MainWindow::updateTextsValidation(int indexTab, QString fitness, QString tb
 
 }
 
-void MainWindow::updateTextsValidationAllInOne(int indexTab,QString name, QString fitness, QString tb, QString safetyMargin, QString momentum)
+void MainWindow::updateTextsValidationAllInOne(int indexTab,QString name, QString fitness, QString tb, QString safetyMargin, QString momentum, QString Zjmin, QString Zcr)
 {
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
 
@@ -680,6 +723,12 @@ void MainWindow::updateTextsValidationAllInOne(int indexTab,QString name, QStrin
 
     QLabel* momentumL = (QLabel*)tabs->findChild<QLabel*>("momPrimoNum"+name);
     momentumL->setText(momentum);
+
+    QLabel* ZjminL = (QLabel*)tabs->findChild<QLabel*>("ZjminNum");
+    ZjminL->setText(Zjmin);
+
+    QLabel* ZcrL = (QLabel*)tabs->findChild<QLabel*>("ZcrNum");
+    ZcrL->setText(Zcr);
 
 }
 void MainWindow::updateTextsValidationAllInOneFitness(int indexTab,QString name, QString fitness)
@@ -1008,7 +1057,7 @@ void MainWindow::pushBackThread(QThread *thread)
 
 }
 
-void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
+void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size,QString fitnessType)
 {
     QTabWidget * tabwidget = new QTabWidget();
     tabwidget->setObjectName("tabwidget");
@@ -1031,6 +1080,8 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     MainWindow::makeKernelPlot(kerFunc,this);
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
+    kerFunc->plotLayout()->insertRow(0);
+    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Best kernel of current iteration (Bkci)"));
     splitter->addWidget(kerFunc);
     MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
     mobFunc->setSizePolicy(spUp);
@@ -1050,7 +1101,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
 
 
     QLabel * AbsMaxFit = new QLabel();
-    AbsMaxFit->setText("Absolute Maximum Fitness (AMF) :");
+    AbsMaxFit->setText("Absolute Maximum Fitness (AMF):");
     grid->addWidget(AbsMaxFit,0,0);
     QLabel * AbsMaxFitNum = new QLabel();
     AbsMaxFitNum->setText("0");
@@ -1079,7 +1130,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
 
 
     QLabel * gen = new QLabel();
-    gen->setText("Current Generation:");
+    gen->setText("Current Iteration:");
     grid->addWidget(gen,3,0);
     QLabel * genNum = new QLabel();
     genNum->setText("0");
@@ -1099,11 +1150,11 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     grid->addWidget(space,5,0);
 
     QLabel * bestIndiv = new QLabel();
-    bestIndiv->setText("Best Individual of current generation");
+    bestIndiv->setText("Best Individual of current iteration");
     grid->addWidget(bestIndiv,6,0);
 
     QLabel * curMaxFit = new QLabel();
-    curMaxFit->setText("Fitness:");
+    curMaxFit->setText("Fitness using "+fitnessType+ " :");
     grid->addWidget(curMaxFit,7,0);
     QLabel * curMaxFitNum = new QLabel();
     curMaxFitNum->setText("0");
@@ -1134,21 +1185,21 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     momPrimoNum->setObjectName("momPrimoNum");
     grid->addWidget(momPrimoNum,8,5);
 
-    QLabel * Zjmin = new QLabel();
-    Zjmin->setText("Zj-min");
-    grid->addWidget(Zjmin,8,6);
-    QLabel * ZjminNum = new QLabel();
-    ZjminNum->setText("0");
-    ZjminNum->setObjectName("ZjminNum");
-    grid->addWidget(ZjminNum,8,7);
+    QLabel * zjmin = new QLabel();
+    zjmin->setText("zj-min");
+    grid->addWidget(zjmin,8,6);
+    QLabel * zjminNum = new QLabel();
+    zjminNum->setText("0");
+    zjminNum->setObjectName("ZjminNum");
+    grid->addWidget(zjminNum,8,7);
 
-    QLabel * Zcr = new QLabel();
-    Zcr->setText("Zcr");
-    grid->addWidget(Zcr,8,8);
-    QLabel * ZcrNum = new QLabel();
-    ZcrNum->setText("0");
-    ZcrNum->setObjectName("ZcrNum");
-    grid->addWidget(ZcrNum,8,9);
+    QLabel * zcr = new QLabel();
+    zcr->setText("zcr");
+    grid->addWidget(zcr,8,8);
+    QLabel * zcrNum = new QLabel();
+    zcrNum->setText("0");
+    zcrNum->setObjectName("ZcrNum");
+    grid->addWidget(zcrNum,8,9);
 
     // first occurence at N iteration;
 
@@ -1171,7 +1222,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
 }
 
 
-void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size)
+void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activation *activation, int activation_size, QString fitnessType)
 {
     QTabWidget * tabwidget = new QTabWidget();
     tabwidget->setObjectName("tabwidget");
@@ -1195,6 +1246,8 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     MainWindow::makeKernelPlot(kerFunc,this);
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
+    kerFunc->plotLayout()->insertRow(0);
+    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Best kernel of current iteration (Bkci)"));
     splitter->addWidget(kerFunc);
     MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
     mobFunc->setSizePolicy(spUp);
@@ -1294,7 +1347,7 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
 
 
     QLabel * gen = new QLabel();
-    gen->setText("Current Generation:");
+    gen->setText("Current Iteration:");
     grid->addWidget(gen,3,0);
     QLabel * genNum = new QLabel();
     genNum->setText("0");
@@ -1314,11 +1367,11 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     grid->addWidget(space,5,0);
 
     QLabel * bestIndiv = new QLabel();
-    bestIndiv->setText("Best Individual of current generation");
+    bestIndiv->setText("Best Individual of current iteration");
     grid->addWidget(bestIndiv,6,0);
 
     QLabel * curMaxFit = new QLabel();
-    curMaxFit->setText("Fitness:");
+    curMaxFit->setText("Fitness using "+ fitnessType+" :");
     grid->addWidget(curMaxFit,7,0);
     QLabel * curMaxFitNum = new QLabel();
     curMaxFitNum->setText("0");
@@ -1427,7 +1480,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("FuncPlot");
     kerFunc->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(kerFunc, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernel(QPoint)));
+//    connect(kerFunc, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernel(QPoint)));
 
 
 //    splitter->addWidget(kerFunc);
@@ -1509,7 +1562,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 
 
     QLabel * gen = new QLabel();
-    gen->setText("Current Generation:");
+    gen->setText("Current Iteration:");
     grid->addWidget(gen,3,0);
     QLabel * genNum = new QLabel();
     genNum->setText("0");
@@ -1529,7 +1582,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
     grid->addWidget(space,5,0);
 
     QLabel * bestIndiv = new QLabel();
-    bestIndiv->setText("Best Individual of current generation");
+    bestIndiv->setText("Best Individual of current iteration");
     grid->addWidget(bestIndiv,6,0);
 
     QLabel * curMaxFit = new QLabel();
@@ -1770,6 +1823,23 @@ void MainWindow::getGraphs(QString nameKerFunc,QString nameMobFunc,QString fitne
     momPrimoNum->setObjectName("momPrimoNum"+nameMobFunc);
     grid->addWidget(momPrimoNum,4,5);
 
+
+    QLabel * zjmin = new QLabel();
+    zjmin->setText("zj-min");
+    grid->addWidget(zjmin,4,6);
+    QLabel * zjminNum = new QLabel();
+    zjminNum->setText("0");
+    zjminNum->setObjectName("ZjminNum");
+    grid->addWidget(zjminNum,4,7);
+
+    QLabel * zcr = new QLabel();
+    zcr->setText("zcr");
+    grid->addWidget(zcr,4,8);
+    QLabel * zcrNum = new QLabel();
+    zcrNum->setText("0");
+    zcrNum->setObjectName("ZcrNum");
+    grid->addWidget(zcrNum,4,9);
+
     // first occurence at N iteration;
     // GMD--------------------------
 
@@ -1798,6 +1868,10 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
     spUp.setVerticalStretch(2);
     QVBoxLayout * vertical = new QVBoxLayout();
     MainWindow::makeKernelPlot(kerFunc, this);
+    kerFunc->plotLayout()->insertRow(0);
+    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Operative Kernel"));
+
+
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
     vertical->addWidget(kerFunc);

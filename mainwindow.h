@@ -11,7 +11,7 @@
 #include <QThread>
 #include "SAke/Ym.h"
 #include <QMutex>
-
+#include <math.h>
 
 
 
@@ -39,9 +39,9 @@ public:
     void updateKernelPlotRegression(QCustomPlot *m_CustomPlot, QVector<double> xKernel,QVector<double> yKernel,QVector<double> xControlpoints,QVector<double> yControlpoints );
     void updateKernelPlotRegressionWithControlPoints(QCustomPlot *m_CustomPlot,QVector<double> xControlpoints,QVector<double> yControlpoints );
     static void pushBackThread(QThread *thread);
-    void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
+    void addTab(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size, QString fitnessType);
     void addTabRegression(QString name, int numberofFunction);
-    void addTabAUCROC(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
+    void addTabAUCROC(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size, QString fitnessType);
     void addTabValidation(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
     void addTabValidationNewInterface(QString name, Rain *rain, int rain_size, Activation *activation, int activation_size);
 
@@ -156,7 +156,8 @@ private slots:
                                QString fitness,
                                QString tb,
                                QString safetyMargin,
-                               QString momentum);
+                               QString momentum,
+                                        QString Zjmin, QString Zcr);
 
     void updateTextsValidationAllInOneFitness(int indexTab,QString name, QString fitness);
 

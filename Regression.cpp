@@ -454,9 +454,6 @@ void Regression::setParameters(QVariantList list)
 
      //MainWindow::updateKernelPlot();
 
-     std::vector<double> x;
-     std::vector<double> y;
-
      controlPoints->calculateControlPoints(&(this->kernel[0]),this->size_kernel);
      xControlpoints = controlPoints->getX();
      yControlpoints = controlPoints->getY();
@@ -478,7 +475,7 @@ void Regression::setParameters(QVariantList list)
      }else{
          controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
      }
-      w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
+//      w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
 
 
      QCustomPlot *m_CustomPlot = ui->kernelPlot;

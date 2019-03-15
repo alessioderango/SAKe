@@ -150,7 +150,7 @@ SAKeController::SAKeController(MainWindow *_main,
         lastGeneration = false;
 
     if(!_lastGeneration){
-        QString stmp = savePath+"/fitnessGenerations.csv";
+        QString stmp = savePath+"/fitnessHistory.csv";
         ofstream myfile;
         myfile.open (stmp.toStdString(),ios::out);
         myfile.close();
@@ -234,20 +234,25 @@ void SAKeController::startAlgorithm()
         //eoEvalFuncCounter<Indi> eval(plainEval);
 
         eoEvalFuncCounter<Indi> *evaltmp;
+        QString fitnessFile = " ";
         switch (ft) {
         case FitnessGMD:
+            fitnessFile = "GMD";
             evaltmp = new eoEvalFuncCounter<Indi>(plainEval);
             break;
 
         case FitnessGMDn:
+            fitnessFile = "HW";
             evaltmp = new eoEvalFuncCounter<Indi>(plainEvalGMDn);
             break;
 
         case FitnessEqualWeights:
+            fitnessFile = "EW";
             evaltmp = new eoEvalFuncCounter<Indi>(plainEvalEqualWeights);
             break;
 
         case FitnessAUCROC:
+            fitnessFile = "AUC ROC";
             evaltmp = new eoEvalFuncCounter<Indi>(plainEvalAUCROC);
             break;
 
@@ -291,7 +296,7 @@ void SAKeController::startAlgorithm()
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Indi>& pop   = do_make_pop(parser, state, init);
 
-        this->stop = new eoGenContinueMy<Indi>(savePath, saveKernels, numberOfKernelToBeSaved);
+        this->stop = new eoGenContinueMy<Indi>(savePath, saveKernels, numberOfKernelToBeSaved, fitnessFile);
         // stopping criteria
         eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
         // output

@@ -475,18 +475,19 @@ void Dialog::on_pushButtonStart_clicked()
     MainWindow::pushBackThread(controller);
     ptrdiff_t pos = distance(MainWindow::threads.begin(), std::find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
 
+
     //Fitness
     if(ui->comboBoxFitness->currentIndex() == FitnessAUCROC)
-        mainWindow->addTabAUCROC(QString("Calibration AUC ROC - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+        mainWindow->addTabAUCROC(QString("Calibration AUC ROC - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"AUC ROC");
     else
         if(ui->comboBoxFitness->currentIndex() == FitnessGMD)
-            mainWindow->addTab(QString("Calibration - GMD "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+            mainWindow->addTab(QString("Calibration - GMD "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"GMD");
         else
             if(ui->comboBoxFitness->currentIndex() == FitnessGMDn)
-                mainWindow->addTab(QString("Calibration - GMDn "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+                mainWindow->addTab(QString("Calibration - HW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"HW");
             else
                 if(ui->comboBoxFitness->currentIndex() == FitnessEqualWeights)
-                    mainWindow->addTab(QString("Calibration - EW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size);
+                    mainWindow->addTab(QString("Calibration - EW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"EW");
 
 
 

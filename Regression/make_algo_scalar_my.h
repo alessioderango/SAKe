@@ -32,6 +32,7 @@
 // Algorithm (only this one needed)
 #include "eoSGAGenerational.h"
 #include "eoSGASteadyState.h"
+#include "../SAKe/eoMyRanking.h"
 
   // also need the parser and param includes
 #include <utils/eoParser.h>
@@ -152,7 +153,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
         }
       // check for authorized values
       // pressure in (0,1]
-      if ( (p<=1) || (p>2) )
+      if ( (p<0) || (p>2) )
         {
           std::cerr << "WARNING, selective pressure must be in (0,1] in Ranking, using 2\n";
           p=2;
@@ -166,7 +167,7 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
           ppSelect.second[1] = (std::string("1"));
         }
       // now we're OK
-      eoPerf2Worth<EOT> & p2w = _state.storeFunctor( new eoRanking<EOT>(p,e) );
+      eoPerf2Worth<EOT> & p2w = _state.storeFunctor( new eoMyRanking<EOT>(p,e) );
       select = new eoRouletteWorthSelect<EOT>(p2w);
     }
   else if (ppSelect.first == std::string("Sequential")) // one after the other
