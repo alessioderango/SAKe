@@ -796,7 +796,7 @@
           </font>
          </property>
          <property name="title">
-          <string>7 - Run</string>
+          <string>6 - Run</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>

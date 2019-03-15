@@ -454,9 +454,12 @@ void Regression::setParameters(QVariantList list)
 
      //MainWindow::updateKernelPlot();
 
-     controlPoints->calculateControlPoints(&(this->kernel[0]),this->size_kernel);
-     xControlpoints = controlPoints->getX();
-     yControlpoints = controlPoints->getY();
+     std::vector<double> x;
+     std::vector<double> y;
+
+//     controlPoints->calculateControlPoints(&(this->kernel[0]),this->size_kernel);
+//     xControlpoints = controlPoints->getX();
+//     yControlpoints = controlPoints->getY();
 
      QVector<double> xKernel;
      QVector<double> yKernel;
@@ -465,16 +468,16 @@ void Regression::setParameters(QVariantList list)
          yKernel.push_back(kernel[i]);
      }
 
-     //updateGraph(kernel,size_kernel);
-     xControlpointsbyN.clear();
-     yControlpointsbyN.clear();
+//     //updateGraph(kernel,size_kernel);
+//     xControlpointsbyN.clear();
+//     yControlpointsbyN.clear();
 
-     if(ui->checkBox->isChecked()){
-         controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
+//     if(ui->checkBox->isChecked()){
+//         controlPoints->getSubdividePointsFromControlPoints(xControlpoints, yControlpoints, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
 
-     }else{
-         controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
-     }
+//     }else{
+//         controlPoints->getSubdividePointsFromKernel(&(kernel[0]), size_kernel, ui->lineEditN->text().toInt(), xControlpointsbyN, yControlpointsbyN);
+//     }
 //      w->updateKernelPlotRegressionWithControlPoints(ui->kernelPlot, QVector<double>::fromStdVector(xControlpointsbyN), QVector<double>::fromStdVector(yControlpointsbyN) );
 
 
@@ -483,6 +486,10 @@ void Regression::setParameters(QVariantList list)
                                    yKernel,
                                    QVector<double>::fromStdVector(xControlpoints),
                                    QVector<double>::fromStdVector(yControlpoints));
+     ui->label_9->hide();
+     ui->checkBox->hide();
+     ui->lineEditN->hide();
+     ui->groupBox_7->hide();
 }
 
 void Regression::on_lineEdit_8_textChanged(const QString &arg1)
@@ -621,9 +628,9 @@ void Regression::on_pushButton_3_clicked()
     }
 
 
-    controlPoints->calculateControlPoints(&(this->kernel[0]),this->size_kernel);
-    xControlpoints = controlPoints->getX();
-    yControlpoints = controlPoints->getY();
+//    controlPoints->calculateControlPoints(&(this->kernel[0]),this->size_kernel);
+//    xControlpoints = controlPoints->getX();
+//    yControlpoints = controlPoints->getY();
 
 
     QCustomPlot *m_CustomPlot = ui->kernelPlot;
@@ -929,29 +936,32 @@ void Regression::on_pushButton_clicked()
     int size;
     int checked;
 
-    if(ui->checkBox_kernel->isChecked())
-    {   //use kernel
+//    ui->checkBox_kernel->setCheckable(true);
+
+//    if(ui->checkBox_kernel->isChecked())
+//    {   //use kernel
         ykerneltmp = kernel;
         xkerneltmp = x1;
         size = kernel.size();
         checked = 0;
-    }
-    if(ui->checkBox_controlpoints->isChecked())
-    {
-        //use control points
-        ykerneltmp = yControlpoints;
-        xkerneltmp = xControlpoints;
-        size = yControlpoints.size();
-        checked = 1;
-    }
-    if(ui->checkBox_N->isChecked())
-    {
-        //use N
-        ykerneltmp = yControlpointsbyN;
-        xkerneltmp = xControlpointsbyN;
-        size = yControlpointsbyN.size();
-        checked = 2;
-    }
+//    }else
+//    if(ui->checkBox_controlpoints->isChecked())
+//    {
+//        //use control points
+//        ykerneltmp = yControlpoints;
+//        xkerneltmp = xControlpoints;
+//        size = yControlpoints.size();
+//        checked = 1;
+//    }else
+//    if(ui->checkBox_N->isChecked())
+//    {
+//        //use N
+//        ykerneltmp = yControlpointsbyN;
+//        xkerneltmp = xControlpointsbyN;
+//        size = yControlpointsbyN.size();
+//        checked = 2;
+//    }
+
     if(ui->lineEditProjName->isReadOnly())
     {
         w->getXmlmanager()->SaveXMLFileAlreadyExistRegressionProject(ui->lineEditProjName->text(),

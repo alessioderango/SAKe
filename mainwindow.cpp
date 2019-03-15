@@ -466,7 +466,7 @@ void MainWindow::updateKernelPlotRegression(QCustomPlot *m_CustomPlot, QVector<d
 {
     if (m_CustomPlot)
     {
-        m_CustomPlot->graph(0)->setData(xControlpoints, yControlpoints);
+//        m_CustomPlot->graph(0)->setData(xControlpoints, yControlpoints);
         ((QCPBars*)m_CustomPlot->plottable(0))->setData(xKernel, yKernel);
         m_CustomPlot->replot();
     }
@@ -1479,7 +1479,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("FuncPlot");
-    kerFunc->setContextMenuPolicy(Qt::CustomContextMenu);
+//    kerFunc->setContextMenuPolicy(Qt::CustomContextMenu);
 //    connect(kerFunc, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernel(QPoint)));
 
 
