@@ -232,6 +232,7 @@ int HandlerCSV::loadCSVGenationsFromFile(QString fileurl, QVector<double> &gener
     std::string line;
 
     if (in.is_open()) {
+        std::getline(in, line);
         while (std::getline(in, line)){
             std::vector<string> x;
             x = split(line, ';');

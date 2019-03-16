@@ -113,6 +113,7 @@ public:
         fitnessFile=_fitnessFile;
 
 
+
     }
 
     static Fitness sumFitness(double _sum, const EOT& _eot){
@@ -208,6 +209,13 @@ public:
             advance(del,numberOfKernelToBeSaved);
             kernels.erase(del,kernels.end() );
         }
+
+        kernelStream <<  "Fitness " << fitnessFile.toStdString() << ";";
+        kernelStream <<  "Safety margin ;";
+        kernelStream <<  "zj-min ;";
+        kernelStream <<  "Base time ;";
+        kernelStream <<  "First-order momentum;";
+        kernelStream <<  "Kernel ;\n";
 
         for (const auto row : kernels) {
             kernelStream << setprecision(6) << row.fitness << ";" <<row.safetyMargin << ";"<<row.ymin << ";"<<  row.tb  <<";"<< row.firstOrderMomentum << ";";

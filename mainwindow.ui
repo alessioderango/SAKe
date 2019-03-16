@@ -96,7 +96,10 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="newCalibrationProject">
-   <property name="checkable">
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="icon">
@@ -112,6 +115,18 @@
    </property>
    <property name="font">
     <font/>
+   </property>
+   <property name="shortcut">
+    <string>Shift+C</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="stopButton">
@@ -133,9 +148,6 @@
    </property>
   </action>
   <action name="actionNew_Regression_Project">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="icon">
     <iconset resource="myresource.qrc">
      <normaloff>:/img/regression.png</normaloff>:/img/regression.png</iconset>

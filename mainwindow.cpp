@@ -2415,5 +2415,6 @@ void MainWindow::setXmlmanager(XMLManager *value)
 void MainWindow::on_actionNew_Regression_Project_triggered()
 {
    Regression *r = new Regression(this);
+   r->setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
    r->show();
 }
