@@ -11,7 +11,7 @@
 #include <mainwindow.h>
 #include <SAke/SAKeController.h>
 
-namespace Ui {
+namespace Ui{
 class Validation;
 }
 

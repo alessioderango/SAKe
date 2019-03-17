@@ -14,7 +14,17 @@ Dialog::Dialog(QWidget *parent) :
     ui->lineEditPar2->hide();
 
     // check input
-    ui->lineEditPopSize->setValidator(new QIntValidator(1, 5000, this));
+    ui->lineEditPopSize->setValidator(new QIntValidator(1, 1000000, this));
+    QDoubleValidator *validator= new QDoubleValidator(this);
+    validator->setBottom(0);
+    validator->setDecimals(2);
+    validator->setTop(1);
+    validator->setRange(0,0,1);
+    validator->setNotation(QDoubleValidator::StandardNotation);
+
+    ui->lineEditPme->setValidator(new QIntValidator(0, 100, this));
+
+    ui->lineEditCrossoverP->setValidator(validator);
     //    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 5000, this));
     //    QDoubleValidator* doubleValidator = new MyValidatorDouble(0.55, 1, 2, ui->lineEditPar1);
     //    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
@@ -172,6 +182,43 @@ bool Dialog::checklineEdit(QString l, QString s){
     return false;
 }
 
+
+bool Dialog::checklineEditRangeDouble(QString l, double max, double min, QString s){
+    if(l.toDouble() > max || l.toDouble() < min ){
+        QString error = QString(s);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return true;
+    }
+    if(l == "0." || l == "1." ){
+        QString error = QString(s);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return true;
+    }
+
+    return false;
+}
+bool Dialog::checklineEditRangeInt(QString l, int max, int min, QString s){
+    if(l.toInt() > max || l.toInt() < min ){
+        QString error = QString(s);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
+        return true;
+    }
+
+    return false;
+}
+
 void Dialog::on_pushButtonStart_clicked()
 {
     HandlerCSV * csv = new HandlerCSV();
@@ -254,10 +301,19 @@ void Dialog::on_pushButtonStart_clicked()
 
     check = checklineEdit(ui->lineEditMutationP->text(), QString("Mutation probability cannot be empty \n"));
     if(check) return;
+    check = checklineEditRangeDouble(ui->lineEditMutationP->text(),1.0,0.0, QString("Mutation probability must be between 0 and 1. \n"));
+    if(check) return;
+
     check = checklineEdit(ui->lineEditCrossoverP->text(), QString("Crossover probability cannot be empty \n"));
     if(check) return;
+    check = checklineEditRangeDouble(ui->lineEditCrossoverP->text(),1.0,0.0, QString("Crossover probability must be between 0 and 1. \n"));
+    if(check) return;
+
     check = checklineEdit(ui->lineEditPme->text(), QString("Pme cannot be empty \n"));
     if(check) return;
+    check = checklineEditRangeInt(ui->lineEditPme->text(), 100, 0, QString("Pme cannot be empty \n"));
+    if(check) return;
+
     check = checklineEdit(ui->lineEditPmb->text(), QString("Pmb cannot be empty \n"));
     if(check) return;
     check = checklineEdit(ui->lineEditTbMin->text(), QString("Tbmin cannot be empty \n"));

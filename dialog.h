@@ -32,6 +32,9 @@ public:
     MainWindow *getMainWindow() const;
     void setMainWindow(MainWindow *value);
     bool checklineEdit(QString l, QString s);
+    bool checklineEditRangeDouble(QString l, double max, double min, QString s);
+    bool checklineEditRangeInt(QString l, int max, int min, QString s);
+
 
 private slots:
 
