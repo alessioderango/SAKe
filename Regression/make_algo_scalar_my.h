@@ -128,6 +128,10 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
     }
   else if (ppSelect.first == std::string("Ranking"))
     {
+      bool MyRanking = false;
+      if(ppSelect.second[1]=="-1"){
+          MyRanking = true;
+      }
       double p,e;
       if (ppSelect.second.size()==2)   // 2 parameters: pressure and exponent
         {
@@ -167,8 +171,15 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
           ppSelect.second[1] = (std::string("1"));
         }
       // now we're OK
-      eoPerf2Worth<EOT> & p2w = _state.storeFunctor( new eoMyRanking<EOT>(p,e) );
-      select = new eoRouletteWorthSelect<EOT>(p2w);
+      if(MyRanking){
+          eoPerf2Worth<EOT> &p2w = _state.storeFunctor( new eoMyRanking<EOT>(p,e) );
+          select = new eoRouletteWorthSelect<EOT>(p2w);
+      }
+      else// Ranking (p,e)
+      {
+        eoPerf2Worth<EOT> &p2w = _state.storeFunctor( new eoRanking<EOT>(p,e) );
+        select = new eoRouletteWorthSelect<EOT>(p2w);
+      }
     }
   else if (ppSelect.first == std::string("Sequential")) // one after the other
     {

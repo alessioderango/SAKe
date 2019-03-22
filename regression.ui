@@ -468,6 +468,11 @@
                 <string>Roulette</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>Ranking (p,e)</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="1" column="4">
@@ -897,6 +902,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QCheckBox" name="checkBox_lastgeneration">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="layoutDirection">
                <enum>Qt::LeftToRight</enum>
               </property>
@@ -910,6 +918,12 @@ spacing:100px;
               </property>
               <property name="text">
                <string/>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
               </property>
               <property name="tristate">
                <bool>false</bool>

@@ -125,7 +125,7 @@ SAKeController::SAKeController(MainWindow *_main,
         }else
             if( QString::compare(selection, "Ranking (s)", Qt::CaseInsensitive)==0){
                 parameter1=para1;
-                parameter2=para2;
+                parameter2=-1;
                 QString tmp = QString("Ranking(");
                 tmp.append(QString::number(parameter1));
                 tmp.append(",");
@@ -138,7 +138,18 @@ SAKeController::SAKeController(MainWindow *_main,
                     parameter1=para1;
                     parameter2=para2;
                     selection = QString("Roulette");
-                }
+                }else
+                    if( QString::compare(selection, "Ranking (p,e)", Qt::CaseInsensitive)==0){
+                        parameter1=para1;
+                        parameter2=para2;
+                        QString tmp = QString("Ranking(");
+                        tmp.append(QString::number(parameter1));
+                        tmp.append(",");
+                        tmp.append(QString::number(parameter2));
+                        tmp.append(")");
+                        //cout << tmp.toStdString() << endl;
+                        selection = tmp;//QString("Ranking(%1,%1)").arg(parameter1,parameter2);
+                    }
 
 
     maxNumberToConsider=numberElitist;

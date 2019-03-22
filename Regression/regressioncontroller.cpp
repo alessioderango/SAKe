@@ -93,18 +93,28 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
         }else
             if( QString::compare(selection, "Ranking (s)", Qt::CaseInsensitive)==0){
                 parameter1=para1;
-                parameter2=para2;
-                selection = QString("Ranking(%1,%2)").arg(parameter1,parameter2);
+                parameter2=-1;
+                QString tmp = QString("Ranking(");
+                tmp.append(QString::number(parameter1));
+                tmp.append(",");
+                tmp.append(QString::number(parameter2));
+                tmp.append(")");
+                selection = tmp;// QString("Ranking(%1,%2)").arg(parameter1,parameter2);
             }else
                 if( QString::compare(selection, "Roulette", Qt::CaseInsensitive)==0){
                     parameter1=para1;
                     parameter2=para2;
                     selection = QString("Roulette");
                 }else
-                    if( QString::compare(selection, "Sequential(ordered/unordered)", Qt::CaseInsensitive)==0){
+                    if( QString::compare(selection, "Ranking (p,e)", Qt::CaseInsensitive)==0){
                         parameter1=para1;
                         parameter2=para2;
-                        selection = QString("Sequential(%1)").arg(para1);
+                        QString tmp = QString("Ranking(");
+                        tmp.append(QString::number(parameter1));
+                        tmp.append(",");
+                        tmp.append(QString::number(parameter2));
+                        tmp.append(")");
+                        selection = tmp;//QString("Sequential(%1)").arg(para1);
                         //std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
                     }
 

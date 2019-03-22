@@ -79,6 +79,7 @@ Regression::Regression(MainWindow * _w,QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Regression)
 {
+
     ui->setupUi(this);
     w=_w;
     //ui->tableWidgetMin1->setRowCount(10);
@@ -91,6 +92,10 @@ Regression::Regression(MainWindow * _w,QWidget *parent) :
     ui->tableWidgetMin1->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidgetMin1->setSelectionMode(QAbstractItemView::SingleSelection);
 
+
+    //Validator
+    ui->lineEditPopSize->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditNumberElitists->setValidator(new QIntValidator(0, 10000000000, this));
 
 //    ui->tableWidgetMin1->setRowCount(1);
 //    addRow(ui->tableWidgetMin1,
@@ -237,6 +242,12 @@ void Regression::setW(MainWindow *value)
     w = value;
 }
 
+void Regression::hideTableFirstGamma(){
+    ui->label_10->hide();
+    ui->lineEdit_8->hide();
+    ui->tableWidgetMin1->hide();
+}
+
 void Regression::setParameters(QVariantList list)
 {
 
@@ -245,7 +256,7 @@ void Regression::setParameters(QVariantList list)
     int first = qvlist.indexOf("-");
     //Setting GA paramenters
     ui->lineEditProjName->setText(qvlist[0].toString());
-    if(qvlist[1]=="StochTour(t)"){
+    if(qvlist[1]=="Stochastic Tournament (Tr)"){
         ui->comboBoxSelection->setCurrentIndex(0);
         ui->lineEditPar1->setText(qvlist[2].toString());
 
@@ -257,7 +268,7 @@ void Regression::setParameters(QVariantList list)
         ui->label_16->hide();
         ui->lineEditPar2->hide();
     }else
-        if(qvlist[1]=="DetTour(T)"){
+        if(qvlist[1]=="Deterministic Tournament (Ts)"){
             ui->comboBoxSelection->setCurrentIndex(1);
             ui->lineEditPar1->setText(qvlist[2].toString());
             ui->label_15->show();
@@ -268,20 +279,22 @@ void Regression::setParameters(QVariantList list)
             ui->label_16->hide();
             ui->lineEditPar2->hide();
         }else
-            if(qvlist[1]=="Ranking(p,e)"){
+            if(qvlist[1]=="Ranking (s)"){
                 ui->comboBoxSelection->setCurrentIndex(2);
                 ui->lineEditPar1->setText(qvlist[2].toString());
-                ui->lineEditPar2->setText(qvlist[3].toString());
+                //ui->lineEditPar2->setText(qvlist[3].toString());
                 ui->label_15->show();
-                ui->label_15->setText("p (selective pressure 1 < p <= 2)");
+                ui->label_15->setText("selective pressure 0 < s < 1   (exponential) \n \
+                                      1 <= s <= 2 (linear)");
                 //ui->lineEditPar1->setText("2");
                 //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
                 ui->label_16->show();
                 ui->label_16->setText("e (exponent 1=linear)");
                 //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
-                //ui->lineEditPar2->setText("1");
+                ui->lineEditPar2->setText("-1");
                 ui->lineEditPar2->show();
-                ui->lineEditPar2->show();
+                ui->label_16->hide();
+                ui->lineEditPar2->hide();
             }else
                 if(qvlist[1]=="Roulette"){
                     ui->comboBoxSelection->setCurrentIndex(3);
@@ -289,7 +302,21 @@ void Regression::setParameters(QVariantList list)
                     ui->lineEditPar1->hide();
                     ui->label_16->hide();
                     ui->lineEditPar2->hide();
-                }
+                }else
+                    if(qvlist[1]=="Ranking (p,e)"){
+                        ui->comboBoxSelection->setCurrentIndex(4);
+                        ui->lineEditPar1->setText(qvlist[2].toString());
+                        ui->lineEditPar2->setText(qvlist[3].toString());
+                        ui->label_15->show();
+                        ui->label_15->setText("p (selective pressure 1 < p <= 2)");
+                        //ui->lineEditPar1->setText("2");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                        ui->label_16->show();
+                        ui->label_16->setText("e (exponent 1=linear)");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                        //ui->lineEditPar2->setText("1");
+                        ui->lineEditPar2->show();
+                    }
     ui->lineEditPopSize->setText(qvlist[4].toString());
     ui->lineEditNumProc->setText(qvlist[5].toString());
     ui->lineEditCrossoverP->setText(qvlist[6].toString());
@@ -336,8 +363,8 @@ void Regression::setParameters(QVariantList list)
     }
     ui->lineEditNumberElitists->setText(QString("%1").arg(qvlist[14].toInt()));
     ui->lineEdit_seed->setText(QString("%1").arg(qvlist[15].toInt()));
-    bool lastgen = qvlist[16].toInt();
-    ui->checkBox_lastgeneration->setChecked(lastgen);
+   // bool lastgen = qvlist[16].toInt();
+   // ui->checkBox_lastgeneration->setChecked(lastgen);
     ui->lineEdit_frequencyPop->setText(QString("%1").arg(qvlist[17].toInt()));
 
     int second = qvlist.indexOf("-",first+1);
@@ -775,7 +802,20 @@ void Regression::on_comboBox_2_currentIndexChanged(int index)
                     ui->lineEditPar1->hide();
                     ui->label_16->hide();
                     ui->lineEditPar2->hide();
-                }
+                }else
+                    if(index == 4)// Ranking (p,e)
+                    {
+                        ui->label_15->show();
+                        ui->label_15->setText("p (selective pressure 1 < p <= 2)");
+                        ui->lineEditPar1->setText("2");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                        ui->label_16->show();
+                        ui->label_16->setText("e (exponent 1=linear)");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                        ui->lineEditPar2->setText("1");
+                        ui->lineEditPar2->show();
+                        ui->lineEditPar1->show();
+                    }
 }
 
 void Regression::on_pushButton_2_clicked()
@@ -857,6 +897,12 @@ void Regression::on_pushButton_clicked()
                 if(check) return;
                 check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
                 if(check) return;
+            }else
+                if(ui->comboBoxSelection->currentIndex() ==4 ){//Ranking (p,e)
+                check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
+                if(check) return;
+                check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
+                if(check) return;
             }
 
 
@@ -886,10 +932,23 @@ void Regression::on_pushButton_clicked()
         {
             QLineEdit* t= (QLineEdit*)ui->tableWidgetMin1->cellWidget(row,column);
             //cout << t->text().toStdString() << endl;
+            check = checklineEdit(t->text(), QString("Values inside gamma table cannot be empty \n"));
+            if(check) return;
+            if(t->text().toDouble() < 0)
+            {
+                checklineEdit("", QString("Values inside gamma table must be > 0 \n"));
+                return;
+            }
+
             tmp.push_back(t->text().toDouble());
         }
         matrixGamma1.push_back(tmp);
     }
+
+
+
+    double maxBeta = 100;
+    double maxAlpha = 100;
 
     //reading Gamma2 table
     std::vector<std::vector<double> > matrixGamma2;
@@ -900,6 +959,22 @@ void Regression::on_pushButton_clicked()
         {
             QLineEdit* t= (QLineEdit*)ui->tableWidget1->cellWidget(row,column);
             //cout << t->text().toStdString() << endl;
+            check = checklineEdit(t->text(), QString("Values inside gamma table cannot be empty \n"));
+            if(check) return;
+            if(t->text().toDouble() <= 0)
+            {
+                checklineEdit("", QString("Values inside gamma table must be > 0 \n"));
+                return;
+            }
+            if((column == 1) && t->text().toDouble() > maxAlpha ){
+                checklineEdit("", QString("Max alpha value must be less than "+QString::number(maxAlpha)+" \n"));
+                return;
+            }
+
+            if((column == 3) && t->text().toDouble() > maxBeta ){
+                checklineEdit("", QString("Max beta value must be less than "+QString::number(maxBeta)+" \n"));
+                return;
+            }
             tmp.push_back(t->text().toDouble());
         }
         matrixGamma2.push_back(tmp);
@@ -914,6 +989,13 @@ void Regression::on_pushButton_clicked()
         {
             QLineEdit* t= (QLineEdit*)ui->tableWidgetLin->cellWidget(row,column);
             //cout << t->text().toStdString() << endl;
+            check = checklineEdit(t->text(), QString("Values inside linear table cannot be empty \n"));
+            if(check) return;
+//            if(t->text().toDouble() <= 0)
+//            {
+//                checklineEdit("", QString("Values inside gamma table must be > 0 \n"));
+//                return;
+//            }
             tmp.push_back(t->text().toDouble());
         }
         matrixLinear.push_back(tmp);
@@ -1370,4 +1452,109 @@ void Regression::on_checkBox_N_stateChanged(int arg1)
 void Regression::setReadOnlyProjName(bool a)
 {
     ui->lineEditProjName->setReadOnly(a);
+}
+
+void Regression::on_comboBoxSelection_currentIndexChanged(int index)
+{
+    if(index == 0){
+        //StockTour
+        ui->label_15->show();
+        ui->lineEditPar1->setValidator(new QDoubleValidator(0.55, 1,2, this));
+        ui->lineEditPar1->show();
+
+        ui->label_15->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
+        ui->label_16->hide();
+        ui->lineEditPar2->hide();
+    }else
+        if(index == 1){
+            //DetTour
+            ui->label_15->show();
+            ui->lineEditPar1->show();
+            ui->lineEditPar1->setText("2");
+            ui->lineEditPar1->setValidator(new QIntValidator(2, ui->lineEditPopSize->text().toInt(), this));
+            ui->label_15->setText(" Ts (tournament size 2 <= Ts <=N))");
+            ui->label_16->hide();
+            ui->lineEditPar2->hide();
+        }else
+            if(index == 2)
+            {
+                ui->label_15->show();
+                ui->label_15->setText("selective pressure 0 < s < 1   (exponential) \n \
+                                      1 <= s <= 2 (linear)");
+                ui->lineEditPar1->setText("2");
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+//                ui->label_16->show();
+                ui->label_16->setText("e (exponent 1=linear)");
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                ui->lineEditPar2->setText("-1");
+                ui->label_16->hide();
+                ui->lineEditPar2->hide();
+            }else
+                if(index == 3)
+                {
+                    ui->label_15->hide();
+                    ui->lineEditPar1->hide();
+                    ui->label_16->hide();
+                    ui->lineEditPar2->hide();
+                }else
+                    if(index == 4)// Ranking (p,e)
+                    {
+                        ui->label_15->show();
+                        ui->label_15->setText("p (selective pressure 1 < p <= 2)");
+                        ui->lineEditPar1->setText("2");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                        ui->label_16->show();
+                        ui->label_16->setText("e (exponent 1=linear)");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                        ui->lineEditPar2->setText("1");
+                        ui->lineEditPar2->show();
+                        ui->lineEditPar1->show();
+                    }
+}
+
+QString Regression::getIdProject() const
+{
+    return idProject;
+}
+
+void Regression::setIdProject(const QString &value)
+{
+    idProject = value;
+}
+
+void Regression::setFieldEnabled(bool b){
+    ui->pushButton_3->setEnabled(b);
+    ui->lineEditPopSize->setEnabled(b);
+    ui->lineEditLoadKernel->setEnabled(b);
+    ui->comboBoxReplacement->setEnabled(b);
+    ui->lineEditNumberElitists->setEnabled(b);
+    ui->comboBoxSelection->setEnabled(b);
+    ui->lineEditPar1->setEnabled(b);
+    ui->lineEditPar2->setEnabled(b);
+    ui->lineEditCrossoverP->setEnabled(b);
+    ui->lineEditMutationP->setEnabled(b);
+    ui->lineEdit_seed->setEnabled(b);
+    ui->tableWidgetMin1->setEnabled(b);
+    ui->tableWidget1->setEnabled(b);
+    ui->tableWidgetLin->setEnabled(b);
+
+
+
+}
+
+void Regression::disableCheckBoxLastGeneration(){
+    ui->checkBox_lastgeneration->setEnabled(false);
+}
+
+
+void Regression::on_checkBox_lastgeneration_clicked()
+{
+    if(ui->checkBox_lastgeneration->isChecked())
+    {
+        QVariantList listParameter = w->getXmlmanager()->getAllElementsFromProjectName(idProject);
+        setParameters(listParameter);
+        setFieldEnabled(false);
+    }else{
+         setFieldEnabled(true);
+    }
 }

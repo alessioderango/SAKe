@@ -36,6 +36,11 @@ public:
     bool checklineEditRangeInt(QString l, int max, int min, QString s);
 
 
+    QString getIdProject() const;
+    void setIdProject(const QString &value);
+    void setFieldEnabled(bool);
+
+
 private slots:
 
     void on_pushButton_clicked();
@@ -60,6 +65,32 @@ private slots:
 
     void on_comboBoxFitness_currentIndexChanged(int index);
 
+    void on_checkBoxContinueFromLastGen_clicked();
+
+    void on_lineEditNumberElitists_textChanged(const QString &arg1);
+
+    void on_lineEditPmb_textChanged(const QString &arg1);
+
+    void on_lineEditPme_textChanged(const QString &arg1);
+
+    void on_lineEditTbMin_textChanged(const QString &arg1);
+
+    void on_lineEditTbMax_textChanged(const QString &arg1);
+
+    void on_lineEditdHpMax_textChanged(const QString &arg1);
+
+    void on_lineEditNumberOfLines_textChanged(const QString &arg1);
+
+    void on_lineEditMaxNumIte_textChanged(const QString &arg1);
+
+    void on_lineEditNumProc_textChanged(const QString &arg1);
+
+    void on_lineEditFrequKerSav_textChanged(const QString &arg1);
+
+    void on_lineEditSeed_textChanged(const QString &arg1);
+
+    void on_lineEditNumBestKernelSaved_textChanged(const QString &arg1);
+
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);
 
@@ -67,6 +98,7 @@ private:
     Ui::Dialog *ui;
     QTabWidget * tab;
     MainWindow *mainWindow;
+    QString idProject;
 };
 
 #endif // DIALOG_H

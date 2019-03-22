@@ -433,6 +433,11 @@
               <string>Roulette</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Ranking (p,e)</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="0" column="0">
@@ -1009,6 +1014,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineEditNumberOfLines">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>

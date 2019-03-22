@@ -26,6 +26,14 @@ public:
 
 
 
+    QString getIdProject() const;
+    void setIdProject(const QString &value);
+    void setFieldEnabled(bool);
+    void disableCheckBoxLastGeneration();
+    void hideTableFirstGamma();
+
+
+
 private slots:
 
     void cellSelected(int nRow, int nCol);
@@ -61,6 +69,10 @@ private slots:
 
     void on_checkBox_N_stateChanged(int arg1);
 
+    void on_comboBoxSelection_currentIndexChanged(int index);
+
+    void on_checkBox_lastgeneration_clicked();
+
 private:
     Ui::Regression *ui;
     MainWindow *w;
@@ -75,6 +87,8 @@ private:
 
     std::vector< double> xControlpointsbyN;
     std::vector< double> yControlpointsbyN;
+
+    QString idProject;
 
 
 

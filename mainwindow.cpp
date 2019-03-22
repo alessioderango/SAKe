@@ -502,23 +502,12 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
     m_CustomPlot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("DET");
     if (m_CustomPlot)
     {
-
-        for (int i = 0; i < FPR.size(); ++i) {
-            QVector<double> FNRPerc(2,0);
-            QVector<double> FPRPerc(2,0);
-            FPRPerc[0]=0;
-            FNRPerc[1] = (double)(((double)1)-TPR[i])*100;
-
-            FPRPerc[0] = FPR[i]*100;
-            FPRPerc[1] = 0;
-            m_CustomPlot->addGraph();
-            (m_CustomPlot->graph(i))->setData(FPRPerc,FNRPerc);
-            cout << FPRPerc[0] << "   " <<FNRPerc[0] << endl;
-            cout << FPRPerc[1] << "   " <<FNRPerc[1] << endl;
-
+        QVector<double> FNR(TPR.size(),0);
+        for (int i = 0; i < FNR.size(); ++i) {
+                 FNR[i] = (double)(((double)1)-TPR[i]);
         }
 
-
+        (m_CustomPlot->graph(0))->setData(FNR, FPR);
         m_CustomPlot->replot();
     }
 
@@ -1974,6 +1963,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
             dialog->setReadOnlyProjName(true);
             dialog->setParameters(listParameter);
             dialog->setMainWindow(this);
+            dialog->setIdProject(item->data(0,Qt::UserRole).toString());
             dialog->show();
         }
     }else
@@ -1997,6 +1987,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
                         regression->setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint
                                                    );
 //                        regression->setMainWindow(this);
+                        regression->setIdProject(item->data(0,Qt::UserRole).toString());
                         regression->show();
                     }
                 }
@@ -2416,5 +2407,7 @@ void MainWindow::on_actionNew_Regression_Project_triggered()
 {
    Regression *r = new Regression(this);
    r->setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+   r->disableCheckBoxLastGeneration();
+   r->hideTableFirstGamma();
    r->show();
 }

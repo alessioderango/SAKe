@@ -23,6 +23,8 @@ Dialog::Dialog(QWidget *parent) :
     validator->setNotation(QDoubleValidator::StandardNotation);
 
     ui->lineEditPme->setValidator(new QIntValidator(0, 100, this));
+    ui->lineEditPopSize->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 10000000000, this));
 
     ui->lineEditCrossoverP->setValidator(validator);
     //    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 5000, this));
@@ -46,22 +48,28 @@ Dialog::~Dialog()
 void Dialog::setParameters(QVariantList list)
 {
     ui->lineEditProjName->setText(list[0].toString());
-    if(list[1]=="StochTour(t)"){
+    if(list[1]=="Stochastic Tournament (Tr)"){
         ui->comboBoxSelection->setCurrentIndex(0);
         ui->lineEditPar1->setText(list[2].toString());
     }else
-        if(list[1]=="DetTour(T)"){
+        if(list[1]=="Deterministic Tournament (Ts)"){
             ui->comboBoxSelection->setCurrentIndex(1);
             ui->lineEditPar1->setText(list[2].toString());
         }else
-            if(list[1]=="Ranking(p,e)"){
+            if(list[1]=="Ranking (s)"){
                 ui->comboBoxSelection->setCurrentIndex(2);
                 ui->lineEditPar1->setText(list[2].toString());
-                ui->lineEditPar2->setText(list[3].toString());
+                ui->lineEditPar2->setText("-1");
             }else
                 if(list[1]=="Roulette"){
                     ui->comboBoxSelection->setCurrentIndex(3);
-                }
+                }else
+                    if(list[1]=="Ranking (p,e)"){
+                        ui->comboBoxSelection->setCurrentIndex(2);
+                        ui->lineEditPar1->setText(list[2].toString());
+                        ui->lineEditPar2->setText(list[3].toString());
+                    }
+
     ui->lineEditNumProc->setText(list[4].toString());
     ui->lineEditPopSize->setText(list[5].toString());
     ui->lineEditMaxNumIte->setText(list[6].toString());
@@ -94,6 +102,10 @@ void Dialog::setParameters(QVariantList list)
     ui->selectOrder1->setCurrentText(list[25].toString());
     ui->selectOrder2->setCurrentText(list[26].toString());
     ui->comboBoxFitness->setCurrentIndex(list[28].toString().toInt());
+    if(list[28] != "2"){
+        ui->lineEditNumberOfLines->hide();
+        ui->labelNumberOfLines->hide();
+    }
     ui->lineEditNumberOfLines->setText(list[29].toString());
 }
 
@@ -244,7 +256,7 @@ void Dialog::on_pushButtonStart_clicked()
     }
     if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
     {
-        QString error = QString("Anotehr Project with the same name already exists \n");
+        QString error = QString("Another Project with the same name already exists \n");
 
         QMessageBox::information(
                     this,
@@ -275,12 +287,20 @@ void Dialog::on_pushButtonStart_clicked()
     }
     bool check = checklineEdit(ui->lineEditPopSize->text(), QString("Population size cannot be empty \n"));
     if(check) return;
+    if(ui->lineEditPopSize->text().toInt() <= 0)
+    check = checklineEdit("", QString("Population size myst be greater than 0\n"));
+    if(check) return;
 
 
     // elitist
     if(ui->comboBoxReplacement->currentIndex() == 1){
         check = checklineEdit(ui->lineEditNumberElitists->text(), QString("number of elitists cannot be empty \n"));
         if(check) return;
+        if(ui->lineEditPopSize->text().toInt() > ui->lineEditPopSize->text().toInt())
+        {
+            check = checklineEdit("", QString("number of elitists must be greater than the population size \n"));
+            if(check) return;
+        }
     }
 
     if(ui->comboBoxSelection->currentIndex() ==0 ){
@@ -293,6 +313,12 @@ void Dialog::on_pushButtonStart_clicked()
         }
         else
             if(ui->comboBoxSelection->currentIndex() ==2 ){
+                check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
+                if(check) return;
+//                check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
+//                if(check) return;
+            }else
+                if(ui->comboBoxSelection->currentIndex() ==4 ){//Ranking (p,e)
                 check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
                 if(check) return;
                 check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
@@ -605,15 +631,29 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
             if(index == 2)
             {
                 ui->label_14->show();
-                ui->label_14->setText("p (selective pressure 1 < p <= 2)");
+                ui->label_14->setText("selective pressure 0 < s < 1   (exponential) \n \
+                       1 <= s <= 2 (linear)");
                 ui->lineEditPar1->setText("2");
-                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
-                ui->label_15->show();
-                ui->label_15->setText("e (exponent 1=linear)");
-                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
-                ui->lineEditPar2->setText("1");
-                ui->lineEditPar2->show();
+                ui->lineEditPar1->setValidator(new QDoubleValidator(0, 2,2, this));
                 ui->lineEditPar1->show();
+                //ui->label_15->show();
+                //ui->label_15->setText("e (exponent 1=linear)");
+                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                //ui->lineEditPar2->setText("1");
+                //ui->lineEditPar2->show();
+
+
+//                ui->label_14->setText("p (selective pressure 1 < p <= 2)");
+//                ui->lineEditPar1->setText("2");
+//                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+//                //ui->label_15->show();
+//                //ui->label_15->setText("e (exponent 1=linear)");
+//                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+//                //ui->lineEditPar2->setText("1");
+//                //ui->lineEditPar2->show();
+//                ui->lineEditPar1->show();
+                ui->label_15->hide();
+                ui->lineEditPar2->hide();
             }else
                 if(index == 3)
                 {
@@ -621,7 +661,20 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
                     ui->lineEditPar1->hide();
                     ui->label_15->hide();
                     ui->lineEditPar2->hide();
-                }
+                }else
+                    if(index == 4)// Ranking (p,e)
+                    {
+                        ui->label_14->show();
+                        ui->label_14->setText("p (selective pressure 1 < p <= 2)");
+                        ui->lineEditPar1->setText("2");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                        ui->label_15->show();
+                        ui->label_15->setText("e (exponent 1=linear)");
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                        ui->lineEditPar2->setText("1");
+                        ui->lineEditPar2->show();
+                        ui->lineEditPar1->show();
+                    }
 
     //Tr (tournament rate 0.55 <= Tr <= 1)
 }
@@ -671,6 +724,10 @@ QString Dialog::getProjectName()
 void Dialog::on_lineEditPopSize_textChanged(const QString &arg1)
 {
     ui->lineEditNumberElitists->setValidator(new QIntValidator(1, ui->lineEditPopSize->text().toInt(), this));
+    QString tmp = ui->lineEditPopSize->text();
+    tmp.remove('.');
+    ui->lineEditPopSize->setText(tmp);
+
 }
 
 void Dialog::on_comboBoxFitness_currentIndexChanged(int index)
@@ -686,4 +743,139 @@ void Dialog::on_comboBoxFitness_currentIndexChanged(int index)
             ui->labelNumberOfLines->show();
             ui->lineEditNumberOfLines->show();
         }
+}
+
+void Dialog::setFieldEnabled(bool b){
+    ui->lineEditRain->setEnabled(b);
+    ui->lineEditActivation->setEnabled(b);
+    ui->lineEditActivation->setEnabled(b);
+    ui->pushButton->setEnabled(b);
+    ui->pushButton_2->setEnabled(b);
+    ui->lineEditPopSize->setEnabled(b);
+    ui->comboBoxInitialPattern->setEnabled(b);
+    ui->comboBoxReplacement->setEnabled(b);
+    ui->lineEditNumberElitists->setEnabled(b);
+    ui->comboBoxSelection->setEnabled(b);
+    ui->lineEditPar1->setEnabled(b);
+    ui->lineEditPar2->setEnabled(b);
+    ui->lineEditCrossoverP->setEnabled(b);
+    ui->lineEditMutationP->setEnabled(b);
+    ui->lineEditPmb->setEnabled(b);
+    ui->lineEditPme->setEnabled(b);
+    ui->lineEditTbMin->setEnabled(b);
+    ui->lineEditdHpMax->setEnabled(b);
+    ui->lineEditTbMax->setEnabled(b);
+    ui->comboBoxFitness->setEnabled(b);
+    ui->lineEditNumberOfLines->setEnabled(b);
+    ui->lineEditSeed->setEnabled(b);
+
+}
+
+
+void Dialog::on_checkBoxContinueFromLastGen_clicked()
+{
+    if(ui->checkBoxContinueFromLastGen->isChecked())
+    {
+       QVariantList listParameter = mainWindow->getXmlmanager()->getAllElementsFromProjectName(idProject);
+       setParameters(listParameter);
+       setFieldEnabled(false);
+    }else
+    {
+       setFieldEnabled(true);
+    }
+}
+
+QString Dialog::getIdProject() const
+{
+    return idProject;
+}
+
+void Dialog::setIdProject(const QString &value)
+{
+    idProject = value;
+}
+
+void Dialog::on_lineEditNumberElitists_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditNumberElitists->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditNumberElitists->setText(tmp);
+}
+
+void Dialog::on_lineEditPmb_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditPmb->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditPmb->setText(tmp);
+}
+
+void Dialog::on_lineEditPme_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditPme->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditPme->setText(tmp);
+}
+
+void Dialog::on_lineEditTbMin_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditTbMin->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditTbMin->setText(tmp);
+}
+
+void Dialog::on_lineEditTbMax_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditTbMax->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditTbMax->setText(tmp);
+}
+
+void Dialog::on_lineEditdHpMax_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditdHpMax->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditdHpMax->setText(tmp);
+
+}
+
+void Dialog::on_lineEditNumberOfLines_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditNumberOfLines->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditNumberOfLines->setText(tmp);
+}
+
+void Dialog::on_lineEditMaxNumIte_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditMaxNumIte->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditMaxNumIte->setText(tmp);
+}
+
+void Dialog::on_lineEditNumProc_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditNumProc->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditNumProc->setText(tmp);
+}
+
+void Dialog::on_lineEditFrequKerSav_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditFrequKerSav->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditFrequKerSav->setText(tmp);
+}
+
+void Dialog::on_lineEditSeed_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditSeed->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditSeed->setText(tmp);
+}
+
+void Dialog::on_lineEditNumBestKernelSaved_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditNumBestKernelSaved->text();
+    tmp.remove('.');tmp.remove(',');
+    ui->lineEditNumBestKernelSaved->setText(tmp);
 }
