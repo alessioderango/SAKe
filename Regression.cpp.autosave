@@ -1666,3 +1666,8 @@ void Regression::on_lineEditMaxNumIte_textChanged(const QString &arg1)
         ui->lineEdit_frequencyPop->setText(QString::number(ui->lineEditMaxNumIte->text().toInt()-1));
     }
 }
+
+void Regression::on_lineEditPar1_textChanged(const QString &arg1)
+{
+    
+}

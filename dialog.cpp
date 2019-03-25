@@ -5,7 +5,6 @@ Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
-
     ui->setupUi(this);
     ui->labelnumberElitists->hide();
     ui->lineEditNumberElitists->hide();
@@ -16,26 +15,25 @@ Dialog::Dialog(QWidget *parent) :
     // check input
     ui->lineEditPopSize->setValidator(new QIntValidator(1, 1000000, this));
     QDoubleValidator *validator= new QDoubleValidator(this);
-    validator->setBottom(0);
-    validator->setDecimals(2);
-    validator->setTop(1);
-    validator->setRange(0,0,1);
+    validator->setRange(0,0,3);
     validator->setNotation(QDoubleValidator::StandardNotation);
 
     ui->lineEditPme->setValidator(new QIntValidator(0, 100, this));
+    ui->lineEditPmb->setValidator(new QIntValidator(0, 100, this));
+    ui->lineEditdHpMax->setValidator(new QIntValidator(0, 100, this));
     ui->lineEditPopSize->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditTbMin->setValidator(new QIntValidator(1, 10000000000, this));
+    ui->lineEditTbMax->setValidator(new QIntValidator(1, 10000000000, this));
     ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 10000000000, this));
-
-    ui->lineEditCrossoverP->setValidator(validator);
-    //    ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 5000, this));
-    //    QDoubleValidator* doubleValidator = new MyValidatorDouble(0.55, 1, 2, ui->lineEditPar1);
-    //    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
-    //    ui->lineEditPar1->setValidator(doubleValidator);
-    //ui->lineEdit
-
+    ui->lineEditCrossoverP->setValidator(new QDoubleValidator(0, 1,2, this));
+    ui->lineEditMutationP->setValidator(validator);
+    ui->lineEditNumberOfLines->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditNumProc->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditSeed->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditFrequKerSav->setValidator(new QIntValidator(0, 10000000000, this));
+    ui->lineEditNumBestKernelSaved->setValidator(new QIntValidator(0, 10000000000, this));
     ui->label_21->setVisible(false);
     ui->lineEditdHpMin->setVisible(false);
-
     ui->groupBox_7->setVisible(false);
 
 }
@@ -51,23 +49,32 @@ void Dialog::setParameters(QVariantList list)
     if(list[1]=="Stochastic Tournament (Tr)"){
         ui->comboBoxSelection->setCurrentIndex(0);
         ui->lineEditPar1->setText(list[2].toString());
+        ui->lineEditPar1->setValidator(new QDoubleValidator(0.55,1,2));
+        ui->lineEditPar2->setText("-1");
     }else
         if(list[1]=="Deterministic Tournament (Ts)"){
             ui->comboBoxSelection->setCurrentIndex(1);
             ui->lineEditPar1->setText(list[2].toString());
+            ui->lineEditPar1->setValidator(new QDoubleValidator(2,list[5].toString(),2));
+            ui->lineEditPar2->setText("-1");
         }else
             if(list[1]=="Ranking (s)"){
                 ui->comboBoxSelection->setCurrentIndex(2);
                 ui->lineEditPar1->setText(list[2].toString());
+                ui->lineEditPar1->setValidator(new QDoubleValidator(0,2,2));
                 ui->lineEditPar2->setText("-1");
             }else
                 if(list[1]=="Roulette"){
                     ui->comboBoxSelection->setCurrentIndex(3);
+                    ui->lineEditPar1->setText("-1");
+                    ui->lineEditPar2->setText("-1");
                 }else
                     if(list[1]=="Ranking (p,e)"){
                         ui->comboBoxSelection->setCurrentIndex(2);
                         ui->lineEditPar1->setText(list[2].toString());
+                        ui->lineEditPar1->setValidator(new QDoubleValidator(1,2,2));
                         ui->lineEditPar2->setText(list[3].toString());
+                        ui->lineEditPar2->setValidator(new QDoubleValidator(0,1,2));
                     }
 
     ui->lineEditNumProc->setText(list[4].toString());
@@ -360,6 +367,11 @@ void Dialog::on_pushButtonStart_clicked()
     if(check) return;
     check = checklineEdit(ui->lineEditNumBestKernelSaved->text(), QString("Number of best kernels to saved cannot be empty \n"));
     if(check) return;
+    if(ui->comboBoxSelection->currentIndex()==2){
+       check = checklineEdit(ui->lineEditNumberOfLines->text(), QString("Number of lines cannot be empty \n"));
+       if(check) return;
+    }
+
 
 
 
@@ -725,8 +737,12 @@ void Dialog::on_lineEditPopSize_textChanged(const QString &arg1)
 {
     ui->lineEditNumberElitists->setValidator(new QIntValidator(1, ui->lineEditPopSize->text().toInt(), this));
     QString tmp = ui->lineEditPopSize->text();
-    tmp.remove('.');
+    tmp.remove('.');tmp.remove(',');
     ui->lineEditPopSize->setText(tmp);
+    if(ui->lineEditNumberElitists->text().toInt() > ui->lineEditPopSize->text().toInt())
+    {
+        ui->lineEditNumberElitists->setText(QString::number(ui->lineEditPopSize->text().toInt()-1));
+    }
 
 }
 
@@ -828,6 +844,11 @@ void Dialog::on_lineEditTbMax_textChanged(const QString &arg1)
     QString tmp = ui->lineEditTbMax->text();
     tmp.remove('.');tmp.remove(',');
     ui->lineEditTbMax->setText(tmp);
+    ui->lineEditTbMin->setValidator(new QIntValidator(0, ui->lineEditTbMax->text().toInt(), this));
+    if(ui->lineEditTbMin->text().toInt() > ui->lineEditTbMax->text().toInt())
+    {
+        ui->lineEditTbMin->setText(QString::number(ui->lineEditTbMax->text().toInt()-1));
+    }
 }
 
 void Dialog::on_lineEditdHpMax_textChanged(const QString &arg1)
@@ -850,6 +871,11 @@ void Dialog::on_lineEditMaxNumIte_textChanged(const QString &arg1)
     QString tmp = ui->lineEditMaxNumIte->text();
     tmp.remove('.');tmp.remove(',');
     ui->lineEditMaxNumIte->setText(tmp);
+    ui->lineEditFrequKerSav->setValidator(new QIntValidator(0, ui->lineEditMaxNumIte->text().toInt(), this));
+    if(ui->lineEditFrequKerSav->text().toInt() > ui->lineEditMaxNumIte->text().toInt())
+    {
+        ui->lineEditFrequKerSav->setText(QString::number(ui->lineEditMaxNumIte->text().toInt()-1));
+    }
 }
 
 void Dialog::on_lineEditNumProc_textChanged(const QString &arg1)
@@ -878,4 +904,44 @@ void Dialog::on_lineEditNumBestKernelSaved_textChanged(const QString &arg1)
     QString tmp = ui->lineEditNumBestKernelSaved->text();
     tmp.remove('.');tmp.remove(',');
     ui->lineEditNumBestKernelSaved->setText(tmp);
+}
+
+void Dialog::on_lineEditCrossoverP_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditCrossoverP->text();
+    QString tmp3 =  tmp.remove(',');
+    ui->lineEditCrossoverP->setText(tmp3);
+    if(tmp.toDouble() > 1)
+    {
+        ui->lineEditCrossoverP->setText("");
+    }
+    if(tmp.contains('.') || tmp.contains(',')){
+        QString tmp1 = tmp.mid(0,2);
+        QString tmp2 = tmp.mid(2);
+        cout << "QString tmp " << tmp.toStdString() << endl;
+        cout << "QString tmp1 " << tmp1.toStdString()  << endl;
+        cout << "QString tmp2 " << tmp2.toStdString()  << endl;
+        tmp2.remove('.');tmp2.remove(',');
+        ui->lineEditCrossoverP->setText(tmp1+tmp2);
+    }
+}
+
+void Dialog::on_lineEditMutationP_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditMutationP->text();
+    QString tmp3 =  tmp.remove(',');
+    ui->lineEditMutationP->setText(tmp3);
+    if(tmp.toDouble() > 1)
+    {
+        ui->lineEditMutationP->setText("");
+    }
+    if(tmp.contains('.') || tmp.contains(',')){
+        QString tmp1 = tmp.mid(0,2);
+        QString tmp2 = tmp.mid(2);
+        cout << "QString tmp " << tmp.toStdString() << endl;
+        cout << "QString tmp1 " << tmp1.toStdString()  << endl;
+        cout << "QString tmp2 " << tmp2.toStdString()  << endl;
+        tmp2.remove('.');tmp2.remove(',');
+        ui->lineEditMutationP->setText(tmp1+tmp2);
+    }
 }

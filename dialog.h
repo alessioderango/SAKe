@@ -91,6 +91,10 @@ private slots:
 
     void on_lineEditNumBestKernelSaved_textChanged(const QString &arg1);
 
+    void on_lineEditCrossoverP_textChanged(const QString &arg1);
+
+    void on_lineEditMutationP_textChanged(const QString &arg1);
+
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);
 
