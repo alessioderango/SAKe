@@ -92,7 +92,7 @@
                </font>
               </property>
               <property name="text">
-               <string>aaa</string>
+               <string/>
               </property>
              </widget>
             </item>

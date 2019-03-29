@@ -225,12 +225,34 @@ Regression::Regression(MainWindow * _w,QWidget *parent) :
 
     ui->lineEditPopSize->setValidator(new QIntValidator(0, 10000000000, this));
     ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 10000000000, this));
-    ui->lineEditCrossoverP->setValidator(new QDoubleValidator(0, 1,2, this));
-    ui->lineEditMutationP->setValidator(new QDoubleValidator(0, 1,2, this));
+
+    QDoubleValidator* val = new QDoubleValidator(0.0, 1.0, 2, ui->lineEditCrossoverP);
+    val->setNotation(QDoubleValidator::StandardNotation);
+    val->setLocale(QLocale::C);
+
+    ui->lineEditCrossoverP->setValidator(val);
+    QDoubleValidator* val2 = new QDoubleValidator(0.0, 1.0, 2, ui->lineEditMutationP);
+    val2->setNotation(QDoubleValidator::StandardNotation);
+    val2->setLocale(QLocale::C);
+    ui->lineEditMutationP->setValidator(val2);
+
     ui->lineEditNumProc->setValidator(new QIntValidator(0, 10000000000, this));
     ui->lineEdit_seed->setValidator(new QIntValidator(0, 10000000000, this));
     ui->lineEdit_frequencyPop->setValidator(new QIntValidator(0, 10000000000, this));
     ui->lineEditNumProc->setValidator(new QIntValidator(0, 10000000000, this));
+
+
+    ui->label_9->hide();
+    ui->checkBox->hide();
+    ui->lineEditN->hide();
+    ui->groupBox_7->hide();
+    ui->checkBox_kernel->hide();
+    ui->checkBox_controlpoints->hide();
+    ui->checkBox_N->hide();
+    //hide first matrix
+    ui->label_10->hide();
+    ui->lineEdit_8->hide();
+    ui->tableWidgetMin1->hide();
 
 }
 
@@ -273,7 +295,10 @@ void Regression::setParameters(QVariantList list)
         ui->lineEditPar1->setText(qvlist[2].toString());
 
         ui->label_15->show();
-        ui->lineEditPar1->setValidator(new QDoubleValidator(0.55, 1,2, this));
+        QDoubleValidator* val = new QDoubleValidator(0.55, 1.00, 2, ui->lineEditPar1);
+        val->setNotation(QDoubleValidator::StandardNotation);
+        val->setLocale(QLocale::C);
+        ui->lineEditPar1->setValidator(val);
         ui->lineEditPar1->show();
 
         ui->label_15->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
@@ -286,7 +311,9 @@ void Regression::setParameters(QVariantList list)
             ui->label_15->show();
             ui->lineEditPar1->show();
             //ui->lineEditPar1->setText("2");
-            ui->lineEditPar1->setValidator(new QIntValidator(2, ui->lineEditPopSize->text().toInt(), this));
+            QIntValidator* val = new QIntValidator(2, ui->lineEditPopSize->text().toInt(), ui->lineEditPar1);
+            val->setLocale(QLocale::C);
+            ui->lineEditPar1->setValidator(val);
             ui->label_15->setText(" Ts (tournament size 2 <= Ts <=N))");
             ui->label_16->hide();
             ui->lineEditPar2->hide();
@@ -299,7 +326,10 @@ void Regression::setParameters(QVariantList list)
                 ui->label_15->setText("selective pressure 0 < s < 1   (exponential) \n \
                                       1 <= s <= 2 (linear)");
                 //ui->lineEditPar1->setText("2");
-                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                QDoubleValidator* val = new QDoubleValidator(0.000, 2.000, 2, ui->lineEditPar1);
+                val->setNotation(QDoubleValidator::StandardNotation);
+                val->setLocale(QLocale::C);
+                ui->lineEditPar1->setValidator(val);
                 ui->label_16->show();
                 ui->label_16->setText("e (exponent 1=linear)");
                 //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
@@ -322,10 +352,13 @@ void Regression::setParameters(QVariantList list)
                         ui->label_15->show();
                         ui->label_15->setText("p (selective pressure 1 < p <= 2)");
                         //ui->lineEditPar1->setText("2");
-                        ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                        QDoubleValidator* val = new QDoubleValidator(1.000, 2.000, 2, ui->lineEditPar1);
+                        val->setNotation(QDoubleValidator::StandardNotation);
+                        val->setLocale(QLocale::C);
+                        ui->lineEditPar1->setValidator(val);
                         ui->label_16->show();
                         ui->label_16->setText("e (exponent 1=linear)");
-                        ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                       // ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
                         //ui->lineEditPar2->setText("1");
                         ui->lineEditPar2->show();
                     }
@@ -928,6 +961,10 @@ void Regression::on_pushButton_clicked()
     if(check) return;
     check = checklineEdit(ui->lineEditNumProc->text(), QString("Number of processors cannot be empty \n"));
     if(check) return;
+    check = checkValueSelectionParameter();
+    if(check){
+        return;
+    }
     //    check = checklineEdit(ui->lineEditSeed->text(), QString("Seed cannot be empty \n"));
     //    if(check) return;
     //    check = checklineEdit(ui->lineEditFrequKerSav->text(), QString("Frequency of kernel saving cannot be empty \n"));
@@ -1473,7 +1510,11 @@ void Regression::on_comboBoxSelection_currentIndexChanged(int index)
     if(index == 0){
         //StockTour
         ui->label_15->show();
-        ui->lineEditPar1->setValidator(new QDoubleValidator(0.55, 1,2, this));
+        QDoubleValidator* val = new QDoubleValidator(0.55, 1.00, 2, ui->lineEditPar1);
+        val->setNotation(QDoubleValidator::StandardNotation);
+        val->setLocale(QLocale::C);
+        ui->lineEditPar1->setValidator(val);
+
         ui->lineEditPar1->show();
 
         ui->label_15->setText("Tr (tournament rate 0.55 <= Tr <= 1)");
@@ -1485,7 +1526,9 @@ void Regression::on_comboBoxSelection_currentIndexChanged(int index)
             ui->label_15->show();
             ui->lineEditPar1->show();
             ui->lineEditPar1->setText("2");
-            ui->lineEditPar1->setValidator(new QIntValidator(2, ui->lineEditPopSize->text().toInt(), this));
+            QIntValidator* val = new QIntValidator(2, ui->lineEditPopSize->text().toInt(), ui->lineEditPar1);
+            val->setLocale(QLocale::C);
+            ui->lineEditPar1->setValidator(val);
             ui->label_15->setText(" Ts (tournament size 2 <= Ts <=N))");
             ui->label_16->hide();
             ui->lineEditPar2->hide();
@@ -1496,6 +1539,10 @@ void Regression::on_comboBoxSelection_currentIndexChanged(int index)
                 ui->label_15->setText("selective pressure 0 < s < 1   (exponential) \n \
                                       1 <= s <= 2 (linear)");
                 ui->lineEditPar1->setText("2");
+                QDoubleValidator* val = new QDoubleValidator(0.000, 2.000, 2, ui->lineEditPar1);
+                val->setNotation(QDoubleValidator::StandardNotation);
+                val->setLocale(QLocale::C);
+                ui->lineEditPar1->setValidator(val);
                 //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
 //                ui->label_16->show();
                 ui->label_16->setText("e (exponent 1=linear)");
@@ -1516,10 +1563,12 @@ void Regression::on_comboBoxSelection_currentIndexChanged(int index)
                         ui->label_15->show();
                         ui->label_15->setText("p (selective pressure 1 < p <= 2)");
                         ui->lineEditPar1->setText("2");
-                        ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
-                        ui->label_16->show();
+                        QDoubleValidator* val = new QDoubleValidator(1.000, 2.000, 2, ui->lineEditPar1);
+                        val->setNotation(QDoubleValidator::StandardNotation);
+                        val->setLocale(QLocale::C);
+                        ui->lineEditPar1->setValidator(val);                        ui->label_16->show();
                         ui->label_16->setText("e (exponent 1=linear)");
-                        ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                        //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
                         ui->lineEditPar2->setText("1");
                         ui->lineEditPar2->show();
                         ui->lineEditPar1->show();
@@ -1596,6 +1645,7 @@ void Regression::on_lineEditCrossoverP_textChanged(const QString &arg1)
 {
     QString tmp = ui->lineEditCrossoverP->text();
     QString tmp3 =  tmp.remove(',');
+    tmp3 =  tmp.remove('e');
     ui->lineEditCrossoverP->setText(tmp3);
     if(tmp.toDouble() > 1)
     {
@@ -1617,6 +1667,7 @@ void Regression::on_lineEditMutationP_textChanged(const QString &arg1)
 {
     QString tmp = ui->lineEditMutationP->text();
     QString tmp3 =  tmp.remove(',');
+    tmp3 =  tmp.remove('e');
     ui->lineEditMutationP->setText(tmp3);
 
     if(tmp.toDouble() > 1)
@@ -1665,4 +1716,162 @@ void Regression::on_lineEditMaxNumIte_textChanged(const QString &arg1)
     {
         ui->lineEdit_frequencyPop->setText(QString::number(ui->lineEditMaxNumIte->text().toInt()-1));
     }
+}
+
+void Regression::on_lineEditPar1_textChanged(const QString &arg1)
+{
+    QString tmp = ui->lineEditPar1->text();
+    cout << "tmp      --------------- >    " << tmp.toStdString() << endl;
+
+    if(ui->comboBoxSelection->currentIndex() ==0 ){  // 0.55 - 1 Tr
+        QString tmp3 =  tmp.remove(',');
+        tmp3 =  tmp.remove('e');
+        ui->lineEditPar1->setText(tmp3);
+        if(tmp.toDouble() > 1)
+        {
+            ui->lineEditPar1->setText("");
+        }
+        if(tmp.contains('.') && (tmp != "2." || tmp != "1.") ){
+            QString tmp1 = tmp.mid(0,2);
+            QString tmp2 = tmp.mid(2);
+            tmp2.remove('.');tmp2.remove(',');
+            ui->lineEditPar1->setText(tmp1+tmp2);
+        }
+    }else
+        if(ui->comboBoxSelection->currentIndex() ==1 ){ // Det 2<= Ts <=N
+            QString tmp3 =  tmp.remove(',');
+            tmp3 =  tmp.remove('e');
+            ui->lineEditPar1->setText(tmp3);
+            if(tmp.toDouble() > ui->lineEditPopSize->text().toInt())
+            {
+                ui->lineEditPar1->setText("");
+            }
+            if(tmp.contains('.')){
+                QString tmp1 = tmp.mid(0,2);
+                QString tmp2 = tmp.mid(2);
+                tmp2.remove('.');tmp2.remove(',');
+                ui->lineEditPar1->setText(tmp1+tmp2);
+            }
+        }
+        else
+            if(ui->comboBoxSelection->currentIndex() ==2 ){// 0 < s <= 2
+                QString tmp3 =  tmp.remove(',');
+                tmp3 =  tmp.remove('e');
+                ui->lineEditPar1->setText(tmp3);
+                if(tmp.toDouble() > 2)
+                {
+                    ui->lineEditPar1->setText("");
+                }
+                if(tmp.contains('.')){
+                    QString tmp1 = tmp.mid(0,2);
+                    QString tmp2 = tmp.mid(2);
+                    tmp2.remove('.');tmp2.remove(',');
+                    ui->lineEditPar1->setText(tmp1+tmp2);
+                }
+            }else{
+                if(ui->comboBoxSelection->currentIndex() ==4 ){// 1 < p <= 2
+                QString tmp3 =  tmp.remove(',');
+                tmp3 =  tmp.remove('e');
+                ui->lineEditPar1->setText(tmp3);
+                if(tmp.toDouble() > 2)
+                {
+                    ui->lineEditPar1->setText("");
+                }
+                if(tmp.contains('.')){
+                    QString tmp1 = tmp.mid(0,2);
+                    QString tmp2 = tmp.mid(2);
+                    tmp2.remove('.');tmp2.remove(',');
+                    ui->lineEditPar1->setText(tmp1+tmp2);
+                }
+                }
+            }
+}
+
+bool Regression::checkValueSelectionParameter(){
+
+    QString tmp = ui->lineEditPar1->text();
+    if(ui->comboBoxSelection->currentIndex() ==0 ){  // 0.55<= - <=1 Tr
+
+
+        if(tmp.toDouble() < 0.55)
+        {
+            ui->lineEditPar1->setText("0.55");
+            QString error = QString("The Tr value must be greater than 0.55. \n");
+
+            QMessageBox::information(
+                        this,
+                        tr(QString("Warning").toStdString().c_str()),
+                        tr(error.toStdString().c_str()) );
+            return true;
+        }
+
+
+    }else
+        if(ui->comboBoxSelection->currentIndex() == 1 ){ // Det 2<= - <=N
+            if(tmp.toDouble() < 2)// || tmp.toDouble() > ui->lineEditPopSize->text().toInt())
+            {
+                ui->lineEditPar1->setText("2");
+                QString error = QString("The Ts value must be greater than 2. \n");
+
+                QMessageBox::information(
+                            this,
+                            tr(QString("Warning").toStdString().c_str()),
+                            tr(error.toStdString().c_str()) );
+                return true;
+            }
+
+        }
+        else
+            if(ui->comboBoxSelection->currentIndex() ==2 ){// 0 < s < 1
+                if(tmp == "2." || tmp == "1."){
+                    ui->lineEditPar1->setText("1.01");
+                    QString error = QString("The s invalid value. \n");
+
+                    QMessageBox::information(
+                                this,
+                                tr(QString("Warning").toStdString().c_str()),
+                                tr(error.toStdString().c_str()) );
+                     return true;
+                }
+
+                if(tmp.toDouble() <= 0)// || tmp.toDouble() >= 1)
+                {
+                    ui->lineEditPar1->setText("0.1");
+                    QString error = QString("The s value must be between 0 and 1. \n");
+
+                    QMessageBox::information(
+                                this,
+                                tr(QString("Warning").toStdString().c_str()),
+                                tr(error.toStdString().c_str()) );
+                    return true;
+                }
+
+            }else
+                if(ui->comboBoxSelection->currentIndex() ==4 ){ //  1 < p <= 2
+                    if(tmp == "2." || tmp == "1."){
+                        ui->lineEditPar1->setText("1.01");
+                        QString error = QString("The p invalid value. \n");
+
+                        QMessageBox::information(
+                                    this,
+                                    tr(QString("Warning").toStdString().c_str()),
+                                    tr(error.toStdString().c_str()) );
+                         return true;
+                    }
+
+                    if(tmp.toDouble() <= 1)// || tmp.toDouble() > 2)
+                    {
+                        ui->lineEditPar1->setText("1.01");
+                        QString error = QString("The p value must be between 1 and 2. \n");
+
+                        QMessageBox::information(
+                                    this,
+                                    tr(QString("Warning").toStdString().c_str()),
+                                    tr(error.toStdString().c_str()) );
+                         return true;
+                    }
+
+                }
+
+     return false;
 }

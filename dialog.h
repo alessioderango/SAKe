@@ -34,6 +34,7 @@ public:
     bool checklineEdit(QString l, QString s);
     bool checklineEditRangeDouble(QString l, double max, double min, QString s);
     bool checklineEditRangeInt(QString l, int max, int min, QString s);
+    bool checkValueSelectionParameter();
 
 
     QString getIdProject() const;
@@ -95,10 +96,16 @@ private slots:
 
     void on_lineEditMutationP_textChanged(const QString &arg1);
 
+    void on_lineEditPar1_textChanged(const QString &arg1);
+
+
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);
 
 private:
+
+
+
     Ui::Dialog *ui;
     QTabWidget * tab;
     MainWindow *mainWindow;

@@ -31,6 +31,7 @@ public:
     void setFieldEnabled(bool);
     void disableCheckBoxLastGeneration();
     void hideTableFirstGamma();
+    bool checkValueSelectionParameter();
 
 
 
@@ -88,6 +89,8 @@ private slots:
     void on_lineEdit_frequencyPop_textChanged(const QString &arg1);
 
     void on_lineEditMaxNumIte_textChanged(const QString &arg1);
+
+    void on_lineEditPar1_textChanged(const QString &arg1);
 
 private:
     Ui::Regression *ui;

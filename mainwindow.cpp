@@ -1944,7 +1944,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_newCalibrationProject_triggered()
 {
-    Dialog *dialog = new Dialog();
+    Dialog *dialog = new Dialog(this);
     dialog->setReadOnlyProjName(false);
     dialog->setMainWindow(this);
     dialog->show();
@@ -1959,7 +1959,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
 //    cout << item->parent()->text(column).toStdString() << endl;
     if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Calibration", Qt::CaseInsensitive)==0){
         if(listParameter.size() > 5){
-            Dialog *dialog = new Dialog();
+            Dialog *dialog = new Dialog(this);
             dialog->setReadOnlyProjName(true);
             dialog->setParameters(listParameter);
             dialog->setMainWindow(this);
@@ -1979,7 +1979,7 @@ void MainWindow::myClick(QTreeWidgetItem *item, int column)
         else
                 if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Regression", Qt::CaseInsensitive)==0){
                     if(listParameter.size() > 5){
-                        Regression *regression = new Regression();
+                        Regression *regression = new Regression(this);
 //                        regression->setReadOnlyProjName(true);
                         regression->setW(this);
                         regression->setReadOnlyProjName(true);
