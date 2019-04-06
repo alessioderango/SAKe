@@ -62,6 +62,8 @@ Dialog::~Dialog()
 
 void Dialog::setParameters(QVariantList list)
 {
+    ui->checkBoxContinueFromLastGen->setEnabled(true);
+    ui->label_25->setEnabled(true);
     ui->lineEditProjName->setText(list[0].toString());
     if(list[1]=="Stochastic Tournament (Tr)"){
         ui->comboBoxSelection->setCurrentIndex(0);
@@ -410,14 +412,26 @@ void Dialog::on_pushButtonStart_clicked()
     int result = csv->loadCSVRain(rainPath,rain,rain_size, rowError, e);
     if(result == 0)
     {
-        emit showAlertInputCsv(rowError,rainPath, e);
+        //emit showAlertInputCsv(rowError,rainPath, e);
+        QString error = QString(e);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
         return;
     }
 
     result = csv->loadCSVActivation(actPath,activation,activation_size, rowError, e);
     if(result== 0)
     {
-        emit showAlertInputCsv(rowError,actPath, e);
+        //emit showAlertInputCsv(rowError,rainPath, e);
+        QString error = QString(e);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
         return;
     }
 
@@ -1132,3 +1146,7 @@ bool Dialog::checkValueSelectionParameter(){
      return false;
 }
 
+
+void Dialog::on_lineEditRain_editingFinished()
+{
+}

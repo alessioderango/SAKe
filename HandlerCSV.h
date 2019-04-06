@@ -10,10 +10,14 @@
 #include <algorithm>
 #include <iostream>
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include "boost/date_time/local_time_adjustor.hpp"
+#include "boost/date_time/c_local_time_adjustor.hpp"
+#include <ctime>
 #include <time.h>
 #include "Regression/Genotype.h"
 #include <QVector>
 using namespace std;
+using boost::posix_time::ptime;
 using namespace boost::posix_time;
 using namespace boost::gregorian;
 

@@ -53,15 +53,78 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
     rain = new Rain[size];
     size=0;
 
+    string previousDate;
+    int deltaT = 0;
     for(unsigned int i =0; i < rows.size();i++){
-        double mm = atof(rows[i].at(1).c_str());
-        string date =  rows[i].at(0);
-
-        ptime rain0;
         try{
-            rain0 = time_from_string(date);
+            double mm = atof(rows[i].at(1).c_str());
+            string actualDate =  rows[i].at(0);
+
+            if(mm < 0){
+                std::cout << "rain row = " << i << std::endl;
+                QString error= "at row "+ QString::number(i) + " mm can not be negative \n";
+                _e.append(error);
+                row = i;
+                return 0;
+            }
+            QString actualDateQString = QString::fromStdString(actualDate);
+            if(actualDateQString.contains(QRegExp("^\d{4}[\-\/\s]?((((0[13578])|(1[02]))[\-\/\s]?(([0-2][0-9])|(3[01])))|(((0[469])|(11))[\-\/\s]?(([0-2][0-9])|(30)))|(02[\-\/\s]?[0-2][0-9])) (([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9]).([0-5][0-9][0-9])")))
+            {
+                std::cout << "rain row = " << i << std::endl;
+                QString error= "at row "+ QString::number(i) + " date  is not in the format yyyy-mm-dd hh:mm:ss.sss \n";
+                _e.append(error);
+                row = i;
+                return 0;
+            }
+
+            if(i > 0){
+                ptime previousTime = time_from_string(previousDate);
+                ptime actualTime = time_from_string(actualDate);
+                int a = Jan;
+                //ptime firstTime = ptime(date(1970, Jan, 1));
+                boost::posix_time::time_duration diff1 =(previousTime-ptime(date(1970, Jan, 1)));
+                boost::posix_time::time_duration diff2 =(actualTime-ptime(date(1970, Jan, 1)));
+                std::time_t begin = diff1.total_seconds();
+                std::time_t end = diff2.total_seconds();
+
+                int difference = std::difftime(end, begin);
+
+                if(difference <= 0){
+                    std::cout << "rain row = " << i << std::endl;
+                    QString error= "at row "+ QString::number(i) + " date is incorrect \n";
+                    _e.append(error);
+                    row = i;
+
+                    return 0;
+                }
+
+                if(i == 1)
+                {
+                    deltaT = difference;
+                    //cout << "deltaT = " << deltaT << endl;
+                }
+
+                if(i > 1){
+                    if(difference > deltaT){
+                        std::cout << "rain row = " << i << std::endl;
+                        QString error= "at row "+ QString::number(i) + " deltaT is wrong.  \n";
+                        _e.append(error);
+                        row = i;
+                        return 0;
+                    }
+                }
+
+
+            }
+
+
+            ptime rain0;
+
+
+            rain0 = time_from_string(actualDate);
             rain[size]= Rain(to_tm(rain0),mm);
             size++;
+            previousDate = actualDate;
 
         }catch(std::exception& e){
             std::cout << "rain row = " << i << std::endl;
@@ -70,6 +133,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
 
             return 0;
         }
+
     }
 
     return 1;
@@ -106,12 +170,10 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
     activation_size=0;
 
     for(unsigned int i =0; i < rows.size();i++){
-        string dateStart =  rows[i].at(0);
-        string dateEnd =  rows[i].at(1);
-
         try{
+            string dateStart =  rows[i].at(0);
+            string dateEnd =  rows[i].at(1);
             cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
-
             ptime activationStart = time_from_string(dateStart);
             ptime activationEnd = time_from_string(dateEnd);
             activation[activation_size]= Activation(to_tm(activationStart),to_tm(activationEnd));

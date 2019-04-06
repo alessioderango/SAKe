@@ -70,7 +70,7 @@ int getDifferenceTime(tm temp1,tm temp2){
             //TODO [differenza in minuti] [differenza in ore] [ differenza in giorni ]
             int difference = 0;
 
-            difference = std::difftime(y, x) / (60*60*24);
+            difference = std::difftime(y, x);
 
 
             //	        std::cout << std::ctime(&x);
@@ -232,7 +232,7 @@ void ValidationController::setMainwindows(MainWindow *value)
 bool diffTimeInterval(tm actStart, tm actEnd, tm pichTime){
     int result1 = getDifferenceTime(actStart,pichTime);
     int result2 = getDifferenceTime(pichTime,actEnd);
-    if(result1>=-2 && result2>=-1){
+    if(result1>=0 && result2>=0){
         return true;
     }
     else

@@ -102,7 +102,7 @@ public:
 	    if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) )
 	    {
             //TODO [differenza in minuti] [differenza in ore] [ differenza in giorni ]
-	        int difference = std::difftime(y, x) / (60*60*24);
+            int difference = std::difftime(y, x);
 //	        std::cout << std::ctime(&x);
 //	        std::cout << std::ctime(&y);
 //	        std::cout << "difference = " << difference << " days" << std::endl;
@@ -154,7 +154,7 @@ public:
                 //TODO inserire variabili intervallo giorni
                 int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
                 int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
-                if(result1>=-2 && result2>=-1){
+                if(result1>=0 && result2>=0){
                     //if(i<countYm)
                     //if(i<(activations_size)){
 //                       printf("i %d \n",i);

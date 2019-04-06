@@ -138,7 +138,7 @@ Regression::Regression(MainWindow * _w,QWidget *parent) :
            0,
            "8",
            "1",
-           "200",
+           "100",
            "20",
            "2",
            "0.02",
@@ -582,7 +582,7 @@ void Regression::on_lineEdit_8_textChanged(const QString &arg1)
                            i-1,
                            "8",
                            "1",
-                           "200",
+                           "100",
                            "20",
                            "2",
                            "0.02",
@@ -623,7 +623,7 @@ void Regression::on_lineEdit_10_textChanged(const QString &arg1)
                            i-1,
                            "8",
                            "1",
-                           "200",
+                           "100",
                            "20",
                            "2",
                            "0.02",
@@ -660,7 +660,7 @@ void Regression::on_lineEdit_9_textChanged(const QString &arg1)
                            i-1,
                            "8",
                            "1",
-                           "200",
+                           "100",
                            "20",
                            "2",
                            "0.02",
@@ -682,6 +682,7 @@ void Regression::on_pushButton_3_clicked()
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr(""), "",
                                                     tr("All Files (*.csv)"));
+    if(!fileName.isEmpty()){
     ui->lineEditLoadKernel->setText(fileName);
 
     QString filename = ui->lineEditLoadKernel->text();
@@ -710,6 +711,7 @@ void Regression::on_pushButton_3_clicked()
                                   yKernel,
                                   QVector<double>::fromStdVector(xControlpoints),
                                   QVector<double>::fromStdVector(yControlpoints));
+    }
 
 }
 

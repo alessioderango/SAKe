@@ -11,15 +11,15 @@ class Genotype
 public:
     Genotype(int dimension);
 
-    setWeight(string x);
-    setParameters(string x);
-    setPercantageW(string x);
-    setFunctionType(string x);
-    setPercantageLinearA(string x);
-    setPercantageLinearB(string x);
-    setPercantageGammaA(string x);
-    setPercantageGammaB(string x);
-    setTranslation(string x);
+    void setWeight(string x);
+    void setParameters(string x);
+    void setPercantageW(string x);
+    void setFunctionType(string x);
+    void setPercantageLinearA(string x);
+    void setPercantageLinearB(string x);
+    void setPercantageGammaA(string x);
+    void setPercantageGammaB(string x);
+    void setTranslation(string x);
 
 
     double *getWeight() ;

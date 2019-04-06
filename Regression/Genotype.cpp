@@ -31,7 +31,7 @@ std::vector<std::string> splitGen(const std::string &s, char delim) {
 }
 
 
-Genotype::setWeight(string x)
+void Genotype::setWeight(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -39,7 +39,7 @@ Genotype::setWeight(string x)
     }
 }
 
-Genotype::setParameters(string x)
+void Genotype::setParameters(string x)
 {
     std::vector<string>  x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < numFunctions; i++) {
@@ -54,7 +54,7 @@ Genotype::setParameters(string x)
 
 }
 
-Genotype::setPercantageW(string x)
+void Genotype::setPercantageW(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -62,7 +62,7 @@ Genotype::setPercantageW(string x)
     }
 }
 
-Genotype::setFunctionType(string x)
+void Genotype::setFunctionType(string x)
 {
    std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -70,7 +70,7 @@ Genotype::setFunctionType(string x)
     }
 }
 
-Genotype::setPercantageLinearA(string x)
+void Genotype::setPercantageLinearA(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -78,7 +78,7 @@ Genotype::setPercantageLinearA(string x)
     }
 }
 
-Genotype::setPercantageLinearB(string x)
+void Genotype::setPercantageLinearB(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -86,7 +86,7 @@ Genotype::setPercantageLinearB(string x)
     }
 }
 
-Genotype::setPercantageGammaA(string x)
+void Genotype::setPercantageGammaA(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -94,7 +94,7 @@ Genotype::setPercantageGammaA(string x)
     }
 }
 
-Genotype::setPercantageGammaB(string x)
+void Genotype::setPercantageGammaB(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {
@@ -102,7 +102,7 @@ Genotype::setPercantageGammaB(string x)
     }
 }
 
-Genotype::setTranslation(string x)
+void Genotype::setTranslation(string x)
 {
     std::vector<string> x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < x1.size(); i++) {

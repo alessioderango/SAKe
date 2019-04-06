@@ -788,7 +788,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -1067,7 +1067,14 @@ spacing:100px;
           </layout>
          </item>
          <item>
-          <widget class="QTableWidget" name="tableWidgetMin1"/>
+          <widget class="QTableWidget" name="tableWidgetMin1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_3">

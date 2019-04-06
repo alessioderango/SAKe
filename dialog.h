@@ -99,6 +99,8 @@ private slots:
     void on_lineEditPar1_textChanged(const QString &arg1);
 
 
+    void on_lineEditRain_editingFinished();
+
 signals:
     void showAlertInputCsv(int row,QString a,  QString e);
 
