@@ -408,8 +408,8 @@ void Dialog::on_pushButtonStart_clicked()
         return;
     }
 
-
-    int result = csv->loadCSVRain(rainPath,rain,rain_size, rowError, e);
+    string rainMinDate, rainMaxDate;
+    int result = csv->loadCSVRain(rainPath,rain,rain_size, rowError, e,rainMinDate, rainMaxDate);
     if(result == 0)
     {
         //emit showAlertInputCsv(rowError,rainPath, e);
@@ -422,7 +422,7 @@ void Dialog::on_pushButtonStart_clicked()
         return;
     }
 
-    result = csv->loadCSVActivation(actPath,activation,activation_size, rowError, e);
+    result = csv->loadCSVActivation(actPath,activation,activation_size, rowError, e,rainMinDate, rainMaxDate);
     if(result== 0)
     {
         //emit showAlertInputCsv(rowError,rainPath, e);

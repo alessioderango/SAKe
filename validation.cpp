@@ -139,15 +139,28 @@ void Validation::accept()
     }
 
     connect(this, SIGNAL(showAlertInputCsv(int,QString,QString)), mainWindow, SLOT(showAlertInputCsv(int,QString,QString))) ;
-    int errorRain = HandlerCSV::loadCSVRain(ui->lineEdit_rain->text(), rain, rain_size, rowError, e);
+    string rainMinDate, rainMaxDate;
+    int errorRain = HandlerCSV::loadCSVRain(ui->lineEdit_rain->text(), rain, rain_size, rowError, e,rainMinDate, rainMaxDate);
     if(errorRain==0){
-        emit showAlertInputCsv(rowError,rainPath, e);
+        //emit showAlertInputCsv(rowError,rainPath, e);
+        QString error = QString(e);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
         return;
     }
 
-    int errorActivation = HandlerCSV::loadCSVActivation(actPath, activation, activation_size, rowError, e);
+    int errorActivation = HandlerCSV::loadCSVActivation(actPath, activation, activation_size, rowError, e, rainMinDate, rainMaxDate);
     if(errorActivation ==0){
-        emit showAlertInputCsv(rowError,actPath, e);
+        //emit showAlertInputCsv(rowError,actPath, e);
+        QString error = QString(e);
+
+        QMessageBox::information(
+                    this,
+                    tr(QString("Warning").toStdString().c_str()),
+                    tr(error.toStdString().c_str()) );
         return;
     }
     int errorKernel = HandlerCSV::loadCSVKernel(ui->lineEdit_kernel->text(), Fi, size_Fi,zCr);

@@ -29,7 +29,9 @@ void HandlerCSV::ReplaceStringInPlace(std::string& subject, const std::string& s
     }
 }
 
-int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QString&  _e)
+int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QString&  _e,
+                            string &rainMinDate,
+                            string &rainMaxDate)
 {
 
 
@@ -55,6 +57,8 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
 
     string previousDate;
     int deltaT = 0;
+    rainMinDate = rows[0].at(0);
+    rainMaxDate = rows[rows.size()-1].at(0);
     for(unsigned int i =0; i < rows.size();i++){
         try{
             double mm = atof(rows[i].at(1).c_str());
@@ -62,7 +66,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
 
             if(mm < 0){
                 std::cout << "rain row = " << i << std::endl;
-                QString error= "at row "+ QString::number(i) + " mm can not be negative \n";
+                QString error= "In rains, at row "+ QString::number(i) + " mm can not be negative \n";
                 _e.append(error);
                 row = i;
                 return 0;
@@ -71,7 +75,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
             if(actualDateQString.contains(QRegExp("^\d{4}[\-\/\s]?((((0[13578])|(1[02]))[\-\/\s]?(([0-2][0-9])|(3[01])))|(((0[469])|(11))[\-\/\s]?(([0-2][0-9])|(30)))|(02[\-\/\s]?[0-2][0-9])) (([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9]).([0-5][0-9][0-9])")))
             {
                 std::cout << "rain row = " << i << std::endl;
-                QString error= "at row "+ QString::number(i) + " date  is not in the format yyyy-mm-dd hh:mm:ss.sss \n";
+                QString error= "In rains, at row "+ QString::number(i) + " date  is not in the format yyyy-mm-dd hh:mm:ss.sss \n";
                 _e.append(error);
                 row = i;
                 return 0;
@@ -82,16 +86,16 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
                 ptime actualTime = time_from_string(actualDate);
                 int a = Jan;
                 //ptime firstTime = ptime(date(1970, Jan, 1));
-                boost::posix_time::time_duration diff1 =(previousTime-ptime(date(1970, Jan, 1)));
-                boost::posix_time::time_duration diff2 =(actualTime-ptime(date(1970, Jan, 1)));
+                boost::posix_time::time_duration diff1 =(previousTime-ptime(date(1900, Jan, 1)));
+                boost::posix_time::time_duration diff2 =(actualTime-ptime(date(1900, Jan, 1)));
                 std::time_t begin = diff1.total_seconds();
                 std::time_t end = diff2.total_seconds();
 
                 int difference = std::difftime(end, begin);
 
                 if(difference <= 0){
-                    std::cout << "rain row = " << i << std::endl;
-                    QString error= "at row "+ QString::number(i) + " date is incorrect \n";
+                    std::cout << " rain row = " << i<< std::endl;
+                    QString error= "In rains, at row "+ QString::number(i) + " date is incorrect \n";
                     _e.append(error);
                     row = i;
 
@@ -107,7 +111,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
                 if(i > 1){
                     if(difference > deltaT){
                         std::cout << "rain row = " << i << std::endl;
-                        QString error= "at row "+ QString::number(i) + " deltaT is wrong.  \n";
+                        QString error= "In rains, at row "+ QString::number(i) + " deltaT is wrong.  \n";
                         _e.append(error);
                         row = i;
                         return 0;
@@ -128,7 +132,8 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
 
         }catch(std::exception& e){
             std::cout << "rain row = " << i << std::endl;
-            _e.append(e.what());
+            QString err = "In rains, " + QString::fromStdString(e.what());
+            _e.append(err);
             row = i;
 
             return 0;
@@ -141,7 +146,13 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
 }
 
 
-int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &activation_size,int &row, QString& _e)
+int HandlerCSV::loadCSVActivation(QString fileurl,
+                                  Activation *&activation,
+                                  int &activation_size,
+                                  int &row,
+                                  QString& _e,
+                                  string rainMinDate,
+                                  string rainMaxDate)
 {
 
     //    qDebug() << "Entrato in loadCSV";
@@ -169,20 +180,84 @@ int HandlerCSV::loadCSVActivation(QString fileurl,Activation *&activation,int &a
     activation = new Activation[activation_size];
     activation_size=0;
 
+    ptime rainMinDateTime = time_from_string(rainMinDate);
+    ptime rainMaxDateTime = time_from_string(rainMaxDate);
+    int a = Jan;
+    //ptime firstTime = ptime(date(1970, Jan, 1));
+    boost::posix_time::time_duration diff1 =(rainMinDateTime-ptime(date(1900, Jan, 1)));
+    boost::posix_time::time_duration diff2 =(rainMaxDateTime-ptime(date(1900, Jan, 1)));
+    std::time_t rainMinDateTimet = diff1.total_seconds();
+    std::time_t rainMaxDateTimet = diff2.total_seconds();
+
     for(unsigned int i =0; i < rows.size();i++){
         try{
             string dateStart =  rows[i].at(0);
             string dateEnd =  rows[i].at(1);
-            cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
+
             ptime activationStart = time_from_string(dateStart);
             ptime activationEnd = time_from_string(dateEnd);
+            int a = Jan;
+            //ptime firstTime = ptime(date(1970, Jan, 1));
+            boost::posix_time::time_duration diff1 =(activationStart-ptime(date(1900, Jan, 1)));
+            boost::posix_time::time_duration diff2 =(activationEnd-ptime(date(1900, Jan, 1)));
+            std::time_t begin = diff1.total_seconds();
+            std::time_t end = diff2.total_seconds();
+
+            int difference = std::difftime(end, begin);
+
+            if(difference < 0){
+                std::cout << " activations row = " << i<< std::endl;
+                QString error= "In activations, at row "+ QString::number(i) + " please, check the range. \n";
+                _e.append(error);
+                row = i;
+
+                return 0;
+            }
+
+            QString stringfinal = " please, check date (out of rain range). \n";
+
+            difference = std::difftime(begin , rainMinDateTimet);
+            if(difference < 0){
+                QString error= "In activations, at row "+ QString::number(i) + stringfinal;
+                _e.append(error);
+                row = i;
+
+                return 0;
+            }
+            difference = std::difftime(end, rainMinDateTimet);
+            if(difference < 0){
+                QString error= "In activations, at row "+ QString::number(i) + stringfinal;
+                _e.append(error);
+                row = i;
+
+                return 0;
+            }
+            difference = std::difftime(rainMaxDateTimet, begin);
+            if(difference < 0){
+                QString error= "In activations, at row "+ QString::number(i) + stringfinal;
+                _e.append(error);
+                row = i;
+
+                return 0;
+            }
+            difference = std::difftime(rainMaxDateTimet, end);
+            if(difference < 0){
+                QString error= "In activations, at row "+ QString::number(i) + stringfinal;
+                _e.append(error);
+                row = i;
+
+                return 0;
+            }
+
+            cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
+
             activation[activation_size]= Activation(to_tm(activationStart),to_tm(activationEnd));
             activation_size++;
 
         }catch(std::exception& e){
             //std::cout << "  Exception: " <<  e.what() << std::endl;
-            std::cout << "act row = " << i << std::endl;
-            _e.append(e.what());
+            QString err = "In activations, " + QString::fromStdString(e.what());
+            _e.append(err);
             row = i;
 
             return 0;

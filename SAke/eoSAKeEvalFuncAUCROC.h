@@ -106,8 +106,8 @@ public:
     int getDifferenceTime(tm temp1,tm temp2){
         ptime rain0 = ptime_from_tm(temp1);
         ptime rainLast = ptime_from_tm(temp2);
-        boost::posix_time::time_duration diff1 =(rain0-ptime(date(1970, Jan, 1)));
-        boost::posix_time::time_duration diff2 =(rainLast-ptime(date(1970, Jan, 1)));
+        boost::posix_time::time_duration diff1 =(rain0-ptime(date(1900, Jan, 1)));
+        boost::posix_time::time_duration diff2 =(rainLast-ptime(date(1900, Jan, 1)));
         std::time_t x = diff1.total_seconds();
         std::time_t y = diff2.total_seconds();
         if ( x != (std::time_t)(-1) && y != (std::time_t)(-1) )

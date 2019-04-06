@@ -29,8 +29,14 @@ class HandlerCSV
 public:
     HandlerCSV();
     static void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);
-    static int loadCSVRain(QString fileurl, Rain * &rain, int &size, int &row, QString &_e);
-    static int loadCSVActivation(QString fileurl, Activation *&activation, int &activation_size,int &row, QString&  _e);
+    static int loadCSVRain(QString fileurl, Rain * &rain, int &size, int &row, QString &_e, string &rainMinDate, string &rainMaxDate);
+    static int loadCSVActivation(QString fileurl,
+                                 Activation *&activation,
+                                 int &activation_size,
+                                 int &row,
+                                 QString& _e,
+                                 string rainMinDate,
+                                 string rainMaxDate);
     static int loadCSVKernel(QString fileurl, double *& Fi, int & size, double & zCr);
     static int loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & size, double & zCr);
     static int loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFromFile, int& numberGen);
