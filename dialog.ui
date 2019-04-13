@@ -171,7 +171,7 @@
         </font>
        </property>
        <property name="title">
-        <string>2 - Population, pattern &amp; Replacement</string>
+        <string>2 - Population, pattern and replacement</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>

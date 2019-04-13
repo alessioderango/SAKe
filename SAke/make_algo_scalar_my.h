@@ -101,8 +101,8 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
       }
     else          // parameter passed by user as DetTour(T)
       detSize = atoi(ppSelect.second[0].c_str());
-    select = new eoSAKeDetTournamentSelect<EOT>(selectionStrategy, detSize);
-//     select = new eoDetTournamentSelect<EOT>(detSize);
+   // select = new eoSAKeDetTournamentSelect<EOT>(selectionStrategy, detSize);
+     select = new eoDetTournamentSelect<EOT>(detSize);
   }
   else if (ppSelect.first == std::string("Sharing"))
   {

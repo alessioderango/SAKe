@@ -136,13 +136,14 @@ public :
             //            for (unsigned int i=0; i< offspring.size(); i++){
             //                std::cout << i << " " << offspring[i].fitness() << std::endl;
             //            }
+            //matingPool.sort();
 
-
-            for (unsigned int i=numberElitist; i< offspring.size(); i++){
+            int posOffspring = numberElitist;
+            for (unsigned int i=0; i< (offspring.size()-numberElitist); i++){
 
 //                std::cout << "ELITISTI!!!!!!! " << " " << std::endl;
 //                typename eoPop<EOT>::iterator replace = _pop.begin() + i;
-                typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
+                typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + posOffspring;
 //                EOT oldChamp = *replace;
 //                (*itPoorGuy) = oldChamp;
                 EOT a;
@@ -156,6 +157,7 @@ public :
                     //a.setFiIndex(tmp, matingPool[i]. getFiIndex(tmp));
                 }
                 (*itPoorGuy) = a;
+                posOffspring++;
 //                offspring[i] =_pop[i].clone();
 //                offspring[i].invalidate();
                 // std::cout << "TORNEO!!!!!!! " << " " << std::endl;

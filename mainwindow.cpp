@@ -412,7 +412,12 @@ void MainWindow::updateFitnessPlot(int indexTab, QVector<double> x, QVector<doub
 
         if(numberofGenerations != 0 && b){
             m_CustomPlot->addGraph();
-            m_CustomPlot->graph(2)->setBrush(QBrush(QColor(169,169,169, 20)));
+            QPen blueDotPen;
+            blueDotPen.setColor(QColor(0, 0, 0, 0));
+            blueDotPen.setStyle(Qt::DotLine);
+            blueDotPen.setWidthF(1);
+            m_CustomPlot->graph(2)->setPen(blueDotPen);
+            m_CustomPlot->graph(2)->setBrush(QBrush(QColor(0,0,0, 20)));
             QVector<double > tmpx;
                     for (int i = 0; i <= numberofGenerations; ++i)
                             tmpx.push_back(x[i]);
@@ -420,19 +425,20 @@ void MainWindow::updateFitnessPlot(int indexTab, QVector<double> x, QVector<doub
                           for (int i = 0; i <= numberofGenerations; ++i)
                                     tmpy.push_back(y[i]);
             m_CustomPlot->graph(2)->setData(tmpx,tmpy);
+            m_CustomPlot->graph(2)->setName("Previous results");
 
 
-            m_CustomPlot->addGraph();
+//            m_CustomPlot->addGraph();
 
 
-            m_CustomPlot->graph(3)->setBrush(QBrush(QColor(169,169,169, 20)));
-            QVector<double > tmpx1;
-                    for (int i = 0; i <= numberofGenerations; ++i)
-                            tmpx1.push_back(x1[i]);
-            QVector<double > tmpy1;
-                          for (int i = 0; i <= numberofGenerations; ++i)
-                                    tmpy1.push_back(y1[i]);
-            m_CustomPlot->graph(3)->setData( tmpx1,tmpy1);
+//            m_CustomPlot->graph(3)->setBrush(QBrush(QColor(169,169,169, 20)));
+//            QVector<double > tmpx1;
+//                    for (int i = 0; i <= numberofGenerations; ++i)
+//                            tmpx1.push_back(x1[i]);
+//            QVector<double > tmpy1;
+//                          for (int i = 0; i <= numberofGenerations; ++i)
+//                                    tmpy1.push_back(y1[i]);
+//            m_CustomPlot->graph(3)->setData( tmpx1,tmpy1);
 
         }
     }
@@ -565,8 +571,8 @@ void MainWindow::updateRegression(int indexTab,
 
    // int shift = x.size()/numberofFunction;
 
-    if(steps==5)
-    {
+//    if(steps==5)
+//    {
       //plot->graph(0)->setVisible(false);
       //plot->graph(1)->rescaleAxes();
       plot->rescaleAxes(true);
@@ -574,7 +580,7 @@ void MainWindow::updateRegression(int indexTab,
       tableResult->setRowCount(numberofFunction);
 
 
-    }
+//    }
     plot->graph(0)->setData(x, y);
     for (int i = 0; i < numberofFunction; ++i) {
        QVector<double> yFunction = QVector<double>::fromStdVector(matrixY[i]);
@@ -2364,6 +2370,7 @@ void MainWindow::createProjectFromOneAlreadyExist(QObject * t)
             //dialog->setReadOnlyProjName(true);
             dialog->setParameters(listParameter);
             dialog->setMainWindow(this);
+            dialog->setEnabledtoFalseCheckContinue();
             dialog->show();
         }
     }else

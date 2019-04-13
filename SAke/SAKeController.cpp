@@ -155,7 +155,7 @@ SAKeController::SAKeController(MainWindow *_main,
     maxNumberToConsider=numberElitist;
     numberofProcessor=_numberofProcessor;
 
-    if(fileExists(tmp2+"/currentGeneration.csv")){
+    if(fileExists(tmp2+"/currentGAiteration.csv")){
         lastGeneration = _lastGeneration;
     }else
         lastGeneration = false;
@@ -216,7 +216,7 @@ void SAKeController::startAlgorithm()
         vector<vector<double>> popFromFile;
         if(lastGeneration){
             int numGen;
-            HandlerCSV::loadCSVPopFromFile(savePath+"/currentGenerationWithHeader.csv",popFromFile,numGen);
+            HandlerCSV::loadCSVPopFromFile(savePath+"/currentGAiteration.csv",popFromFile,numGen);
         }
 
 

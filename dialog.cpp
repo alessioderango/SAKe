@@ -42,15 +42,15 @@ Dialog::Dialog(QWidget *parent) :
     ui->pushButtonStart->setAutoDefault(false);
     ui->pushButtonStart->setDefault(false);
 
-//    QDoubleValidator* val = new QDoubleValidator(1.000, 2.000, 3, ui->lineEditPar1);
-//    val->setNotation(QDoubleValidator::StandardNotation);
-//    val->setLocale(QLocale::C);
-//    ui->lineEditPar1->setValidator(val);
+    //    QDoubleValidator* val = new QDoubleValidator(1.000, 2.000, 3, ui->lineEditPar1);
+    //    val->setNotation(QDoubleValidator::StandardNotation);
+    //    val->setLocale(QLocale::C);
+    //    ui->lineEditPar1->setValidator(val);
 
     //ui->lineEditPar2->setValidator(val);
 
-//    QRegExp rx("^\d[0-9]*\.?[0-9]+");
-//    ui->lineEditPar1->setValidator(new QRegExpValidator(rx, this));
+    //    QRegExp rx("^\d[0-9]*\.?[0-9]+");
+    //    ui->lineEditPar1->setValidator(new QRegExpValidator(rx, this));
     ui->lineEditNumberOfLines->hide();
     ui->labelNumberOfLines->hide();
 }
@@ -243,7 +243,7 @@ bool Dialog::checklineEditRangeDouble(QString l, double max, double min, QString
                     tr(error.toStdString().c_str()) );
         return true;
     }
-    if(l == "0." || l == "1." ){
+    if(l == "0." || l == "1." || l == "." ){
         QString error = QString(s);
 
         QMessageBox::information(
@@ -292,16 +292,41 @@ void Dialog::on_pushButtonStart_clicked()
                     tr(error.toStdString().c_str()) );
         return;
     }
+
+
     if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
     {
-        QString error = QString("Another Project with the same name already exists \n");
+        QString error = QString("Another Project with the same name already exists. \n");
+
 
         QMessageBox::information(
                     this,
                     tr(QString("Warning").toStdString().c_str()),
                     tr(error.toStdString().c_str()) );
+
         return;
     }
+
+    if(!ui->lineEditProjName->isReadOnly()){
+        QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+ui->lineEditProjName->text();
+        QDir dir3(tmp2);
+        if (!dir3.exists()){
+            dir3.mkdir(".");
+        }
+        if(QDir(tmp2).exists()){
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Warning", "A folder with the same name exists. Do you want to overwrite it?",
+                                          QMessageBox::Yes|QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
+
+            }else
+            {
+                if(reply == QMessageBox::No)
+                    return;
+            }
+        }
+    }
+
 
     if(!SAKeController::fileExists(rainPath)){
         //emit showAlertFileNotExist(rainPath);
@@ -326,7 +351,7 @@ void Dialog::on_pushButtonStart_clicked()
     bool check = checklineEdit(ui->lineEditPopSize->text(), QString("Population size cannot be empty \n"));
     if(check) return;
     if(ui->lineEditPopSize->text().toInt() <= 0)
-    check = checklineEdit("", QString("Population size myst be greater than 0\n"));
+        check = checklineEdit("", QString("Population size myst be greater than 0\n"));
     if(check) return;
 
 
@@ -341,8 +366,11 @@ void Dialog::on_pushButtonStart_clicked()
         }
     }
 
+
     if(ui->comboBoxSelection->currentIndex() ==0 ){
         check = checklineEdit(ui->lineEditPar1->text(), QString("Tr cannot be empty \n"));
+        if(check) return;
+        check = checklineEditRangeDouble(ui->lineEditPar1->text(),1.0,0.55, QString("Tr must t be between 0.55 and 1. \n"));
         if(check) return;
     }else
         if(ui->comboBoxSelection->currentIndex() ==1 ){
@@ -353,15 +381,15 @@ void Dialog::on_pushButtonStart_clicked()
             if(ui->comboBoxSelection->currentIndex() ==2 ){
                 check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
                 if(check) return;
-//                check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
-//                if(check) return;
+                //                check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
+                //                if(check) return;
             }else
                 if(ui->comboBoxSelection->currentIndex() ==4 ){//Ranking (p,e)
-                check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
-                if(check) return;
-                check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
-                if(check) return;
-            }
+                    check = checklineEdit(ui->lineEditPar1->text(), QString("selective pressure cannot be empty \n"));
+                    if(check) return;
+                    check = checklineEdit(ui->lineEditPar2->text(), QString("exponent cannot be empty \n"));
+                    if(check) return;
+                }
 
     check = checklineEdit(ui->lineEditMutationP->text(), QString("Mutation probability cannot be empty \n"));
     if(check) return;
@@ -399,8 +427,8 @@ void Dialog::on_pushButtonStart_clicked()
     check = checklineEdit(ui->lineEditNumBestKernelSaved->text(), QString("Number of best kernels to saved cannot be empty \n"));
     if(check) return;
     if(ui->comboBoxSelection->currentIndex()==2){
-       check = checklineEdit(ui->lineEditNumberOfLines->text(), QString("Number of lines cannot be empty \n"));
-       if(check) return;
+        check = checklineEdit(ui->lineEditNumberOfLines->text(), QString("Number of lines cannot be empty \n"));
+        if(check) return;
     }
 
     check = checkValueSelectionParameter();
@@ -560,10 +588,10 @@ void Dialog::on_pushButtonStart_clicked()
                                                  QVector<double> ,
                                                  QVector<double> ,
                                                  QVector<double> ,int, bool)), mainWindow, SLOT(updateFitnessPlot(int ,
-                                                                                                        QVector<double> ,
-                                                                                                        QVector<double> ,
-                                                                                                        QVector<double> ,
-                                                                                                        QVector<double> ,int ,bool)));
+                                                                                                                  QVector<double> ,
+                                                                                                                  QVector<double> ,
+                                                                                                                  QVector<double> ,
+                                                                                                                  QVector<double> ,int ,bool)));
 
 
     connect(controller, SIGNAL(updateKernelPlot(int ,
@@ -672,6 +700,7 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
         QDoubleValidator* val = new QDoubleValidator(0.55, 1.00, 2, ui->lineEditPar1);
         val->setNotation(QDoubleValidator::StandardNotation);
         val->setLocale(QLocale::C);
+        ui->lineEditPar1->setText("0.55");
         ui->lineEditPar1->setValidator(val);
         ui->lineEditPar1->show();
 
@@ -695,13 +724,14 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
             {
                 ui->label_14->show();
                 ui->label_14->setText("selective pressure 0 < s < 1   (exponential) \n \
-                       1 <= s <= 2 (linear)");
-                ui->lineEditPar1->setText("2");
-                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 2,2, this));
-                QDoubleValidator* val = new QDoubleValidator(0.000, 2.000, 2, ui->lineEditPar1);
+                                      1 <= s <= 2 (linear)");
+                                      ui->lineEditPar1->setText("2");
+                        //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 2,2, this));
+                        QDoubleValidator* val = new QDoubleValidator(0.000, 2.000, 2, ui->lineEditPar1);
                 val->setNotation(QDoubleValidator::StandardNotation);
                 val->setLocale(QLocale::C);
                 ui->lineEditPar1->setValidator(val);
+                ui->lineEditPar1->setText("2");
                 ui->lineEditPar1->show();
                 //ui->label_15->show();
                 //ui->label_15->setText("e (exponent 1=linear)");
@@ -710,15 +740,15 @@ void Dialog::on_comboBoxSelection_currentIndexChanged(int index)
                 //ui->lineEditPar2->show();
 
 
-//                ui->label_14->setText("p (selective pressure 1 < p <= 2)");
-//                ui->lineEditPar1->setText("2");
-//                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
-//                //ui->label_15->show();
-//                //ui->label_15->setText("e (exponent 1=linear)");
-//                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
-//                //ui->lineEditPar2->setText("1");
-//                //ui->lineEditPar2->show();
-//                ui->lineEditPar1->show();
+                //                ui->label_14->setText("p (selective pressure 1 < p <= 2)");
+                //                ui->lineEditPar1->setText("2");
+                //                //ui->lineEditPar1->setValidator(new QDoubleValidator(1, 2,2, this));
+                //                //ui->label_15->show();
+                //                //ui->label_15->setText("e (exponent 1=linear)");
+                //                //ui->lineEditPar1->setValidator(new QDoubleValidator(0, 1,2, this));
+                //                //ui->lineEditPar2->setText("1");
+                //                //ui->lineEditPar2->show();
+                //                ui->lineEditPar1->show();
                 ui->label_15->hide();
                 ui->lineEditPar2->hide();
             }else
@@ -851,17 +881,23 @@ void Dialog::setFieldEnabled(bool b){
 
 }
 
+void Dialog::setEnabledtoFalseCheckContinue()
+{
+    ui->checkBoxContinueFromLastGen->setEnabled(false);
+    ui->label_25->setEnabled(false);
+}
+
 
 void Dialog::on_checkBoxContinueFromLastGen_clicked()
 {
     if(ui->checkBoxContinueFromLastGen->isChecked())
     {
-       QVariantList listParameter = mainWindow->getXmlmanager()->getAllElementsFromProjectName(idProject);
-       setParameters(listParameter);
-       setFieldEnabled(false);
+        QVariantList listParameter = mainWindow->getXmlmanager()->getAllElementsFromProjectName(idProject);
+        setParameters(listParameter);
+        setFieldEnabled(false);
     }else
     {
-       setFieldEnabled(true);
+        setFieldEnabled(true);
     }
 }
 
@@ -1021,10 +1057,10 @@ void Dialog::on_lineEditPar1_textChanged(const QString &arg1)
         QString tmp3 =  tmp.remove(',');
         tmp3 =  tmp.remove('e');
         ui->lineEditPar1->setText(tmp3);
-        if(tmp.toDouble() > 1)
-        {
-            ui->lineEditPar1->setText("");
-        }
+//        if(tmp.toDouble() > 1)
+//        {
+//           // ui->lineEditPar1->setText("");
+//        }
         if(tmp.contains('.') && (tmp != "2." || tmp != "1.") ){
             QString tmp1 = tmp.mid(0,2);
             QString tmp2 = tmp.mid(2);
@@ -1064,19 +1100,19 @@ void Dialog::on_lineEditPar1_textChanged(const QString &arg1)
                 }
             }else{
                 if(ui->comboBoxSelection->currentIndex() ==4 ){// 1 < p <= 2
-                QString tmp3 =  tmp.remove(',');
-                tmp3 =  tmp.remove('e');
-                ui->lineEditPar1->setText(tmp3);
-                if(tmp.toDouble() > 2)
-                {
-                    ui->lineEditPar1->setText("");
-                }
-                if(tmp.contains('.')){
-                    QString tmp1 = tmp.mid(0,2);
-                    QString tmp2 = tmp.mid(2);
-                    tmp2.remove('.');tmp2.remove(',');
-                    ui->lineEditPar1->setText(tmp1+tmp2);
-                }
+                    QString tmp3 =  tmp.remove(',');
+                    tmp3 =  tmp.remove('e');
+                    ui->lineEditPar1->setText(tmp3);
+                    if(tmp.toDouble() > 2)
+                    {
+                        ui->lineEditPar1->setText("");
+                    }
+                    if(tmp.contains('.')){
+                        QString tmp1 = tmp.mid(0,2);
+                        QString tmp2 = tmp.mid(2);
+                        tmp2.remove('.');tmp2.remove(',');
+                        ui->lineEditPar1->setText(tmp1+tmp2);
+                    }
                 }
             }
 }
@@ -1140,10 +1176,10 @@ bool Dialog::checkValueSelectionParameter(){
                                     this,
                                     tr(QString("Warning").toStdString().c_str()),
                                     tr(error.toStdString().c_str()) );
-                         return true;
+                        return true;
                     }
 
-     return false;
+    return false;
 }
 
 

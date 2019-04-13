@@ -40,6 +40,7 @@ public:
     QString getIdProject() const;
     void setIdProject(const QString &value);
     void setFieldEnabled(bool);
+    void setEnabledtoFalseCheckContinue();
 
 
 private slots:
