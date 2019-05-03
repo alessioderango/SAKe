@@ -72,9 +72,10 @@ public :
         offspring.resize(_pop.size());
         //matingPool.resize(_pop.size());
 
-        select(_pop, matingPool);
+        //select(_pop, matingPool);
 
          _pop.sort();
+         int N =_pop.size();
 
 
         //SELECTION
@@ -98,6 +99,9 @@ public :
 
         }
         // END SELECTION
+
+        _pop.resize(N-numberElitist);
+        select(_pop,matingPool);
 
 
         unsigned i;
@@ -124,8 +128,9 @@ public :
 
           }
 
-        for (unsigned int i=numberElitist; i< matingPool.size(); i++){
-             typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
+        int posOffspring = numberElitist;
+        for (unsigned int i=0; i< matingPool.size(); i++){
+             typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + posOffspring;
             EOT a;
             a.setWFromNew(matingPool[i].getW());
             a.setParFromNew(matingPool[i].getPar());
@@ -138,6 +143,7 @@ public :
             a.setPercentageVariationGammaB(matingPool[i].getPercentageVariationGammaB());
             a.setTranslation(matingPool[i].getTranslation());
             (*itPoorGuy) = a;
+            posOffspring++;
         }
 
         _pop.clear();

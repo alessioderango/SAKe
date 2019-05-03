@@ -85,6 +85,7 @@ public:
 
 
         myfile.close();
+        double value = 0.00000001;
 
         if(step%frequencySavePop ==0)
         {
@@ -100,7 +101,11 @@ public:
                 // Weight
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
-                    myfile <<  _vEO[gen].getPercentageVariationWeightConst(t) ;
+                    if(abs(_vEO[gen].getPercentageVariationWeightConst(t)) < value){
+                        myfile << 0;
+                    }else
+                        myfile << _vEO[gen].getPercentageVariationWeightConst(t);
+
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
 
@@ -110,9 +115,23 @@ public:
                 // Parameters
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
-                    myfile <<  _vEO[gen].getParConst(t).getParameters(0) << " ,";//alfa
-                    myfile <<  _vEO[gen].getParConst(t).getParameters(1) << " ,";//beta
-                    myfile <<  _vEO[gen].getParConst(t).getParameters(2);//translation
+                    if(abs(_vEO[gen].getParConst(t).getParameters(0)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
+                        myfile <<  _vEO[gen].getParConst(t).getParameters(0) << " ,";//alfa
+
+                    if(abs(_vEO[gen].getParConst(t).getParameters(1)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
+                        myfile <<  _vEO[gen].getParConst(t).getParameters(1) << " ,";//beta
+
+                    if(abs(_vEO[gen].getParConst(t).getParameters(2)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
+                        myfile <<  _vEO[gen].getParConst(t).getParameters(2);//translation
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
 
@@ -121,6 +140,10 @@ public:
                 // FunctionType
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
+                    if(abs(_vEO[gen].getFunctionTypeConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getFunctionTypeConst(t);
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -131,6 +154,10 @@ public:
                 // PercentageWeigh
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
+                    if(abs(_vEO[gen].getPercentageVariationWeightConst(t) ) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getPercentageVariationWeightConst(t) ;
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -141,6 +168,10 @@ public:
                 // PercentageLinearA
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
+                    if(abs(_vEO[gen].getPercentageVariationLinearAConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getPercentageVariationLinearAConst(t) ;
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -151,6 +182,10 @@ public:
                 // PercentageLinearB
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
+                    if(abs(_vEO[gen].getPercentageVariationLinearBConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getPercentageVariationLinearBConst(t);
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -160,7 +195,10 @@ public:
 
                 // PercentageGammaA
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
-
+                    if(abs(_vEO[gen].getPercentageVariationGammaAConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getPercentageVariationGammaAConst(t);
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -171,6 +209,10 @@ public:
                 // PercentageGammaB
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
+                    if(abs(_vEO[gen].getPercentageVariationGammaBConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getPercentageVariationGammaBConst(t) ;
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -180,7 +222,10 @@ public:
 
                 // PercentageTranslation
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
-
+                    if(abs(_vEO[gen].getTranslationConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getTranslationConst(t) ;
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";
@@ -191,6 +236,10 @@ public:
                 // YCombinata
                 for (int t = 0; t < _vEO[gen].getYCombinataConst().size(); t++) {
 
+                    if(abs(_vEO[gen].getYCombinataConst(t)) < value)
+                    {
+                        myfile << 0 << " ,";
+                    }else
                     myfile <<  _vEO[gen].getYCombinataConst(t);
                     if(t !=  _vEO[gen].getYCombinataConst().size() -1)
                         myfile << ",";

@@ -69,23 +69,25 @@ public :
 
         do
         {
+
+            // creare una eoPop temporanea con i primi n-e della popolazione dopo
+            // avarli ordinati. Applicare la selezione sulla eoPop appena creata e
+            // aggiungere gli n-e alla offspring insieme agli e (elitisti) precedentemente
+            // conservati.
             eoPop<EOT> offspring;
             eoPop<EOT> matingPool;
             offspring.resize(_pop.size());
             //matingPool.resize(_pop.size());
 
-            select(_pop, matingPool);
+            //select(_pop, matingPool);
 
             _pop.sort();
+            int N =_pop.size();
+
             for (unsigned int i=0; i< numberElitist; i++){
 
-//                std::cout << "ELITISTI!!!!!!! " << " " << std::endl;
-//                typename eoPop<EOT>::iterator replace = _pop.begin() + i;
                 typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
-//                EOT oldChamp = *replace;
-//                (*itPoorGuy) = oldChamp;
                 EOT a;
-                //double * r = (double*) malloc(sizeof(double)*_pop[i]. getSize());
                 std::vector<double> r;
                 r.resize(_pop[i].getSize());
                 a.setFi(r);
@@ -99,8 +101,27 @@ public :
 //                offspring[i] =_pop[i].clone();
 //                offspring[i].invalidate();
                 // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-
             }
+
+//            eoPop<EOT> popNMinusE;
+//            popNMinusE.resize(N-numberElitist);
+//            for (unsigned int i=0; i< N - numberElitist; i++){
+//                typename eoPop<EOT>::iterator itPoorGuy = popNMinusE.begin() + i;
+//                EOT a;
+//                std::vector<double> r;
+//                r.resize(_pop[i].getSize());
+//                a.setFi(r);
+//                a.setSize(_pop[i].getSize());
+//                for (int tmp = 0; tmp < _pop[i].getSize(); tmp++) {
+//                    a.setFiIndex(tmp, _pop[i].getFi()[tmp]);
+//                    //std::cout << "a.getFi()[tmp] " << a.getFi()[tmp] << "  =  " << "_pop[i].getFi()[tmp]  = " << _pop[i].getFi()[tmp]<<std::endl;
+//                    //a.setFiIndex(tmp, _pop[i]. getFiIndex(tmp));
+//                }
+//                (*itPoorGuy) = a;
+//            }
+
+            _pop.resize(N-numberElitist);
+            select(_pop,matingPool);
 
             unsigned i;
 
@@ -117,7 +138,7 @@ public :
                 }
             }
 
-            for (i=0; i < offspring.size(); i++)
+            for (i=0; i < matingPool.size(); i++)
             {
                 if (rng.flip(mutationRate) )
                 {
