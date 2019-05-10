@@ -108,9 +108,13 @@ public:
             }
 
             for (int i = 0; i < parametersSize; i++) {
-                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(0) << std::endl;
-                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(1) << std::endl;
-                //            std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(2) << std::endl;
+                     //std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(0) << std::endl;
+                     //std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(1) << std::endl;
+                     if(g[count].getParameters()[i].getParameters(1) < 0)
+                     {
+                         cout << "negativoooooooooooooo " << g[count].getParameters()[i].getParameters(1) << endl;
+                     }
+                     //<std::cout << " parameters - ["<< i <<"] = "<< parameters[i].getParameters(2) << std::endl;
                 _genotype.addPar(g[count].getParameters()[i]);
             }
 

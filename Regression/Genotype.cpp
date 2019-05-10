@@ -44,10 +44,15 @@ void Genotype::setParameters(string x)
     std::vector<string>  x1 = splitGen(x, ',');
     for (unsigned int i = 0; i < numFunctions; i++) {
         Parameters tmp;
+        int partmp = i*3;
 
-        tmp.addParameters(std::stod(x1[i]));
-        tmp.addParameters(std::stod(x1[i+1]));
-        tmp.addParameters(std::stod(x1[i+2]));
+        tmp.addParameters(std::stod(x1[partmp]));
+        tmp.addParameters(std::stod(x1[partmp+1]));
+        if( std::stod(x1[partmp+1]) < 0){
+
+            std::cout << "negativo letturaaaaaa " << std::stod(x1[partmp+1]) <<std::endl;
+        }
+        tmp.addParameters(std::stod(x1[partmp+2]));
 
         parameters[i] = tmp;
     }

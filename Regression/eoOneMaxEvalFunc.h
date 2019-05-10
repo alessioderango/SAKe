@@ -94,6 +94,17 @@ public:
                          if(_eo.getFunctionType(i) == 2 || _eo.getFunctionType(i) == 1){
                                 double alfa=_eo.getPar(i).getParameters(0);
                                 double beta=_eo.getPar(i).getParameters(1);
+//                                if(alfa < 0)
+//                                {
+//                                    alfa = 0;
+//                                    cout << "alfa negativa" << endl;
+//                                }
+//                                if(beta < 0)
+//                                {
+
+//                                    cout << "beta negativa    " << beta << endl;
+//                                     beta = 0;
+//                                }
                                     yTmp = gamma_pdf(alfa,beta,x[j]);
                             }
 

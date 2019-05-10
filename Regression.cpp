@@ -1246,13 +1246,13 @@ void Regression::on_pushButton_clicked()
     for (int i = 0; i < matrixLinear.size(); ++i) {
         Parameters tmp;
         double tmp1=fRand(matrixLinear[i][0],matrixLinear[i][1]);
-        //std::cout <<tmp1<< std::endl;
+        std::cout <<tmp1<< std::endl;
         tmp.addParameters(tmp1);
         double tmp2=fRand(matrixLinear[i][2],matrixLinear[i][3]);
-        //std::cout <<tmp2<< std::endl;
+        std::cout <<tmp2<< std::endl;
         tmp.addParameters(tmp2);
         double tmp3=fRand(matrixLinear[i][9],matrixLinear[i][10]);
-        //std::cout <<tmp3<< std::endl;
+        std::cout <<tmp3<< std::endl;
         tmp.addParameters(tmp3);
         parameters[count]=tmp;
         count++;

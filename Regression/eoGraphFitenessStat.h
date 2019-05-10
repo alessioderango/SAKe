@@ -216,6 +216,16 @@ private :
                     if(_pop.best_element().getFunctionTypeConst(i) == 2 || _pop.best_element().getFunctionTypeConst(i) == 1){
                         double alfa=_pop.best_element().getParConst(i).getParameters(0);
                         double beta=_pop.best_element().getParConst(i).getParameters(1);
+//                        if(alfa < 0)
+//                        {
+//                            alfa = 0;
+//                            cout << "alfa negativa" << endl;
+//                        }
+//                        if(beta < 0)
+//                        {
+//                            beta = 0;
+//                            cout << "beta negativa" << endl;
+//                        }
                         yTmp = gamma_pdf(alfa,beta,xRegretmp[j]);
                     }
 
