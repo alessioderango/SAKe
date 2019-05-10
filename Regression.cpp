@@ -1303,10 +1303,10 @@ void Regression::on_pushButton_clicked()
 
     }
 
-    std::vector<Genotype> g;
+    std::vector<Genotype> loadedPopulation;
     if(ui->checkBox_lastgeneration->isChecked()){
         HandlerCSV::loadCSVPopFromFileRegression(tmp2+"/population.csv",
-                                             g,
+                                             loadedPopulation,
                                              dimension
                                              );
 
@@ -1339,7 +1339,7 @@ void Regression::on_pushButton_clicked()
                                                                  typeReplacement,
                                                                  ui->comboBoxSelection->currentText(),
                                                                  ui->lineEdit_seed->text().toInt(),
-                                                                 g,
+                                                                 loadedPopulation,
                                                                  ui->checkBox_lastgeneration->isChecked(),
                                                                  ui->lineEdit_frequencyPop->text().toInt()
                                                                  );

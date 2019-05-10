@@ -196,7 +196,7 @@ private :
         ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
 
         //TODO
-        //if( steps%1 ==0){
+        if( steps%5 ==0){
 
         for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
 
@@ -305,7 +305,7 @@ private :
                                           controller->widgetArray,
                                           controller->arrowArray,
                                           matrixParameters);
-    //}
+    }
 
     emit controller->updateTextsRegression(pos,genString,
                                            QString("%1").arg(fitness),

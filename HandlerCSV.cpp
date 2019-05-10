@@ -408,6 +408,7 @@ int HandlerCSV::loadCSVPopFromFileRegression(QString fileurl,
         tmp.setPercantageGammaA(x[6]);
         tmp.setPercantageGammaB(x[7]);
         tmp.setTranslation(x[8]);
+        tmp.setYCombinataFromString(x[9]);
 
         g.push_back(tmp);
 

@@ -185,6 +185,10 @@ public:
       yCombinata=_w;
   }
 
+  void  addYcombinata(double value){
+      functionType.push_back(value);
+  }
+
    std::vector<double> getPercentageVariationWeight(){
        return percentageVariationWeight;
    }

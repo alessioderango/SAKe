@@ -101,10 +101,10 @@ public:
                 // Weight
                 for (int t = 0; t < _vEO[gen].getWConst().size(); t++) {
 
-                    if(abs(_vEO[gen].getPercentageVariationWeightConst(t)) < value){
+                    if(abs(_vEO[gen].getWConst(t)) < value){
                         myfile << 0;
                     }else
-                        myfile << _vEO[gen].getPercentageVariationWeightConst(t);
+                        myfile << _vEO[gen].getWConst(t);
 
                     if(t !=  _vEO[gen].getWConst().size() -1)
                         myfile << ",";

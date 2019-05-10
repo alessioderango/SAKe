@@ -159,3 +159,21 @@ double *Genotype::getTranslation()
 {
     return translation;
 }
+
+QVector<double> Genotype::getYCombinata() const
+{
+    return yCombinata;
+}
+
+void Genotype::setYCombinata(const QVector<double> &value)
+{
+    yCombinata = value;
+}
+
+void Genotype::setYCombinataFromString(string x)
+{
+    std::vector<string> x1 = splitGen(x, ',');
+    for (unsigned int i = 0; i < x1.size(); i++) {
+        yCombinata.push_back(std::stod(x1[i]));
+    }
+}

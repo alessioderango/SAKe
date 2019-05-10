@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <QVector>
 
 class Genotype
 {
@@ -20,6 +21,7 @@ public:
     void setPercantageGammaA(string x);
     void setPercantageGammaB(string x);
     void setTranslation(string x);
+
 
 
     double *getWeight() ;
@@ -40,6 +42,10 @@ public:
 
     double *getTranslation() ;
 
+    QVector<double> getYCombinata() const;
+    void setYCombinata(const QVector<double> &value);
+    void setYCombinataFromString(string x);
+
 private:
     double * weight;
     Parameters *parameters;
@@ -51,6 +57,7 @@ private:
     double * percantageGammaB;
     double* translation;
     int numFunctions;
+    QVector<double> yCombinata;
 };
 
 #endif // GENOTYPE_H

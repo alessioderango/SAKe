@@ -2058,6 +2058,14 @@ void MainWindow::on_stopButton_triggered()
                     ((SAKeController*) MainWindow::threads[index])->stopThread();
 
         }
+
+        if( dynamic_cast< RegressionController* >( MainWindow::threads[index] ) ){
+
+            if(((RegressionController*) MainWindow::threads[index])->isRunning())
+                if(!(((RegressionController*) MainWindow::threads[index])->getStop()))
+                    ((RegressionController*) MainWindow::threads[index])->stopThread();
+
+        }
     }
 }
 
