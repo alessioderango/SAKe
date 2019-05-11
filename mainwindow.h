@@ -124,7 +124,12 @@ private slots:
                               QString safetyMargin,
                               QString momentum,
                               int barValur,
-                              int firstOccurence, QString abmaxfitness, QString avmaxfitness);
+                              int firstOccurence, QString abmaxfitness, QString avmaxfitness,
+                     QString tbBest,
+                     QString safetyMarginBest,
+                     QString momentumBest,
+                     QString ZjminBest,
+                     QString ZcrBest);
 
     void updateTextsRegression(int indexTab,
                               QString s,

@@ -19,6 +19,7 @@ struct row {
     double safetyMargin;
     double firstOrderMomentum;
     double ymin;
+    double zcr;
     std::vector<double> kernel;
 };
 
@@ -126,6 +127,7 @@ public:
     virtual bool operator() ( const eoPop<EOT>& _vEO ) {
 
 
+        int numberofdecimals = 8;
 
         if(thisGeneration == 0){ // first step
             QVector<double> x;
@@ -150,37 +152,39 @@ public:
 
         myfileWithHeader <<  "Iteration ;";
         myfileWithHeader <<  "Fitness " << fitnessFile.toStdString() << ";";
+        myfileWithHeader <<  "tb ;";
         myfileWithHeader <<  "Safety margin ;";
-        myfileWithHeader <<  "zj-min ;";
-        myfileWithHeader <<  "Base time ;";
         myfileWithHeader <<  "First-order momentum;";
+        myfileWithHeader <<  "zj-min ;";
+        myfileWithHeader <<  "zcr ;";
         myfileWithHeader <<  "Kernel ;\n";
 
         for (unsigned int  t = 0; t < _vEO.size(); t++) {
-            double tmp = _vEO[t].fitness();
+            double fitnessDouble = _vEO[t].fitness();
 
-            int stop =  _vEO[t].getSizeConst();
+            int tb =  _vEO[t].getSizeConst();
 //            myfile << thisGeneration+numGenerations << " ;";
-//            myfile << tmp << " ;";
-            double delta =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
+//            myfile << fitnessDouble << " ;";
+            double Safetymargin =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
 //            myfile << delta << " ;";
 //            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
-//            myfile << stop << " ;";
+//            myfile << tb << " ;";
 //            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
             //myfile << " ;";
-            //  myfile << "fitness ; "<<tmp <<" ; ";
-//            for (int i = 0; i < stop; i++) {
+            //  myfile << "fitness ; "<<fitnessDouble <<" ; ";
+//            for (int i = 0; i < tb; i++) {
 //                myfile << _vEO[t].getFiConstIndex(i) << ";";
 //            }
 //            myfile << "\n";
 
             myfileWithHeader << thisGeneration+numGenerations << " ;";
-            myfileWithHeader << tmp << " ;";
-            myfileWithHeader << delta << " ;";
-            myfileWithHeader << _vEO[t].getYmMinConst().getValue() << " ;";
-            myfileWithHeader << stop << " ;";
-            myfileWithHeader << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
-            for (int i = 0; i < stop; i++) {
+            myfileWithHeader << fitnessDouble << " ;";
+            myfileWithHeader << tb << " ;";
+            myfileWithHeader << setprecision(numberofdecimals) <<Safetymargin << " ;";
+            myfileWithHeader << setprecision(numberofdecimals) <<_vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+            myfileWithHeader << setprecision(numberofdecimals) <<_vEO[t].getYmMinConst().getValue() << " ;";// zj-min
+            myfileWithHeader << setprecision(numberofdecimals) <<_vEO[t].getYmMin2Const().getValue() << " ;";// zcr
+            for (int i = 0; i < tb; i++) {
                 myfileWithHeader << _vEO[t].getFiConstIndex(i) << ";";
             }
             myfileWithHeader << "\n";
@@ -194,12 +198,13 @@ public:
             double firstOrderMomentum = _vEO[t].getMomentoDelPrimoOrdineConst();
 
             double ymin = _vEO[t].getYmMinConst().getValue();
+            double zcrdouble = _vEO[t].getYmMin2Const().getValue();
             if(eoCountContinue<EOT>::thisGeneration%stepToSave ==0 ){
                 std::vector<double> tmpKernel;
                 for (int i = 0; i < tb; i++) {
                     tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
                 }
-                row r1 = {cFitness, tb, safetyMargin, firstOrderMomentum,ymin,tmpKernel};
+                row r1 = {cFitness, tb, safetyMargin, firstOrderMomentum,ymin, zcrdouble, tmpKernel};
                 kernels.insert(r1);
             }
         }
@@ -211,14 +216,15 @@ public:
         }
 
         kernelStream <<  "Fitness " << fitnessFile.toStdString() << ";";
+        kernelStream <<  "tb ;";
         kernelStream <<  "Safety margin ;";
-        kernelStream <<  "zj-min ;";
-        kernelStream <<  "Base time ;";
         kernelStream <<  "First-order momentum;";
+        kernelStream <<  "zj-min ;";
+        kernelStream <<  "zcr ;";
         kernelStream <<  "Kernel ;\n";
 
         for (const auto row : kernels) {
-            kernelStream << setprecision(6) << row.fitness << ";" <<row.safetyMargin << ";"<<row.ymin << ";"<<  row.tb  <<";"<< row.firstOrderMomentum << ";";
+            kernelStream << setprecision(numberofdecimals) << row.fitness << ";" <<row.tb << ";"<<row.safetyMargin  << ";"<<  row.firstOrderMomentum  <<";"<< row.ymin << ";"<<row.zcr << ";";
             for(int i = 0; i < row.kernel.size(); i++)
             {
                 kernelStream  << row.kernel[i]<< ";";

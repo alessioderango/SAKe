@@ -310,9 +310,6 @@ void Dialog::on_pushButtonStart_clicked()
     if(!ui->lineEditProjName->isReadOnly()){
         QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+ui->lineEditProjName->text();
         QDir dir3(tmp2);
-        if (!dir3.exists()){
-            dir3.mkdir(".");
-        }
         if(QDir(tmp2).exists()){
             QMessageBox::StandardButton reply;
             reply = QMessageBox::question(this, "Warning", "A folder with the same name exists. Do you want to overwrite it?",
@@ -324,7 +321,14 @@ void Dialog::on_pushButtonStart_clicked()
                 if(reply == QMessageBox::No)
                     return;
             }
+        }else
+        {
+            if (!dir3.exists()){
+                dir3.mkdir(".");
+            }
         }
+
+
     }
 
 
@@ -612,6 +616,11 @@ void Dialog::on_pushButtonStart_clicked()
                                            int ,
                                            int,
                                            QString ,
+                                           QString ,
+                                           QString ,
+                                           QString ,
+                                           QString ,
+                                           QString ,
                                            QString )), mainWindow, SLOT(updateTexts(int ,
                                                                                     QString,
                                                                                     QString,
@@ -623,6 +632,11 @@ void Dialog::on_pushButtonStart_clicked()
                                                                                     QString ,
                                                                                     int,
                                                                                     int,
+                                                                                    QString ,
+                                                                                    QString ,
+                                                                                    QString ,
+                                                                                    QString ,
+                                                                                    QString ,
                                                                                     QString ,
                                                                                     QString )));
     connect(controller, SIGNAL(updateAbsMaxFit(int , QString )), mainWindow, SLOT(updateAbsMaxFit(int , QString )));
@@ -649,13 +663,13 @@ void Dialog::on_pushButtonStart_clicked()
         mainWindow->addTabAUCROC(QString("Calibration AUC ROC - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"AUC ROC");
     else
         if(ui->comboBoxFitness->currentIndex() == FitnessGMD)
-            mainWindow->addTab(QString("Calibration - GMD "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"GMD");
+            mainWindow->addTab(QString("Calibration GMD - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"GMD");
         else
             if(ui->comboBoxFitness->currentIndex() == FitnessGMDn)
-                mainWindow->addTab(QString("Calibration - HW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"HW");
+                mainWindow->addTab(QString("Calibration HW - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"HW");
             else
                 if(ui->comboBoxFitness->currentIndex() == FitnessEqualWeights)
-                    mainWindow->addTab(QString("Calibration - EW "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"EW");
+                    mainWindow->addTab(QString("Calibration EW - "+ui->lineEditProjName->text()),rain, rain_size, activation, activation_size,"EW");
 
 
 

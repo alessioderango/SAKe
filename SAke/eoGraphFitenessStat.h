@@ -46,6 +46,11 @@ public:
         AbsoluteAvarageFitness=0;
         controller =s;
         numGenerations = 0;
+        tbBestEver="0";
+        safetyMarginBestEver="0";
+        momentumBestEver="0";
+        ZjminBestEver="0";
+        ZcrBestEver="0";
         //dsakecontroller =_sakecontroller;
     }
 
@@ -67,6 +72,7 @@ private :
     template<class T>
     void doit(const eoPop<EOT>& _pop, T)
     { // find the largest elements
+        int numberofdecimals = 8;
         count++;
         double fitness =_pop.best_element().fitness();
 
@@ -106,15 +112,33 @@ private :
         emit controller->updateKernelPlot(pos,QVector<double>::fromStdVector(best_element.getFiConst()),best_element.getSizeConst());
 
         emit controller->updateFitnessPlot(pos,x,yBest,x,yAverage, numGenerations, (steps == 1));
-
+        QString ZjMin = QString("%1").arg((best_element.getYmMinConst().getValue()), 0, 'g', numberofdecimals);
+        QString Zcr = QString("%1").arg((best_element.getYmMin2Const().getValue()), 0, 'g', numberofdecimals);
+        double ZjMind = best_element.getYmMinConst().getValue();
+        double Zcrd = best_element.getYmMin2Const().getValue();
+        double safetyMargin = (ZjMind -Zcrd)/ZjMind;
+        QString safetyMarginS = QString("%1").arg(safetyMargin, 0, 'g', numberofdecimals);
+        QString firstodermomentum = QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst(), 0, 'g', numberofdecimals);
+        QString tbS = QString("%1").arg(_pop.best_element().getSizeConst());
         if(steps ==1){
             firstOccurance = 1;
             bestfitness = 0;
+            tbBestEver="0";
+            safetyMarginBestEver="0";
+            momentumBestEver="0";
+            ZjminBestEver="0";
+            ZcrBestEver="0";
         }
         else{
             if(fitness > bestfitness){
                 bestfitness = fitness;
                 firstOccurance = steps;
+                tbBestEver=tbS;
+                safetyMarginBestEver=safetyMarginS;
+                momentumBestEver=firstodermomentum;
+                ZjminBestEver=ZjMin;
+                ZcrBestEver=Zcr;
+
             }
         }
         if(AbsoluteAvarageFitness < ( v / _pop.size())){
@@ -131,19 +155,24 @@ private :
 
         QString genString= QString("%1").arg(steps+numGenerations);
         steps++;
-        QString ZjMin = QString("%1").arg((best_element.getYmMinConst().getValue()));
-        QString Zcr = QString("%1").arg((best_element.getYmMin2Const().getValue()));
+
+
         emit controller->updateTexts(pos,genString,QString("%1").arg(fitness),
                                      QString("%1").arg(v / _pop.size()),
-                                     QString("%1").arg(_pop.best_element().getSizeConst()),
+                                     tbS,
                                      ZjMin,
                                      Zcr,
-                                     QString("%1").arg((best_element.getYmMinConst().getValue()-best_element.getYmMin2Const().getValue())/best_element.getYmMinConst().getValue()),
-                                     QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst()),
+                                     safetyMarginS,
+                                     firstodermomentum,
                                      (steps*100)/maxGen,
                                      firstOccurance,
                                      QString("%1").arg(AbsoluteMaximumFitness),
-                                     QString("%1").arg(AbsoluteAvarageFitness)
+                                     QString("%1").arg(AbsoluteAvarageFitness),
+                                     tbBestEver,
+                                     safetyMarginBestEver,
+                                     momentumBestEver,
+                                     ZjminBestEver,
+                                     ZcrBestEver
                                      );
         controller->getMainwindows()->mutex.unlock();
 
@@ -168,5 +197,10 @@ private :
     double AbsoluteMaximumFitness;
     double AbsoluteAvarageFitness;
     SAKeController* controller;
+    QString tbBestEver;
+    QString safetyMarginBestEver;
+    QString momentumBestEver;
+    QString ZjminBestEver;
+    QString ZcrBestEver;
 };
 #endif // EOGRAPHFITENESSSTAT_H

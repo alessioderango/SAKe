@@ -145,7 +145,12 @@ signals:
                      int barValur,
                      int firstOccurence,
                      QString abmaxfitness,
-                     QString avmaxfitnes);
+                     QString avmaxfitnes,
+                     QString tbBest,
+                     QString safetyMarginBest,
+                     QString momentumBest,
+                     QString ZjminBest,
+                     QString ZcrBest);
 
     void updateAbsMaxFit(int indexTab, QString s);
     void updateAbsAvFit(int indexTab, QString s);
