@@ -130,13 +130,13 @@ private :
             ZcrBestEver="0";
         }
         else{
-            if(steps == 173)
-            {
-                cout << setprecision(20) <<"fitness : " << fitness << " - bestfitness : " << bestfitness << endl;
-            }
+//            if(steps == 173)
+//            {
+//                cout << setprecision(20) <<"fitness : " << fitness << " - bestfitness : " << bestfitness << endl;
+//            }
             //double e = 0.000001;
-            //if(fabs(fitness-bestfitness) < 0.1 )
-            if(fitness > bestfitness)
+            if(fabs(fitness-bestfitness) > 0.0001 )
+            //if(fitness > bestfitness)
             {
                 bestfitness = fitness;
                 firstOccurance = steps;
