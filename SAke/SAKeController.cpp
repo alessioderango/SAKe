@@ -1,5 +1,7 @@
 #include "SAKeController.h"
 #include "make_checkpoint_my.h"
+#include "SAke/eoGenContinueMy.h"
+#include "SAke/make_continue_my.h"
 
 bool SAKeController::fileExists(QString path) {
     QFileInfo checkFile(path);
@@ -307,7 +309,11 @@ void SAKeController::startAlgorithm()
         // yes, this is representation indepedent once you have an eoInit
         eoPop<Indi>& pop   = do_make_pop(parser, state, init);
 
-        this->stop = new eoGenContinueMy<Indi>(savePath, saveKernels, numberOfKernelToBeSaved, fitnessFile);
+        this->stop = new eoGenContinueMy<Indi>(savePath,
+                                               saveKernels,
+                                               numberOfKernelToBeSaved,
+                                               fitnessFile,
+                                               this);
         // stopping criteria
         eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
         // output

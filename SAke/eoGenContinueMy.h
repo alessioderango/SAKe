@@ -10,6 +10,7 @@
 #include <set>
 #include <iomanip>
 #include <QVector>
+#include "SAKeController.h"
 #include "HandlerCSV.h"
 using namespace std;
 
@@ -91,7 +92,11 @@ public:
     typedef typename EOT::Fitness Fitness;
 
     /// Ctor for setting a
-    eoGenContinueMy( QString _savePath, int _stepToSave, int _numberOfKernelToBeSaved, QString _fitnessFile)
+    eoGenContinueMy( QString _savePath,
+                     int _stepToSave,
+                     int _numberOfKernelToBeSaved,
+                     QString _fitnessFile,
+                     SAKeController* s)
         : eoCountContinue<EOT>( ),
           eoValueParam<unsigned>(0, "Generations", "Generations"),
           stop( false )
@@ -108,10 +113,11 @@ public:
         numberOfKernelToBeSaved=_numberOfKernelToBeSaved;
         stepToSave = _stepToSave;
 
-//        ofstream myfile;
-//        myfile.open (saveFitnessGenerations.toStdString(),ios::out);
-//        myfile.close();
+        //        ofstream myfile;
+        //        myfile.open (saveFitnessGenerations.toStdString(),ios::out);
+        //        myfile.close();
         fitnessFile=_fitnessFile;
+        controller = s;
 
 
 
@@ -139,8 +145,8 @@ public:
         }
 
         //SALVATAGGIO ULTIMA GENERAZIONE
-//        ofstream myfile;
-//        myfile.open (savePath.toStdString(),ios::out);
+        //        ofstream myfile;
+        //        myfile.open (savePath.toStdString(),ios::out);
 
         ofstream myfileWithHeader;
         myfileWithHeader.open (savePathWithHeader.toStdString(),ios::out);
@@ -163,19 +169,19 @@ public:
             double fitnessDouble = _vEO[t].fitness();
 
             int tb =  _vEO[t].getSizeConst();
-//            myfile << thisGeneration+numGenerations << " ;";
-//            myfile << fitnessDouble << " ;";
+            //            myfile << thisGeneration+numGenerations << " ;";
+            //            myfile << fitnessDouble << " ;";
             double Safetymargin =(_vEO[t].getYmMinConst().getValue()-_vEO[t].getYmMin2Const().getValue())/_vEO[t].getYmMinConst().getValue() ;
-//            myfile << delta << " ;";
-//            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
-//            myfile << tb << " ;";
-//            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+            //            myfile << delta << " ;";
+            //            myfile << _vEO[t].getYmMinConst().getValue() << " ;";
+            //            myfile << tb << " ;";
+            //            myfile << _vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
             //myfile << " ;";
             //  myfile << "fitness ; "<<fitnessDouble <<" ; ";
-//            for (int i = 0; i < tb; i++) {
-//                myfile << _vEO[t].getFiConstIndex(i) << ";";
-//            }
-//            myfile << "\n";
+            //            for (int i = 0; i < tb; i++) {
+            //                myfile << _vEO[t].getFiConstIndex(i) << ";";
+            //            }
+            //            myfile << "\n";
 
             myfileWithHeader << thisGeneration+numGenerations << " ;";
             myfileWithHeader << fitnessDouble << " ;";
@@ -199,14 +205,14 @@ public:
 
             double ymin = _vEO[t].getYmMinConst().getValue();
             double zcrdouble = _vEO[t].getYmMin2Const().getValue();
-            if(eoCountContinue<EOT>::thisGeneration%stepToSave ==0 ){
-                std::vector<double> tmpKernel;
-                for (int i = 0; i < tb; i++) {
-                    tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
-                }
-                row r1 = {cFitness, tb, safetyMargin, firstOrderMomentum,ymin, zcrdouble, tmpKernel};
-                kernels.insert(r1);
+
+            std::vector<double> tmpKernel;
+            for (int i = 0; i < tb; i++) {
+                tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
             }
+            row r1 = {cFitness, tb, safetyMargin, firstOrderMomentum,ymin, zcrdouble, tmpKernel};
+            kernels.insert(r1);
+
         }
 
         if(kernels.size() > numberOfKernelToBeSaved){
@@ -215,27 +221,41 @@ public:
             kernels.erase(del,kernels.end() );
         }
 
-        kernelStream <<  "Fitness " << fitnessFile.toStdString() << ";";
-        kernelStream <<  "tb ;";
-        kernelStream <<  "Safety margin ;";
-        kernelStream <<  "First-order momentum;";
-        kernelStream <<  "zj-min ;";
-        kernelStream <<  "zcr ;";
-        kernelStream <<  "Kernel ;\n";
+        if(stepToSave  != 0 && eoCountContinue<EOT>::thisGeneration%stepToSave ==0 )
+        {
+            kernelStream <<  "Fitness " << fitnessFile.toStdString() << ";";
+            kernelStream <<  "tb ;";
+            kernelStream <<  "Safety margin ;";
+            kernelStream <<  "First-order momentum;";
+            kernelStream <<  "zj-min ;";
+            kernelStream <<  "zcr ;";
+            kernelStream <<  "Kernel ;\n";
 
-        for (const auto row : kernels) {
-            kernelStream << setprecision(numberofdecimals) << row.fitness << ";" <<row.tb << ";"<<row.safetyMargin  << ";"<<  row.firstOrderMomentum  <<";"<< row.ymin << ";"<<row.zcr << ";";
-            for(int i = 0; i < row.kernel.size(); i++)
-            {
-                kernelStream  << row.kernel[i]<< ";";
+            for (const auto row : kernels) {
+                kernelStream << setprecision(numberofdecimals) << row.fitness << ";" <<row.tb << ";"<<row.safetyMargin  << ";"<<  row.firstOrderMomentum  <<";"<< row.ymin << ";"<<row.zcr << ";";
+                for(int i = 0; i < row.kernel.size(); i++)
+                {
+                    kernelStream  << row.kernel[i]<< ";";
+                }
+                kernelStream << "\n";
+
             }
-            kernelStream << "\n";
 
+            kernelStream.close();
         }
 
+        auto bestAbsoluteKernel = *(kernels.begin());
+        ptrdiff_t index = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
+
+        emit controller->updateTextsBestAbsolute(index,
+                                                 QString("%1").arg(bestAbsoluteKernel.tb),
+                                                 QString("%1").arg(bestAbsoluteKernel.safetyMargin),
+                                                 QString("%1").arg(bestAbsoluteKernel.firstOrderMomentum),
+                                                 QString("%1").arg(bestAbsoluteKernel.ymin),
+                                                 QString("%1").arg(bestAbsoluteKernel.zcr));
 
 
-//        myfile.close();
+        //        myfile.close();
         myfileWithHeader.close();
 
         ofstream fitnessGenerator;
@@ -291,6 +311,7 @@ private:
 
     int numGenerations;
     QString fitnessFile;
+    SAKeController* controller;
 };
 
 

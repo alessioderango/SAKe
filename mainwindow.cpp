@@ -628,6 +628,36 @@ void MainWindow::updateRegression(int indexTab,
 
 }
 
+
+void MainWindow::updateTextsBestAbsolute(int indexTab,
+                             QString tbBestAbsolute,
+                             QString safetyMarginBestAbsolute,
+                             QString momentumBestAbsolute,
+                             QString ZjminBestAbsolute,
+                             QString ZcrBestAbsolute)
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
+    mutex.lock();
+
+
+    QLabel* tbLBest = (QLabel*)tabs->findChild<QLabel*>("tbNumBestAbsolute");
+    tbLBest->setText(tbBestAbsolute);
+
+    QLabel* ZjminLBest = (QLabel*)tabs->findChild<QLabel*>("ZjminNumBestAbsolute");
+    ZjminLBest->setText(ZjminBestAbsolute);
+    QLabel* ZcrLBest = (QLabel*)tabs->findChild<QLabel*>("ZcrNumBestAbsolute");
+    ZcrLBest->setText(ZcrBestAbsolute);
+
+    QLabel* safetyMArginLBest = (QLabel*)tabs->findChild<QLabel*>("dCriticoNumBestAbsolute");
+    safetyMArginLBest->setText(safetyMarginBestAbsolute);
+
+    QLabel* momentumLBest = (QLabel*)tabs->findChild<QLabel*>("momPrimoNumBestAbsolute");
+    momentumLBest->setText(momentumBestAbsolute);
+
+    mutex.unlock();
+
+}
+
 void MainWindow::updateTexts(int indexTab,
                              QString s,
                              QString fitness,
@@ -1101,8 +1131,9 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     mobFunc->setSizePolicy(spUp);
 
     mobFunc->setObjectName("mobFunc");
-    //mobFunc->rescaleAxes();
+    //mobFunc->rescaleAxes();grid
     splitter->addWidget(mobFunc);
+
 
     splitter->setOrientation(Qt::Vertical);
 
@@ -1110,10 +1141,11 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     //vertical->addStretch(vertical->sizeConstraint()*2);
 
 
+
+
     mainL->addLayout(vertical);
-    QGridLayout * grid = new QGridLayout();
-
-
+    QGridLayout *  grid = new QGridLayout();
+//splitter->addWidget(grid);
     QLabel * AbsMaxFit = new QLabel();
     AbsMaxFit->setText("Absolute Maximum Fitness (AMF) using "+fitnessType+ " :");
     grid->addWidget(AbsMaxFit,0,0);
@@ -1169,91 +1201,147 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     grid->addWidget(zcrNumBest,1,9);
 
 
+//    QLabel * space1 = new QLabel();
+//    space1->setText(" ");
+//    grid->addWidget(space1,2,0);
+    QLabel * AbsMaxFitBAK = new QLabel();
+    AbsMaxFitBAK->setText("Best Absolute Kernel : ");
+    grid->addWidget(AbsMaxFitBAK,2,0);
+
+    int rowAbsoluteKernel=3;
+
+    QLabel * tbBestBestAbsolute = new QLabel();
+    tbBestBestAbsolute->setText("tb:");
+    grid->addWidget(tbBestBestAbsolute,rowAbsoluteKernel,0);
+    QLabel * tbNumBestBestAbsolute = new QLabel();
+    tbNumBestBestAbsolute->setText("0");
+    tbNumBestBestAbsolute->setObjectName("tbNumBestAbsolute");
+    grid->addWidget(tbNumBestBestAbsolute,rowAbsoluteKernel,1);
+
+    QLabel * dCriticoBestAbsolute = new QLabel();
+    dCriticoBestAbsolute->setText("Safety margin:");
+    grid->addWidget(dCriticoBestAbsolute,rowAbsoluteKernel,2);
+    QLabel * dCriticoNumBestAbsolute = new QLabel();
+    dCriticoNumBestAbsolute->setText("0");
+    dCriticoNumBestAbsolute->setObjectName("dCriticoNumBestAbsolute");
+    grid->addWidget(dCriticoNumBestAbsolute,rowAbsoluteKernel,3);
+
+    QLabel * momPrimorowCurrent = new QLabel();
+    momPrimorowCurrent->setText("First-order momentum:");
+    grid->addWidget(momPrimorowCurrent,rowAbsoluteKernel,4);
+    QLabel * momPrimoNumrowCurrent = new QLabel();
+    momPrimoNumrowCurrent->setText("0");
+    momPrimoNumrowCurrent->setObjectName("momPrimoNumBestAbsolute");
+    grid->addWidget(momPrimoNumrowCurrent,rowAbsoluteKernel,5);
+
+    QLabel * zjminrowCurrent = new QLabel();
+    zjminrowCurrent->setText("zj-min");
+    grid->addWidget(zjminrowCurrent,rowAbsoluteKernel,6);
+    QLabel * zjminNumrowCurrent = new QLabel();
+    zjminNumrowCurrent->setText("0");
+    zjminNumrowCurrent->setObjectName("ZjminNumBestAbsolute");
+    grid->addWidget(zjminNumrowCurrent,rowAbsoluteKernel,7);
+
+    QLabel * zcrrowCurrent = new QLabel();
+    zcrrowCurrent->setText("zcr");
+    grid->addWidget(zcrrowCurrent,rowAbsoluteKernel,8);
+    QLabel * zcrNumrowCurrent = new QLabel();
+    zcrNumrowCurrent->setText("0");
+    zcrNumrowCurrent->setObjectName("ZcrNumBestAbsolute");
+    grid->addWidget(zcrNumrowCurrent,rowAbsoluteKernel,9);
+
+
+
+    QLabel * space5 = new QLabel();
+    space5->setText(" ");
+    grid->addWidget(space5,4,0);
+
 
     QLabel * AbsAveFit = new QLabel();
     AbsAveFit->setText("Absolute Average Fitness:");
-    grid->addWidget(AbsAveFit,2,0);
+    grid->addWidget(AbsAveFit,5,0);
     QLabel * AbsAveFitNum = new QLabel();
     AbsAveFitNum->setText("0");
     AbsAveFitNum->setObjectName("AbsAveFitNum");
-    grid->addWidget(AbsAveFitNum,2,1);
+    grid->addWidget(AbsAveFitNum,5,1);
 
-    QLabel * space1 = new QLabel();
-    space1->setText(" ");
-    grid->addWidget(space1,3,0);
+    QLabel * space4 = new QLabel();
+    space4->setText(" ");
+    grid->addWidget(space4,6,0);
 
 
     QLabel * gen = new QLabel();
     gen->setText("Current Iteration:");
-    grid->addWidget(gen,4,0);
+    grid->addWidget(gen,7,0);
     QLabel * genNum = new QLabel();
     genNum->setText("0");
     genNum->setObjectName("GenerationText");
-    grid->addWidget(genNum,4,1);
+    grid->addWidget(genNum,7,1);
 
     QLabel * curAveFit = new QLabel();
     curAveFit->setText("Current Average Fitness:");
-    grid->addWidget(curAveFit,5,0);
+    grid->addWidget(curAveFit,8,0);
     QLabel * curAveFitNum = new QLabel();
     curAveFitNum->setText("0");
     curAveFitNum->setObjectName("curAveFitNum");
-    grid->addWidget(curAveFitNum,5,1);
+    grid->addWidget(curAveFitNum,8,1);
 
     QLabel * space = new QLabel();
     space->setText(" ");
-    grid->addWidget(space,6,0);
+    grid->addWidget(space,9,0);
 
     QLabel * bestIndiv = new QLabel();
     bestIndiv->setText("Best Individual of current iteration");
-    grid->addWidget(bestIndiv,7,0);
+    grid->addWidget(bestIndiv,10,0);
 
     QLabel * curMaxFit = new QLabel();
     curMaxFit->setText("Fitness using "+fitnessType+ " :");
-    grid->addWidget(curMaxFit,8,0);
+    grid->addWidget(curMaxFit,11,0);
     QLabel * curMaxFitNum = new QLabel();
     curMaxFitNum->setText("0");
     curMaxFitNum->setObjectName("curMaxFitNum");
-    grid->addWidget(curMaxFitNum,8,1);
+    grid->addWidget(curMaxFitNum,11,1);
 
+    int rowCurrent = 12;
     QLabel * tb = new QLabel();
     tb->setText("tb:");
-    grid->addWidget(tb,9,0);
+    grid->addWidget(tb,rowCurrent,0);
     QLabel * tbNum = new QLabel();
     tbNum->setText("0");
     tbNum->setObjectName("tbNum");
-    grid->addWidget(tbNum,9,1);
+    grid->addWidget(tbNum,rowCurrent,1);
 
     QLabel * dCritico = new QLabel();
     dCritico->setText("Safety margin:");
-    grid->addWidget(dCritico,9,2);
+    grid->addWidget(dCritico,rowCurrent,2);
     QLabel * dCriticoNum = new QLabel();
     dCriticoNum->setText("0");
     dCriticoNum->setObjectName("dCriticoNum");
-    grid->addWidget(dCriticoNum,9,3);
+    grid->addWidget(dCriticoNum,rowCurrent,3);
 
     QLabel * momPrimo = new QLabel();
     momPrimo->setText("First-order momentum:");
-    grid->addWidget(momPrimo,9,4);
+    grid->addWidget(momPrimo,rowCurrent,4);
     QLabel * momPrimoNum = new QLabel();
     momPrimoNum->setText("0");
     momPrimoNum->setObjectName("momPrimoNum");
-    grid->addWidget(momPrimoNum,9,5);
+    grid->addWidget(momPrimoNum,rowCurrent,5);
 
     QLabel * zjmin = new QLabel();
     zjmin->setText("zj-min");
-    grid->addWidget(zjmin,9,6);
+    grid->addWidget(zjmin,rowCurrent,6);
     QLabel * zjminNum = new QLabel();
     zjminNum->setText("0");
     zjminNum->setObjectName("ZjminNum");
-    grid->addWidget(zjminNum,9,7);
+    grid->addWidget(zjminNum,rowCurrent,7);
 
     QLabel * zcr = new QLabel();
     zcr->setText("zcr");
-    grid->addWidget(zcr,9,8);
+    grid->addWidget(zcr,rowCurrent,8);
     QLabel * zcrNum = new QLabel();
     zcrNum->setText("0");
     zcrNum->setObjectName("ZcrNum");
-    grid->addWidget(zcrNum,9,9);
+    grid->addWidget(zcrNum,rowCurrent,9);
 
     // first occurence at N iteration;
 
@@ -1371,8 +1459,10 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     QGridLayout * grid = new QGridLayout();
 
 
+
+
     QLabel * AbsMaxFit = new QLabel();
-    AbsMaxFit->setText("Absolute Maximum Fitness (AMF) :");
+    AbsMaxFit->setText("Absolute Maximum Fitness (AMF) using "+fitnessType+ " :");
     grid->addWidget(AbsMaxFit,0,0);
     QLabel * AbsMaxFitNum = new QLabel();
     AbsMaxFitNum->setText("0");
@@ -1385,96 +1475,191 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     firstOccurenceText->setObjectName("firstOccurenceText");
     grid->addWidget(firstOccurenceText,0,2);
 
+    QLabel * tbBest = new QLabel();
+    tbBest->setText("tb:");
+    grid->addWidget(tbBest,1,0);
+    QLabel * tbNumBest = new QLabel();
+    tbNumBest->setText("0");
+    tbNumBest->setObjectName("tbNumBest");
+    grid->addWidget(tbNumBest,1,1);
+
+    QLabel * dCriticoBest = new QLabel();
+    dCriticoBest->setText("Safety margin:");
+    grid->addWidget(dCriticoBest,1,2);
+    QLabel * dCriticoNumBest = new QLabel();
+    dCriticoNumBest->setText("0");
+    dCriticoNumBest->setObjectName("dCriticoNumBest");
+    grid->addWidget(dCriticoNumBest,1,3);
+
+    QLabel * momPrimoBest = new QLabel();
+    momPrimoBest->setText("First-order momentum:");
+    grid->addWidget(momPrimoBest,1,4);
+    QLabel * momPrimoNumBest = new QLabel();
+    momPrimoNumBest->setText("0");
+    momPrimoNumBest->setObjectName("momPrimoNumBest");
+    grid->addWidget(momPrimoNumBest,1,5);
+
+    QLabel * zjminBest = new QLabel();
+    zjminBest->setText("zj-min");
+    grid->addWidget(zjminBest,1,6);
+    QLabel * zjminNumBest = new QLabel();
+    zjminNumBest->setText("0");
+    zjminNumBest->setObjectName("ZjminNumBest");
+    grid->addWidget(zjminNumBest,1,7);
+
+    QLabel * zcrBest = new QLabel();
+    zcrBest->setText("zcr");
+    grid->addWidget(zcrBest,1,8);
+    QLabel * zcrNumBest = new QLabel();
+    zcrNumBest->setText("0");
+    zcrNumBest->setObjectName("ZcrNumBest");
+    grid->addWidget(zcrNumBest,1,9);
+
+
+//    QLabel * space1 = new QLabel();
+//    space1->setText(" ");
+//    grid->addWidget(space1,2,0);
+    QLabel * AbsMaxFitBAK = new QLabel();
+    AbsMaxFitBAK->setText("Best Absolute Kernel : ");
+    grid->addWidget(AbsMaxFitBAK,2,0);
+
+    int rowAbsoluteKernel=3;
+
+    QLabel * tbBestBestAbsolute = new QLabel();
+    tbBestBestAbsolute->setText("tb:");
+    grid->addWidget(tbBestBestAbsolute,rowAbsoluteKernel,0);
+    QLabel * tbNumBestBestAbsolute = new QLabel();
+    tbNumBestBestAbsolute->setText("0");
+    tbNumBestBestAbsolute->setObjectName("tbNumBestAbsolute");
+    grid->addWidget(tbNumBestBestAbsolute,rowAbsoluteKernel,1);
+
+    QLabel * dCriticoBestAbsolute = new QLabel();
+    dCriticoBestAbsolute->setText("Safety margin:");
+    grid->addWidget(dCriticoBestAbsolute,rowAbsoluteKernel,2);
+    QLabel * dCriticoNumBestAbsolute = new QLabel();
+    dCriticoNumBestAbsolute->setText("0");
+    dCriticoNumBestAbsolute->setObjectName("dCriticoNumBestAbsolute");
+    grid->addWidget(dCriticoNumBestAbsolute,rowAbsoluteKernel,3);
+
+    QLabel * momPrimorowCurrent = new QLabel();
+    momPrimorowCurrent->setText("First-order momentum:");
+    grid->addWidget(momPrimorowCurrent,rowAbsoluteKernel,4);
+    QLabel * momPrimoNumrowCurrent = new QLabel();
+    momPrimoNumrowCurrent->setText("0");
+    momPrimoNumrowCurrent->setObjectName("momPrimoNumBestAbsolute");
+    grid->addWidget(momPrimoNumrowCurrent,rowAbsoluteKernel,5);
+
+    QLabel * zjminrowCurrent = new QLabel();
+    zjminrowCurrent->setText("zj-min");
+    grid->addWidget(zjminrowCurrent,rowAbsoluteKernel,6);
+    QLabel * zjminNumrowCurrent = new QLabel();
+    zjminNumrowCurrent->setText("0");
+    zjminNumrowCurrent->setObjectName("ZjminNumBestAbsolute");
+    grid->addWidget(zjminNumrowCurrent,rowAbsoluteKernel,7);
+
+    QLabel * zcrrowCurrent = new QLabel();
+    zcrrowCurrent->setText("zcr");
+    grid->addWidget(zcrrowCurrent,rowAbsoluteKernel,8);
+    QLabel * zcrNumrowCurrent = new QLabel();
+    zcrNumrowCurrent->setText("0");
+    zcrNumrowCurrent->setObjectName("ZcrNumBestAbsolute");
+    grid->addWidget(zcrNumrowCurrent,rowAbsoluteKernel,9);
+
+
+
+    QLabel * space5 = new QLabel();
+    space5->setText(" ");
+    grid->addWidget(space5,4,0);
 
 
     QLabel * AbsAveFit = new QLabel();
     AbsAveFit->setText("Absolute Average Fitness:");
-    grid->addWidget(AbsAveFit,1,0);
+    grid->addWidget(AbsAveFit,5,0);
     QLabel * AbsAveFitNum = new QLabel();
     AbsAveFitNum->setText("0");
     AbsAveFitNum->setObjectName("AbsAveFitNum");
-    grid->addWidget(AbsAveFitNum,1,1);
+    grid->addWidget(AbsAveFitNum,5,1);
 
-    QLabel * space1 = new QLabel();
-    space1->setText(" ");
-    grid->addWidget(space1,2,0);
+    QLabel * space4 = new QLabel();
+    space4->setText(" ");
+    grid->addWidget(space4,6,0);
 
 
     QLabel * gen = new QLabel();
     gen->setText("Current Iteration:");
-    grid->addWidget(gen,3,0);
+    grid->addWidget(gen,7,0);
     QLabel * genNum = new QLabel();
     genNum->setText("0");
     genNum->setObjectName("GenerationText");
-    grid->addWidget(genNum,3,1);
+    grid->addWidget(genNum,7,1);
 
     QLabel * curAveFit = new QLabel();
     curAveFit->setText("Current Average Fitness:");
-    grid->addWidget(curAveFit,4,0);
+    grid->addWidget(curAveFit,8,0);
     QLabel * curAveFitNum = new QLabel();
     curAveFitNum->setText("0");
     curAveFitNum->setObjectName("curAveFitNum");
-    grid->addWidget(curAveFitNum,4,1);
+    grid->addWidget(curAveFitNum,8,1);
 
     QLabel * space = new QLabel();
     space->setText(" ");
-    grid->addWidget(space,5,0);
+    grid->addWidget(space,9,0);
 
     QLabel * bestIndiv = new QLabel();
     bestIndiv->setText("Best Individual of current iteration");
-    grid->addWidget(bestIndiv,6,0);
+    grid->addWidget(bestIndiv,10,0);
 
     QLabel * curMaxFit = new QLabel();
-    curMaxFit->setText("Fitness using "+ fitnessType+" :");
-    grid->addWidget(curMaxFit,7,0);
+    curMaxFit->setText("Fitness using "+fitnessType+ " :");
+    grid->addWidget(curMaxFit,11,0);
     QLabel * curMaxFitNum = new QLabel();
     curMaxFitNum->setText("0");
     curMaxFitNum->setObjectName("curMaxFitNum");
-    grid->addWidget(curMaxFitNum,7,1);
+    grid->addWidget(curMaxFitNum,11,1);
 
+    int rowCurrent = 12;
     QLabel * tb = new QLabel();
     tb->setText("tb:");
-    grid->addWidget(tb,8,0);
+    grid->addWidget(tb,rowCurrent,0);
     QLabel * tbNum = new QLabel();
     tbNum->setText("0");
     tbNum->setObjectName("tbNum");
-    grid->addWidget(tbNum,8,1);
+    grid->addWidget(tbNum,rowCurrent,1);
 
     QLabel * dCritico = new QLabel();
     dCritico->setText("Safety margin:");
-    grid->addWidget(dCritico,8,2);
+    grid->addWidget(dCritico,rowCurrent,2);
     QLabel * dCriticoNum = new QLabel();
     dCriticoNum->setText("0");
     dCriticoNum->setObjectName("dCriticoNum");
-    grid->addWidget(dCriticoNum,8,3);
+    grid->addWidget(dCriticoNum,rowCurrent,3);
 
     QLabel * momPrimo = new QLabel();
     momPrimo->setText("First-order momentum:");
-    grid->addWidget(momPrimo,8,4);
+    grid->addWidget(momPrimo,rowCurrent,4);
     QLabel * momPrimoNum = new QLabel();
     momPrimoNum->setText("0");
     momPrimoNum->setObjectName("momPrimoNum");
-    grid->addWidget(momPrimoNum,8,5);
+    grid->addWidget(momPrimoNum,rowCurrent,5);
 
-    QLabel * Zjmin = new QLabel();
-    Zjmin->setText("Zj-min");
-    grid->addWidget(Zjmin,8,6);
-    QLabel * ZjminNum = new QLabel();
-    ZjminNum->setText("0");
-    ZjminNum->setObjectName("ZjminNum");
-    grid->addWidget(ZjminNum,8,7);
+    QLabel * zjmin = new QLabel();
+    zjmin->setText("zj-min");
+    grid->addWidget(zjmin,rowCurrent,6);
+    QLabel * zjminNum = new QLabel();
+    zjminNum->setText("0");
+    zjminNum->setObjectName("ZjminNum");
+    grid->addWidget(zjminNum,rowCurrent,7);
 
-    QLabel * Zcr = new QLabel();
-    Zcr->setText("Zcr");
-    grid->addWidget(Zcr,8,8);
-    QLabel * ZcrNum = new QLabel();
-    ZcrNum->setText("0");
-    ZcrNum->setObjectName("ZcrNum");
-    grid->addWidget(ZcrNum,8,9);
-
-
+    QLabel * zcr = new QLabel();
+    zcr->setText("zcr");
+    grid->addWidget(zcr,rowCurrent,8);
+    QLabel * zcrNum = new QLabel();
+    zcrNum->setText("0");
+    zcrNum->setObjectName("ZcrNum");
+    grid->addWidget(zcrNum,rowCurrent,9);
 
     // first occurence at N iteration;
+
 
 
     mainL->addLayout(grid);

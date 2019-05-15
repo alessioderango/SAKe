@@ -113,6 +113,12 @@ private slots:
                             QVector<double> FPR,
                             QVector<double> TPR,
                             double AUCROC);
+    void updateTextsBestAbsolute(int indexTab,
+                                 QString tbBestAbsolute,
+                                 QString safetyMarginBestAbsolute,
+                                 QString momentumBestAbsolute,
+                                 QString ZjminBestAbsolute,
+                                 QString ZcrBestAbsolute);
 
     void updateTexts(int indexTab,
                               QString s,

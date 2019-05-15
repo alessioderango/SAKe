@@ -639,6 +639,18 @@ void Dialog::on_pushButtonStart_clicked()
                                                                                     QString ,
                                                                                     QString ,
                                                                                     QString )));
+
+    connect(controller, SIGNAL( updateTextsBestAbsolute(int ,
+                                                        QString ,
+                                                        QString ,
+                                                        QString ,
+                                                        QString ,
+                                                        QString )), mainWindow, SLOT(updateTextsBestAbsolute(int ,
+                                                                                                              QString ,
+                                                                                                              QString ,
+                                                                                                              QString ,
+                                                                                                              QString ,
+                                                                                                              QString )));
     connect(controller, SIGNAL(updateAbsMaxFit(int , QString )), mainWindow, SLOT(updateAbsMaxFit(int , QString )));
 
     connect(controller, SIGNAL(updateAbsAvFit(int , QString )), mainWindow, SLOT(updateAbsAvFit(int , QString )));

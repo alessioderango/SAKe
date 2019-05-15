@@ -31,18 +31,21 @@ typedef eoSAKe<MyFitT> Indi;      // ***MUST*** derive from EO
 #include "SAke/make_genotype_SAKe.h"
 #include "SAke/make_op_SAKe.h"
 #include "make_pop_my.h"
-#include "SAke/make_continue_my.h"
-//#include <do/make_checkpoint.h>
+
 #include "make_algo_scalar_my.h"
 #include <do/make_run.h>
 #include <eoScalarFitness.h>
 #include "mainwindow.h"
+
+
 void make_help(eoParser & _parser);
 
+template< class EOT>
+class eoGenContinueMy;
 
 
 #include <QObject>
-#include "SAke/eoGenContinueMy.h"
+//
 
 
 using namespace eo;
@@ -133,6 +136,12 @@ signals:
                             QVector<double> FPR,
                             QVector<double> TPR,
                             double AUCROC);
+    void updateTextsBestAbsolute(int indexTab,
+                                 QString tbBestAbsolute,
+                                 QString safetyMarginBestAbsolute,
+                                 QString momentumBestAbsolute,
+                                 QString ZjminBestAbsolute,
+                                 QString ZcrBestAbsolute);
     void updateTexts(int indexTab,
                      QString s,
                      QString fitness,
