@@ -344,11 +344,12 @@ int HandlerCSV::loadCSVPopFromFile(QString fileurl,vector<vector<double>> &popFr
     std::ifstream in(fileurl.toStdString());
     std::string line;
     std::getline(in, line);// jump header line
+    int numberofelementsbeforeKernel = 7;
     while (std::getline(in, line)){
         std::vector<string> x;
         x = split(line, ';');
         numberGen = std::stod(x[0]);
-        x.erase(x.begin(),x.begin()+6);
+        x.erase(x.begin(),x.begin()+numberofelementsbeforeKernel);
         std::vector<double> tmp;
         for (unsigned int i = 0; i < x.size(); i++) {
             tmp.push_back(std::stod(x[i]));

@@ -164,8 +164,7 @@ public:
         ofstream myfileWithHeader;
         myfileWithHeader.open (savePathWithHeader.toStdString(),ios::out);
 
-        ofstream kernelStream;
-        kernelStream.open (savePathKernels.toStdString(),ios::out);
+
 
 
 
@@ -236,6 +235,9 @@ public:
 
         if(stepToSave  != 0 && eoCountContinue<EOT>::thisGeneration%stepToSave ==0 )
         {
+            ofstream kernelStream;
+            kernelStream.open (savePathKernels.toStdString(),ios::out);
+
             kernelStream <<  "Fitness " << fitnessFile.toStdString() << ";";
             kernelStream <<  "tb ;";
             kernelStream <<  "Safety margin ;";
@@ -262,10 +264,10 @@ public:
 
         emit controller->updateTextsBestAbsolute(index,
                                                  QString("%1").arg(bestAbsoluteKernel.tb),
-                                                 QString("%1").arg(bestAbsoluteKernel.safetyMargin),
-                                                 QString("%1").arg(bestAbsoluteKernel.firstOrderMomentum),
-                                                 QString("%1").arg(bestAbsoluteKernel.ymin),
-                                                 QString("%1").arg(bestAbsoluteKernel.zcr));
+                                                 QString("%1").arg(bestAbsoluteKernel.safetyMargin, 0, 'g', numberofdecimals),
+                                                 QString("%1").arg(bestAbsoluteKernel.firstOrderMomentum, 0, 'g', numberofdecimals),
+                                                 QString("%1").arg(bestAbsoluteKernel.ymin, 0, 'g', numberofdecimals),
+                                                 QString("%1").arg(bestAbsoluteKernel.zcr, 0, 'g', numberofdecimals));
 
 
         //        myfile.close();
