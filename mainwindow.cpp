@@ -212,27 +212,27 @@ void MainWindow::makeDETPlot(QCustomPlot *customPlot)
     customPlot->xAxis->setRange( 0, 1 );
     customPlot->yAxis->setRange( 0, 1 );
 
-    customPlot->xAxis->setScaleType(QCPAxis::stLogarithmic);
-    customPlot->yAxis->setScaleType(QCPAxis::stLogarithmic);
+//    customPlot->xAxis->setScaleType(QCPAxis::stLogarithmic);
+//    customPlot->yAxis->setScaleType(QCPAxis::stLogarithmic);
 
 
-    QVector<double> TickValues;
-    QVector<QString> TickLabels;
-    // you can safely change the values according to the output
-    TickValues << 0 <<0.1  <<0.2  <<0.3  <<0.4  <<0.5  <<0.6  <<0.7 <<0.8  <<0.9 <<1  <<2  <<3  <<4  <<5  <<6  <<7 <<8  <<9<< 10 << 20 << 30 << 40 << 50 << 60 << 70 << 80<< 90 << 100;
-    TickLabels << "0" <<"0.1%"  <<"0.2%"  <<"0.3%"  <<"0.4%"  <<"0.5%"  <<"0.6%"  <<"0.7%" <<"0.8%"  <<"0.9%" <<"1%"  <<"2%"  <<"3%"  <<"4%"  <<"5%"  <<"6%"  <<"7%" <<"8%"  <<"9%"<< "10%" << "20%"<< "30%" << "40%"<< "50%" << "60%"<< "70%" << "80%"<< "90%" << "100%";
-    // disable default ticks and their labels
-    customPlot->yAxis->setAutoTicks(false);
-    customPlot->yAxis->setAutoTickLabels(false);
-    // add your custom values and labels
-    customPlot->yAxis->setTickVector(TickValues);
-    customPlot->yAxis->setTickVectorLabels(TickLabels);
+//    QVector<double> TickValues;
+//    QVector<QString> TickLabels;
+//    // you can safely change the values according to the output
+//    TickValues << 0 <<0.1  <<0.2  <<0.3  <<0.4  <<0.5  <<0.6  <<0.7 <<0.8  <<0.9 <<1  <<2  <<3  <<4  <<5  <<6  <<7 <<8  <<9<< 10 << 20 << 30 << 40 << 50 << 60 << 70 << 80<< 90 << 100;
+//    TickLabels << "0" <<"0.1%"  <<"0.2%"  <<"0.3%"  <<"0.4%"  <<"0.5%"  <<"0.6%"  <<"0.7%" <<"0.8%"  <<"0.9%" <<"1%"  <<"2%"  <<"3%"  <<"4%"  <<"5%"  <<"6%"  <<"7%" <<"8%"  <<"9%"<< "10%" << "20%"<< "30%" << "40%"<< "50%" << "60%"<< "70%" << "80%"<< "90%" << "100%";
+//    // disable default ticks and their labels
+//    customPlot->yAxis->setAutoTicks(false);
+//    customPlot->yAxis->setAutoTickLabels(false);
+//    // add your custom values and labels
+//    customPlot->yAxis->setTickVector(TickValues);
+//    customPlot->yAxis->setTickVectorLabels(TickLabels);
 
-    customPlot->xAxis->setAutoTicks(false);
-    customPlot->xAxis->setAutoTickLabels(false);
-    // add your custom values and labels
-    customPlot->xAxis->setTickVector(TickValues);
-    customPlot->xAxis->setTickVectorLabels(TickLabels);
+//    customPlot->xAxis->setAutoTicks(false);
+//    customPlot->xAxis->setAutoTickLabels(false);
+//    // add your custom values and labels
+//    customPlot->xAxis->setTickVector(TickValues);
+//    customPlot->xAxis->setTickVectorLabels(TickLabels);
 
     customPlot->xAxis->setLabel( "False positive rate or false alarms rate" );
     customPlot->yAxis->setLabel( "False negative rate or missed  detection rate" );
@@ -260,7 +260,7 @@ void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, 
     customPlot->yAxis->setRange( 0,20 );
 
     customPlot->addGraph();
-    customPlot->graph(1)->setPen( QPen( Qt::gray ,0.5 ) );
+    customPlot->graph(1)->setPen( QPen( Qt::darkMagenta ,0.5 ) );
 
     QVector<double> timetmp(rain_size),ytime(rain_size);
     for (int i=0; i<rain_size; i++){
@@ -513,9 +513,50 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
                  FNR[i] = (double)(((double)1)-TPR[i]);
         }
 
-        (m_CustomPlot->graph(0))->setData(FNR, FPR);
+        QVector<double> FPRMaggiore05;
+        QVector<double> FNRMaggiore05;
+        double limitD = 0.5;
+
+//        PER ORESTE
+//        QVector<double> tmp;
+//        tmp.push_back(0.5);
+//        tmp.push_back(0.6);
+//        tmp.push_back(0.7);
+//        tmp.push_back(0.8);
+//        tmp.push_back(0.9);
+//        tmp.push_back(0.99);
+
+         boost::math::normal_distribution<>myNormal (0, 1);
+//        for (int i = 0; i < tmp.size(); ++i){
+//             cout << quantile(myNormal, tmp[i]) << endl;
+//        }
+
+        for (int i = 0; i < FPR.size(); ++i) {
+//            if(FPR[i] > limitD && FNR[i] > limitD){
+             cout << FPR[i] << " " << FNR[i] << endl;
+             if(FPR[i] > 0 && FPR[i] < 1 && FNR[i] > 0 && FNR[i] < 1){
+//                 cout << FPR[i] << endl;
+                 FPRMaggiore05.push_back(quantile(myNormal, FPR[i]));
+//                 cout << FNR[i] << endl;
+                 FNRMaggiore05.push_back(quantile(myNormal, FNR[i]));
+             }
+//            }
+        }
+
+        cout << " FPRMaggiore05 " << endl;
+        if(FPRMaggiore05.size() == 0 && FNRMaggiore05.size() ==0)
+            cout << " FPRMaggiore05  vuoto!" << endl;
+        for (int i = 0; i < FPRMaggiore05.size(); ++i) {
+            cout << FPRMaggiore05[i] << " " << FNRMaggiore05[i] << endl;
+        }
+
+
+
+        (m_CustomPlot->graph(0))->setData(FPRMaggiore05,FNRMaggiore05);
         m_CustomPlot->replot();
     }
+
+
 
     QLabel* text = (QLabel*)tabs->findChild<QLabel*>("AUCValue");
     text->setText(QString("%1").arg(AUCROC));

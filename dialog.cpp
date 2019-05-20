@@ -1000,7 +1000,7 @@ void Dialog::on_lineEditMaxNumIte_textChanged(const QString &arg1)
     ui->lineEditFrequKerSav->setValidator(new QIntValidator(0, ui->lineEditMaxNumIte->text().toInt(), this));
     if(ui->lineEditFrequKerSav->text().toInt() > ui->lineEditMaxNumIte->text().toInt())
     {
-        ui->lineEditFrequKerSav->setText(QString::number(ui->lineEditMaxNumIte->text().toInt()-1));
+        ui->lineEditFrequKerSav->setText(QString::number(ui->lineEditMaxNumIte->text().toInt()));
     }
 }
 

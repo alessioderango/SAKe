@@ -12,6 +12,7 @@
 #include "SAke/Ym.h"
 #include <QMutex>
 #include <math.h>
+#include <boost/math/distributions/normal.hpp>
 
 
 

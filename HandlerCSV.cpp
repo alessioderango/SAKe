@@ -273,13 +273,13 @@ int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & si
     std::ifstream in(fileurl.toStdString());
 
     std::string line;
-
+    int numberofelementsbeforeKernel = 6;
     std::getline(in, line);
     std::vector<string> x;
     x = split(line, ';');
-    zCr = std::stod(x[2]);
+    zCr = std::stod(x[3]);
     //cout << line << endl;
-    x.erase(x.begin(),x.begin()+5);
+    x.erase(x.begin(),x.begin()+numberofelementsbeforeKernel);
 
     Fi.resize(x.size());
     size=x.size();
@@ -306,12 +306,13 @@ int HandlerCSV::loadCSVKernel(QString fileurl, double *& Fi, int & size, double 
     std::ifstream in(fileurl.toStdString());
 
     std::string line;
+    int numberofelementsbeforeKernel = 6;
 
     std::getline(in, line);
     std::vector<string> x;
     x = split(line, ';');
     zCr = std::stod(x[3]);
-    x.erase(x.begin(),x.begin()+6);
+    x.erase(x.begin(),x.begin()+numberofelementsbeforeKernel);
     //    cout << line << endl;
 
     //           qDebug() <<double(stop-start)/CLOCKS_PER_SEC << " seconds\n";

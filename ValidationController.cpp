@@ -272,7 +272,7 @@ double ValidationController::getAUCROC(std::vector<double>&  Y,
             int result1 = getDifferenceTime(activations[s].getStart(),ymSorted[i].getTime());
             int result2 = getDifferenceTime(ymSorted[i].getTime(),activations[s].getEnd());
             if(result1>=-2 && result2>=-1){
-                cout << "considero intervallo con ymSorted" << endl;
+//                cout << "considero intervallo con ymSorted" << endl;
                 ymSorted[i].setI(i+1);
                 bests.push_back(ymSorted[i]);
                 if(ymSorted[i].getValue() < YsMin){
@@ -518,7 +518,7 @@ void ValidationController::getMobilityFunction(std::vector<double>&  Y,
             // trovato un picco deve essere considerato
             for (int a = 0; a < activations_size; a++) {
                 if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                    cout << "salto un pico all'interno di un intervallo " << endl;
+//                    cout << "salto un pico all'interno di un intervallo " << endl;
                     jump = true;
                 }
             }
@@ -697,7 +697,7 @@ void ValidationController::startValidation(){
             if(ft == FitnessGMDn)
                 for (int a = 0; a < activations_size; a++) {
                     if(diffTimeInterval(activations[a].getStart(), activations[a].getEnd(),rain[t].getTime())){
-                        cout << "salto un pico all'interno di un intervallo " << endl;
+//                        cout << "salto un pico all'interno di un intervallo " << endl;
                         jump = true;
                     }
                 }

@@ -74,17 +74,17 @@ struct compareRow {
                 && absequal(r1.safetyMargin,r2.safetyMargin,e)
                 && doubleMin(r1.firstOrderMomentum,r2.firstOrderMomentum,e))
             return true;
-        if (absequal(r1.fitness,r2.fitness,e) && r1.tb == r2.tb
-                && absequal(r1.safetyMargin,r2.safetyMargin,e)
-                && absequal(r1.firstOrderMomentum,r2.firstOrderMomentum,e)
-                && doubleMax(r1.ymin,r2.ymin,e))
-            return true;
-        if (absequal(r1.fitness,r2.fitness,e) && r1.tb == r2.tb
-                && absequal(r1.safetyMargin,r2.safetyMargin,e)
-                && absequal(r1.firstOrderMomentum,r2.firstOrderMomentum,e)
-                && absequal(r1.ymin,r2.ymin,e)
-                && doubleMax(r1.zcr,r2.zcr,e))
-            return true;
+//        if (absequal(r1.fitness,r2.fitness,e) && r1.tb == r2.tb
+//                && absequal(r1.safetyMargin,r2.safetyMargin,e)
+//                && absequal(r1.firstOrderMomentum,r2.firstOrderMomentum,e)
+//                && doubleMax(r1.ymin,r2.ymin,e))
+//            return true;
+//        if (absequal(r1.fitness,r2.fitness,e) && r1.tb == r2.tb
+//                && absequal(r1.safetyMargin,r2.safetyMargin,e)
+//                && absequal(r1.firstOrderMomentum,r2.firstOrderMomentum,e)
+//                && absequal(r1.ymin,r2.ymin,e)
+//                && doubleMax(r1.zcr,r2.zcr,e))
+//            return true;
         return false;
     }
 };
