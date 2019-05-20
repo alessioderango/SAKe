@@ -612,13 +612,13 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     emit this->updateROCPlot(pos,QVector<double>::fromStdVector(FPR),QVector<double>::fromStdVector(TPR),AUC);
     int indexPlot = getRightPlotFromName(namePlot);
     emit this->updateMobPlotAllInOne(pos,namePlot,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(),ymMin2.getTime(),bests,widgetArray[indexPlot],arrowArray[indexPlot]);
-
+    int nd = MainWindow::numberofdecimals;
     emit this->updateTextsValidationAllInOne(pos,namePlot,QString("%1").arg(AUC),
                                              QString("%1").arg(this->size),
-                                             QString("%1").arg(dYcr),
-                                             QString("%1").arg(momentoDelPrimoOrdine),
-                                             QString("%1").arg(ymMin.getValue()),
-                                             QString("%1").arg(ymMin2.getValue())
+                                             QString("%1").arg(dYcr, 0, 'g', nd),
+                                             QString("%1").arg(momentoDelPrimoOrdine, 0, 'g', nd),
+                                             QString("%1").arg(ymMin.getValue(), 0, 'g', nd),
+                                             QString("%1").arg(ymMin2.getValue(), 0, 'g', nd)
                                              );
      emit this->updateKernelPlot(pos,QVector<double>::fromStdVector(Fi),size);
 

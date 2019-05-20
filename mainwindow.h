@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    static const int numberofdecimals = 8;
 
     QTabWidget* getTabbyPos(int pos);
     explicit MainWindow(QWidget *parent = 0);

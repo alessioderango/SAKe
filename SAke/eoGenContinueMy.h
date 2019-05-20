@@ -146,7 +146,7 @@ public:
     virtual bool operator() ( const eoPop<EOT>& _vEO ) {
 
 
-        int numberofdecimals = 8;
+        int nd = MainWindow::numberofdecimals;
 
         if(thisGeneration == 0){ // first step
             QVector<double> x;
@@ -198,10 +198,10 @@ public:
             myfileWithHeader << thisGeneration+numGenerations << " ;";
             myfileWithHeader << fitnessDouble << " ;";
             myfileWithHeader << tb << " ;";
-            myfileWithHeader << setprecision(numberofdecimals) <<Safetymargin << " ;";
-            myfileWithHeader << setprecision(numberofdecimals) <<_vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
-            myfileWithHeader << setprecision(numberofdecimals) <<_vEO[t].getYmMinConst().getValue() << " ;";// zj-min
-            myfileWithHeader << setprecision(numberofdecimals) <<_vEO[t].getYmMin2Const().getValue() << " ;";// zcr
+            myfileWithHeader << setprecision(nd) <<Safetymargin << " ;";
+            myfileWithHeader << setprecision(nd) <<_vEO[t].getMomentoDelPrimoOrdineConst() << " ;";
+            myfileWithHeader << setprecision(nd) <<_vEO[t].getYmMinConst().getValue() << " ;";// zj-min
+            myfileWithHeader << setprecision(nd) <<_vEO[t].getYmMin2Const().getValue() << " ;";// zcr
             for (int i = 0; i < tb; i++) {
                 myfileWithHeader << _vEO[t].getFiConstIndex(i) << ";";
             }
@@ -247,7 +247,7 @@ public:
             kernelStream <<  "Kernel ;\n";
 
             for (const auto row : kernels) {
-                kernelStream << setprecision(numberofdecimals) << row.fitness << ";" <<row.tb << ";"<<row.safetyMargin  << ";"<<  row.firstOrderMomentum  <<";"<< row.ymin << ";"<<row.zcr << ";";
+                kernelStream << setprecision(nd) << row.fitness << ";" <<row.tb << ";"<<row.safetyMargin  << ";"<<  row.firstOrderMomentum  <<";"<< row.ymin << ";"<<row.zcr << ";";
                 for(int i = 0; i < row.kernel.size(); i++)
                 {
                     kernelStream  << row.kernel[i]<< ";";
@@ -264,10 +264,10 @@ public:
 
         emit controller->updateTextsBestAbsolute(index,
                                                  QString("%1").arg(bestAbsoluteKernel.tb),
-                                                 QString("%1").arg(bestAbsoluteKernel.safetyMargin, 0, 'g', numberofdecimals),
-                                                 QString("%1").arg(bestAbsoluteKernel.firstOrderMomentum, 0, 'g', numberofdecimals),
-                                                 QString("%1").arg(bestAbsoluteKernel.ymin, 0, 'g', numberofdecimals),
-                                                 QString("%1").arg(bestAbsoluteKernel.zcr, 0, 'g', numberofdecimals));
+                                                 QString("%1").arg(bestAbsoluteKernel.safetyMargin, 0, 'g', nd),
+                                                 QString("%1").arg(bestAbsoluteKernel.firstOrderMomentum, 0, 'g', nd),
+                                                 QString("%1").arg(bestAbsoluteKernel.ymin, 0, 'g', nd),
+                                                 QString("%1").arg(bestAbsoluteKernel.zcr, 0, 'g', nd));
 
 
         //        myfile.close();

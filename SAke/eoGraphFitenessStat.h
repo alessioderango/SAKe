@@ -72,7 +72,7 @@ private :
     template<class T>
     void doit(const eoPop<EOT>& _pop, T)
     { // find the largest elements
-        int numberofdecimals = 8;
+        const int nd = MainWindow::numberofdecimals;
         count++;
         double fitness =_pop.best_element().fitness();
 
@@ -112,13 +112,13 @@ private :
         emit controller->updateKernelPlot(pos,QVector<double>::fromStdVector(best_element.getFiConst()),best_element.getSizeConst());
 
         emit controller->updateFitnessPlot(pos,x,yBest,x,yAverage, numGenerations, (steps == 1));
-        QString ZjMin = QString("%1").arg((best_element.getYmMinConst().getValue()), 0, 'g', numberofdecimals);
-        QString Zcr = QString("%1").arg((best_element.getYmMin2Const().getValue()), 0, 'g', numberofdecimals);
+        QString ZjMin = QString("%1").arg((best_element.getYmMinConst().getValue()), 0, 'g', nd);
+        QString Zcr = QString("%1").arg((best_element.getYmMin2Const().getValue()), 0, 'g', nd);
         double ZjMind = best_element.getYmMinConst().getValue();
         double Zcrd = best_element.getYmMin2Const().getValue();
         double safetyMargin = (ZjMind -Zcrd)/ZjMind;
-        QString safetyMarginS = QString("%1").arg(safetyMargin, 0, 'g', numberofdecimals);
-        QString firstodermomentum = QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst(), 0, 'g', numberofdecimals);
+        QString safetyMarginS = QString("%1").arg(safetyMargin, 0, 'g', nd);
+        QString firstodermomentum = QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst(), 0, 'g', nd);
         QString tbS = QString("%1").arg(_pop.best_element().getSizeConst());
         if(steps ==1){
             firstOccurance = 1;
