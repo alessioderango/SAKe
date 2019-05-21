@@ -60,6 +60,7 @@ eoPop<EOT>&  do_make_pop(eoParser & _parser, eoState& _state, eoInit<EOT> & _ini
     eoValueParam<uint32_t>& seedParam = _parser.getORcreateParam(uint32_t(0), "seed", "Random number seed", 'S');
 //    if (seedParam.value() == 0)
 //        seedParam.value() = time(0);
+    srand(seedParam.value());
     eoValueParam<unsigned>& popSize = _parser.getORcreateParam(unsigned(20), "popSize", "Population Size", 'P', "Evolution Engine");
 
   // Either load or initialize

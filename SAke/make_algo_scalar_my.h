@@ -134,7 +134,8 @@ eoAlgo<EOT> & do_make_algo_scalar_my(eoParser& _parser,
       else        // parameter passed by user as DetTour(T)
         p = atof(ppSelect.second[0].c_str());
 
-      select = new eoSAKeStochTournamentSelect<EOT>(selectionStrategy,p);
+      //select = new eoSAKeStochTournamentSelect<EOT>(selectionStrategy,p);
+      select = new eoStochTournamentSelect<EOT>(p);
     }
   else if (ppSelect.first == std::string("Ranking"))
     {

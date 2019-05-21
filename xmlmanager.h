@@ -118,6 +118,8 @@ public:
     QString xmlFilePath;
     QString folderPath;
     QVariantList getAllElementsFromProjectName(QString nameProject);
+    int findProjectName(QString nameProject, QString typeProject);
+
     bool deleteProject(int idProject);
 
 

@@ -892,7 +892,7 @@ void ValidationController::startValidationAllinOne(QString namePlot){
             p.setValue(Y[t]);
             p.setTime(rain[t].getTime());
             ym.push_back(p);
-            countYm++;
+//            countYm++;
         }
     }
 
@@ -941,7 +941,7 @@ void ValidationController::startValidationAllinOne(QString namePlot){
     std::vector<Ym> bests;
     //    printf("activations_size %d \n",activations_size);
     for (int s = 0; s < activations_size; s++) {
-        for (int i = 0; i < countYm; i++) {
+        for (int i = 0; i < ym.size(); i++) {
             //TODO inserire variabili intervallo giorni
             int result1 = getDifferenceTime(activations[s].getStart(),ym[i].getTime());
             int result2 = getDifferenceTime(ym[i].getTime(),activations[s].getEnd());
@@ -973,10 +973,12 @@ void ValidationController::startValidationAllinOne(QString namePlot){
         }//for
     }//for
     if(iMin < 0)  iMin = 0;
-    if(iMin > countYm-1)  iMin = countYm-1;
+    if(iMin > ym.size()-1)  iMin = ym.size()-1;
     int index=(iMin+1);
 
     double dYcr = (YsMin-ym[index].getValue())/YsMin;
+
+    cout <<" ft =" << ft << "  dYcr = " << dYcr << endl;
 
     Ym ymMin= ym[iMin];
     Ym ymMin2 = ym[iMin+1];

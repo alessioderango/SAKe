@@ -97,9 +97,9 @@ void Validation::accept()
         return;
     }
 
-    if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
+    if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text(), "ValidationProject"))
     {
-        QString error = QString("Anotehr Project with the same name already exists \n");
+        QString error = QString("Another Project with the same name already exists \n");
 
         QMessageBox::information(
                     this,

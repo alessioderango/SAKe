@@ -87,6 +87,51 @@ int findAllElementsByProject(QString xmlFilePath,QString nameProject){
     return 0;
 }
 
+int findAllElementsByProject(QString xmlFilePath,QString nameProject, QString typeProject){
+
+    QFile* filetmp = new QFile(xmlFilePath);
+    if( !filetmp->exists()){
+        filetmp->open(QIODevice::ReadWrite);
+        QTextStream stream( filetmp );
+        stream << "<?xml version='1.0' encoding='UTF-8'?>"<< endl;
+        stream <<  "<Projects>" << endl;
+        stream <<  "</Projects>" << endl;
+        filetmp->close();
+
+    }
+    delete filetmp;
+    QFile inFile( xmlFilePath );
+
+
+    if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        qDebug( "Failed to open file for reading." );
+        return 0;
+    }
+
+    QDomDocument document;
+    if( !document.setContent( &inFile ) )
+    {
+        qDebug( "Failed to parse the file into a DOM tree." );
+        inFile.close();
+        return 0;
+    }
+
+    inFile.close();
+
+    QDomElement documentElement = document.documentElement();
+    QDomNodeList a = documentElement.elementsByTagName("Name");
+//    qDebug() << a.length();
+    for (int i = 0; i < a.length(); i++) {
+        qDebug() << a.at(i).firstChild().nodeValue();
+        if(QString::compare(a.at(i).parentNode().nodeName(), typeProject, Qt::CaseInsensitive)==0 &&
+                QString::compare(a.at(i).firstChild().nodeValue(), nameProject, Qt::CaseInsensitive)==0)
+            return 1;
+    }
+    // Load document
+    return 0;
+}
+
 QVariantList XMLManager::getAllElementsFromProjectName(QString idProject){
     QVariantList matrix;
     QVariantList list;
@@ -319,6 +364,11 @@ void XMLManager::setTreeview(QTreeWidget *value)
 
 int XMLManager::findProjectName(QString nameProject){
     bool result = findAllElementsByProject(xmlFilePath,nameProject);
+    qDebug() << "Project name = " << result << endl;
+    return result;
+}
+int XMLManager::findProjectName(QString nameProject, QString typeProject){
+    bool result = findAllElementsByProject(xmlFilePath,nameProject, typeProject);
     qDebug() << "Project name = " << result << endl;
     return result;
 }

@@ -907,7 +907,7 @@ void Regression::on_pushButton_clicked()
         return;
     }
 
-    if(!ui->lineEditProjName->isReadOnly() && w->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
+    if(!ui->lineEditProjName->isReadOnly() && w->getXmlmanager()->findProjectName(ui->lineEditProjName->text(), "RegressionProject"))
     {
         QString error = QString("Anotehr Project with the same name already exists \n");
 

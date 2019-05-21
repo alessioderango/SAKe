@@ -294,7 +294,7 @@ void Dialog::on_pushButtonStart_clicked()
     }
 
 
-    if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text()))
+    if(!ui->lineEditProjName->isReadOnly() && mainWindow->getXmlmanager()->findProjectName(ui->lineEditProjName->text(),"CalibrationProject"))
     {
         QString error = QString("Another Project with the same name already exists. \n");
 

@@ -214,7 +214,7 @@ public:
             myfileWithHeader << setprecision(nd) <<_vEO[t].getYmMinConst().getValue() << " ;";// zj-min
             myfileWithHeader << setprecision(nd) <<_vEO[t].getYmMin2Const().getValue() << " ;";// zcr
             for (int i = 0; i < tb; i++) {
-                myfileWithHeader << _vEO[t].getFiConstIndex(i) << ";";
+                myfileWithHeader << setprecision(15) <<_vEO[t].getFiConstIndex(i) << ";";
             }
             myfileWithHeader << "\n";
         }
@@ -275,7 +275,7 @@ public:
                 kernelStream << setprecision(nd) << row.fitness << ";" <<row.tb << ";"<<row.safetyMargin  << ";"<<  row.firstOrderMomentum  <<";"<< row.ymin << ";"<<row.zcr << ";";
                 for(int i = 0; i < row.kernel.size(); i++)
                 {
-                    kernelStream  << row.kernel[i]<< ";";
+                    kernelStream  << setprecision(15) <<row.kernel[i]<< ";";
                 }
                 kernelStream << "\n";
 
