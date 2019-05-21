@@ -258,7 +258,7 @@ public:
             kernels.erase(del,kernels.end() );
         }
 
-        if(stepToSave  != 0 && eoCountContinue<EOT>::thisGeneration%stepToSave ==0 )
+        if(stepToSave  != 0 && (eoCountContinue<EOT>::thisGeneration+1)%stepToSave ==0 )
         {
             ofstream kernelStream;
             kernelStream.open (savePathKernels.toStdString(),ios::out);
