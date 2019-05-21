@@ -845,7 +845,15 @@ void MainWindow::getMoreInfoROC()
 
 }
 
-void MainWindow::updateMobPlot(int indexTab, Rain * rain, int rain_size, Activation *activation, int activation_size, std::vector<double> Y, double YmMinVal, tm YmMinTime, double YmMinVal2, tm  YmMinTime2, std::vector<Ym> bests, std::vector<QCPItemText*> widgetArray,
+void MainWindow::updateMobPlot(int indexTab, Rain * rain, int rain_size,
+                               Activation *activation,
+                               int activation_size,
+                               std::vector<double> Y,
+                               double YmMinVal,
+                               tm YmMinTime,
+                               double YmMinVal2,
+                               tm  YmMinTime2,
+                               std::vector<Ym> bests, std::vector<QCPItemText*> widgetArray,
                                std::vector<QCPItemLine*> arrowArray)
 {
     QCustomPlot *m_CustomPlot = getPlotMobility(indexTab,"");

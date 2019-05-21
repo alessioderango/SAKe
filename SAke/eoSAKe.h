@@ -116,6 +116,9 @@ public:
     std::vector<Ym> getBestsConst() const{
         return bests;
     }
+    Ym getBestsConstIndex(int _i) const{
+        return bests[_i];
+    }
 
     double getFiIndex(int _i){
         return Fi[_i];

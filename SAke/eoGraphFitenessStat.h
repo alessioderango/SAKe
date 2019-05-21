@@ -91,25 +91,25 @@ private :
         yAverage.push_back( v / _pop.size());
 
         const EOT best_element= _pop.best_element();
-        std::vector<double> Y;
-        Y.resize(rain_size);
-
-        for (int t = 0; t < rain_size; t++) {
-            double ym = 0;
-            Y[t] = 0;
-            for (int r = 0; r < t; r++)
-                if ((t - r) < best_element.getSizeConst()){
-                    ym += best_element.getFiConstIndex(t - r) * P[r].getRainMm();
-                }
-            Y[t] = ym;
-        }
-        controller->getMainwindows()->mutex.lock();
         ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
+//        std::vector<double> Y;
+//        Y.resize(rain_size);
 
-        cout << "aggiorno " << pos << endl;
-        emit controller->updateMobPlot(pos,P,rain_size,activation, activation_size, Y,best_element.getYmMinConst().getValue(),best_element.getYmMinConst().getTime(), best_element.getYmMin2Const().getValue(), best_element.getYmMin2Const().getTime(),best_element.getBestsConst(),controller->widgetArray, controller->arrowArray);
+//        for (int t = 0; t < rain_size; t++) {
+//            double ym = 0;
+//            Y[t] = 0;
+//            for (int r = 0; r < t; r++)
+//                if ((t - r) < best_element.getSizeConst()){
+//                    ym += best_element.getFiConstIndex(t - r) * P[r].getRainMm();
+//                }
+//            Y[t] = ym;
+//        }
+        controller->getMainwindows()->mutex.lock();
 
-        emit controller->updateKernelPlot(pos,QVector<double>::fromStdVector(best_element.getFiConst()),best_element.getSizeConst());
+//        cout << "aggiorno " << pos << endl;
+//        emit controller->updateMobPlot(pos,P,rain_size,activation, activation_size, Y,best_element.getYmMinConst().getValue(),best_element.getYmMinConst().getTime(), best_element.getYmMin2Const().getValue(), best_element.getYmMin2Const().getTime(),best_element.getBestsConst(),controller->widgetArray, controller->arrowArray);
+
+//        emit controller->updateKernelPlot(pos,QVector<double>::fromStdVector(best_element.getFiConst()),best_element.getSizeConst());
 
         emit controller->updateFitnessPlot(pos,x,yBest,x,yAverage, numGenerations, (steps == 1));
         QString ZjMin = QString("%1").arg((best_element.getYmMinConst().getValue()), 0, 'g', nd);

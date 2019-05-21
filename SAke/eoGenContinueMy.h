@@ -21,7 +21,10 @@ struct row {
     double firstOrderMomentum;
     double ymin;
     double zcr;
+    Ym zjminTime;
+    Ym zcrTime;
     std::vector<double> kernel;
+    std::vector<Ym> kernelYm;
 };
 
 
@@ -109,10 +112,15 @@ public:
                      int _stepToSave,
                      int _numberOfKernelToBeSaved,
                      QString _fitnessFile,
-                     SAKeController* s)
+                     SAKeController* s,
+                     Rain * _rain,
+                     int _rain_size,
+                     Activation *_activation,
+                     int _activation_size)
         : eoCountContinue<EOT>( ),
           eoValueParam<unsigned>(0, "Generations", "Generations"),
           stop( false )
+
 
     {
         //_savePath.remove(0,8);
@@ -131,7 +139,10 @@ public:
         //        myfile.close();
         fitnessFile=_fitnessFile;
         controller = s;
-
+        P=_rain;
+        rain_size=_rain_size;
+        activation =_activation;
+        activation_size = _activation_size;
 
 
     }
@@ -219,10 +230,24 @@ public:
             double zcrdouble = _vEO[t].getYmMin2Const().getValue();
 
             std::vector<double> tmpKernel;
+            std::vector<Ym> tmpKernelYm;
+            for (int i = 0; i < _vEO[t].getBestsConst().size(); i++) {
+                Ym ymTmp = _vEO[t].getBestsConstIndex(i);
+                tmpKernelYm.push_back(ymTmp);
+            }
             for (int i = 0; i < tb; i++) {
                 tmpKernel.push_back(_vEO[t].getFiConstIndex(i));
             }
-            row r1 = {cFitness, tb, safetyMargin, firstOrderMomentum,ymin, zcrdouble, tmpKernel};
+            row r1 = {cFitness,
+                      tb,
+                      safetyMargin,
+                      firstOrderMomentum,
+                      ymin,
+                      zcrdouble,
+                      _vEO[t].getYmMinConst(),
+                      _vEO[t].getYmMin2Const(),
+                      tmpKernel,
+                      tmpKernelYm};
             kernels.insert(r1);
 
         }
@@ -261,7 +286,7 @@ public:
 
         auto bestAbsoluteKernel = *(kernels.begin());
         ptrdiff_t index = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), controller));
-
+        controller->getMainwindows()->mutex.lock();
         emit controller->updateTextsBestAbsolute(index,
                                                  QString("%1").arg(bestAbsoluteKernel.tb),
                                                  QString("%1").arg(bestAbsoluteKernel.safetyMargin, 0, 'g', nd),
@@ -273,6 +298,35 @@ public:
         //        myfile.close();
         myfileWithHeader.close();
 
+        //const EOT best_element= _vEO.best_element();
+        std::vector<double> Y;
+        Y.resize(rain_size);
+
+        for (int t = 0; t < rain_size; t++) {
+            double ym = 0;
+            Y[t] = 0;
+            for (int r = 0; r < t; r++)
+                if ((t - r) < bestAbsoluteKernel.kernel.size()){
+                    ym += bestAbsoluteKernel.kernel[t - r] * P[r].getRainMm();
+                }
+            Y[t] = ym;
+        }
+
+        emit controller->updateMobPlot(index,P,rain_size,activation, activation_size, Y,
+                                       bestAbsoluteKernel.ymin,
+                                       bestAbsoluteKernel.zjminTime.getTime(),
+                                       bestAbsoluteKernel.zcr,
+                                       bestAbsoluteKernel.zcrTime.getTime(),
+                                       bestAbsoluteKernel.kernelYm,
+                                       controller->widgetArray,
+                                       controller->arrowArray);
+
+        emit controller->updateKernelPlot(index,
+                                          QVector<double>::fromStdVector(bestAbsoluteKernel.kernel),
+                                          bestAbsoluteKernel.kernel.size());
+
+
+        controller->getMainwindows()->mutex.unlock();
         ofstream fitnessGenerator;
         fitnessGenerator.open (saveFitnessGenerations.toStdString(),ios::app);
 
@@ -327,6 +381,10 @@ private:
     int numGenerations;
     QString fitnessFile;
     SAKeController* controller;
+    Rain * P;
+    int rain_size;
+    Activation *activation;
+    int activation_size;
 };
 
 

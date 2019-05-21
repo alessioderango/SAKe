@@ -313,7 +313,11 @@ void SAKeController::startAlgorithm()
                                                saveKernels,
                                                numberOfKernelToBeSaved,
                                                fitnessFile,
-                                               this);
+                                               this,
+                                               rain,
+                                               rain_size,
+                                               activations,
+                                               activations_size);
         // stopping criteria
         eoContinue<Indi> & term = do_make_continue_my(parser, state, eval,this->stop);
         // output
