@@ -978,7 +978,7 @@ void ValidationController::startValidationAllinOne(QString namePlot){
 
     double dYcr = (YsMin-ym[index].getValue())/YsMin;
 
-    cout <<" ft =" << ft << "  dYcr = " << dYcr << endl;
+//    cout <<" ft =" << ft << "  dYcr = " << dYcr << endl;
 
     Ym ymMin= ym[iMin];
     Ym ymMin2 = ym[iMin+1];

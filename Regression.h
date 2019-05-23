@@ -51,11 +51,11 @@ private slots:
 
     void on_pushButton_clicked();
 
-    void on_lineEdit_7_textChanged(const QString &arg1);
+//    void on_lineEdit_7_textChanged(const QString &arg1);
 
     void on_checkBox_clicked();
 
-    void on_comboBox_2_currentIndexChanged(int index);
+//    void on_comboBox_2_currentIndexChanged(int index);
 
     void on_pushButton_2_clicked();
 
@@ -70,7 +70,8 @@ private slots:
 
     void on_checkBox_N_stateChanged(int arg1);
 
-    void on_comboBoxSelection_currentIndexChanged(int index);
+
+    void on_comboBox_2_currentIndexChanged(int index);
 
     void on_checkBox_lastgeneration_clicked();
 
@@ -91,6 +92,7 @@ private slots:
     void on_lineEditMaxNumIte_textChanged(const QString &arg1);
 
     void on_lineEditPar1_textChanged(const QString &arg1);
+
 
 private:
     Ui::Regression *ui;

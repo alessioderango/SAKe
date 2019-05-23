@@ -367,7 +367,7 @@ void MainWindow::makeMobilityFunctionPlot(QCustomPlot * customPlot,Rain * rain, 
     connect(customPlot, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestMobilityFunction(QPoint)));
 
     customPlot->plotLayout()->insertRow(0);
-    customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(customPlot, "Mobility function related to Bkci"));
+    customPlot->plotLayout()->addElement(0, 0, new QCPPlotTitle(customPlot, "Mobility function related to ABK"));
 }
 
 void MainWindow:: makeKernelPlot(QCustomPlot *customPlot,MainWindow * w)
@@ -533,7 +533,7 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
 
         for (int i = 0; i < FPR.size(); ++i) {
 //            if(FPR[i] > limitD && FNR[i] > limitD){
-             cout << FPR[i] << " " << FNR[i] << endl;
+//             cout << FPR[i] << " " << FNR[i] << endl;
              if(FPR[i] > 0 && FPR[i] < 1 && FNR[i] > 0 && FNR[i] < 1){
 //                 cout << FPR[i] << endl;
                  FPRMaggiore05.push_back(quantile(myNormal, FPR[i]));
@@ -543,12 +543,12 @@ void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double
 //            }
         }
 
-        cout << " FPRMaggiore05 " << endl;
-        if(FPRMaggiore05.size() == 0 && FNRMaggiore05.size() ==0)
-            cout << " FPRMaggiore05  vuoto!" << endl;
-        for (int i = 0; i < FPRMaggiore05.size(); ++i) {
-            cout << FPRMaggiore05[i] << " " << FNRMaggiore05[i] << endl;
-        }
+//        cout << " FPRMaggiore05 " << endl;
+//        if(FPRMaggiore05.size() == 0 && FNRMaggiore05.size() ==0)
+//            cout << " FPRMaggiore05  vuoto!" << endl;
+//        for (int i = 0; i < FPRMaggiore05.size(); ++i) {
+//            cout << FPRMaggiore05[i] << " " << FNRMaggiore05[i] << endl;
+//        }
 
 
 
@@ -1138,7 +1138,7 @@ void MainWindow::closeTab(int index)
 {
     //rilasciare lock
     mutex.lock();
-    cout << "chiudere" << index << endl;
+//    cout << "chiudere" << index << endl;
     ui->tabWidget_2->removeTab(index);
     MainWindow::threads.erase(MainWindow::threads.begin()+index);
     mutex.unlock();
@@ -1174,7 +1174,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
     kerFunc->plotLayout()->insertRow(0);
-    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Best kernel of current iteration (Bkci)"));
+    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Absolute Best Kernel (ABK)"));
     splitter->addWidget(kerFunc);
     MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
     mobFunc->setSizePolicy(spUp);
@@ -1254,7 +1254,7 @@ void MainWindow::addTab(QString name, Rain * rain, int rain_size, Activation *ac
 //    space1->setText(" ");
 //    grid->addWidget(space1,2,0);
     QLabel * AbsMaxFitBAK = new QLabel();
-    AbsMaxFitBAK->setText("Best Absolute Kernel : ");
+    AbsMaxFitBAK->setText("Absolute Best Kernel (ABK) : ");
     grid->addWidget(AbsMaxFitBAK,2,0);
 
     int rowAbsoluteKernel=3;
@@ -1438,7 +1438,7 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
     kerFunc->setSizePolicy(spUp);
     kerFunc->setObjectName("kerFunc");
     kerFunc->plotLayout()->insertRow(0);
-    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Best kernel of current iteration (Bkci)"));
+    kerFunc->plotLayout()->addElement(0, 0, new QCPPlotTitle(kerFunc, "Absolute Best Kernel (ABK)"));
     splitter->addWidget(kerFunc);
     MainWindow::makeMobilityFunctionPlot(mobFunc, rain,  rain_size, activation, activation_size);
     mobFunc->setSizePolicy(spUp);
@@ -1569,7 +1569,7 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
 //    space1->setText(" ");
 //    grid->addWidget(space1,2,0);
     QLabel * AbsMaxFitBAK = new QLabel();
-    AbsMaxFitBAK->setText("Best Absolute Kernel : ");
+    AbsMaxFitBAK->setText("Absolute Best Kernel (ABK) : ");
     grid->addWidget(AbsMaxFitBAK,2,0);
 
     int rowAbsoluteKernel=3;
@@ -1818,7 +1818,7 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 //           "1",
 //           "200 ",
 //           "200");
-    cout << "tableResult->horizontalHeader()->width() = " << tableResult->horizontalHeader()->width()<< endl;
+//    cout << "tableResult->horizontalHeader()->width() = " << tableResult->horizontalHeader()->width()<< endl;
     tableResult->setMinimumWidth(530);
     tableResult->setMaximumWidth(530);
     QLabel * t1 = new QLabel();
@@ -2656,14 +2656,14 @@ void MainWindow::deleteProject(int item)
 void MainWindow::createProjectFromOneAlreadyExist(QObject * t)
 {
     QTreeWidgetItem* item = (QTreeWidgetItem*) t;
-    cout << item->data(0,Qt::UserRole).toInt() << endl;
-    cout << ui->treeWidget->indexOfTopLevelItem(item) << endl;
+//    cout << item->data(0,Qt::UserRole).toInt() << endl;
+//    cout << ui->treeWidget->indexOfTopLevelItem(item) << endl;
     int column =0;
 
     QVariantList listParameter = xmlmanager->getAllElementsFromProjectName(item->data(0,Qt::UserRole).toString());
     QTreeWidgetItem * p = item->parent();
 //    int i = ui->treeWidget->indexOfTopLevelItem(item);
-    cout << column << endl;
+//    cout << column << endl;
 //    cout << item->parent()->text(column).toStdString() << endl;
     if(ui->treeWidget->indexOfTopLevelItem(item) <= -1 && QString::compare(item->parent()->text(column), "Calibration", Qt::CaseInsensitive)==0){
         if(listParameter.size() > 5){

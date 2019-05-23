@@ -1045,9 +1045,9 @@ void Dialog::on_lineEditCrossoverP_textChanged(const QString &arg1)
     if(tmp.contains('.') || tmp.contains(',')){
         QString tmp1 = tmp.mid(0,2);
         QString tmp2 = tmp.mid(2);
-        cout << "QString tmp " << tmp.toStdString() << endl;
-        cout << "QString tmp1 " << tmp1.toStdString()  << endl;
-        cout << "QString tmp2 " << tmp2.toStdString()  << endl;
+//        cout << "QString tmp " << tmp.toStdString() << endl;
+//        cout << "QString tmp1 " << tmp1.toStdString()  << endl;
+//        cout << "QString tmp2 " << tmp2.toStdString()  << endl;
         tmp2.remove('.');tmp2.remove(',');
         ui->lineEditCrossoverP->setText(tmp1+tmp2);
     }
@@ -1066,9 +1066,9 @@ void Dialog::on_lineEditMutationP_textChanged(const QString &arg1)
     if(tmp.contains('.') || tmp.contains(',')){
         QString tmp1 = tmp.mid(0,2);
         QString tmp2 = tmp.mid(2);
-        cout << "QString tmp " << tmp.toStdString() << endl;
-        cout << "QString tmp1 " << tmp1.toStdString()  << endl;
-        cout << "QString tmp2 " << tmp2.toStdString()  << endl;
+//        cout << "QString tmp " << tmp.toStdString() << endl;
+//        cout << "QString tmp1 " << tmp1.toStdString()  << endl;
+//        cout << "QString tmp2 " << tmp2.toStdString()  << endl;
         tmp2.remove('.');tmp2.remove(',');
         ui->lineEditMutationP->setText(tmp1+tmp2);
     }
@@ -1077,7 +1077,7 @@ void Dialog::on_lineEditMutationP_textChanged(const QString &arg1)
 void Dialog::on_lineEditPar1_textChanged(const QString &arg1)
 {
     QString tmp = ui->lineEditPar1->text();
-    cout << "tmp      --------------- >    " << tmp.toStdString() << endl;
+//    cout << "tmp      --------------- >    " << tmp.toStdString() << endl;
 
     if(ui->comboBoxSelection->currentIndex() ==0 ){  // 0.55 - 1 Tr
         QString tmp3 =  tmp.remove(',');

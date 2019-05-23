@@ -90,7 +90,7 @@ public:
         if(step%frequencySavePop ==0)
         {
 
-            cout << " salvoooo " << endl;
+//            cout << " salvoooo " << endl;
 
             myfile.open (savePopulation.toStdString(),ios::out);
 

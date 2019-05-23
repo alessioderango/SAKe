@@ -50,7 +50,7 @@ void Genotype::setParameters(string x)
         tmp.addParameters(std::stod(x1[partmp+1]));
         if( std::stod(x1[partmp+1]) < 0){
 
-            std::cout << "negativo letturaaaaaa " << std::stod(x1[partmp+1]) <<std::endl;
+//            std::cout << "negativo letturaaaaaa " << std::stod(x1[partmp+1]) <<std::endl;
         }
         tmp.addParameters(std::stod(x1[partmp+2]));
 

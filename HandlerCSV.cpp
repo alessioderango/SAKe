@@ -65,7 +65,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
             string actualDate =  rows[i].at(0);
 
             if(mm < 0){
-                std::cout << "rain row = " << i << std::endl;
+//                std::cout << "rain row = " << i << std::endl;
                 QString error= "In rains, at row "+ QString::number(i) + " mm can not be negative \n";
                 _e.append(error);
                 row = i;
@@ -74,7 +74,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
             QString actualDateQString = QString::fromStdString(actualDate);
             if(actualDateQString.contains(QRegExp("^\d{4}[\-\/\s]?((((0[13578])|(1[02]))[\-\/\s]?(([0-2][0-9])|(3[01])))|(((0[469])|(11))[\-\/\s]?(([0-2][0-9])|(30)))|(02[\-\/\s]?[0-2][0-9])) (([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9]).([0-5][0-9][0-9])")))
             {
-                std::cout << "rain row = " << i << std::endl;
+//                std::cout << "rain row = " << i << std::endl;
                 QString error= "In rains, at row "+ QString::number(i) + " date  is not in the format yyyy-mm-dd hh:mm:ss.sss \n";
                 _e.append(error);
                 row = i;
@@ -94,7 +94,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
                 int difference = std::difftime(end, begin);
 
                 if(difference <= 0){
-                    std::cout << " rain row = " << i<< std::endl;
+//                    std::cout << " rain row = " << i<< std::endl;
                     QString error= "In rains, at row "+ QString::number(i) + " date is incorrect \n";
                     _e.append(error);
                     row = i;
@@ -131,7 +131,7 @@ int HandlerCSV::loadCSVRain(QString fileurl,Rain * &rain,int &size,int &row,QStr
             previousDate = actualDate;
 
         }catch(std::exception& e){
-            std::cout << "rain row = " << i << std::endl;
+//            std::cout << "rain row = " << i << std::endl;
             QString err = "In rains, " + QString::fromStdString(e.what());
             _e.append(err);
             row = i;
@@ -206,7 +206,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,
             int difference = std::difftime(end, begin);
 
             if(difference < 0){
-                std::cout << " activations row = " << i<< std::endl;
+//                std::cout << " activations row = " << i<< std::endl;
                 QString error= "In activations, at row "+ QString::number(i) + " please, check the range. \n";
                 _e.append(error);
                 row = i;
@@ -249,7 +249,7 @@ int HandlerCSV::loadCSVActivation(QString fileurl,
                 return 0;
             }
 
-            cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
+//            cout << " dateStart " << dateStart << " dateEnd " << dateEnd << endl;
 
             activation[activation_size]= Activation(to_tm(activationStart),to_tm(activationEnd));
             activation_size++;
@@ -393,8 +393,8 @@ int HandlerCSV::loadCSVPopFromFileRegression(QString fileurl,
     std::ifstream in(fileurl.toStdString());
     std::string line;
 
-    cout << "leggo popolazione regressione" << endl;
-    cout << fileurl.toStdString() << endl;
+//    cout << "leggo popolazione regressione" << endl;
+//    cout << fileurl.toStdString() << endl;
 
     while (std::getline(in, line)){
         std::vector<string> x;

@@ -98,54 +98,54 @@ public:
         if(lastgeneration){
 
             for (int i = 0; i < weightsSize; i++) {
-                std::cout << " weights - ["<< i <<"] = "<< g[count].getWeight()[i] << std::endl;
+//                std::cout << " weights - ["<< i <<"] = "<< g[count].getWeight()[i] << std::endl;
                 _genotype.addW(g[count].getWeight()[i]);
             }
 
             for (int i = 0; i < functionTypesSize; i++) {
-                std::cout << " functionTypes - ["<< i <<"] = "<< g[count].getFunctionType()[i] << std::endl;
+//                std::cout << " functionTypes - ["<< i <<"] = "<< g[count].getFunctionType()[i] << std::endl;
                 _genotype.addFunctionType(g[count].getFunctionType()[i]);
             }
 
             for (int i = 0; i < parametersSize; i++) {
-                     std::cout << " parameters - ["<< i <<"] = "<< g[count].getParameters()[i].getParameters(0) << std::endl;
-                     std::cout << " parameters - ["<< i <<"] = "<< g[count].getParameters()[i].getParameters(1) << std::endl;
-                     if(g[count].getParameters()[i].getParameters(1) < 0)
-                     {
-                         cout << "negativoooooooooooooo " << g[count].getParameters()[i].getParameters(1) << endl;
-                     }
-                     std::cout << " parameters - ["<< i <<"] = "<<g[count].getParameters()[i].getParameters(2) << std::endl;
+//                     std::cout << " parameters - ["<< i <<"] = "<< g[count].getParameters()[i].getParameters(0) << std::endl;
+//                     std::cout << " parameters - ["<< i <<"] = "<< g[count].getParameters()[i].getParameters(1) << std::endl;
+//                     if(g[count].getParameters()[i].getParameters(1) < 0)
+//                     {
+//                         cout << "negativoooooooooooooo " << g[count].getParameters()[i].getParameters(1) << endl;
+//                     }
+//                     std::cout << " parameters - ["<< i <<"] = "<<g[count].getParameters()[i].getParameters(2) << std::endl;
                 _genotype.addPar(g[count].getParameters()[i]);
             }
 
             for (int i = 0; i < percentualePesoSize; i++) {
-                std::cout << " percentualePeso - ["<< i <<"] = "<< g[count].getPercantageW()[i] << std::endl;
+//                std::cout << " percentualePeso - ["<< i <<"] = "<< g[count].getPercantageW()[i] << std::endl;
                 _genotype.addPercentageVariationWeight(g[count].getPercantageW()[i]);
             }
             for (int i = 0; i < percentualeLineareASize; i++) {
-                std::cout << " percentualeLineareA - ["<< i <<"] = "<< g[count].getPercantageLinearA()[i] << std::endl;
+//                std::cout << " percentualeLineareA - ["<< i <<"] = "<< g[count].getPercantageLinearA()[i] << std::endl;
                 _genotype.addPercentageVariationLinearA(g[count].getPercantageLinearA()[i]);
             }
             for (int i = 0; i <  percentualeLineareBSize; i++) {
-                std::cout << " percentualeLineareB - ["<< i <<"] = "<< g[count].getPercantageLinearB()[i] << std::endl;
+//                std::cout << " percentualeLineareB - ["<< i <<"] = "<< g[count].getPercantageLinearB()[i] << std::endl;
                 _genotype.addPercentageVariationLinearB(g[count].getPercantageLinearB()[i]);
             }
             for (int i = 0; i < percentualeGammaASize; i++) {
-                std::cout << " percentualeGammaA - ["<< i <<"] = "<< g[count].getPercantageGammaA()[i] << std::endl;
+//                std::cout << " percentualeGammaA - ["<< i <<"] = "<< g[count].getPercantageGammaA()[i] << std::endl;
                 _genotype.addPercentageVariationGammaA(g[count].getPercantageGammaA()[i]);
             }
             for (int i = 0; i < percentualeGammaBSize; i++) {
-                std::cout << " percentualeGammaB - ["<< i <<"] = "<< g[count].getPercantageGammaB()[i] << std::endl;
+//                std::cout << " percentualeGammaB - ["<< i <<"] = "<< g[count].getPercantageGammaB()[i] << std::endl;
                 _genotype.addPercentageVariationGammaB(g[count].getPercantageGammaB()[i]);
             }
 
             for (int i = 0; i < translationSize; i++) {
-                std::cout << " translation - ["<< i <<"] = "<< g[count].getTranslation()[i] << std::endl;
+//                std::cout << " translation - ["<< i <<"] = "<< g[count].getTranslation()[i] << std::endl;
                 _genotype.addTranslation(g[count].getTranslation()[i]);
             }
 
             for (int i = 0; i < g[count].getYCombinata().size(); i++) {
-                std::cout << " YCombinata - ["<< i <<"] = "<< g[count].getYCombinata()[i] << std::endl;
+//                std::cout << " YCombinata - ["<< i <<"] = "<< g[count].getYCombinata()[i] << std::endl;
                 _genotype.addYCombinata(g[count].getYCombinata()[i]);
             }
 
@@ -195,7 +195,7 @@ public:
             }
 
             for (int i = 0; i < translationSize; i++) {
-                std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
+//                std::cout << " translation - ["<< i <<"] = "<< this->translation[i] << std::endl;
                 _genotype.addTranslation(this->translation[i]);
             }
         }

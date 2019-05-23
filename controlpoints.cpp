@@ -183,12 +183,12 @@ double getYfromline(double x2,double y2,double x1,double y1,int xris){
          }
      }
 
-     cout << " x y " << endl;
-     for (int i  = 0; i < x.size(); i++)
-     {
-         cout << x[i] << " ";
-         cout << y[i] << endl;
-     }
+//     cout << " x y " << endl;
+//     for (int i  = 0; i < x.size(); i++)
+//     {
+//         cout << x[i] << " ";
+//         cout << y[i] << endl;
+//     }
 
      std::vector<double> xTrasformed,yTrasformed;
 
@@ -312,9 +312,9 @@ double getYfromline(double x2,double y2,double x1,double y1,int xris){
          x.push_back(sumx/count);
          y.push_back(sumy/count);
      }
-     cout << "end =  " <<end << endl;
-     cout << "xn =  " <<n << endl;
-     cout << "x  =  " <<x.size() << endl;
+//     cout << "end =  " <<end << endl;
+//     cout << "xn =  " <<n << endl;
+//     cout << "x  =  " <<x.size() << endl;
  }
 
  void ControlPoints::getSubdividePointsFromControlPoints(std::vector< double> x, std::vector< double> y, int n, std::vector<double> &xOutput, std::vector<double> &yOutput){

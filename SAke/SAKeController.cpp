@@ -170,34 +170,34 @@ SAKeController::SAKeController(MainWindow *_main,
     }
 
 
-    qDebug() << "selection arrivato " << selection << "\n";
-    qDebug() << "pattern arrivato " << pattern << "\n";
-    qDebug() << "ipop arrivato " <<   pop << "\n";
-    qDebug() << "imaxGen arrivato " << maxGen << "\n";
-    qDebug() << "itbMax arrivato " <<   tbMax << "\n";
-    qDebug() << "itbMin arrivato " <<   tbMin << "\n";
-    qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
-    qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
-    qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
-    qDebug() << "fpropMutation arrivato " << propMutation << "\n";
-    qDebug() << "fpme arrivato " << pme << "\n";
-    qDebug() << "fpmb arrivato " << pmb << "\n";
-    qDebug() << "rain_size arrivato " << rain_size << "\n";
-    qDebug() << "act_size arrivato " << activation_size << "\n";
-    qDebug() << "_projectName  arrivato " << projectName << "\n";
-    qDebug() << "_numberProcessor arrivato " << numberofProcessor << "\n";
-    qDebug() << "ipara1 arrivato " << parameter1 << "\n";
-    qDebug() << "ipara2 arrivato " << parameter2 << "\n";
-    qDebug() << "selectionOrder1 arrivato " << orders[0] << "\n";
-    qDebug() << "selectionOrder2 arrivato " << orders[1] << "\n";
-    qDebug() << "selectionOrder3 arrivato " << orders[2]  << "\n";
-    qDebug() << "selectionOrder4 arrivato " << orders[3] << "\n";
-    qDebug() << "numberElitist arrivato " << numberElitist << "\n";
-    qDebug() << "tipo arrivato " << typeAlgorithm << "\n";
-    qDebug() << "seed " << seed << "\n";
-    qDebug() << "_saveKernels " << _saveKernels << "\n";
-    qDebug() << "numberOfKernelToBeSaved" << _numberOfKernelToBeSaved << "\n";
-    qDebug() << "replacement" << replacement << "\n";
+//    qDebug() << "selection arrivato " << selection << "\n";
+//    qDebug() << "pattern arrivato " << pattern << "\n";
+//    qDebug() << "ipop arrivato " <<   pop << "\n";
+//    qDebug() << "imaxGen arrivato " << maxGen << "\n";
+//    qDebug() << "itbMax arrivato " <<   tbMax << "\n";
+//    qDebug() << "itbMin arrivato " <<   tbMin << "\n";
+//    qDebug() << "idHpMax arrivato " <<   dHpMax << "\n";
+//    qDebug() << "idHpMin arrivato " <<   dHpMin << "\n";
+//    qDebug() << "fpropCrossover arrivato " << propCrossover << "\n";
+//    qDebug() << "fpropMutation arrivato " << propMutation << "\n";
+//    qDebug() << "fpme arrivato " << pme << "\n";
+//    qDebug() << "fpmb arrivato " << pmb << "\n";
+//    qDebug() << "rain_size arrivato " << rain_size << "\n";
+//    qDebug() << "act_size arrivato " << activation_size << "\n";
+//    qDebug() << "_projectName  arrivato " << projectName << "\n";
+//    qDebug() << "_numberProcessor arrivato " << numberofProcessor << "\n";
+//    qDebug() << "ipara1 arrivato " << parameter1 << "\n";
+//    qDebug() << "ipara2 arrivato " << parameter2 << "\n";
+//    qDebug() << "selectionOrder1 arrivato " << orders[0] << "\n";
+//    qDebug() << "selectionOrder2 arrivato " << orders[1] << "\n";
+//    qDebug() << "selectionOrder3 arrivato " << orders[2]  << "\n";
+//    qDebug() << "selectionOrder4 arrivato " << orders[3] << "\n";
+//    qDebug() << "numberElitist arrivato " << numberElitist << "\n";
+//    qDebug() << "tipo arrivato " << typeAlgorithm << "\n";
+//    qDebug() << "seed " << seed << "\n";
+//    qDebug() << "_saveKernels " << _saveKernels << "\n";
+//    qDebug() << "numberOfKernelToBeSaved" << _numberOfKernelToBeSaved << "\n";
+//    qDebug() << "replacement" << replacement << "\n";
 
     clickCloseTab=false;
 

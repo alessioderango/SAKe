@@ -116,14 +116,11 @@ private :
         QString Zcr = QString("%1").arg((best_element.getYmMin2Const().getValue()), 0, 'g', nd);
 //        double ZjMind = best_element.getYmMinConst().getValue();
 //        double Zcrd = best_element.getYmMin2Const().getValue();
-        if(steps == 30)
-        {
-            cout << "c" << endl;
-        }
+
         double safetyMargin = (best_element.getYmMinConst().getValue() -best_element.getYmMin2Const().getValue())/best_element.getYmMinConst().getValue();
-        cout <<setprecision(8)<<" ZjMind =" << best_element.getYmMinConst().getValue() << endl;
-        cout <<setprecision(8)<<" Zcrd =" << best_element.getYmMin2Const().getValue() << endl;
-        cout <<setprecision(8)<<" safetyMargin =" << safetyMargin << endl;
+//        cout <<setprecision(8)<<" ZjMind =" << best_element.getYmMinConst().getValue() << endl;
+//        cout <<setprecision(8)<<" Zcrd =" << best_element.getYmMin2Const().getValue() << endl;
+//        cout <<setprecision(8)<<" safetyMargin =" << safetyMargin << endl;
         QString safetyMarginS = QString("%1").arg(safetyMargin, 0, 'g', nd);
         QString firstodermomentum = QString("%1").arg(best_element.getMomentoDelPrimoOrdineConst(), 0, 'g', nd);
         QString tbS = QString("%1").arg(_pop.best_element().getSizeConst());
@@ -142,7 +139,7 @@ private :
 //                cout << setprecision(20) <<"fitness : " << fitness << " - bestfitness : " << bestfitness << endl;
 //            }
             //double e = 0.000001;
-            if(fabs(fitness-bestfitness) > 0.0001 )
+            if((fitness-bestfitness) > 0 &&fabs(fitness-bestfitness) > 0.0001 )
             //if(fitness > bestfitness)
             {
                 bestfitness = fitness;
