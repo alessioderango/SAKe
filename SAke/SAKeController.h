@@ -106,6 +106,9 @@ public:
 
     QString getSavePath() const;
 
+    int getMaxGen() const;
+    void setMaxGen(int value);
+
 signals:
     void finished(int index);
     void updateMobPlot(int indexTab,
@@ -163,6 +166,11 @@ signals:
 
     void updateAbsMaxFit(int indexTab, QString s);
     void updateAbsAvFit(int indexTab, QString s);
+    void updateTableROCPlot(int indexTab,
+                       QVector<int> TP,
+                       QVector<int> FP,
+                       QVector<int> TN,
+                       QVector<int> FN);
 
 
 protected:

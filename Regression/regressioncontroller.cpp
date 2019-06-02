@@ -126,6 +126,13 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
      lastgeneration = _lastgeneration;
      frequencySavePop = _frequencySavePop;
 
+     if(!lastgeneration){
+         QString stmp = savePath+"/fitnessHistory.csv";
+         ofstream myfile;
+         myfile.open (stmp.toStdString(),ios::out);
+         myfile.close();
+     }
+
 }
 
 
@@ -279,6 +286,16 @@ void RegressionController::startAlgorithm(){
 
 void RegressionController::run(){
     startAlgorithm();
+}
+
+QString RegressionController::getSavePath() const
+{
+    return savePath;
+}
+
+void RegressionController::setSavePath(const QString &value)
+{
+    savePath = value;
 }
 
 bool RegressionController::getStop()

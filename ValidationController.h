@@ -168,6 +168,12 @@ signals:
                        QVector<double> TPR,
                        double AUCROC);
 
+    void updateTableROCPlot(int indexTab,
+                       QVector<int> TP,
+                       QVector<int> FP,
+                       QVector<int> TN,
+                       QVector<int> FN);
+
 private:
     void run();
 

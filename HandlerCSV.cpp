@@ -286,7 +286,7 @@ int HandlerCSV::loadCSVKernel(QString fileurl, std::vector<double> &Fi, int & si
 
     for(unsigned int i =0; i < x.size();i++){
         double tmp = std::stod(x[i]);
-        cout << " tmp " << tmp <<  endl;
+//        cout << " tmp " << tmp <<  endl;
         Fi[i]= tmp;
 
     }

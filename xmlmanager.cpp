@@ -817,8 +817,9 @@ void XMLManager::ReadCalibrationProjectXML()
     QTreeWidgetItem * vali = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Validation")));
     QTreeWidgetItem * regre = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("Regression")));
 
-    treeview->insertTopLevelItem(0, vali);
+
     treeview->insertTopLevelItem(0, regre);
+    treeview->insertTopLevelItem(0, vali);
     treeview->insertTopLevelItem(0, cali);
 
     for (int i = 0; i < calibrationProject.length(); i++) {

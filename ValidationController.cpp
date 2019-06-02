@@ -610,6 +610,13 @@ void ValidationController::startValidationAUCROC(QString namePlot){
     ptrdiff_t pos = distance(MainWindow::threads.begin(), find(MainWindow::threads.begin(), MainWindow::threads.end(), this));
 
     emit this->updateROCPlot(pos,QVector<double>::fromStdVector(FPR),QVector<double>::fromStdVector(TPR),AUC);
+    emit this->updateTableROCPlot(pos,
+                                  QVector<int>::fromStdVector(TP),
+                                  QVector<int>::fromStdVector(FP),
+                                  QVector<int>::fromStdVector(TN),
+                                  QVector<int>::fromStdVector(FN)
+                                  );
+
     int indexPlot = getRightPlotFromName(namePlot);
     emit this->updateMobPlotAllInOne(pos,namePlot,rain,rain_size,activations, activations_size, Y,ymMin.getValue(),ymMin.getTime(), ymMin2.getValue(),ymMin2.getTime(),bests,widgetArray[indexPlot],arrowArray[indexPlot]);
     int nd = MainWindow::numberofdecimals;

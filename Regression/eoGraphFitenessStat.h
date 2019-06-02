@@ -87,14 +87,24 @@ private :
     // default
     template<class T>
     void doit(const eoPop<EOT>& _pop, T)
-    { // find the largest elements
-        //value() = _pop.best_element().fitness();
-        //Sleep(uint(1000));
+    {
         count++;
-        double fitness =_pop.best_element().fitness();
 
+
+        if(steps == 1){ // first step
+            QString stmp = controller->getSavePath()+"/fitnessHistory.csv";
+            HandlerCSV::loadCSVGenationsFromFile(stmp, x, yBest, yAverage);
+            numGenerations = x.size();
+
+        }
+
+//        yBest.push_back( _pop.best_element().fitness() );
+//        x.push_back(numGenerations+1);
+
+
+        double fitness =_pop.best_element().fitness();
         yBest.push_back( _pop.best_element().fitness());
-        x.push_back(count);
+        x.push_back(numGenerations+steps);
 
         Fitness v = std::accumulate(_pop.begin(), _pop.end(), Fitness(0.0), eoGraphFitnessStat::sumFitness);
 
@@ -116,10 +126,6 @@ private :
             parameter[i]= _pop.best_element().getParConst(i);
             functiontype[i]= _pop.best_element().getFunctionTypeConst(i);
         }
-
-
-
-
 
         if(_pop.size() < 200 && steps%5 ==0){
             //            p.waitForFinished();
@@ -152,7 +158,7 @@ private :
         //           std::cout << _pop.best_element().getParConst()[i].getParameters(1) << std::endl;
         //       }
 
-        QString genString= QString("Gen:    %1").arg(steps);
+        QString genString= QString("Gen:    %1").arg(steps+numGenerations);
         //        auto p =QtConcurrent::run(update,update->valueGenRegression,genString);
         //        p.waitForFinished();
         //Q_EMIT update->valueGenRegression(genString);
@@ -181,7 +187,7 @@ private :
         }
         if(steps ==1){
             firstOccurance = 1;
-            bestfitness = 0;
+            bestfitness = -999999999;
         }
         else{
             if(fitness > bestfitness){
@@ -197,7 +203,10 @@ private :
 
         //TODO
         if( steps%5 ==0){
+            emit controller->updateFitnessPlot(pos,x,yBest,x,yAverage, numGenerations, (steps == 5));
+        }
 
+        if( steps%5 ==0 && firstOccurance == steps){
         for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
 
 
@@ -304,7 +313,8 @@ private :
                                           steps,
                                           controller->widgetArray,
                                           controller->arrowArray,
-                                          matrixParameters);
+                                          matrixParameters,
+                                          _pop.best_element().getFunctionTypeConst());
     }
 
     emit controller->updateTextsRegression(pos,genString,
@@ -347,6 +357,7 @@ private :
     std::vector< std::vector<double> > matrixY;
     std::vector< std::vector<double> > matrixParameters;
     int numParameters;
+    int numGenerations;
 
 
 };

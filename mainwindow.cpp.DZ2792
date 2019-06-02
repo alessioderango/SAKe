@@ -462,10 +462,6 @@ void MainWindow::updateFitnessPlotRegression(int indexTab,
     QCustomPlot *m_CustomPlot = getFitnessPlot(indexTab);
     if (m_CustomPlot)
     {
-        if(automaticRescaleFitness)
-        m_CustomPlot->xAxis->setRange( 0, x1.size() );
-        if(automaticRescaleFitness)
-        m_CustomPlot->xAxis->setRange( 0, x.size() );
        // m_CustomPlot->xAxis->setRange( 0, x.size() );
         m_CustomPlot->graph( 0 )->setData( x, y);
         m_CustomPlot->replot();
@@ -548,62 +544,40 @@ void MainWindow::updateTableROCPlot(int indexTab,
                    QVector<int> TN,
                    QVector<int> FN){
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
-    QTableWidget* table = (QTableWidget*)tabs->findChild<QTableWidget*>("tableROC");
+    QTableWidget* table = (QTableWidget*)tabs->findChild<QCustomPlot*>("tableROC");
 
-    table->verticalHeader()->setVisible(false);
     table->setColumnCount(5);
     table->setRowCount(TP.size());
     for (int i = 0; i < TP.size(); ++i) {
 
         QString s= QString("%1").arg(i+1);
-        QTableWidgetItem * nrow= new QTableWidgetItem(s);
-//        QLineEdit* nrow = new QLineEdit();
-//        nrow->setText(s);
-//        nrow->setReadOnly(true);
-        table->setItem(i, 0, nrow);
+        QLineEdit* nrow = new QLineEdit();
+        nrow->setText(s);
+        table->setCellWidget(i, 0, nrow);
 
         s= QString("%1").arg(TP[i]);
-        QTableWidgetItem * ntp= new QTableWidgetItem(s);
-//        QLineEdit* ntp = new QLineEdit();
-//        ntp->setText(s);
-//        ntp->setReadOnly(true);
-        table->setItem(i, 1, ntp);
+        QLineEdit* ntp = new QLineEdit();
+        ntp->setText(s);
+        table->setCellWidget(i, 1, ntp);
 
         s= QString("%1").arg(FP[i]);
-        QTableWidgetItem * nfp= new QTableWidgetItem(s);
-//        QLineEdit* nfp = new QLineEdit();
-//        nfp->setText(s);
-//        nfp->setReadOnly(true);
-        table->setItem(i, 2, nfp);
+        QLineEdit* nfp = new QLineEdit();
+        nfp->setText(s);
+        table->setCellWidget(i, 2, nfp);
 
         s= QString("%1").arg(TN[i]);
-        QTableWidgetItem * ntn= new QTableWidgetItem(s);
-//        QLineEdit* ntn = new QLineEdit();
-//        ntn->setText(s);
-//        ntn->setReadOnly(true);
-        table->setItem(i, 3, ntn);
+        QLineEdit* ntn = new QLineEdit();
+        ntn->setText(s);
+        table->setCellWidget(i, 3, ntn);
 
 
         s= QString("%1").arg(FN[i]);
-        QTableWidgetItem * nfn= new QTableWidgetItem(s);
-//        QLineEdit* nfn = new QLineEdit();
-//        nfn->setText(s);
-//        nfn->setReadOnly(true);
-        table->setItem(i, 4, nfn);
+        QLineEdit* nfn = new QLineEdit();
+        nfn->setText(s);
+        table->setCellWidget(i, 4, nfn);
 
         //   addRow(table, TP[i], FP[i], TN[i], FN[i]);
     }
-
-
-    QStringList tableh;
-    tableh<<"N."<<"TP"<<"FP"<<"TN"<<"FN";
-    table->setHorizontalHeaderLabels(tableh);
-    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    table->verticalHeader()->setVisible(false);
-//    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-//    table->setSelectionBehavior(QAbstractItemView::SelectRows);
-//    table->setSelectionMode(QAbstractItemView::SingleSelection);
-//table->resizeColumnsToContents();
 }
 
 void MainWindow::updateROCPlot(int indexTab, QVector<double> FPR, QVector<double> TPR, double AUCROC)
@@ -717,13 +691,11 @@ void MainWindow::updateRegression(int indexTab,
                        int steps,
                        std::vector<QCPItemText*> widgetArray,
                        std::vector<QCPItemLine*> arrowArray,
-                       std::vector< std::vector<double> > matrixParameters,
-                       std::vector<int> functionType){
+                       std::vector< std::vector<double> > matrixParameters){
 
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(indexTab);
     QCustomPlot* plot = (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
-    QTableWidget * tableResultGamma= (QTableWidget*)tabs->findChild<QTableWidget*>("tableResultGamma");
-     QTableWidget * tableResultLinear= (QTableWidget*)tabs->findChild<QTableWidget*>("tableResultLinear");
+    QTableWidget * tableResult= (QTableWidget*)tabs->findChild<QTableWidget*>("tableResult");
 
    //
     plot->graph(1)->setData(xReal, yReal);
@@ -735,10 +707,9 @@ void MainWindow::updateRegression(int indexTab,
 //    {
       //plot->graph(0)->setVisible(false);
       //plot->graph(1)->rescaleAxes();
-
+      //plot->rescaleAxes(true);
       //plot->graph(0)->setVisible(true);
-      tableResultGamma->setRowCount(numberofFunction);
-      tableResultLinear->setRowCount(numberofFunction);
+      tableResult->setRowCount(numberofFunction);
 
 
 //    }
@@ -753,75 +724,35 @@ void MainWindow::updateRegression(int indexTab,
         QString a = QString("w, a, b, t\n %1, %2, %3, %4").arg(matrixParameters[i][0]).arg(matrixParameters[i][1]).arg(matrixParameters[i][2]).arg(matrixParameters[i][3]);
         widgetArray[i]->setText(a);
         arrowArray[i]->end->setCoords(x[xDistance],yFunction[xDistance]);
+        QLabel* nrow = new QLabel();
+        QString s= QString("%1").arg(i+1);
+        nrow->setText(s);
+        tableResult->setCellWidget(i, 0, nrow);
 
+        s= QString("%1").arg(matrixParameters[i][0]);
+
+        nrow = new QLabel();
+        nrow->setText(s);
+        tableResult->setCellWidget(i, 1, nrow);
+        s= QString("%1").arg(matrixParameters[i][1]);
+        nrow = new QLabel();
+        nrow->setText(s);
+        tableResult->setCellWidget(i, 2, nrow);
+
+        s= QString("%1").arg(matrixParameters[i][2]);
+        nrow = new QLabel();
+        nrow->setText(s);
+        tableResult->setCellWidget(i, 3, nrow);
+
+        s= QString("%1").arg(matrixParameters[i][3]);
+        nrow = new QLabel();
+        nrow->setText(s);
+        tableResult->setCellWidget(i, 4, nrow);
     }
-    int counter = 0;
-    for (int i = 0; i < numberofFunction; ++i) {
-        if(functionType[i] != 0){
-            QTableWidgetItem* nrow = new QTableWidgetItem();
-            QString s= QString("%1").arg(counter+1);
-            nrow->setText(s);
-
-            tableResultGamma->setItem(counter, 0, nrow);
-            s= QString("%1").arg(matrixParameters[i][0]);
-
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultGamma->setItem(counter, 1, nrow);
-
-            s= QString("%1").arg(matrixParameters[i][1]);
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultGamma->setItem(counter, 2, nrow);
-
-            s= QString("%1").arg(matrixParameters[i][2]);
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultGamma->setItem(counter, 3, nrow);
-
-            s= QString("%1").arg(matrixParameters[i][3]);
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultGamma->setItem(counter, 4, nrow);
-            counter++;
-        }
-    }
-    counter = 0;
-    for (int i = 0; i < numberofFunction; ++i) {
-        if(functionType[i] == 0){
-            QTableWidgetItem* nrow = new QTableWidgetItem();
-            QString s= QString("%1").arg(counter+1);
-            nrow->setText(s);
-
-            tableResultLinear->setItem(counter, 0, nrow);
-            s= QString("%1").arg(matrixParameters[i][0]);
-
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultLinear->setItem(counter, 1, nrow);
-
-            s= QString("%1").arg(matrixParameters[i][1]);
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultLinear->setItem(counter, 2, nrow);
-
-            s= QString("%1").arg(matrixParameters[i][2]);
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultLinear->setItem(counter, 3, nrow);
-
-            s= QString("%1").arg(matrixParameters[i][3]);
-            nrow = new QTableWidgetItem();
-            nrow->setText(s);
-            tableResultLinear->setItem(counter, 4, nrow);
-            counter++;
-        }
-    }
-    //tableResultGamma->resizeColumnsToContents();
     plot->replot();
 
-    if(automaticRescaleRegression)
-    plot->rescaleAxes(true);
+
+
 
 
 
@@ -1656,10 +1587,6 @@ void MainWindow::addTabAUCROC(QString name, Rain * rain, int rain_size, Activati
 //    DETPlot->setObjectName("DET");
 //    rightside->addWidget(DETPlot,1.5);
 
-    QTableWidget * tableROC= new QTableWidget();
-    tableROC->setObjectName("tableROC");
-    rightside->addWidget(tableROC,1.5);
-
     auto widget = new QWidget();
     widget->setLayout(rightside);
 
@@ -1938,8 +1865,8 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
     kerFunc->setObjectName("FuncPlot");
     splitter->addWidget(kerFunc);
     splitter->setOrientation(Qt::Vertical);
-    kerFunc->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(kerFunc, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernelRegression(QPoint)));
+//    kerFunc->setContextMenuPolicy(Qt::CustomContextMenu);
+//    connect(kerFunc, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequestKernel(QPoint)));
 
     vertical->addWidget(splitter);
     //vertical->addStretch(vertical->sizeConstraint()*2);
@@ -1964,23 +1891,14 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 
     QVBoxLayout * vertical2 = new QVBoxLayout();
 
-    QTableWidget *tableResultGamma = new QTableWidget();
-    tableResultGamma->setColumnCount(5);
+    QTableWidget *tableResult = new QTableWidget();
+    tableResult->setColumnCount(5);
     QStringList m_TableHeader;
-    m_TableHeader<<"N."<<" weight "<<" alpha "<< " beta " << " shift ";
-    tableResultGamma->setHorizontalHeaderLabels(m_TableHeader);
-    tableResultGamma->verticalHeader()->setVisible(false);
-    tableResultGamma->setRowCount(4);
-    tableResultGamma->setObjectName("tableResultGamma");
-
-    QTableWidget *tableResultLinear = new QTableWidget();
-    tableResultLinear->setColumnCount(5);
-    QStringList m_TableHeader2;
-    m_TableHeader2<<"N."<<" weight "<<" m "<< " q " << " shift ";
-    tableResultLinear->setHorizontalHeaderLabels(m_TableHeader2);
-    tableResultLinear->verticalHeader()->setVisible(false);
-    tableResultLinear->setRowCount(4);
-    tableResultLinear->setObjectName("tableResultLinear");
+    m_TableHeader<<"N."<<" w "<<" a "<< " b " << " t ";
+    tableResult->setHorizontalHeaderLabels(m_TableHeader);
+    tableResult->verticalHeader()->setVisible(false);
+    tableResult->setRowCount(4);
+    tableResult->setObjectName("tableResult");
 
 //    tableResult->resizeColumnsToContents();
 //    tableResult->setLayout(vertical2);
@@ -1992,23 +1910,16 @@ void MainWindow::addTabRegression(QString name,int numberofFunction)
 //           "200 ",
 //           "200");
 //    cout << "tableResult->horizontalHeader()->width() = " << tableResult->horizontalHeader()->width()<< endl;
-//    tableResult->setMinimumWidth(530);
-//    tableResult->setMaximumWidth(530);
+    tableResult->setMinimumWidth(530);
+    tableResult->setMaximumWidth(530);
     QLabel * t1 = new QLabel();
-    t1->setText("Gamma Parameters:");
+    t1->setText("Best Functions Parameters:");
     t1->setMinimumWidth(300);
     t1->setVisible(true);
     grid->addWidget(t1,0,3);
-    grid->addWidget(tableResultGamma,1,3,6,1);
+    grid->addWidget(tableResult,1,3,6,1);
 
-    QLabel * linearPara = new QLabel();
-    linearPara->setText("Linear Parameters:");
-    linearPara->setMinimumWidth(300);
-    linearPara->setVisible(true);
-    grid->addWidget(linearPara,0,4);
-    grid->addWidget(tableResultLinear,1,4,6,1);
-
-   // grid->addWidget(tableResult,1,3,6,1);
+    grid->addWidget(tableResult,1,3,6,1);
     QLabel * t = new QLabel();
     t->setText("");
     t->setMinimumWidth(300);
@@ -2400,7 +2311,10 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
 
     QTableWidget * tableROC= new QTableWidget();
     tableROC->setObjectName("tableROC");
-
+    QStringList m_TableHeader;
+    m_TableHeader<<"N."<<"TP"<<"FP"<<"TN"<< "FN";
+    tableROC->setHorizontalHeaderLabels(m_TableHeader);
+    tableROC->verticalHeader()->setVisible(false);
     gridAUC->addWidget(tableROC,0,1);
     QLabel * AUC = new QLabel();
     AUC->setText("Area under curve (AUC) :");
@@ -2410,10 +2324,7 @@ void MainWindow::addTabValidationNewInterface(QString name, Rain * rain, int rai
     AUCValue->setObjectName("AUCValue");
     gridAUC->addWidget(AUCValue,1,1);
 
-//    gridAUC->setRowStretch(0,1);
-    gridAUC->setColumnStretch(0,1);
-    gridAUC->setColumnStretch(1,1);
-    //gridAUC->setRowStretch(1,2);
+    gridAUC->setRowStretch(0,1.5);
 //rightside->setStretchFactor(0,2);
 
     rightside->addWidget(wrap(gridAUC));
@@ -2616,19 +2527,6 @@ void MainWindow::automaticResizeFitness()
 
 }
 
-void MainWindow::automaticResizeRegression()
-{
-//    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
-//    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("mobFunc");
-//    currentPlot->rescaleAxes();
-//    currentPlot->replot();
-    if(automaticRescaleRegression)
-        automaticRescaleRegression = false;
-    else
-        automaticRescaleRegression = true;
-
-}
-
 void MainWindow::savePngMobilityFunction()
 {
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
@@ -2786,8 +2684,7 @@ void MainWindow::contextMenuRequestKernelRegression(QPoint pos)
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
     QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
 
-    menu->addAction("Rescale Axes", this, SLOT(resizeKernelRegression()));
-    menu->addAction("Automatic Rescale Axes", this, SLOT(automaticResizeRegression()));
+    menu->addAction("Rescale Axes", this, SLOT(resizeKernel()));
 //    menu->addAction("Save Graph PDF", this, SLOT(savePdfKernel()));
 //    menu->addAction("Save Graph PNG", this, SLOT(savePngKernel()));
 

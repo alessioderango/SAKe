@@ -207,6 +207,7 @@ void Validation::accept()
     qRegisterMetaType<std::vector<QCPItemText*>>("std::vector<QCPItemText*>");
     qRegisterMetaType<std::vector<double>>("std::vector<double>");
     qRegisterMetaType<QVector<double>>("QVector<double>");
+    qRegisterMetaType<QVector<int>>("QVector<int>");
     connect(validationController, SIGNAL(updateMobPlot(int,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
                                                        std::vector<QCPItemLine*> )), mainWindow, SLOT(updateMobPlot(int,Rain * , int ,Activation *,int, std::vector<double>,double,tm,double ,tm,std::vector<Ym> , std::vector<QCPItemText*> ,
                                                                                                                     std::vector<QCPItemLine*> )));
@@ -274,6 +275,16 @@ void Validation::accept()
                                                                                        QVector<double> ,
                                                                                        QVector<double> ,
                                                                                        double )));
+    connect(validationController, SIGNAL(updateTableROCPlot(int ,
+                                                            QVector<int> ,
+                                                            QVector<int> ,
+                                                            QVector<int> ,
+                                                            QVector<int> )), mainWindow, SLOT( updateTableROCPlot(int ,
+                                                                                                  QVector<int> ,
+                                                                                                  QVector<int> ,
+                                                                                                  QVector<int> ,
+                                                                                                  QVector<int> )));
+
     validationController->setProjectName(ui->lineEditProjName->text());
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(validationController);

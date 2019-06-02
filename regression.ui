@@ -258,12 +258,12 @@
               </property>
               <item>
                <property name="text">
-                <string>generational</string>
+                <string>elitist/steady state</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>elitist/steady state</string>
+                <string>generational</string>
                </property>
               </item>
              </widget>
@@ -537,7 +537,7 @@
                </font>
               </property>
               <property name="text">
-               <string>0.7</string>
+               <string>0.75</string>
               </property>
              </widget>
             </item>
@@ -577,7 +577,7 @@
                </font>
               </property>
               <property name="text">
-               <string>0.3</string>
+               <string>0.25</string>
               </property>
              </widget>
             </item>
@@ -1042,6 +1042,9 @@ spacing:100px;
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="text">
+              <string>0</string>
+             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -1093,6 +1096,9 @@ spacing:100px;
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="text">
+              <string>1</string>
+             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -1122,6 +1128,9 @@ spacing:100px;
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="text">
+              <string>1</string>
              </property>
             </widget>
            </item>
@@ -1161,7 +1170,23 @@ spacing:100px;
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_7">
-     <item row="0" column="0">
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
       <widget class="QPushButton" name="pushButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1171,19 +1196,6 @@ spacing:100px;
        </property>
        <property name="text">
         <string>Start</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Cancel</string>
        </property>
       </widget>
      </item>

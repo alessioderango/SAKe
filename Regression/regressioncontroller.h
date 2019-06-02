@@ -153,6 +153,9 @@ public:
     vector<QCPItemText*> widgetArray;
     vector<QCPItemLine*> arrowArray;
 
+    QString getSavePath() const;
+    void setSavePath(const QString &value);
+
 signals:
     void finished(int index);
     void updateTextsRegression(int indexTab,
@@ -172,8 +175,16 @@ signals:
                           int steps,
                           std::vector<QCPItemText*> widgetArray,
                           std::vector<QCPItemLine*> arrowArray,
-                          std::vector< std::vector<double> > matrixParameters);
+                          std::vector< std::vector<double> > matrixParameters,
+                          std::vector<int>);
 
+    void updateFitnessPlot(int indexTab,
+                           QVector<double> x,
+                           QVector<double> y,
+                           QVector<double> x1,
+                           QVector<double> y1,
+                           int numGenerations,
+                           bool b);
 public slots:
     void startThread();
     void startAlgorithm();

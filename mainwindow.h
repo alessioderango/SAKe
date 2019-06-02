@@ -26,6 +26,8 @@ class MainWindow : public QMainWindow
 
 public:
     static const int numberofdecimals = 8;
+    bool automaticRescaleFitness = false;
+    bool automaticRescaleRegression = true;
 
     QTabWidget* getTabbyPos(int pos);
     explicit MainWindow(QWidget *parent = 0);
@@ -107,6 +109,12 @@ private slots:
                            QVector<double> x1,
                            QVector<double> y1, int numberofGeneration,
                            bool b);
+    void updateFitnessPlotRegression(int indexTab,
+                           QVector<double> x,
+                           QVector<double> y,
+                           QVector<double> x1,
+                           QVector<double> y1, int numberofGeneration,
+                           bool b);
     void updateKernelPlot(int indexTab,
                            QVector<double> Fi,
                            int tb);
@@ -115,6 +123,11 @@ private slots:
                             QVector<double> FPR,
                             QVector<double> TPR,
                             double AUCROC);
+    void updateTableROCPlot(int indexTab,
+                       QVector<int> TP,
+                       QVector<int> FP,
+                       QVector<int> TN,
+                       QVector<int> FN);
     void updateTextsBestAbsolute(int indexTab,
                                  QString tbBestAbsolute,
                                  QString safetyMarginBestAbsolute,
@@ -156,7 +169,8 @@ private slots:
                           int steps,
                           std::vector<QCPItemText*> widgetArray,
                           std::vector<QCPItemLine*> arrowArray,
-                          std::vector< std::vector<double> > matrixParameters);
+                          std::vector< std::vector<double> > matrixParameters,
+                          std::vector<int> functionType);
 
 
     void updateTextsValidation(int indexTab,
@@ -196,6 +210,8 @@ private slots:
     void savePdfKernel();
 
     void resizeFitness();
+    void automaticResizeFitness();
+    void automaticResizeRegression();
     void savePngFitness();
     void savePdfFitness();
 

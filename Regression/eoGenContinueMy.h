@@ -7,6 +7,8 @@
 #include <utils/eoLogger.h>
 #include <fstream>
 #include <algorithm>    // std::sort
+#include "regressioncontroller.h"
+#include "HandlerCSV.h"
 using namespace std;
 
 /**
@@ -22,6 +24,7 @@ public:
     using eoCountContinue<EOT>::thisGeneration;
     using eoCountContinue<EOT>::thisGenerationPlaceholder;
 
+    typedef typename EOT::Fitness Fitness;
     /// Ctor for setting a
     eoGenContinueMy( QString _savePath, int _frequencySavePop)
         : eoCountContinue<EOT>( ),
@@ -30,16 +33,33 @@ public:
 
     {
         //_savePath.remove(0,8);
+        saveFitnessGenerations=_savePath+"/fitnessHistory.csv";
         savePath=_savePath+"/kernel.csv";
         savePopulation=_savePath+"/population.csv";
         frequencySavePop = _frequencySavePop;
         step=1;
+        numGenerations=0;
+
     }
 
-
+    static Fitness sumFitness(double _sum, const EOT& _eot){
+        _sum += _eot.fitness();
+        return _sum;
+    }
     /** Returns false when a certain number of generations is
          * reached */
     virtual bool operator() ( const eoPop<EOT>& _vEO ) {
+
+
+        if(step == 1){ // first step
+            QVector<double> x;
+            QVector<double> yBest;
+            QVector<double> yAverage;
+            HandlerCSV::loadCSVGenationsFromFile(saveFitnessGenerations, x, yBest, yAverage);
+            numGenerations = x.size();
+
+        }
+
 
         //SALVATAGGIO ULTIMA GENERAZIONE
         ofstream myfile;
@@ -54,7 +74,7 @@ public:
         myfile << "Equation : \n";
         myfile << "Nash–Sutcliffe efficiency : " << _vEO.best_element().fitness() << " \n";
 
-        myfile << "Type ; Weight ; alfa ; beta; translation;  \n";
+        myfile << "Type ; weight ; alfa ; beta; shift;  \n";
         for (int t = 0; t < _vEO.best_element().getWConst().size(); t++) {
             if(_vEO.best_element().getFunctionTypeConst(t) == 0 )
                 continue;
@@ -68,7 +88,7 @@ public:
 
         }
 
-        myfile << "Type ; Weight ; alfa ; beta; translation;  \n";
+        myfile << "Type ; weight ; m ; q ; shift;  \n";
         for (int t = 0; t < _vEO.best_element().getWConst().size(); t++) {
             if(_vEO.best_element().getFunctionTypeConst(t) == 0 )
                 myfile <<  "linear" << ";";
@@ -263,6 +283,16 @@ public:
 
         step++;
 
+        ofstream fitnessGenerator;
+        fitnessGenerator.open (saveFitnessGenerations.toStdString(),ios::app);
+
+        Fitness v = std::accumulate(_vEO.begin(), _vEO.end(), Fitness(0.0), eoGenContinueMy::sumFitness);
+
+        fitnessGenerator << step+numGenerations << ";" << _vEO.best_element().fitness() << ";" << v/_vEO.size() << endl;
+
+        fitnessGenerator.close();
+
+
 
         thisGeneration++;
         if(stop){
@@ -299,6 +329,8 @@ private:
     QObject *gen;
     int frequencySavePop;
     int step;
+     QString saveFitnessGenerations;
+     int numGenerations;
 };
 
 

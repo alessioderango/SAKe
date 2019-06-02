@@ -663,7 +663,17 @@ void Dialog::on_pushButtonStart_clicked()
                                                                                        QVector<double> ,
                                                                                        double )));
 
+    qRegisterMetaType<QVector<int>>("QVector<int>");
 
+    connect(controller, SIGNAL(updateTableROCPlot(int ,
+                                                            QVector<int> ,
+                                                            QVector<int> ,
+                                                            QVector<int> ,
+                                                            QVector<int> )), mainWindow, SLOT( updateTableROCPlot(int ,
+                                                                                                  QVector<int> ,
+                                                                                                  QVector<int> ,
+                                                                                                  QVector<int> ,
+                                                                                                  QVector<int> )));
 
     mainWindow->mutex.lock();
     MainWindow::pushBackThread(controller);

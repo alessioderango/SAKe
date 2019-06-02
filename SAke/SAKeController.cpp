@@ -368,6 +368,16 @@ void SAKeController::startAlgorithm()
 
 }
 
+int SAKeController::getMaxGen() const
+{
+    return maxGen;
+}
+
+void SAKeController::setMaxGen(int value)
+{
+    maxGen = value;
+}
+
 QString SAKeController::getSavePath() const
 {
     return savePath;

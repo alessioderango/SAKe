@@ -73,7 +73,6 @@ private :
     void doit(const eoPop<EOT>& _pop, T)
     { // find the largest elements
         const int nd = MainWindow::numberofdecimals;
-        count++;
         double fitness =_pop.best_element().fitness();
 
         if(steps == 1){ // first step
@@ -84,7 +83,7 @@ private :
         }
 
         yBest.push_back( _pop.best_element().fitness() );
-        x.push_back(numGenerations+count);
+        x.push_back(numGenerations+steps);
 
         Fitness v = std::accumulate(_pop.begin(), _pop.end(), Fitness(0.0), eoGraphFitnessStat::sumFitness);
 
@@ -162,8 +161,16 @@ private :
         }
 
         if(best_element.getFPR().size() != 0)
+        {
             emit controller->updateROCPlot(pos, QVector<double>::fromStdVector(best_element.getFPR()),QVector<double>::fromStdVector(best_element.getTPR()),best_element.getAUC());
+            emit controller->updateTableROCPlot(pos,
+                                          QVector<int>::fromStdVector(best_element.getTP()),
+                                          QVector<int>::fromStdVector(best_element.getFP()),
+                                          QVector<int>::fromStdVector(best_element.getTN()),
+                                          QVector<int>::fromStdVector(best_element.getFN())
+                                          );
 
+        }
         QString genString= QString("%1").arg(steps+numGenerations);
         steps++;
 
