@@ -144,7 +144,8 @@ public:
 
                 //controllo > 0
 
-            }else
+            }
+            else
                 if(_genotype.getFunctionType(i) == 1){
                     //Alfa
                     double tmp1 =_genotype.getPar(i).getParameters(0);
@@ -184,7 +185,8 @@ public:
 
                     _genotype.setW(i,tmpGammaWeight);
 
-                }else
+                }
+                   else
                     if(_genotype.getFunctionType(i) == 2){
                         double tmp1 =_genotype.getPar(i).getParameters(0);
                         double tmp2 = _genotype.getPar(i).getParameters(1);
@@ -279,7 +281,7 @@ public:
 //                        }
                         if(translationValue+tmpTranslation > (_genotype.getYCombinataConst().size())){
                             _genotype.setParameters(i,2,_genotype.getYCombinataConst().size()/numberofGammaFunction);
-                            //tmpTranslation = _genotype.getYCombinataConst().size()/2;
+                            tmpTranslation = _genotype.getYCombinataConst().size()/2;
                         }else
                              _genotype.setParameters(i,2,_genotype.getPar(i).getParameters(2)+tmpTranslation);
 //                        std::cout << (_genotype.getTranslation(i)+tmpTranslation) << std::endl;

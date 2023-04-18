@@ -126,7 +126,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Load starting Kernel</string>
+               <string>Starting Kernel</string>
               </property>
              </widget>
             </item>
@@ -258,12 +258,12 @@
               </property>
               <item>
                <property name="text">
-                <string>elitist/steady state</string>
+                <string>generational</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>generational</string>
+                <string>elitist/steady state</string>
                </property>
               </item>
              </widget>

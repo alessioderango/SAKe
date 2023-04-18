@@ -26,7 +26,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->lineEditTbMax->setValidator(new QIntValidator(1, 10000000000, this));
     ui->lineEditNumberElitists->setValidator(new QIntValidator(1, 10000000000, this));
     ui->lineEditCrossoverP->setValidator(new QDoubleValidator(0, 1,2, this));
-    ui->lineEditMutationP->setValidator(validator);
+    ui->lineEditMutationP->setValidator(new QDoubleValidator(0, 1,2, this));
     ui->lineEditNumberOfLines->setValidator(new QIntValidator(0, 10000000000, this));
     ui->lineEditNumProc->setValidator(new QIntValidator(0, 10000000000, this));
     ui->lineEditSeed->setValidator(new QIntValidator(0, 10000000000, this));
@@ -128,6 +128,10 @@ void Dialog::setParameters(QVariantList list)
         else
             if(list[16] == "Increasing triangular")
                 ui->comboBoxInitialPattern->setCurrentIndex(1);
+            else
+                if(list[16] == "Random")
+                    ui->comboBoxInitialPattern->setCurrentIndex(3);
+
 
 
     ui->lineEditRain->setText(list[17].toString());
@@ -307,29 +311,29 @@ void Dialog::on_pushButtonStart_clicked()
         return;
     }
 
-    if(!ui->lineEditProjName->isReadOnly()){
-        QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+ui->lineEditProjName->text();
-        QDir dir3(tmp2);
-        if(QDir(tmp2).exists()){
-            QMessageBox::StandardButton reply;
-            reply = QMessageBox::question(this, "Warning", "A folder with the same name exists. Do you want to overwrite it?",
-                                          QMessageBox::Yes|QMessageBox::No);
-            if (reply == QMessageBox::Yes) {
+//    if(!ui->lineEditProjName->isReadOnly()){
+//        QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+ui->lineEditProjName->text();
+//        QDir dir3(tmp2);
+//        if(QDir(tmp2).exists()){
+//            QMessageBox::StandardButton reply;
+//            reply = QMessageBox::question(this, "Warning", "A folder with the same name exists. Do you want to overwrite it?",
+//                                          QMessageBox::Yes|QMessageBox::No);
+//            if (reply == QMessageBox::Yes) {
 
-            }else
-            {
-                if(reply == QMessageBox::No)
-                    return;
-            }
-        }else
-        {
-            if (!dir3.exists()){
-                dir3.mkdir(".");
-            }
-        }
+//            }else
+//            {
+//                if(reply == QMessageBox::No)
+//                    return;
+//            }
+//        }else
+//        {
+//            if (!dir3.exists()){
+//                dir3.mkdir(".");
+//            }
+//        }
 
 
-    }
+//    }
 
 
     if(!SAKeController::fileExists(rainPath)){
@@ -479,6 +483,31 @@ void Dialog::on_pushButtonStart_clicked()
     if(x !=0){
         x=1;
     }
+
+    if(!ui->lineEditProjName->isReadOnly()){
+        QString tmp2 = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)+"/workspace/calibration/"+ui->lineEditProjName->text();
+        QDir dir3(tmp2);
+        if(QDir(tmp2).exists()){
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Warning", "A folder with the same name exists. Do you want to overwrite it?",
+                                          QMessageBox::Yes|QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
+
+            }else
+            {
+                if(reply == QMessageBox::No)
+                    return;
+            }
+        }else
+        {
+            if (!dir3.exists()){
+                dir3.mkdir(".");
+            }
+        }
+
+
+    }
+
     //check input
     SAKeController * controller = new SAKeController(mainWindow,
                                                      ui->comboBoxSelection->currentText(),

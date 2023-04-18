@@ -167,13 +167,13 @@ public:
 
 
         for (int t = 1; t <= tb; t++) {
-            int tj = rand() % tb;
+            int tj = qrand() % tb;
 
             double PdHMin = 1/PdH;
             double percPdH=fRandMutation(PdHMin,PdH);
             double addPdH=(percPdH*hMax)/100;
             double dHp;
-            if(rand()%2==0){
+            if(qrand()%2==0){
                 dHp = addPdH;
             }else{
                 dHp = - addPdH;
@@ -182,9 +182,9 @@ public:
             double result=  ((double)t / tb)*100;
 
 //            if (result <= Pme1) {
-//                tj = (rand() % (tb-tb0)) + tb0;
+//                tj = (qrand() % (tb-tb0)) + tb0;
 
-//                dHp = rand() % ((int) addPdH+1);
+//                dHp = qrand() % ((int) addPdH+1);
 //            }
 
             if (result <= Pme) {

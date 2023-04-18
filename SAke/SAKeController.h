@@ -177,6 +177,7 @@ protected:
 
 public slots:
     void startThread();
+    void restartThread();
     void stopThread();
     bool getStop();
 private:

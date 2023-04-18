@@ -47,8 +47,14 @@ public:
         // END   Code of Ctor of an eoSAKeInit object
     }
 
+    double fRandInit(double fMin, double fMax)
+    {
+        double f = (double)rand() / (double)RAND_MAX;
+        return fMin + f * (fMax - fMin);
+    }
+
     std::vector<double> GetFunzioneFiltro(int tb,string Inputpattern) {
-       // double* fi = (double*) malloc(sizeof(double)*tb);
+        // double* fi = (double*) malloc(sizeof(double)*tb);
         std::vector<double> fi;
         fi.resize(tb);
         int i;
@@ -68,7 +74,26 @@ public:
                     double hMax = (double)(2 /(double)tb);
                     fi[i] = ((double)(i / (double)(tb * hMax)));
                 }
+            }else if (Inputpattern.compare( "Random") == 0) {
+                //std::cout << "Random " << std::endl;
+                for (i = 0; i < tb; i++) {
+                    double hMax = fRandInit(0.0, 1.0);
+                    fi[i] = hMax;
+                }
+                //********* normalizzo **********
+                double s = 0;
+                for (int i = 0; i < tb; i++) {
+                    s += fi[i];
+                }
+                if (s != 1) {
+                    for (int t = 0; t < tb; t++) {
+                        fi[t] = (1 / s) *fi[t];
+                    }
+                }
+                //************
             }
+
+
         return fi;
     }
 
@@ -98,9 +123,9 @@ public:
 
         }else
         {
-//            cout << tbMax << " "<< tbMin << endl;
+            // cout << tbMax << " "<< tbMin << endl;
             int tb =( rand()%(tbMax-tbMin))+tbMin;
-//             cout << tb  << endl;
+            //cout << tb  << endl;
             _genotype.setSize(tb);
             //double* fi = GetFunzioneFiltro(tb, pattern);
             std::vector<double> fi = GetFunzioneFiltro(tb, pattern);

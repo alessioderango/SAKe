@@ -901,6 +901,7 @@ void Regression::on_pushButton_clicked()
 {
     QString e;
 
+    srand(ui->lineEdit_seed->text().toInt());
 
     if(ui->lineEditProjName->text().isEmpty())
     {
@@ -1315,8 +1316,6 @@ void Regression::on_pushButton_clicked()
                                                  loadedPopulation,
                                                  dimension
                                                  );
-
-
     }
     RegressionController * controller = new RegressionController(w,
                                                                  ui->lineEditProjName->text(),
@@ -1347,7 +1346,8 @@ void Regression::on_pushButton_clicked()
                                                                  ui->lineEdit_seed->text().toInt(),
                                                                  loadedPopulation,
                                                                  ui->checkBox_lastgeneration->isChecked(),
-                                                                 ui->lineEdit_frequencyPop->text().toInt()
+                                                                 ui->lineEdit_frequencyPop->text().toInt(),
+                                                                 dimension
                                                                  );
 
     //    controller->setX(x1);

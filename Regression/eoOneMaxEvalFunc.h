@@ -125,14 +125,25 @@ public:
                      std::vector<double> Yswifted;
                      int s = (int)_eo.getPar(i).getParameters(2);
                      int xsize = x.size();
-//                     if(s > xsize)
+
+//                     for (int k = 0; k < x.size(); ++k) {
+//                         Yswifted.push_back(0);
+//                     }
+//                     
 //                     {
 //                         cout <<" x = "  <<x.size() << " --  s =" << s << endl;
+////                     }
+//                     cout <<" BEFORE  SWIFT "  << endl;
+//                     for (int k = 0; k < xsize; ++k) {
+//                          cout << " matrixY["<< i << "]["<< k << "] = " << matrixY[i][k] <<endl;
 //                     }
 
 
                      if(s >= 0)
                      {
+                         if(s > xsize)
+                             s=xsize;
+
                          for (int k = 0; k < s; ++k) {
                              Yswifted.push_back(0);
                          }
@@ -147,6 +158,12 @@ public:
                      else
                      {
                          s=abs(s);
+                         if(s < -xsize)
+                         {
+                             s=0;
+                         }
+                         if(s > xsize)
+                             s=xsize;
 //                         cout <<" xsize = "  <<xsize << " --  s =" << s << endl;
 //                         cout << " x.size()-s = " << xsize-s << endl;
                          for (int k = s; k < xsize; ++k) {
@@ -159,6 +176,11 @@ public:
                          }
 
                      }
+
+//                     cout <<" AFTER  SWIFT "  << endl;
+//                     for (int k = 0; k < xsize; ++k) {
+//                          cout << "  Yswifted[" << k << "] = " <<  Yswifted[k] <<endl;
+//                     }
 
                      for (int k = 0; k < x.size(); ++k) {
                         matrixY[i][k] =  Yswifted[k];

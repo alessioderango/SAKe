@@ -34,7 +34,7 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
                                            QString  sselection,
                                            int _seed,
                                            std::vector<Genotype> &_g,
-                                           bool _lastgeneration, int _frequencySavePop){
+                                           bool _lastgeneration, int _frequencySavePop, int dimension){
 
     typeReplacement =itypeReplacement;
     selection        = sselection;
@@ -55,6 +55,7 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
 
     this->x = _xkernel;
     this->y = _ykernel;
+    this->dimension = dimension;
 
     this->weights = weights;
     this->weightsSize =weightsSize;
@@ -117,6 +118,7 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
                         selection = tmp;//QString("Sequential(%1)").arg(para1);
                         //std::cout << typeAlgorithm << " "<< selection.toStdString()<< std::endl;
                     }
+    std::cout << " selection "<< selection.toStdString()<< std::endl;
 
      clickCloseTab=false;
      mainwindows = main;
@@ -132,7 +134,6 @@ RegressionController::RegressionController(MainWindow *main, QString projectName
          myfile.open (stmp.toStdString(),ios::out);
          myfile.close();
      }
-
 }
 
 
@@ -150,12 +151,19 @@ void RegressionController::startAlgorithm(){
     //                              int size_kernelx
     //                              );
 
+
     time_t start_time, end_time;
     this->start=true;
     int argc=1;
     char **input= (char**)malloc(sizeof(char*) * 1);
     input[0]= (char*)malloc(sizeof(char)*1);
     input[0]=(char*) 'a';
+
+    if(lastgeneration){
+        cout << "carico popolazione" << endl;
+        HandlerCSV::loadCSVPopFromFileRegression(savePath+"/population.csv", g, dimension);
+    }
+
     try
     {
 #ifdef _OPENMP
@@ -411,6 +419,11 @@ void RegressionController::setProgressBar(QObject *value)
 
 
 void RegressionController::startThread(){
+    QThread::start();
+}
+
+void RegressionController::restartThread(){
+    lastgeneration=true;
     QThread::start();
 }
 

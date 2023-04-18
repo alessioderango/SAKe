@@ -76,6 +76,7 @@
    <addaction name="actionNewValidationProject"/>
    <addaction name="actionNew_Regression_Project"/>
    <addaction name="separator"/>
+   <addaction name="actionPause"/>
    <addaction name="stopButton"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -116,7 +117,7 @@
   <action name="stopButton">
    <property name="icon">
     <iconset resource="myresource.qrc">
-     <normaloff>:/img/red-stop-button-icon-17950.png</normaloff>:/img/red-stop-button-icon-17950.png</iconset>
+     <normaloff>:/img/images.jpg</normaloff>:/img/images.jpg</iconset>
    </property>
    <property name="text">
     <string>Stop Button</string>
@@ -138,6 +139,18 @@
    </property>
    <property name="text">
     <string>New Regression Project</string>
+   </property>
+  </action>
+  <action name="actionPause">
+   <property name="icon">
+    <iconset resource="myresource.qrc">
+     <normaloff>:/img/play.png</normaloff>:/img/play.png</iconset>
+   </property>
+   <property name="text">
+    <string>pause</string>
+   </property>
+   <property name="toolTip">
+    <string>actionPause</string>
    </property>
   </action>
  </widget>

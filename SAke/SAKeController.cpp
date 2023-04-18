@@ -428,6 +428,11 @@ void SAKeController::startThread(){
     QThread::start();
 }
 
+void SAKeController::restartThread(){
+    lastGeneration=true;
+    QThread::start();
+}
+
 
 void SAKeController::stopThread(){
 
@@ -443,6 +448,5 @@ bool SAKeController::getStop()
     if(stop){
         return stop->getStop();
     }
-
 }
 

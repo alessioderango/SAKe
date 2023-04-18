@@ -30,7 +30,7 @@ public:
 	 * Ctor - no requirement
 	 */
 // START eventually add or modify the anyVariable argument
-	eoSAKeQuadCrossover()
+    eoSAKeQuadCrossover()
 	//  eoSAKeQuadCrossover( varType  _anyVariable) : anyVariable(_anyVariable)
 	// END eventually add or modify the anyVariable argument
     {
@@ -59,34 +59,34 @@ public:
 	}
 
 	bool operator()(GenotypeT& _genotype1, GenotypeT & _genotype2) {
-		bool oneAtLeastIsModified(true);
+        bool oneAtLeastIsModified(true);
         bool debug = false;
-		int tb1 = _genotype1.getSize();
-		int tb2 = _genotype2.getSize();
-		if (debug) {
-			cout << "************************ BEFORE CROSSOVER ***********************" << endl;
-			cout << "GENOTYPE 1:" << endl;
-			cout << "size : " << tb1 << endl;
-			for (int i = 0; i < tb1; ++i) {
-				cout << _genotype1.getFi()[i] << " ";
-			}
-			cout << endl;
-			cout << "GENOTYPE 2:" << endl;
-			cout << "size : " << tb2 << endl;
-			for (int i = 0; i < tb2; ++i) {
-				cout << _genotype2.getFi()[i] << " ";
-			}
-			cout << endl;
-		}
+        int tb1 = _genotype1.getSize();
+        int tb2 = _genotype2.getSize();
+        if (debug) {
+            cout << "************************ BEFORE CROSSOVER ***********************" << endl;
+            cout << "GENOTYPE 1:" << endl;
+            cout << "size : " << tb1 << endl;
+            for (int i = 0; i < tb1; ++i) {
+                cout << _genotype1.getFi()[i] << " ";
+            }
+            cout << endl;
+            cout << "GENOTYPE 2:" << endl;
+            cout << "size : " << tb2 << endl;
+            for (int i = 0; i < tb2; ++i) {
+                cout << _genotype2.getFi()[i] << " ";
+            }
+            cout << endl;
+        }
 
-		int min = tb1;
-		if (tb2 < min)
-			min = tb2;
+        int min = tb1;
+        if (tb2 < min)
+            min = tb2;
 
-		int tbCut = rand() % min;
+        int tbCut = rand() % min;
 
 
-		for (int i = 0; i < tbCut; i++) {
+        for (int i = 0; i < tbCut; i++) {
 //            cout << "min : " << min << endl;
 //			cout << "tbCut : " << tbCut << endl;
 //			cout << "i : " << i << endl;
@@ -97,11 +97,11 @@ public:
 //			cout << "_genotype2.getFiIndex(i) : " << _genotype2.getFiIndex(i) << endl;
 //            cout << "size : " << tb2 << endl;
 
-			double fi1 = _genotype1.getFiIndex(i);
-			double fi2 = _genotype2.getFiIndex(i);
-			_genotype1.setFiIndex(i,fi2);
-			_genotype2.setFiIndex(i,fi1);
-		}
+            double fi1 = _genotype1.getFiIndex(i);
+            double fi2 = _genotype2.getFiIndex(i);
+            _genotype1.setFiIndex(i,fi2);
+            _genotype2.setFiIndex(i,fi1);
+        }
         bool allzero=true;
         for (int i = 0; i < _genotype1.getSize(); ++i) {
             if(_genotype1.getFi()[i] != 0){
@@ -109,7 +109,7 @@ public:
             }
         }
         if(!allzero)
-		normalizaElement(_genotype1);
+        normalizaElement(_genotype1);
         allzero=true;
         for (int i = 0; i < _genotype2.getSize(); ++i) {
             if(_genotype2.getFi()[i] != 0){
@@ -117,36 +117,36 @@ public:
             }
         }
         if(!allzero)
-		normalizaElement(_genotype2);
+        normalizaElement(_genotype2);
 
-		// START code for crossover of _genotype1 and _genotype2 objects
+        // START code for crossover of _genotype1 and _genotype2 objects
 
-		/** Requirement
-		 * if (at least one genotype has been modified) // no way to distinguish
-		 *     oneAtLeastIsModified = true;
-		 * else
-		 *     oneAtLeastIsModified = false;
-		 */
+        /** Requirement
+         * if (at least one genotype has been modified) // no way to distinguish
+         *     oneAtLeastIsModified = true;
+         * else
+         *     oneAtLeastIsModified = false;
+         */
 
-		if (debug) {
-			cout << "******************** AFTER CROSSOVER ***********************" << endl;
-			cout << "GENOTYPE 1:" << endl;
-			cout << "size : " << tb1 << endl;
-			for (int i = 0; i < tb1; ++i) {
-				cout << _genotype1.getFi()[i] << " ";
-			}
-			cout << endl;
-			cout << "GENOTYPE 2:" << endl;
-			cout << "size : " << tb2 << endl;
-			for (int i = 0; i < tb2; ++i) {
-				cout << _genotype2.getFi()[i] << " ";
-			}
-			cout << endl;
-		}
+        if (debug) {
+            cout << "******************** AFTER CROSSOVER ***********************" << endl;
+            cout << "GENOTYPE 1:" << endl;
+            cout << "size : " << tb1 << endl;
+            for (int i = 0; i < tb1; ++i) {
+                cout << _genotype1.getFi()[i] << " ";
+            }
+            cout << endl;
+            cout << "GENOTYPE 2:" << endl;
+            cout << "size : " << tb2 << endl;
+            for (int i = 0; i < tb2; ++i) {
+                cout << _genotype2.getFi()[i] << " ";
+            }
+            cout << endl;
+        }
 
-		return oneAtLeastIsModified;
+        return oneAtLeastIsModified;
 		// END code for crossover of _genotype1 and _genotype2 objects
-	}
+    }
 
 };
 

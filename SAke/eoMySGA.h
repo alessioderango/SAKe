@@ -77,15 +77,13 @@ public :
             eoPop<EOT> offspring;
             eoPop<EOT> matingPool;
             offspring.resize(_pop.size());
-            //matingPool.resize(_pop.size());
-
-            //select(_pop, matingPool);
 
             _pop.sort();
             int N =_pop.size();
 
-            for (unsigned int i=0; i< numberElitist; i++){
-
+            std::cout << numberElitist << std::endl;
+            for (unsigned int i=0; i< numberElitist; i++)
+            {
                 typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + i;
                 EOT a;
                 std::vector<double> r;
@@ -95,30 +93,9 @@ public :
                 for (int tmp = 0; tmp < _pop[i].getSize(); tmp++) {
                     a.setFiIndex(tmp, _pop[i].getFi()[tmp]);
                     //std::cout << "a.getFi()[tmp] " << a.getFi()[tmp] << "  =  " << "_pop[i].getFi()[tmp]  = " << _pop[i].getFi()[tmp]<<std::endl;
-                    //a.setFiIndex(tmp, _pop[i]. getFiIndex(tmp));
                 }
                 (*itPoorGuy) = a;
-//                offspring[i] =_pop[i].clone();
-//                offspring[i].invalidate();
-                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
             }
-
-//            eoPop<EOT> popNMinusE;
-//            popNMinusE.resize(N-numberElitist);
-//            for (unsigned int i=0; i< N - numberElitist; i++){
-//                typename eoPop<EOT>::iterator itPoorGuy = popNMinusE.begin() + i;
-//                EOT a;
-//                std::vector<double> r;
-//                r.resize(_pop[i].getSize());
-//                a.setFi(r);
-//                a.setSize(_pop[i].getSize());
-//                for (int tmp = 0; tmp < _pop[i].getSize(); tmp++) {
-//                    a.setFiIndex(tmp, _pop[i].getFi()[tmp]);
-//                    //std::cout << "a.getFi()[tmp] " << a.getFi()[tmp] << "  =  " << "_pop[i].getFi()[tmp]  = " << _pop[i].getFi()[tmp]<<std::endl;
-//                    //a.setFiIndex(tmp, _pop[i]. getFiIndex(tmp));
-//                }
-//                (*itPoorGuy) = a;
-//            }
 
             _pop.resize(N-numberElitist);
             select(_pop,matingPool);
@@ -147,58 +124,27 @@ public :
                 }
 
             }
-            //qsort (popTmp, _pop.size(), sizeof(EOT),compareEOT);
-
-//            std::cout << "STAMPO POPOLAZIONE!!!!!!! " << " " << std::endl;
-//            for (unsigned int i=0; i< _pop.size(); i++){
-//                std::cout << i << " " << _pop[i].fitness() << std::endl;
-//            }
-            //            std::cout << "STAMPO OFFSPRING!!!!!!! " << " " << std::endl;
-            //            for (unsigned int i=0; i< offspring.size(); i++){
-            //                std::cout << i << " " << offspring[i].fitness() << std::endl;
-            //            }
-            //matingPool.sort();
 
             int posOffspring = numberElitist;
             for (unsigned int i=0; i< (offspring.size()-numberElitist); i++){
 
-//                std::cout << "ELITISTI!!!!!!! " << " " << std::endl;
-//                typename eoPop<EOT>::iterator replace = _pop.begin() + i;
                 typename eoPop<EOT>::iterator itPoorGuy = offspring.begin() + posOffspring;
-//                EOT oldChamp = *replace;
-//                (*itPoorGuy) = oldChamp;
                 EOT a;
-                //double * r = (double*) malloc(sizeof(double)*matingPool[i]. getSize());
                 std::vector<double> r;
                 r.resize(matingPool[i].getSize());
                 a.setFi(r);
                 a.setSize(matingPool[i].getSize());
                 for (int tmp = 0; tmp < matingPool[i].getSize(); tmp++) {
                     a.setFiIndex(tmp, matingPool[i].getFiIndex(tmp));
-                    //a.setFiIndex(tmp, matingPool[i]. getFiIndex(tmp));
                 }
                 (*itPoorGuy) = a;
                 posOffspring++;
-//                offspring[i] =_pop[i].clone();
-//                offspring[i].invalidate();
-                // std::cout << "TORNEO!!!!!!! " << " " << std::endl;
-
             }
-
-
-
-
 
             _pop.clear();
             _pop.swap(offspring);
             apply<EOT>(eval, _pop);
-//            _pop.sort();
-//            std::cout << "STAMPO OFFSPRING DOPO REPLACEMENT!!!!!!! " << " " << std::endl;
-//            for (unsigned int i=0; i< _pop.size(); i++){
-//                std::cout << i << " " << _pop[i].fitness() << std::endl;
-//            }
-
-        } while (cont(_pop));
+        } while(cont(_pop));
     }
 private :
 

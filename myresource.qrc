@@ -2,9 +2,10 @@
     <qresource prefix="/">
         <file>img/download.png</file>
         <file>img/cali.png</file>
-        <file>img/red-stop-button-icon-17950.png</file>
         <file>img/check.png</file>
         <file>img/loader.gif</file>
         <file>img/regression.png</file>
+        <file>img/images.jpg</file>
+        <file>img/play.png</file>
     </qresource>
 </RCC>

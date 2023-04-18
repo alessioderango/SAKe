@@ -417,7 +417,9 @@ void MainWindow::updateFitnessPlot(int indexTab, QVector<double> x, QVector<doub
         m_CustomPlot->replot();
 
         if(numberofGenerations != 0 && b){
+            if(m_CustomPlot->graphCount()==2){
             m_CustomPlot->addGraph();
+            }
             QPen blueDotPen;
             blueDotPen.setColor(QColor(0, 0, 0, 0));
             blueDotPen.setStyle(Qt::DotLine);
@@ -475,7 +477,9 @@ void MainWindow::updateFitnessPlotRegression(int indexTab,
         m_CustomPlot->replot();
 
         if(numberofGenerations != 0 && b){
+            if(m_CustomPlot->graphCount()==2){
             m_CustomPlot->addGraph();
+            }
             QPen blueDotPen;
             blueDotPen.setColor(QColor(0, 0, 0, 0));
             blueDotPen.setStyle(Qt::DotLine);
@@ -596,7 +600,7 @@ void MainWindow::updateTableROCPlot(int indexTab,
 
 
     QStringList tableh;
-    tableh<<"N."<<"TP"<<"FP"<<"TN"<<"FN";
+    tableh<<"k"<<"TP"<<"FP"<<"TN"<<"FN";
     table->setHorizontalHeaderLabels(tableh);
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table->verticalHeader()->setVisible(false);
@@ -743,6 +747,8 @@ void MainWindow::updateRegression(int indexTab,
 
 //    }
     plot->graph(0)->setData(x, y);
+    int number_gamma=1;
+    int number_linear=1;
     for (int i = 0; i < numberofFunction; ++i) {
        QVector<double> yFunction = QVector<double>::fromStdVector(matrixY[i]);
         plot->graph(i+2)->setData(x, yFunction);
@@ -750,7 +756,17 @@ void MainWindow::updateRegression(int indexTab,
         //double *max = max_element(yFunction.begin(), yFunction.end());
         int xDistance = distance(yFunction.begin(), max_element(yFunction.begin(), yFunction.end()));
         widgetArray[i]->position->setCoords(x[xDistance],yFunction[xDistance]+(0.02));
-        QString a = QString("w, a, b, t\n %1, %2, %3, %4").arg(matrixParameters[i][0]).arg(matrixParameters[i][1]).arg(matrixParameters[i][2]).arg(matrixParameters[i][3]);
+        QString a;
+        if(functionType[i] != 0)
+        {
+            a = QString("Gamma \n N., weight, alpha, beta, shift\n %1, %2, %3, %4, %5").arg(number_gamma).arg(matrixParameters[i][0]).arg(matrixParameters[i][1]).arg(matrixParameters[i][2]).arg(matrixParameters[i][3]);
+            number_gamma++;
+        }
+        if(functionType[i] == 0)
+        {
+             a = QString("Linear \n N., weight, m, q, shift\n %1, %2, %3, %4, %5").arg(number_linear).arg(matrixParameters[i][0]).arg(matrixParameters[i][1]).arg(matrixParameters[i][2]).arg(matrixParameters[i][3]);
+             number_linear++;
+        }
         widgetArray[i]->setText(a);
         arrowArray[i]->end->setCoords(x[xDistance],yFunction[xDistance]);
 
@@ -2689,6 +2705,28 @@ void MainWindow::savePdfKernel()
     currentPlot->savePdf(fileName);
 }
 
+void MainWindow::savePngKernelRegression()
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
+    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
+
+    QString fileName =QFileDialog::getSaveFileName(this,
+                                                   tr("Save png"), "",
+                                                   tr("Png (*.png);;All Files (*)"));
+    currentPlot->savePng(fileName);
+}
+
+void MainWindow::savePdfKernelRegression()
+{
+    QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
+    QCustomPlot* currentPlot= (QCustomPlot*)tabs->findChild<QCustomPlot*>("FuncPlot");
+
+    QString fileName =QFileDialog::getSaveFileName(this,
+                                                   tr("Save pdf"), "",
+                                                   tr("Pdf (*.pdf);;All Files (*)"));
+    currentPlot->savePdf(fileName);
+}
+
 void MainWindow::resizeFitness()
 {
     QTabWidget* tabs = (QTabWidget*)ui->tabWidget_2->widget(((QTabWidget*)ui->tabWidget_2)->currentIndex());
@@ -2788,8 +2826,8 @@ void MainWindow::contextMenuRequestKernelRegression(QPoint pos)
 
     menu->addAction("Rescale Axes", this, SLOT(resizeKernelRegression()));
     menu->addAction("Automatic Rescale Axes", this, SLOT(automaticResizeRegression()));
-//    menu->addAction("Save Graph PDF", this, SLOT(savePdfKernel()));
-//    menu->addAction("Save Graph PNG", this, SLOT(savePngKernel()));
+    menu->addAction("Save Graph PDF", this, SLOT(savePdfKernelRegression()));
+    menu->addAction("Save Graph PNG", this, SLOT(savePngKernelRegression()));
 
     menu->popup(currentPlot->mapToGlobal(pos));
 
@@ -2937,4 +2975,25 @@ void MainWindow::on_actionNew_Regression_Project_triggered()
    r->disableCheckBoxLastGeneration();
    r->hideTableFirstGamma();
    r->show();
+}
+
+void MainWindow::on_actionPause_triggered()
+{
+
+    if(ui->tabWidget_2->count()>0){
+        int index = ((QTabWidget*)ui->tabWidget_2)->currentIndex();
+
+        //if(ui->tabWidget_2->)
+
+        if( dynamic_cast< SAKeController* >( MainWindow::threads[index] ) ){
+            if(!((SAKeController*) MainWindow::threads[index])->isRunning())
+                    ((SAKeController*) MainWindow::threads[index])->restartThread();
+        }
+
+        if( dynamic_cast< RegressionController* >( MainWindow::threads[index] ) ){
+            if(!((RegressionController*) MainWindow::threads[index])->isRunning())
+                ((RegressionController*) MainWindow::threads[index])->restartThread();
+        }
+    }
+
 }

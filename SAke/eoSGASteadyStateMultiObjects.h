@@ -141,7 +141,6 @@ public :
             counter++;
             int gen1=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
             int gen2=rand()%_pop.size();//-maxNumberToConsider) + maxNumberToConsider;
-
 //            std::cout << "TORNEO!!!!!!! " << " " << std::endl;
 //            std::cout << popTmp[gen1].fitness() << " ";
 

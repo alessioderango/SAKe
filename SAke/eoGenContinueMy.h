@@ -257,9 +257,11 @@ public:
             advance(del,numberOfKernelToBeSaved);
             kernels.erase(del,kernels.end() );
         }
+        cout << "controller->getMaxGen() " << controller->getMaxGen() << " thisGeneration "<< thisGeneration   << endl;
 
-        if((stepToSave  != 0 && (eoCountContinue<EOT>::thisGeneration+1)%stepToSave ==0) || (controller->getMaxGen() == thisGeneration) || this->getStop())
+        if((stepToSave  != 0 && (eoCountContinue<EOT>::thisGeneration+1)%stepToSave ==0) || (controller->getMaxGen() == (thisGeneration+1)) || this->getStop())
         {
+            cout << "Salvo Kernelsssss" << endl;
             ofstream kernelStream;
             kernelStream.open (savePathKernels.toStdString(),ios::out);
 

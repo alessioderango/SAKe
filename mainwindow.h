@@ -209,6 +209,9 @@ private slots:
     void savePngKernel();
     void savePdfKernel();
 
+    void savePngKernelRegression();
+    void savePdfKernelRegression();
+
     void resizeFitness();
     void automaticResizeFitness();
     void automaticResizeRegression();
@@ -229,6 +232,8 @@ private slots:
 
 
     void on_actionNew_Regression_Project_triggered();
+
+    void on_actionPause_triggered();
 
 signals:
      void expandTreeViewSignals();

@@ -95,7 +95,6 @@ private :
             QString stmp = controller->getSavePath()+"/fitnessHistory.csv";
             HandlerCSV::loadCSVGenationsFromFile(stmp, x, yBest, yAverage);
             numGenerations = x.size();
-
         }
 
 //        yBest.push_back( _pop.best_element().fitness() );
@@ -206,7 +205,7 @@ private :
             emit controller->updateFitnessPlot(pos,x,yBest,x,yAverage, numGenerations, (steps == 5));
         }
 
-        if( steps%5 ==0 && firstOccurance == steps){
+        if( (steps%5 ==0 || firstOccurance == steps) ){
         for (int i = 0; i < _pop.best_element().getWConst().size(); ++i) {
 
 
@@ -257,6 +256,9 @@ private :
 
             if(s >= 0)
             {
+                if(s > xsize)
+                    s=xsize;
+
                 for (int k = 0; k < s; ++k) {
                     Yswifted.push_back(0);
                 }
@@ -271,6 +273,12 @@ private :
             else
             {
                 s=abs(s);
+                if(s < -xsize)
+                {
+                    s=0;
+                }
+                if(s > xsize)
+                    s=xsize;
                 //                         cout <<" xsize = "  <<xsize << " --  s =" << s << endl;
                 //                         cout << " x.size()-s = " << xsize-s << endl;
                 for (int k = s; k < xsize; ++k) {

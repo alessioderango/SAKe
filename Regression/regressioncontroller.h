@@ -57,7 +57,8 @@ typedef eoOneMax<MyFitT> Individual;      // ***MUST*** derive from EO
 
 // how to initialize the population
 // it IS representation independent if an eoInit is given
-#include <do/make_pop.h>
+//#include <do/make_pop.h>
+#include "Regression/make_pop_my.h"
 
 // the stopping criterion
 #include <Regression/make_continue_my.h>
@@ -114,7 +115,8 @@ public:
                          int seed,
                          std::vector<Genotype> &,
                           bool lastgeneration,
-                         int frequencySavePop);
+                         int frequencySavePop,
+                         int dimension);
     RegressionController();
 
 
@@ -187,6 +189,7 @@ signals:
                            bool b);
 public slots:
     void startThread();
+    void restartThread();
     void startAlgorithm();
     void stopThread();
 private:
@@ -248,6 +251,7 @@ private:
     bool lastgeneration;
 
     int frequencySavePop;
+    int dimension;
 
 };
 
