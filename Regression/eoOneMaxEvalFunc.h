@@ -123,7 +123,8 @@ public:
             for (int i = 0; i < _eo.getWConst().size(); ++i) {
                //  for (int j = 0; j < x.size(); j++) {
                      std::vector<double> Yswifted;
-                     int s = (int)_eo.getPar(i).getParameters(2);
+                     //translation
+                     long long int s = (int)_eo.getPar(i).getParameters(2);
                      int xsize = x.size();
 
 //                     for (int k = 0; k < x.size(); ++k) {
