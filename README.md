@@ -49,5 +49,5 @@ Development 8(7), 1955–1978. [DOI: 10.5194/gmd-8-1955-2015](http://www.geosci-
 
 ### Contact Person
 
-* Alessio De Rango - a.derango@mat.unical.it 
-* Stefano Luigi Gariano - stefano.gariano@irpi.cnr.it
+* Alessio De Rango - a.derango(at)unical.it 
+* Giulio Iovine - giulio.iovine(at)irpi.cnr.it
