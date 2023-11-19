@@ -1,8 +1,8 @@
 # SAKe
 <div style="display:table-cell; vertical-align:middle">
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="200"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.PNG" style="float: right;" width="150">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="200">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="150"> &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.PNG" style="float: right;" width="150">  &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="200">  &nbsp; &nbsp; &nbsp;
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="200">
 </div>
 
