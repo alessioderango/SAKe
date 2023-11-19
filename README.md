@@ -1,6 +1,6 @@
 # SAKe
 
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="200"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.PNG" style="float: right;" width="200"> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/UNICALlogo.png"  width="200"> 
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="200"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.PNG" style="float: right;" width="200"> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/UNICALlogo.png"  width="200"> 
 
 # Research Institute for Geo-Hydrological Protection
 ## in the Department of Earth System Sciences and Environmental Technology an Institute of the Italian National Research Council (CNR) and Department of Mathematic and Computer Science of University of Calabria
@@ -49,5 +49,5 @@ Development 8(7), 1955–1978. [DOI: 10.5194/gmd-8-1955-2015](http://www.geosci-
 
 ### Contact Person
 
-* Alessio De Rango - a.derango@mat.unical.it 
-* Stefano Luigi Gariano - stefano.gariano@irpi.cnr.it
+* Alessio De Rango - a.derango(at)unical.it 
+* Giulio Iovine - giulio.iovine(at)irpi.cnr.it
