@@ -45,6 +45,10 @@ results, that we attribute to the performance and flexibility of GA-SAKe.
 The functions obtained by GA-SAKe can be integrated in early warning systems for the
 possible occurrence of rainfall induced landslides.
 
+### Installer
+
+Please find the last version of the software SAKev0.1-beta.39 [here](https://github.com/alessioderango/SAKe/releases/download/SAKev0.1-beta.39/SAKev0.1-beta.39.exe)
+
 ### Compilation instruction
 
 Requirements:
