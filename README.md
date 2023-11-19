@@ -45,6 +45,16 @@ results, that we attribute to the performance and flexibility of GA-SAKe.
 The functions obtained by GA-SAKe can be integrated in early warning systems for the
 possible occurrence of rainfall induced landslides.
 
+### Compilation instruction
+
+Requirements:
+ - Qt 5.8 (download [here](https://download.qt.io/new_archive/qt/5.8/5.8.0/qt-opensource-windows-x86-mingw530-5.8.0.exe))
+ - boost Library 1.60
+ - paradisEO Library release 2.0 (download [here](https://github.com/nojhan/paradiseo/releases/tag/2.1.0-beta))
+
+boost and paradisEO libraries already compiled for windows 7 (or higher) can be downloaded [here](https://drive.google.com/drive/folders/1t6sGG6o5hgLbKPIq-Rfxd-8HSHZEY5LY?usp=sharing).
+Please before compilation move the two libraries one folder up respect to the git repo. In this way, the SAKe.pro file is ready for the compilation.
+
 ### To know more
 
 Terranova OG, Gariano SL, Iaquinta P, Iovine GGR. 2015. GA-SAKe: forecasting landslide
