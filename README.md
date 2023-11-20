@@ -1,11 +1,13 @@
 # GA SAKe 2.0
+## An advanced hydrological model to predict the activation of landslides
+
 <div style="display:table-cell; vertical-align:middle">
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logo-irpi-cnr.png"  width="250"> &nbsp; &nbsp; &nbsp;
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="250">  &nbsp; &nbsp; &nbsp;
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="250">
 </div>
 
-### An advanced hydrological model to predict the activation of landslides
+
 
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
