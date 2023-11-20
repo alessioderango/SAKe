@@ -2,10 +2,10 @@
 ## An advanced hydrological model to predict the activation of landslides
 
 <div style="display:table-cell; vertical-align:middle">
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.jpeg"  width="250"> &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="150"> &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="250">  &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="250">
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.jpeg"  width="200"> &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="120"> &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="200">  &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="200">
 </div>
 
 ## Calibration 
