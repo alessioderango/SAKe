@@ -7,6 +7,8 @@
 
 ### Forecasting rainfall-induced landslides: A model to predict the time of occurrence of rainfall-induced landslides based on a genetic algorithm
 
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
+
 We developed GA-SAKe, Genetic Algorithm-based Self-Adaptive Kernel, a new model to
 predict the time of occurrence of rainfall-induced landslides.
 
