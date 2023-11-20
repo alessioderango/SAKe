@@ -7,11 +7,16 @@
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="250">
 </div>
 
+## Calibration 
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
+
+## Validation 
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-val_v2.png" >
+
+## Regression 
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
 
-
+### Summary 
 GA SAKe is a black-box model assuming that slope stability depends on rainfall in a linear, steady-state manner. It employs Genetic Algorithms to predict the timing of triggering of landslides, based on rainfall series and previous activations. Calibration provides families of optimal, discretized kernels that maximize the fitness. For each kernel, a mobility function can be obtained through convolution with the rain series. Once validated, the model can be applied to estimate future activations.
 This new release (2.0) includes improvements concerning software optimization, graphical user interface, input format, selection criteria, and fitness types. A specific regression tool allows to obtain suitable analytical expressions to approximate a given kernel, for a better understanding of groundwater dynamics.
 GA SAKe-2.0 could be integrated within an early-warning system to estimate the triggering of landslides, based on measured/forecasted rainfall. 
