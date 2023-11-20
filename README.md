@@ -8,7 +8,7 @@
 </div>
 
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
-<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-val.png" >
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-val_v2.png" >
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
 
 
