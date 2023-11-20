@@ -61,6 +61,14 @@ Both the boost and paradisEO binaries for Windows 7 (or higher) can be downloade
 Before compiling, please move the two libraries one folder up with respect to the git repo folder. If you prefer another location, please update the paths in the SAKe.pro project file.
 
 ### To know more
+If you find GA-SAKe useful for your research or work, you may consider citing the following papers in your scientific publications or technical reports:
+
+De Rango A, Terranova A, D'Ambrosio D, Lupiano V, Mendicino G, Terranova OG, Iovine G, submitted.
+GA SAKe-2.0 – An advanced hydrological model to predict the activation of landslides. Computers & Geosciences.
+
+Terranova O., Gariano S.L., Iaquinta P., Lupiano V., Rago V., Iovine G., 2018. Examples of application of GASAKe 
+for predicting the occurrence of rainfall-induced landslides in southern Italy. Geosciences (Switzerland), 8 (2), art. no. 78. 
+[DOI: 10.3390/geosciences8020078](https://doi.org/10.3390/geosciences8020078)
 
 Terranova OG, Gariano SL, Iaquinta P, Iovine GGR. 2015. GA-SAKe: forecasting landslide
 activations by a genetic-algorithms-based hydrological model. Geoscientific Model
