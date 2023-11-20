@@ -7,9 +7,8 @@
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="250">
 </div>
 
-
-
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-val.png" >
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
 
 
