@@ -1,6 +1,10 @@
 # SAKe
-
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="200"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp;  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.PNG" style="float: right;" width="200"> &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/UNICALlogo.png"  width="200"> 
+<div style="display:table-cell; vertical-align:middle">
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logoIRPI.PNG"  width="150"> &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/CNRlogo.PNG" style="float: right;" width="150">  &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="200">  &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="200">
+</div>
 
 # Research Institute for Geo-Hydrological Protection
 ## in the Department of Earth System Sciences and Environmental Technology an Institute of the Italian National Research Council (CNR) and Department of Mathematic and Computer Science of University of Calabria
@@ -40,6 +44,20 @@ results, that we attribute to the performance and flexibility of GA-SAKe.
 
 The functions obtained by GA-SAKe can be integrated in early warning systems for the
 possible occurrence of rainfall induced landslides.
+
+### Installer for Windows 7 (or higher)
+
+Please find the last version of the software SAKev0.1-beta.39 [here](https://github.com/alessioderango/SAKe/releases/download/SAKev0.1-beta.39/SAKev0.1-beta.39.exe)
+
+### Compilation instruction
+
+Requirements:
+ - Qt 5.8 (download [here](https://download.qt.io/new_archive/qt/5.8/5.8.0/qt-opensource-windows-x86-mingw530-5.8.0.exe))
+ - boost Library 1.60
+ - paradisEO Library release 2.0 (download [here](https://github.com/nojhan/paradiseo/releases/tag/2.1.0-beta))
+
+boost and paradisEO libraries already compiled for windows 7 (or higher) can be downloaded [here](https://drive.google.com/drive/folders/1t6sGG6o5hgLbKPIq-Rfxd-8HSHZEY5LY?usp=sharing).
+Please before compilation move the two libraries one folder up respect to the git repo. In this way, the SAKe.pro file is ready for the compilation.
 
 ### To know more
 
