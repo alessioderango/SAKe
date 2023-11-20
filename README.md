@@ -1,8 +1,8 @@
 # SAKe
 <div style="display:table-cell; vertical-align:middle">
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logo-irpi-cnr.png"  width="300"> &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="300">  &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="300">
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logo-irpi-cnr.png"  width="280"> &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="280">  &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="280">
 </div>
 
 ### Forecasting rainfall-induced landslides: A model to predict the time of occurrence of rainfall-induced landslides based on a genetic algorithm
