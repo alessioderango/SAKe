@@ -8,23 +8,23 @@
  <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="200">
 </div>
 
-## Calibration 
-<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
-
-## Validation 
-<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-val_v2.png" >
-
-## Regression 
-<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
-
 ### Summary 
 GA SAKe is a black-box model assuming that slope stability depends on rainfall in a linear, steady-state manner. It employs Genetic Algorithms to predict the timing of triggering of landslides, based on rainfall series and previous activations. Calibration provides families of optimal, discretized kernels that maximize the fitness. For each kernel, a mobility function can be obtained through convolution with the rain series. Once validated, the model can be applied to estimate future activations.
 This new release (2.0) includes improvements concerning software optimization, graphical user interface, input format, selection criteria, and fitness types. A specific regression tool allows to obtain suitable analytical expressions to approximate a given kernel, for a better understanding of groundwater dynamics.
 GA SAKe-2.0 could be integrated within an early-warning system to estimate the triggering of landslides, based on measured/forecasted rainfall. 
 
  - The instruction guide can be found [here](https://github.com/alessioderango/SAKe/blob/master/guide_and_example/Appendix%20A%20-%20Instruction%20Guide.pdf).
- - An example of an application, including calibration, validation and regression, to the Uncino landslide case study is available [here](https://github.com/alessioderango/SAKe/blob/master/guide_and_example/Appendix%20B%20-%20An%20example%20of%20application.pdf).
- - Data concerning an application to the Uncino landslide in Southern Italy, characterized by 6 re-activations, can be found [here](https://github.com/alessioderango/SAKe/tree/master/case_study). 
+ - An example of application (including calibration, validation and regression) to the Uncino landslide (Southern Italy) is available [here](https://github.com/alessioderango/SAKe/blob/master/guide_and_example/Appendix%20B%20-%20An%20example%20of%20application.pdf).
+ - Data concerning an application to the Uncino case study, characterized by 6 re-activations, can be found [here](https://github.com/alessioderango/SAKe/tree/master/case_study). 
+
+### Calibration 
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
+
+### Validation 
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-val_v2.png" >
+
+### Regression 
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
 
 ### Installer for Windows 7 (or higher)
 
@@ -34,7 +34,6 @@ Please find the last version of the software SAKev0.1-beta.39 [here](https://git
 
 GA SAKe can be compiled both for Windows and Linux.
 
-
 Requirements:
  - Qt 5.8 ([Windows installer](https://download.qt.io/new_archive/qt/5.8/5.8.0/qt-opensource-windows-x86-mingw530-5.8.0.exe), [Linux installer](https://download.qt.io/new_archive/qt/5.8/5.8.0/qt-opensource-linux-x64-5.8.0.run))
  - boost Library 1.60 ([Windows sources](http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.zip), [Linux sources](http://sourceforge.net/projects/boost/files/boost/1.60.0/boost_1_60_0.tar.gz))
@@ -43,7 +42,7 @@ Requirements:
 Both the boost and paradisEO binaries for Windows 7 (or higher) can be downloaded from [here](https://drive.google.com/drive/folders/1t6sGG6o5hgLbKPIq-Rfxd-8HSHZEY5LY?usp=sharing).
 Before compiling, please move the two libraries one folder up with respect to the git repo folder. If you prefer another location, please update the paths in the SAKe.pro project file.
 
-### To know more
+### References
 If you find GA SAKe useful for your research or work, you may consider citing the following papers in your scientific publications or technical reports:
 
 De Rango A, Terranova A, D'Ambrosio D, Lupiano V, Mendicino G, Terranova OG, Iovine G, submitted.
