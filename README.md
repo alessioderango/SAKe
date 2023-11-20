@@ -1,13 +1,14 @@
 # SAKe
 <div style="display:table-cell; vertical-align:middle">
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logo-irpi-cnr.png"  width="300"> &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="300">  &nbsp; &nbsp; &nbsp;
- <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="300">
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/logo-irpi-cnr.png"  width="250"> &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DEMACS.png" style="margin:auto" width="250">  &nbsp; &nbsp; &nbsp;
+ <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/DIAm.png"  width="250">
 </div>
 
 ### Forecasting rainfall-induced landslides: A model to predict the time of occurrence of rainfall-induced landslides based on a genetic algorithm
 
 <img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe.png" >
+<img src="https://github.com/alessioderango/SAKe/blob/master/README-IMG/SAKe-regr.png" >
 
 We developed GA-SAKe, Genetic Algorithm-based Self-Adaptive Kernel, a new model to
 predict the time of occurrence of rainfall-induced landslides.
@@ -60,6 +61,14 @@ Both the boost and paradisEO binaries for Windows 7 (or higher) can be downloade
 Before compiling, please move the two libraries one folder up with respect to the git repo folder. If you prefer another location, please update the paths in the SAKe.pro project file.
 
 ### To know more
+If you find GA-SAKe useful for your research or work, you may consider citing the following papers in your scientific publications or technical reports:
+
+De Rango A, Terranova A, D'Ambrosio D, Lupiano V, Mendicino G, Terranova OG, Iovine G, submitted.
+GA SAKe-2.0 – An advanced hydrological model to predict the activation of landslides. Computers & Geosciences.
+
+Terranova O., Gariano S.L., Iaquinta P., Lupiano V., Rago V., Iovine G., 2018. Examples of application of GASAKe 
+for predicting the occurrence of rainfall-induced landslides in southern Italy. Geosciences (Switzerland), 8 (2), art. no. 78. 
+[DOI: 10.3390/geosciences8020078](https://doi.org/10.3390/geosciences8020078)
 
 Terranova OG, Gariano SL, Iaquinta P, Iovine GGR. 2015. GA-SAKe: forecasting landslide
 activations by a genetic-algorithms-based hydrological model. Geoscientific Model
@@ -71,5 +80,4 @@ Development 8(7), 1955–1978. [DOI: 10.5194/gmd-8-1955-2015](http://www.geosci-
 * Alessio De Rango - a.derango(at)unical.it
 
 ### License
-SAKe is released under the AGPLv3.0 license https://www.gnu.org/licenses/agpl-3.0.en.html
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/.
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/agpl-3.0.en.html.
