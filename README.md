@@ -45,16 +45,16 @@ Before compiling, please move the two libraries one folder up with respect to th
 ### References
 If you find GA SAKe useful for your research or work, you may consider citing the following papers in your scientific publications or technical reports:
 
-De Rango A, Terranova A, D'Ambrosio D, Lupiano V, Mendicino G, Terranova OG, Iovine G, submitted.
-GA SAKe-2.0 – An advanced hydrological model to predict the activation of landslides. Computers & Geosciences.
+- De Rango A, Terranova A, D'Ambrosio D, Lupiano V, Mendicino G, Terranova OG, Iovine G, *submitted*.
+GA SAKe-2.0 – An advanced hydrological model to predict the activation of landslides. *Computers & Geosciences*.
 
-Terranova O., Gariano S.L., Iaquinta P., Lupiano V., Rago V., Iovine G., 2018. Examples of application of GASAKe 
-for predicting the occurrence of rainfall-induced landslides in southern Italy. Geosciences (Switzerland), 8 (2), art. no. 78. 
+- Terranova O., Gariano S.L., Iaquinta P., Lupiano V., Rago V., Iovine G., 2018. Examples of application of GASAKe 
+for predicting the occurrence of rainfall-induced landslides in southern Italy. *Geosciences* (*Switzerland*), 8 (2), art. no. 78. 
 [DOI: 10.3390/geosciences8020078](https://doi.org/10.3390/geosciences8020078)
 
-Terranova OG, Gariano SL, Iaquinta P, Iovine GGR. 2015. GA SAKe: forecasting landslide
-activations by a genetic-algorithms-based hydrological model. Geoscientific Model
-Development 8(7), 1955–1978. [DOI: 10.5194/gmd-8-1955-2015](http://www.geosci-model-dev.net/8/1955/2015/).
+- Terranova OG, Gariano SL, Iaquinta P, Iovine GGR. 2015. GA SAKe: forecasting landslide
+activations by a genetic-algorithms-based hydrological model. *Geoscientific Model
+Development* 8(7), 1955–1978. [DOI: 10.5194/gmd-8-1955-2015](http://www.geosci-model-dev.net/8/1955/2015/).
 
 ### Contact Person
 
