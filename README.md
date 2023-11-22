@@ -28,7 +28,7 @@ GA SAKe-2.0 could be integrated within an early-warning system to estimate the t
 
 ### Installer for Windows 7 (or higher)
 
-Please find the last version of the software SAKev0.1-beta.39 [here](https://github.com/alessioderango/SAKe/releases/download/SAKev0.1-beta.39/SAKev0.1-beta.39.exe)
+Please find the last version of the software SAKev2.0-beta.39 [here](https://github.com/alessioderango/SAKe/releases/download/SAKev2.0-beta.39/SAKev2.0-beta.39.exe)
 
 ### Compilation instruction
 
